@@ -1,0 +1,3 @@
+recursive-include adminlte/static *
+recursive-include adminlte/templates *.html
+include README.rst
