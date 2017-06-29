@@ -8,11 +8,12 @@ class Config:
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
-    FLASKY_MAIL_SENDER = 'Flasky Admin <flasky@example.com>'
-    FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    PGS_MAIL_SUBJECT_PREFIX = '[PGS Cert Mgr]'
+    PGS_MAIL_SENDER = 'PGS Admin <pgs@example.com>'
+    PGS_ADMIN = os.environ.get('PGS_ADMIN')
 
     @staticmethod
     def init_app(app):
