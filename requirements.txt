@@ -7,6 +7,8 @@ Flask-Moment
 Flask-SQLAlchemy
 Flask-Script
 Flask-WTF
+Flask-Potion
+Flask-Principal
 Jinja2
 Mako
 MarkupSafe

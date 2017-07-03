@@ -4,8 +4,10 @@ from flask_mail import Mail
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_potion import Api
 from config import config
 from adminlte import AdminLTE
+
 
 bootstrap = Bootstrap()
 mail = Mail()
@@ -24,6 +26,7 @@ def create_app(config_name):
 
     bootstrap.init_app(app)
     AdminLTE(app)
+    api = Api(app)
     mail.init_app(app)
     moment.init_app(app)
     db.init_app(app)
@@ -34,5 +37,8 @@ def create_app(config_name):
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
+    from . import resources
+    resources.init_resources(api)
 
     return app
