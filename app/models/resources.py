@@ -1,5 +1,5 @@
 from flask_potion import ModelResource
-from . import models
+from app.models import models
 
 
 class RoleResource(ModelResource):

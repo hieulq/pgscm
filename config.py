@@ -7,6 +7,7 @@ class Config:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
+    NAME = 'PGS Certificate Management'
     MAIL_USE_TLS = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
