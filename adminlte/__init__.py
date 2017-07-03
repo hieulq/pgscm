@@ -83,7 +83,7 @@ def adminlte_find_resource(filename, cdn, use_minified=None, local=True):
     """
     config = current_app.config
 
-    if None == use_minified:
+    if use_minified is None:
         use_minified = config['ADMINLTE_USE_MINIFIED']
 
     if use_minified:
