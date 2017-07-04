@@ -98,6 +98,10 @@ def adminlte_find_resource(filename, cdn, use_minified=None, local=True):
     return resource_url
 
 
+def breadcrumb_gen():
+    pass
+
+
 class AdminLTE(object):
     def __init__(self, app=None):
         if app is not None:
