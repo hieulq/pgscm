@@ -16,6 +16,10 @@ class Config:
     PGS_MAIL_SENDER = 'PGS Admin <pgs@example.com>'
     PGS_ADMIN = os.environ.get('PGS_ADMIN')
 
+    # Security
+    SECURITY_PASSWORD_SALT = 'PGS'
+    SECURITY_TRACKABLE = True
+
     @staticmethod
     def init_app(app):
         pass

@@ -1,5 +1,10 @@
 from flask_potion import ModelResource
-from app.models import models
+from app.db import models
+
+
+class RoleResource(ModelResource):
+    class Meta:
+        model = models.Role
 
 
 class UserResource(ModelResource):
@@ -8,4 +13,5 @@ class UserResource(ModelResource):
 
 
 def init_resources(api):
+    api.add_resource(RoleResource)
     api.add_resource(UserResource)

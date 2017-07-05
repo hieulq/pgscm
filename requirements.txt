@@ -1,14 +1,11 @@
 Flask
 Flask-Bootstrap
-Flask-Login
-Flask-Mail
 Flask-Migrate
 Flask-Moment
 Flask-SQLAlchemy
 Flask-Script
-Flask-WTF
 Flask-Potion
-Flask-Principal
+Flask-Security
 Jinja2
 Mako
 MarkupSafe
@@ -16,5 +13,4 @@ SQLAlchemy
 WTForms
 Werkzeug
 alembic
-blinker
-itsdangerous
+bcrypt
