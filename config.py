@@ -19,6 +19,9 @@ class Config:
     # Security
     SECURITY_PASSWORD_SALT = 'PGS'
     SECURITY_TRACKABLE = True
+    SECURITY_REGISTERABLE = True
+    SECURITY_URL_PREFIX = '/auth'
+    SECURITY_SEND_REGISTER_EMAIL = False
 
     @staticmethod
     def init_app(app):

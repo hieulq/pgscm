@@ -23,7 +23,7 @@ class User(sqla.Model, UserMixin):
     __tablename__ = 'user'
     id = sqla.Column(sqla.Integer(), primary_key=True)
     email = sqla.Column(sqla.String(64), unique=True, index=True)
-    username = sqla.Column(sqla.String(64), unique=True, index=True)
+    fullname = sqla.Column(sqla.String(64), unique=True, index=True)
     roles = sqla.relationship('Role', secondary=roles_users,
                               backref=sqla.backref('user', lazy='dynamic'))
     active = sqla.Column(sqla.Boolean())
@@ -33,11 +33,12 @@ class User(sqla.Model, UserMixin):
     last_login_ip = sqla.Column(sqla.String(50))
     current_login_ip = sqla.Column(sqla.String(50))
     login_count = sqla.Column(sqla.Integer())
+    avatar = '/static/img/pgs-160x160.jpg'
 
     def __repr__(self):
-        return '<User %r with Role %r>' % self.username, self.role
+        return '<User %r >' % self.fullname
 
 
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.query.get(int(user_id))
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))

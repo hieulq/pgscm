@@ -23,14 +23,16 @@
     </a>
     <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+            {% if current_user.is_authenticated and ('admin' in current_user.roles or
+            'mod' in current_user.roles) %}
             <!-- Messages: style can be found in dropdown.less-->
             <li class="dropdown messages-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-envelope"></i>
-                    <span class="label label-success">4</span>
+                    <span class="label label-success">1</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="header">You have 4 messages</li>
+                    <li class="header">You have 1 message</li>
                     <li>
                         <!-- inner menu: contains the actual data -->
                         <ul class="menu">
@@ -42,78 +44,14 @@
                                              alt="User Image"/>
                                     </div>
                                     <h4>
-                                        Support Team
+                                        Message title
                                         <small><i class="fa fa-clock-o"></i> 5
                                             mins
                                         </small>
                                     </h4>
-                                    <p>Why not buy a new awesome theme?</p>
+                                    <p>Message Content</p>
                                 </a>
                             </li><!-- end message -->
-                            <li>
-                                <a href="#">
-                                    <div class="pull-left">
-                                        <img src="{{ url_for('static', filename='img/avatar2.png') }}"
-                                             class="img-circle"
-                                             alt="user image"/>
-                                    </div>
-                                    <h4>
-                                        PGS Design Team
-                                        <small><i class="fa fa-clock-o"></i> 2
-                                            hours
-                                        </small>
-                                    </h4>
-                                    <p>Why not buy a new awesome theme?</p>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="pull-left">
-                                        <img src="{{ url_for('static', filename='img/avatar.png') }}"
-                                             class="img-circle"
-                                             alt="user image"/>
-                                    </div>
-                                    <h4>
-                                        Developers
-                                        <small><i class="fa fa-clock-o"></i>
-                                            Today
-                                        </small>
-                                    </h4>
-                                    <p>Why not buy a new awesome theme?</p>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="pull-left">
-                                        <img src="{{ url_for('static', filename='img/avatar2.png') }}"
-                                             class="img-circle"
-                                             alt="user image"/>
-                                    </div>
-                                    <h4>
-                                        Sales Department
-                                        <small><i class="fa fa-clock-o"></i>
-                                            Yesterday
-                                        </small>
-                                    </h4>
-                                    <p>Why not buy a new awesome theme?</p>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="pull-left">
-                                        <img src="{{ url_for('static', filename='img/avatar.png') }}"
-                                             class="img-circle"
-                                             alt="user image"/>
-                                    </div>
-                                    <h4>
-                                        Reviewers
-                                        <small><i class="fa fa-clock-o"></i> 2
-                                            days
-                                        </small>
-                                    </h4>
-                                    <p>Why not buy a new awesome theme?</p>
-                                </a>
-                            </li>
                         </ul>
                     </li>
                     <li class="footer"><a href="#">See All Messages</a></li>
@@ -123,43 +61,24 @@
             <li class="dropdown notifications-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-warning"></i>
-                    <span class="label label-warning">10</span>
+                    <span class="label label-warning">2</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="header">You have 10 notifications</li>
+                    <li class="header">You have 2 tasks!</li>
                     <li>
                         <!-- inner menu: contains the actual data -->
                         <ul class="menu">
                             <li>
                                 <a href="#">
-                                    <i class="ion ion-ios7-people info"></i> 5
-                                    new members joined today
+                                    <i class="fa fa-warning danger"></i>
+                                    Certificate 2017.BT-01 mid-term audit due
+                                    date!
                                 </a>
                             </li>
                             <li>
                                 <a href="#">
-                                    <i class="fa fa-warning danger"></i> Very
-                                    long description here that may not fit into
-                                    the page and may cause design problems
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-users warning"></i> 5 new
-                                    members joined
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#">
-                                    <i class="ion ion-ios7-cart success"></i> 25
-                                    sales made
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="ion ion-ios7-person danger"></i>
-                                    You changed your username
+                                    <i class="fa fa-warning danger"></i>
+                                    Certificate 2017.TX-02 expired soon!
                                 </a>
                             </li>
                         </ul>
@@ -167,96 +86,8 @@
                     <li class="footer"><a href="#">View all</a></li>
                 </ul>
             </li>
-            <!-- Tasks: style can be found in dropdown.less -->
-            <li class="dropdown tasks-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-tasks"></i>
-                    <span class="label label-danger">9</span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class="header">You have 9 tasks</li>
-                    <li>
-                        <!-- inner menu: contains the actual data -->
-                        <ul class="menu">
-                            <li><!-- Task item -->
-                                <a href="#">
-                                    <h3>
-                                        Design some buttons
-                                        <small class="pull-right">20%</small>
-                                    </h3>
-                                    <div class="progress xs">
-                                        <div class="progress-bar progress-bar-aqua"
-                                             style="width: 20%"
-                                             role="progressbar"
-                                             aria-valuenow="20"
-                                             aria-valuemin="0"
-                                             aria-valuemax="100">
-                                            <span class="sr-only">20% Complete</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li><!-- end task item -->
-                            <li><!-- Task item -->
-                                <a href="#">
-                                    <h3>
-                                        Create a nice theme
-                                        <small class="pull-right">40%</small>
-                                    </h3>
-                                    <div class="progress xs">
-                                        <div class="progress-bar progress-bar-green"
-                                             style="width: 40%"
-                                             role="progressbar"
-                                             aria-valuenow="20"
-                                             aria-valuemin="0"
-                                             aria-valuemax="100">
-                                            <span class="sr-only">40% Complete</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li><!-- end task item -->
-                            <li><!-- Task item -->
-                                <a href="#">
-                                    <h3>
-                                        Some task I need to do
-                                        <small class="pull-right">60%</small>
-                                    </h3>
-                                    <div class="progress xs">
-                                        <div class="progress-bar progress-bar-red"
-                                             style="width: 60%"
-                                             role="progressbar"
-                                             aria-valuenow="20"
-                                             aria-valuemin="0"
-                                             aria-valuemax="100">
-                                            <span class="sr-only">60% Complete</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li><!-- end task item -->
-                            <li><!-- Task item -->
-                                <a href="#">
-                                    <h3>
-                                        Make beautiful transitions
-                                        <small class="pull-right">80%</small>
-                                    </h3>
-                                    <div class="progress xs">
-                                        <div class="progress-bar progress-bar-yellow"
-                                             style="width: 80%"
-                                             role="progressbar"
-                                             aria-valuenow="20"
-                                             aria-valuemin="0"
-                                             aria-valuemax="100">
-                                            <span class="sr-only">80% Complete</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li><!-- end task item -->
-                        </ul>
-                    </li>
-                    <li class="footer">
-                        <a href="#">View all tasks</a>
-                    </li>
-                </ul>
-            </li>
+            {% endif %}
+            {% if current_user.is_authenticated %}
             <!-- User Account: style can be found in dropdown.less -->
             <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -267,25 +98,12 @@
                 <ul class="dropdown-menu">
                     <!-- User image -->
                     <li class="user-header bg-light-blue">
-                        <img src="{{ current_user.avatar }}" class="img-circle"
+                        <img src="{{ current_user.avatar }}"
+                             class="img-circle"
                              alt="User Image"/>
                         <p>
-                            {{ current_user.full_name }} - Web Developer
-                            <small>Member
-                                since {{ current_user.created_at.strftime("%b. %Y") }}</small>
+                            {{ current_user.fullname }}
                         </p>
-                    </li>
-                    <!-- Menu Body -->
-                    <li class="user-body">
-                        <div class="col-xs-4 text-center">
-                            <a href="#">Followers</a>
-                        </div>
-                        <div class="col-xs-4 text-center">
-                            <a href="#">Sales</a>
-                        </div>
-                        <div class="col-xs-4 text-center">
-                            <a href="#">Friends</a>
-                        </div>
                     </li>
                     <!-- Menu Footer-->
                     <li class="user-footer">
@@ -294,12 +112,13 @@
                                class="btn btn-default btn-flat">Profile</a>
                         </div>
                         <div class="pull-right">
-                            <a href="{{ url_for('auth.logout') }}"
+                            <a href="{{ url_for_security('logout') }}"
                                class="btn btn-default btn-flat">Sign out</a>
                         </div>
                     </li>
                 </ul>
             </li>
+            {% endif %}
         </ul>
     </div>
 {%- endblock navbar %}
@@ -307,19 +126,21 @@
 {% block sidebar -%}
     <!-- sidebar: style can be found in sidebar.less -->
     <!-- sidebar menu: : style can be found in sidebar.less -->
+    {% if current_user.is_authenticated %}
     <div class="user-panel">
         <div class="pull-left image">
             <img src="{{ current_user.avatar }}" alt="User Image"
                  class="img-circle">
         </div>
         <div class="pull-left info">
-            <p>{{ current_user.full_name }}</p>
+            <p>{{ current_user.fullname }}</p>
             <a href="#">
                 <i class="fa fa-circle text-success"></i>
                 Online
             </a>
         </div>
     </div>
+    {% endif %}
     <!-- search form -->
     <form action="#" method="get" class="sidebar-form">
         <div class="input-group">
@@ -334,13 +155,14 @@
     </form>
     <!-- /.search form -->
     <ul class="sidebar-menu">
-        <li class="header">TASKS</li>
+        <li class="header">PGS MANAGEMENT</li>
         <li class="active">
             <a href="{{ url_for('main.index') }}">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </a>
         </li>
-
+        {% if current_user.is_authenticated and ('admin' in current_user.roles or
+        'mod' in current_user.roles) %}
         <li class="treeview">
             <a href="#">
                 <i class="fa fa-balance-scale"></i> <span>Certificate</span>
@@ -364,28 +186,7 @@
                 <i class="fa fa-home"></i> <span>Associated Group</span>
             </a>
         </li>
-
-        <li class="treeview">
-            <a href="#">
-                <i class="fa fa-folder"></i>
-                <span>Examples</span>
-                <i class="fa fa-angle-left pull-right"></i>
-            </a>
-            <ul class="treeview-menu">
-                <li>
-                    <a href="{{ url_for('auth.login') }}">
-                        <i class="fa fa-circle-o"></i>
-                        Login
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url_for('auth.lockscreen') }}">
-                        <i class="fa fa-circle-o"></i>
-                        Lockscreen
-                    </a>
-                </li>
-            </ul>
-        </li>
+        {% if 'admin' in current_user.roles %}
         <li class="header">DMZ</li>
         <li class="treeview">
             <a href="#">
@@ -408,7 +209,21 @@
                 </li>
             </ul>
         </li>
-
+        {% endif %}
+        {% endif %}
+        {% if not current_user.is_authenticated %}
+        <li class="header">USER</li>
+        <li class="treeview">
+            <a href="{{ url_for_security('login') }}">
+                <i class="fa fa-user"></i> <span>Login</span>
+            </a>
+        </li>
+        <li class="treeview">
+            <a href="{{ url_for_security('register') }}">
+                <i class="fa fa-user-plus"></i> <span>Register</span>
+            </a>
+        </li>
+        {% endif %}
     </ul>
     <!-- /.sidebar -->
 {%- endblock sidebar %}
@@ -466,9 +281,3 @@
 
     </div><!-- /.row -->
 {%- endblock content %}
-{% block page_content %}
-    <div class="page-header">
-        <h1>Hello, {% if current_user.is_authenticated %}
-            {{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
-    </div>
-{% endblock %}
