@@ -25,6 +25,7 @@ login_manager.login_view = 'security.login'
 from app.db.models import User, Role
 user_datastore = SQLAlchemyUserDatastore(sqla, User, Role)
 sec = Security()
+api = Api()
 
 
 def create_app(config_name):
@@ -32,7 +33,6 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
-    api = Api(app)
     bootstrap.init_app(app)
     AdminLTE(app)
     mail.init_app(app)
@@ -40,6 +40,10 @@ def create_app(config_name):
     sqla.init_app(app)
     login_manager.init_app(app)
     sec.init_app(app, user_datastore, register_form=forms.RegisterForm)
+    # Flask potion do not initialize with current Flask app, so the below line
+    # is the work-around for potion to init_app correctly.
+    api.app = app
+    api.init_app(app)
 
     from app.main import main as main_blueprint
     app.register_blueprint(main_blueprint)
