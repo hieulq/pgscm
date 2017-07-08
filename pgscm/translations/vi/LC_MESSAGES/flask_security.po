@@ -63,33 +63,33 @@ msgstr "Cảm ơn. Email của bạn đã được xác nhận."
 
 #: flask_security/core.py:140
 msgid "Your email has already been confirmed."
-msgstr ""
+msgstr "Email của bạn đã được xác nhận."
 
 #: flask_security/core.py:142
 msgid "Invalid confirmation token."
-msgstr ""
+msgstr "Khoá xác nhận không hợp lệ."
 
 #: flask_security/core.py:144
 #, python-format
 msgid "%(email)s is already associated with an account."
-msgstr ""
+msgstr "%(email)s đã được sử dụng."
 
 #: flask_security/core.py:146
 msgid "Password does not match"
-msgstr ""
+msgstr "Mật khẩu không đúng"
 
 #: flask_security/core.py:148
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Mật khẩu không đúng"
 
 #: flask_security/core.py:150
 msgid "Redirections outside the domain are forbidden"
-msgstr ""
+msgstr "Đổi hướng ngoài domain không được cho phép"
 
 #: flask_security/core.py:152
 #, python-format
 msgid "Instructions to reset your password have been sent to %(email)s."
-msgstr ""
+msgstr "Hướng dẫn để đặt lại mật khẩu đã được gửi tới %(email)s."
 
 #: flask_security/core.py:155
 #, python-format
@@ -97,19 +97,21 @@ msgid ""
 "You did not reset your password within %(within)s. New instructions have "
 "been sent to %(email)s."
 msgstr ""
+"Bạn đã không đặt lại mật khẩu trong %(within)s. Hướng dẫn mới đã được gửi "
+"tới %(email)s."
 
 #: flask_security/core.py:158
 msgid "Invalid reset password token."
-msgstr ""
+msgstr "Khoá đặt lại mật khẩu không hợp lệ."
 
 #: flask_security/core.py:160
 msgid "Email requires confirmation."
-msgstr ""
+msgstr "Email cần xác nhận."
 
 #: flask_security/core.py:162
 #, python-format
 msgid "Confirmation instructions have been sent to %(email)s."
-msgstr ""
+msgstr "Hướng dẫn xác nhận đã được gửi tới %(email)s."
 
 #: flask_security/core.py:164
 #, python-format
@@ -117,6 +119,8 @@ msgid ""
 "You did not confirm your email within %(within)s. New instructions to "
 "confirm your email have been sent to %(email)s."
 msgstr ""
+"Bạn đã không xác nhận email trong %(within)s. Hướng dẫn mới đã được gửi "
+"tới %(email)s."
 
 #: flask_security/core.py:168
 #, python-format
@@ -124,69 +128,72 @@ msgid ""
 "You did not login within %(within)s. New instructions to login have been "
 "sent to %(email)s."
 msgstr ""
+"Bạn đã không đăng nhập trong %(within)s. Hướng dẫn mới đã được gửi "
+"tới %(email)s."
 
 #: flask_security/core.py:171
 #, python-format
 msgid "Instructions to login have been sent to %(email)s."
-msgstr ""
+msgstr "Hướng dẫn đăng nhập đã được gửi tới %(email)s."
 
 #: flask_security/core.py:173
 msgid "Invalid login token."
-msgstr ""
+msgstr "Khoá đăng nhập không hợp lệ"
 
 #: flask_security/core.py:175
 msgid "Account is disabled."
-msgstr ""
+msgstr "Tài khoản bị khoá"
 
 #: flask_security/core.py:177
 msgid "Email not provided"
-msgstr ""
+msgstr "Không cung cấp email"
 
 #: flask_security/core.py:179
 msgid "Invalid email address"
-msgstr ""
+msgstr "Email không hợp lệ"
 
 #: flask_security/core.py:181
 msgid "Password not provided"
-msgstr ""
+msgstr "Không cung cấp password"
 
 #: flask_security/core.py:183
 msgid "No password is set for this user"
-msgstr ""
+msgstr "Người dùng không có mật khẩu"
 
 #: flask_security/core.py:185
 msgid "Password must be at least 6 characters"
-msgstr ""
+msgstr "Mật khẩu tối thiểu phải có 6 ký tự"
 
 #: flask_security/core.py:187
 msgid "Specified user does not exist"
-msgstr ""
+msgstr "Người dùng không tồn tại"
 
 #: flask_security/core.py:189
 msgid "Invalid password"
-msgstr ""
+msgstr "Mật khẩu không đúng"
 
 #: flask_security/core.py:191
 msgid "You have successfully logged in."
-msgstr ""
+msgstr "Bạn đã đăng nhập thành công."
 
 #: flask_security/core.py:193
 msgid "Forgot password?"
-msgstr ""
+msgstr "Quên mật khẩu?"
 
 #: flask_security/core.py:195
 msgid ""
 "You successfully reset your password and you have been logged in "
 "automatically."
 msgstr ""
+"Bạn đã đặt lại mật khẩu thành công và tài khoản đã tự động được đăng nhập."
 
 #: flask_security/core.py:198
 msgid "Your new password must be different than your previous password."
-msgstr ""
+msgstr "Mật khẩu mới phải khác mật khẩu cũ."
 
 #: flask_security/core.py:201
 msgid "You successfully changed your password."
-msgstr ""
+msgstr "Bạn đã thay đổi mật khẩu thành công."
 
 #: flask_security/core.py:203
 msgid "Please log in to access this page."
@@ -194,7 +201,7 @@ msgstr "Hãy đăng nhập để xem trang này"
 
 #: flask_security/core.py:205
 msgid "Please reauthenticate to access this page."
-msgstr ""
+msgstr "Hãy đăng nhập lại để truy cập trang này."
 
 #: flask_security/forms.py:30
 msgid "Email Address"
@@ -221,100 +228,100 @@ msgstr "Đăng ký"
 
 #: flask_security/forms.py:35
 msgid "Resend Confirmation Instructions"
-msgstr ""
+msgstr "Gửi lại hướng dẫn xác nhận"
 
 #: flask_security/forms.py:36
 msgid "Recover Password"
-msgstr ""
+msgstr "Khôi phục mật khẩu"
 
 #: flask_security/forms.py:37
 msgid "Reset Password"
-msgstr ""
+msgstr "Đặt lại mật khẩu"
 
 #: flask_security/forms.py:38
 msgid "Retype Password"
-msgstr ""
+msgstr "Điền lại mật khẩu"
 
 #: flask_security/forms.py:39
 msgid "New Password"
-msgstr ""
+msgstr "Mật khẩu mới"
 
 #: flask_security/forms.py:40
 msgid "Change Password"
-msgstr ""
+msgstr "Thay đổi mật khẩu"
 
 #: flask_security/forms.py:41
 msgid "Send Login Link"
-msgstr ""
+msgstr "Gửi link đăng nhập"
 
 #: flask_security/templates/security/_menu.html:2
 msgid "Menu"
-msgstr ""
+msgstr "Mục lục"
 
 #: flask_security/templates/security/_menu.html:9
 msgid "Forgot password"
-msgstr ""
+msgstr "Quên mật khẩu"
 
 #: flask_security/templates/security/_menu.html:12
 msgid "Confirm account"
-msgstr ""
+msgstr "Xác nhận tài khoản"
 
 #: flask_security/templates/security/change_password.html:3
 msgid "Change password"
-msgstr ""
+msgstr "Đổi mật khẩu"
 
 #: flask_security/templates/security/forgot_password.html:3
 msgid "Send password reset instructions"
-msgstr ""
+msgstr "Gửi hướng dẫn đặt lại mật khẩu"
 
 #: flask_security/templates/security/reset_password.html:3
 msgid "Reset password"
-msgstr ""
+msgstr "Đặt lại mật khẩu"
 
 #: flask_security/templates/security/send_confirmation.html:3
 msgid "Resend confirmation instructions"
-msgstr ""
+msgstr "Gửi lại hướng dẫn xác nhận"
 
 #: flask_security/templates/security/email/change_notice.html:1
 msgid "Your password has been changed."
-msgstr ""
+msgstr "Mật khẩu của bạn đã được thay đổi"
 
 #: flask_security/templates/security/email/change_notice.html:3
 msgid "If you did not change your password,"
-msgstr ""
+msgstr "Nếu bạn không thay đổi mật khẩu,"
 
 #: flask_security/templates/security/email/change_notice.html:3
 msgid "click here to reset it"
-msgstr ""
+msgstr "click vào đây để đặt lại"
 
 #: flask_security/templates/security/email/confirmation_instructions.html:1
 msgid "Please confirm your email through the link below:"
-msgstr ""
+msgstr "Hãy xác nhận email của bạn qua link bên dưới:"
 
 #: flask_security/templates/security/email/confirmation_instructions.html:3
 #: flask_security/templates/security/email/welcome.html:6
 msgid "Confirm my account"
-msgstr ""
+msgstr "Xác nhận tài khoản của tôi"
 
 #: flask_security/templates/security/email/login_instructions.html:1
 #: flask_security/templates/security/email/welcome.html:1
 #, python-format
 msgid "Welcome %(email)s!"
-msgstr ""
+msgstr "Xin chào %(email)s!"
 
 #: flask_security/templates/security/email/login_instructions.html:3
 msgid "You can log into your account through the link below:"
-msgstr ""
+msgstr "Bạn có thể đăng nhập bằng đường link bên dưới:"
 
 #: flask_security/templates/security/email/login_instructions.html:5
 msgid "Login now"
-msgstr ""
+msgstr "Đăng nhập bây giờ"
 
 #: flask_security/templates/security/email/reset_instructions.html:1
 msgid "Click here to reset your password"
-msgstr ""
+msgstr "Click vào đây để đổi lại mật khẩu"
 
 #: flask_security/templates/security/email/welcome.html:4
 msgid "You can confirm your email through the link below:"
-msgstr ""
+msgstr "Bạn có thể xác nhận email qua đường link bên dưới:"
 
