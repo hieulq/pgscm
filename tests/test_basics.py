@@ -1,7 +1,7 @@
 import unittest
 import mock
 from flask import current_app
-from app import create_app, sqla, api
+from pgscm import create_app, sqla, api
 
 
 class BasicsTestCase(unittest.TestCase):

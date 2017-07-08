@@ -156,40 +156,40 @@
     <!-- /.search form -->
     <ul class="sidebar-menu">
         <li class="header">PGS MANAGEMENT</li>
-        <li class="active">
+        <li class="{{ is_active_in_tree(request, 'main') }}">
             <a href="{{ url_for('main.index') }}">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </a>
         </li>
         {% if current_user.is_authenticated and ('admin' in current_user.roles or
         'mod' in current_user.roles) %}
-        <li class="treeview">
+        <li class="{{ is_active_in_tree(request, 'certificate') }}">
             <a href="#">
                 <i class="fa fa-balance-scale"></i> <span>Certificate</span>
             </a>
         </li>
 
-        <li class="treeview">
+        <li class="{{ is_active_in_tree(request, 'farmer') }}">
             <a href="#">
                 <i class="fa fa-child"></i> <span>Farmer</span>
             </a>
         </li>
 
-        <li class="treeview">
+        <li class="{{ is_active_in_tree(request, 'group') }}">
             <a href="#">
                 <i class="fa fa-group"></i> <span>Group</span>
             </a>
         </li>
 
-        <li class="treeview">
+        <li class="{{ is_active_in_tree(request, 'agroup') }}">
             <a href="#">
                 <i class="fa fa-home"></i> <span>Associated Group</span>
             </a>
         </li>
         {% if 'admin' in current_user.roles %}
         <li class="header">DMZ</li>
-        <li class="treeview">
-            <a href="#">
+        <li class="{{ is_active_in_tree(request, 'admin') }}">
+            <a href="{{ url_for('admin.index') }}">
                 <i class="fa fa-key"></i>
                 <span>Administrator</span>
                 <i class="fa fa-angle-left pull-right"></i>

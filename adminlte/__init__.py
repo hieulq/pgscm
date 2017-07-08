@@ -98,6 +98,17 @@ def adminlte_find_resource(filename, cdn, use_minified=None, local=True):
     return resource_url
 
 
+def is_active_in_tree(request, bp_name):
+    if request.blueprint == bp_name:
+        return 'active'
+    else:
+        return 'treeview'
+
+
+def breadcrumb_gen():
+    pass
+
+
 class AdminLTE(object):
     def __init__(self, app=None):
         if app is not None:
@@ -126,6 +137,8 @@ class AdminLTE(object):
 
         app.jinja_env.globals['adminlte_find_resource'] =\
             adminlte_find_resource
+        app.jinja_env.globals['is_active_in_tree'] = \
+            is_active_in_tree
 
         if not hasattr(app, 'extensions'):
             app.extensions = {}

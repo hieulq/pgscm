@@ -1,5 +1,5 @@
 from flask_security import UserMixin, RoleMixin
-from app import sqla, login_manager
+from pgscm import sqla, login_manager
 
 # Create a table to support a many-to-many relationship between Users and Roles
 roles_users = sqla.Table(

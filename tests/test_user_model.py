@@ -1,7 +1,7 @@
 import unittest
 import mock
-from app import create_app, sqla, api
-from app.db.models import User
+from pgscm import create_app, sqla, api
+from pgscm.db.models import User
 
 
 class UserModelTestCase(unittest.TestCase):

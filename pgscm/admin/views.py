@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, current_app
 from . import admin
 from flask_security import roles_required
 

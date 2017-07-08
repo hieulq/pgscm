@@ -1,5 +1,5 @@
 from flask_potion import ModelResource
-from app.db import models
+from pgscm.db import models
 
 
 class RoleResource(ModelResource):

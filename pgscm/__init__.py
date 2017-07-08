@@ -11,7 +11,7 @@ from flask_security import user_registered
 from adminlte import AdminLTE
 from config import config
 
-from app.security import forms
+from pgscm.security import forms
 
 bootstrap = Bootstrap()
 mail = Mail()
@@ -22,7 +22,7 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'security.login'
 
-from app.db.models import User, Role
+from pgscm.db.models import User, Role
 user_datastore = SQLAlchemyUserDatastore(sqla, User, Role)
 sec = Security()
 api = Api()
@@ -45,13 +45,13 @@ def create_app(config_name):
     api.app = app
     api.init_app(app)
 
-    from app.main import main as main_blueprint
+    from pgscm.main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
-    from app.admin import admin as admin_blueprint
+    from pgscm.admin import admin as admin_blueprint
     app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
-    from app.db import resources
+    from pgscm.db import resources
     resources.init_resources(api)
 
     # Default role for new user is 'user'
