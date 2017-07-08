@@ -3,8 +3,11 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
+    # common
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+
+    # mail config options
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
     NAME = 'PGS Certificate Management'
@@ -16,7 +19,11 @@ class Config:
     PGS_MAIL_SENDER = 'PGS Admin <pgs@example.com>'
     PGS_ADMIN = os.environ.get('PGS_ADMIN')
 
-    # Security
+    # i18n
+    BABEL_DEFAULT_LOCALE = 'vi'
+    BABEL_DEFAULT_TIMEZONE = 'ICT'
+
+    # security
     SECURITY_PASSWORD_SALT = 'PGS'
     SECURITY_TRACKABLE = True
     SECURITY_REGISTERABLE = True

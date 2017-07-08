@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, session
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_mail import Mail
@@ -7,6 +7,7 @@ from flask_potion import Api
 from flask_security import Security, SQLAlchemyUserDatastore, utils
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import user_registered
+from flask_babelex import Babel, Domain
 
 from adminlte import AdminLTE
 from config import config
@@ -17,6 +18,7 @@ bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
 sqla = SQLAlchemy()
+babel = Babel()
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -28,18 +30,34 @@ sec = Security()
 api = Api()
 
 
+@babel.localeselector
+def get_locale():
+    override = request.args.get('lang')
+    if override:
+        session['lang'] = override
+    rv = session.get('lang', 'vi')
+    return rv
+
+
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
+    babel.init_app(app)
     bootstrap.init_app(app)
     AdminLTE(app)
     mail.init_app(app)
     moment.init_app(app)
     sqla.init_app(app)
     login_manager.init_app(app)
-    sec.init_app(app, user_datastore, register_form=forms.RegisterForm)
+    # Init flask security using factory method, then change the localized
+    # domain to our own
+    sec_state = sec.init_app(app,
+                             user_datastore, register_form=forms.RegisterForm)
+    sec_dom = Domain()
+    sec_state.i18n_domain.dirname = None
+
     # Flask potion do not initialize with current Flask app, so the below line
     # is the work-around for potion to init_app correctly.
     api.app = app
