@@ -7,7 +7,7 @@ from flask_potion import Api
 from flask_security import Security, SQLAlchemyUserDatastore, utils
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import user_registered
-from flask_babelex import Babel, Domain
+from flask_babelex import Babel
 
 from adminlte import AdminLTE
 from config import config
@@ -55,7 +55,6 @@ def create_app(config_name):
     # domain to our own
     sec_state = sec.init_app(app,
                              user_datastore, register_form=forms.RegisterForm)
-    sec_dom = Domain()
     sec_state.i18n_domain.dirname = None
 
     # Flask potion do not initialize with current Flask app, so the below line
