@@ -1,22 +1,22 @@
 {% extends "adminlte/base_without_nav.html" %}
 {% import "bootstrap/wtf.html" as wtf%}
-{% block title %}Log In{% endblock %}
-{% block description %}Log into your account!{% endblock %}
+{% block title %}{{ _('Log In') }}{% endblock %}
+{% block description %}{{ _('Log into your account!') }}{% endblock %}
 {% block bodytag %}login-page{% endblock %}
 
 {% block body %}
   <div class="login-box">
     <div class="login-logo">
-        <strong>PGS</strong><br />Certificate Management
+        {{ _('Certificate Management') }}<br /><strong>PGS</strong>
     </div>
     <div class="login-box-body">
-      <p>Log into your account!</p>
+      <p>{{ _('Log into your account!') }}</p>
       {# Display errors (if there are any). #}
       {% include "security/_messages.html" %}
       {# Render the login form. #}
       {{wtf.quick_form(login_user_form)}}
 	<br>
-	<p>New user? <a href="{{ url_for_security('register') }}">Click here to register</a>.</p>
+	<p>{{ _('New user? ') }}<a href="{{ url_for_security('register') }}">{{ _('Click here to register') }}</a>.</p>
     </div>
   </div>
 {% endblock %}

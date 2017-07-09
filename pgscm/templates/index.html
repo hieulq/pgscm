@@ -2,7 +2,7 @@
 {% import "adminlte/layout.html" as layout with context %}
 {% import "adminlte/widgets.html" as widgets with context %}
 
-{% block title %}PGS Certificate Manager{% endblock %}
+{% block title %}{{ _('PGS Certificate Manager') }}{% endblock %}
 {% block head %}
     {{ super() }}
     <link rel="shortcut icon"
@@ -16,7 +16,7 @@
 {% block navbar %}
     <!-- Sidebar toggle button-->
     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-        <span class="sr-only">Toggle navigation</span>
+        <span class="sr-only">{{ _('Toggle navigation') }}</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -86,6 +86,32 @@
                     <li class="footer"><a href="#">View all</a></li>
                 </ul>
             </li>
+            <!-- Language choosing -->
+            <li class="dropdown notifications-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-flag"></i>
+                </a>
+                <ul class="dropdown-menu" style="width: 140px;height: 120px;">
+                    <li class="header">{{ _('Change the language.') }}</li>
+                    <li>
+                        <!-- inner menu: contains the actual data -->
+                        <ul class="menu">
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-check-circle"></i>
+                                    {{ _('Vietnamese') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-circle"></i>
+                                    {{ _('English') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
             {% endif %}
             {% if current_user.is_authenticated %}
             <!-- User Account: style can be found in dropdown.less -->
@@ -109,11 +135,11 @@
                     <li class="user-footer">
                         <div class="pull-left">
                             <a href="#"
-                               class="btn btn-default btn-flat">Profile</a>
+                               class="btn btn-default btn-flat">{{ _('Profile') }}</a>
                         </div>
                         <div class="pull-right">
                             <a href="{{ url_for_security('logout') }}"
-                               class="btn btn-default btn-flat">Sign out</a>
+                               class="btn btn-default btn-flat">{{ _('Sign out') }}</a>
                         </div>
                     </li>
                 </ul>
@@ -145,7 +171,7 @@
     <form action="#" method="get" class="sidebar-form">
         <div class="input-group">
             <input type="text" name="q" class="form-control"
-                   placeholder="Search...">
+                   placeholder={{ _('Search...') }}>
             <span class="input-group-btn">
                 <button type="submit" name="search" id="search-btn"
                         class="btn btn-flat"><i class="fa fa-search"></i>
@@ -155,56 +181,56 @@
     </form>
     <!-- /.search form -->
     <ul class="sidebar-menu">
-        <li class="header">PGS MANAGEMENT</li>
+        <li class="header">{{ _('PGS MANAGEMENT') }}</li>
         <li class="{{ is_active_in_tree(request, 'main') }}">
             <a href="{{ url_for('main.index') }}">
-                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                <i class="fa fa-dashboard"></i> <span>{{ _('Dashboard') }}</span>
             </a>
         </li>
         {% if current_user.is_authenticated and ('admin' in current_user.roles or
         'mod' in current_user.roles) %}
         <li class="{{ is_active_in_tree(request, 'certificate') }}">
             <a href="#">
-                <i class="fa fa-balance-scale"></i> <span>Certificate</span>
+                <i class="fa fa-balance-scale"></i> <span>{{ _('Certificate') }}</span>
             </a>
         </li>
 
         <li class="{{ is_active_in_tree(request, 'farmer') }}">
             <a href="#">
-                <i class="fa fa-child"></i> <span>Farmer</span>
+                <i class="fa fa-child"></i> <span>{{ _('Farmer') }}</span>
             </a>
         </li>
 
         <li class="{{ is_active_in_tree(request, 'group') }}">
             <a href="#">
-                <i class="fa fa-group"></i> <span>Group</span>
+                <i class="fa fa-group"></i> <span>{{ _('Group') }}</span>
             </a>
         </li>
 
         <li class="{{ is_active_in_tree(request, 'agroup') }}">
             <a href="#">
-                <i class="fa fa-home"></i> <span>Associated Group</span>
+                <i class="fa fa-home"></i> <span>{{ _('Associated Group') }}</span>
             </a>
         </li>
         {% if 'admin' in current_user.roles %}
-        <li class="header">DMZ</li>
+        <li class="header">{{ _('DMZ') }}</li>
         <li class="{{ is_active_in_tree(request, 'admin') }}">
             <a href="{{ url_for('admin.index') }}">
                 <i class="fa fa-key"></i>
-                <span>Administrator</span>
+                <span>{{ _('Administrator') }}</span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
                 <li>
                     <a href="{{ url_for('admin.users') }}">
                         <i class="fa fa-user"></i>
-                        Users Management
+                        {{ _('Users Management') }}
                     </a>
                 </li>
                 <li>
                     <a href="{{ url_for('admin.configs') }}">
                         <i class="fa fa-cogs"></i>
-                        Configurations
+                        {{ _('Configurations') }}
                     </a>
                 </li>
             </ul>
@@ -212,15 +238,15 @@
         {% endif %}
         {% endif %}
         {% if not current_user.is_authenticated %}
-        <li class="header">USER</li>
+        <li class="header">{{ _('USER') }}</li>
         <li class="treeview">
             <a href="{{ url_for_security('login') }}">
-                <i class="fa fa-user"></i> <span>Login</span>
+                <i class="fa fa-user"></i> <span>{{ _('Login') }}</span>
             </a>
         </li>
         <li class="treeview">
             <a href="{{ url_for_security('register') }}">
-                <i class="fa fa-user-plus"></i> <span>Register</span>
+                <i class="fa fa-user-plus"></i> <span>{{ _('Register') }}</span>
             </a>
         </li>
         {% endif %}
@@ -230,18 +256,18 @@
 
 {% block content_header -%}
     <h1>
-        Dashboard
-        <small>Summary report about PGS status</small>
+        {{ _('Dashboard') }}
+        <small>{{ _('Summary report about PGS status') }}</small>
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li><a href="#"><i class="fa fa-dashboard"></i>{{ _(' Home') }}</a></li>
+        <li class="active">{{ _('Dashboard') }}</li>
     </ol>
 {%- endblock content_header %}
 {% block content -%}
     <h4 class="page-header">
-        PGS Status
-        <small>Quickly summary about <code>PGS Certificates</code> analytics.
+        {{ _('PGS Status') }}
+        <small>{{ _('Quickly summary about <code>PGS Certificates</code> analytics.') }}
         </small>
     </h4>
     <!-- Small boxes (Stat box) -->

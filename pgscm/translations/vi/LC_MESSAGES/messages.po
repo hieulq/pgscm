@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-07-08 21:13+0900\n"
+"POT-Creation-Date: 2017-07-09 16:05+0900\n"
 "PO-Revision-Date: 2017-07-08 21:17+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: vi\n"
@@ -23,3 +23,130 @@ msgstr ""
 msgid "Full name"
 msgstr "Họ tên"
 
+#: pgscm/templates/404.html:3 pgscm/templates/500.html:3
+#: pgscm/templates/base.html:3 pgscm/templates/index.html:5
+msgid "PGS Certificate Manager"
+msgstr "Hệ thống quản lý chứng chỉ PGS"
+
+#: pgscm/templates/404.html:3
+msgid "Page Not Found"
+msgstr "Trang không tồn tại"
+
+#: pgscm/templates/404.html:7
+msgid "Not Found"
+msgstr "Không tồn tại"
+
+#: pgscm/templates/500.html:3 pgscm/templates/500.html:7
+msgid "Internal Server Error"
+msgstr "Máy chủ gặp sự cố"
+
+#: pgscm/templates/base.html:16 pgscm/templates/index.html:19
+msgid "Toggle navigation"
+msgstr "Kích hoạt trang điều phối"
+
+#: pgscm/templates/index.html:112
+msgid "Profile"
+msgstr "Hồ sơ cá nhân"
+
+#: pgscm/templates/index.html:116
+msgid "Sign out"
+msgstr "Đăng xuất"
+
+#: pgscm/templates/index.html:158
+msgid "PGS MANAGEMENT"
+msgstr "DANH MỤC QUẢN LÝ PGS"
+
+#: pgscm/templates/index.html:161 pgscm/templates/index.html:233
+#: pgscm/templates/index.html:238
+msgid "Dashboard"
+msgstr "Tổng quan"
+
+#: pgscm/templates/index.html:168
+msgid "Certificate"
+msgstr "Chứng chỉ"
+
+#: pgscm/templates/index.html:174
+msgid "Farmer"
+msgstr "Nông dân"
+
+#: pgscm/templates/index.html:180
+msgid "Group"
+msgstr "Nhóm"
+
+#: pgscm/templates/index.html:186
+msgid "Associated Group"
+msgstr "Liên nhóm"
+
+#: pgscm/templates/index.html:190
+msgid "DMZ"
+msgstr "KHU VỰC QUẢN TRỊ"
+
+#: pgscm/templates/index.html:194
+msgid "Administrator"
+msgstr "Danh mục quản trị"
+
+#: pgscm/templates/index.html:201
+msgid "Users Management"
+msgstr "Quản lý người dùng hệ thống"
+
+#: pgscm/templates/index.html:207
+msgid "Configurations"
+msgstr "Quản lý cấu hình"
+
+#: pgscm/templates/index.html:215
+msgid "USER"
+msgstr "TÁC VỤ NGƯỜI DÙNG"
+
+#: pgscm/templates/index.html:218
+msgid "Login"
+msgstr "Đăng nhập"
+
+#: pgscm/templates/index.html:223 pgscm/templates/security/register_user.html:3
+msgid "Register"
+msgstr "Đăng ký"
+
+#: pgscm/templates/index.html:234
+msgid "Summary report about PGS status"
+msgstr "Báo cáo thống kê trạng thái hiện tại của hệ thống PGS"
+
+#: pgscm/templates/index.html:237
+msgid " Home"
+msgstr " Trang chủ"
+
+#: pgscm/templates/index.html:243
+msgid "PGS Status"
+msgstr "Trạng thái của PGS"
+
+#: pgscm/templates/index.html:244
+msgid "Quickly summary about <code>PGS Certificates</code> analytics."
+msgstr "Thống kê nhanh về <code>Chứng chỉ PGS</code>."
+
+#: pgscm/templates/security/login_user.html:3
+msgid "Log In"
+msgstr "Đăng nhập"
+
+#: pgscm/templates/security/login_user.html:4
+#: pgscm/templates/security/login_user.html:13
+msgid "Log into your account!"
+msgstr "Đăng nhập vào hệ thống PGS!"
+
+#: pgscm/templates/security/login_user.html:10
+#: pgscm/templates/security/register_user.html:11
+msgid "Certificate Management"
+msgstr "Quản Lý Chứng Chỉ"
+
+#: pgscm/templates/security/login_user.html:19
+msgid "New user? "
+msgstr "Người dùng mới? "
+
+#: pgscm/templates/security/login_user.html:19
+msgid "Click here to register"
+msgstr "Click vào đây để đăng ký"
+
+#: pgscm/templates/security/register_user.html:4
+msgid "Register new PGS account!"
+msgstr "Đăng ký tài khoản PGS mới!"
+
+#: pgscm/templates/security/register_user.html:14
+msgid "Please register new PGS account!"
+msgstr "Hãy đăng ký tài khoản PGS mới!"

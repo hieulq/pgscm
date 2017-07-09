@@ -1,17 +1,17 @@
 {% extends "adminlte/base_without_nav.html" %}
 {% import "bootstrap/wtf.html" as wtf%}
-{% block title %}Register{% endblock %}
-{% block description %}Register new PGS account!{% endblock %}
+{% block title %}{{ _('Register') }}{% endblock %}
+{% block description %}{{ _('Register new PGS account!') }}{% endblock %}
 {% block bodytag %}register-page{% endblock %}
 
 {% block body %}
 
   <div class="register-box">
     <div class="register-logo">
-      <strong>PGS</strong><br />Certificate Management
+      {{ _('Certificate Management') }}<br /><strong>PGS</strong>
     </div>
     <div class="register-box-body">
-      <p>Please register new PGS account!</p>
+      <p>{{ _('Please register new PGS account!') }}</p>
       {# Display errors (if there are any). #}
       {% include "security/_messages.html" %}
       <form action="{{ url_for_security('register') }}" method="POST" name="register_user_form">

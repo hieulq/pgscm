@@ -1,15 +1,14 @@
-# Vietnamese translations for PGSCM.
+# Translations template for PGSCM.
 # Copyright (C) 2017 Hieu LE
-# This file is distributed under the same license as the PGSCM
-# project.
-# Hieu LE <hieulq19@gmail.com>, 2017.
+# This file is distributed under the same license as the PGSCM project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-07-08 21:13+0900\n"
+"Project-Id-Version: PGSCM 1.0.0\n"
+"Report-Msgid-Bugs-To: hieulq19@gmail.com\n"
+"POT-Creation-Date: 2017-07-09 16:05+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,5 +19,133 @@ msgstr ""
 
 #: pgscm/security/forms.py:6
 msgid "Full name"
+msgstr ""
+
+#: pgscm/templates/404.html:3 pgscm/templates/500.html:3
+#: pgscm/templates/base.html:3 pgscm/templates/index.html:5
+msgid "PGS Certificate Manager"
+msgstr ""
+
+#: pgscm/templates/404.html:3
+msgid "Page Not Found"
+msgstr ""
+
+#: pgscm/templates/404.html:7
+msgid "Not Found"
+msgstr ""
+
+#: pgscm/templates/500.html:3 pgscm/templates/500.html:7
+msgid "Internal Server Error"
+msgstr ""
+
+#: pgscm/templates/base.html:16 pgscm/templates/index.html:19
+msgid "Toggle navigation"
+msgstr ""
+
+#: pgscm/templates/index.html:112
+msgid "Profile"
+msgstr ""
+
+#: pgscm/templates/index.html:116
+msgid "Sign out"
+msgstr ""
+
+#: pgscm/templates/index.html:158
+msgid "PGS MANAGEMENT"
+msgstr ""
+
+#: pgscm/templates/index.html:161 pgscm/templates/index.html:233
+#: pgscm/templates/index.html:238
+msgid "Dashboard"
+msgstr ""
+
+#: pgscm/templates/index.html:168
+msgid "Certificate"
+msgstr ""
+
+#: pgscm/templates/index.html:174
+msgid "Farmer"
+msgstr ""
+
+#: pgscm/templates/index.html:180
+msgid "Group"
+msgstr ""
+
+#: pgscm/templates/index.html:186
+msgid "Associated Group"
+msgstr ""
+
+#: pgscm/templates/index.html:190
+msgid "DMZ"
+msgstr ""
+
+#: pgscm/templates/index.html:194
+msgid "Administrator"
+msgstr ""
+
+#: pgscm/templates/index.html:201
+msgid "Users Management"
+msgstr ""
+
+#: pgscm/templates/index.html:207
+msgid "Configurations"
+msgstr ""
+
+#: pgscm/templates/index.html:215
+msgid "USER"
+msgstr ""
+
+#: pgscm/templates/index.html:218
+msgid "Login"
+msgstr ""
+
+#: pgscm/templates/index.html:223 pgscm/templates/security/register_user.html:3
+msgid "Register"
+msgstr ""
+
+#: pgscm/templates/index.html:234
+msgid "Summary report about PGS status"
+msgstr ""
+
+#: pgscm/templates/index.html:237
+msgid " Home"
+msgstr ""
+
+#: pgscm/templates/index.html:243
+msgid "PGS Status"
+msgstr ""
+
+#: pgscm/templates/index.html:244
+msgid "Quickly summary about <code>PGS Certificates</code> analytics."
+msgstr ""
+
+#: pgscm/templates/security/login_user.html:3
+msgid "Log In"
+msgstr ""
+
+#: pgscm/templates/security/login_user.html:4
+#: pgscm/templates/security/login_user.html:13
+msgid "Log into your account!"
+msgstr ""
+
+#: pgscm/templates/security/login_user.html:10
+#: pgscm/templates/security/register_user.html:11
+msgid "Certificate Management"
+msgstr ""
+
+#: pgscm/templates/security/login_user.html:19
+msgid "New user? "
+msgstr ""
+
+#: pgscm/templates/security/login_user.html:19
+msgid "Click here to register"
+msgstr ""
+
+#: pgscm/templates/security/register_user.html:4
+msgid "Register new PGS account!"
+msgstr ""
+
+#: pgscm/templates/security/register_user.html:14
+msgid "Please register new PGS account!"
 msgstr ""
 

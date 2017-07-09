@@ -5,4 +5,4 @@ from flask_babelex import lazy_gettext
 
 _ = gettext
 _n = ngettext
-_l = lazy_gettext
+__ = lazy_gettext
