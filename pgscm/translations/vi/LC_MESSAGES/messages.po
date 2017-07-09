@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-07-09 16:05+0900\n"
+"POT-Creation-Date: 2017-07-09 16:42+0900\n"
 "PO-Revision-Date: 2017-07-08 21:17+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: vi\n"
@@ -44,80 +44,96 @@ msgstr "Máy chủ gặp sự cố"
 msgid "Toggle navigation"
 msgstr "Kích hoạt trang điều phối"
 
-#: pgscm/templates/index.html:112
+#: pgscm/templates/index.html:95
+msgid "Change the language."
+msgstr "Đổi ngôn ngữ."
+
+#: pgscm/templates/index.html:102
+msgid "Vietnamese"
+msgstr "Tiếng Việt"
+
+#: pgscm/templates/index.html:108
+msgid "English"
+msgstr "Tiếng Anh"
+
+#: pgscm/templates/index.html:138
 msgid "Profile"
 msgstr "Hồ sơ cá nhân"
 
-#: pgscm/templates/index.html:116
+#: pgscm/templates/index.html:142
 msgid "Sign out"
 msgstr "Đăng xuất"
 
-#: pgscm/templates/index.html:158
+#: pgscm/templates/index.html:174
+msgid "Search..."
+msgstr "Tìm kiếm..."
+
+#: pgscm/templates/index.html:184
 msgid "PGS MANAGEMENT"
 msgstr "DANH MỤC QUẢN LÝ PGS"
 
-#: pgscm/templates/index.html:161 pgscm/templates/index.html:233
-#: pgscm/templates/index.html:238
+#: pgscm/templates/index.html:187 pgscm/templates/index.html:259
+#: pgscm/templates/index.html:264
 msgid "Dashboard"
 msgstr "Tổng quan"
 
-#: pgscm/templates/index.html:168
+#: pgscm/templates/index.html:194
 msgid "Certificate"
 msgstr "Chứng chỉ"
 
-#: pgscm/templates/index.html:174
+#: pgscm/templates/index.html:200
 msgid "Farmer"
 msgstr "Nông dân"
 
-#: pgscm/templates/index.html:180
+#: pgscm/templates/index.html:206
 msgid "Group"
 msgstr "Nhóm"
 
-#: pgscm/templates/index.html:186
+#: pgscm/templates/index.html:212
 msgid "Associated Group"
 msgstr "Liên nhóm"
 
-#: pgscm/templates/index.html:190
+#: pgscm/templates/index.html:216
 msgid "DMZ"
 msgstr "KHU VỰC QUẢN TRỊ"
 
-#: pgscm/templates/index.html:194
+#: pgscm/templates/index.html:220
 msgid "Administrator"
 msgstr "Danh mục quản trị"
 
-#: pgscm/templates/index.html:201
+#: pgscm/templates/index.html:227
 msgid "Users Management"
 msgstr "Quản lý người dùng hệ thống"
 
-#: pgscm/templates/index.html:207
+#: pgscm/templates/index.html:233
 msgid "Configurations"
 msgstr "Quản lý cấu hình"
 
-#: pgscm/templates/index.html:215
+#: pgscm/templates/index.html:241
 msgid "USER"
 msgstr "TÁC VỤ NGƯỜI DÙNG"
 
-#: pgscm/templates/index.html:218
+#: pgscm/templates/index.html:244
 msgid "Login"
 msgstr "Đăng nhập"
 
-#: pgscm/templates/index.html:223 pgscm/templates/security/register_user.html:3
+#: pgscm/templates/index.html:249 pgscm/templates/security/register_user.html:3
 msgid "Register"
 msgstr "Đăng ký"
 
-#: pgscm/templates/index.html:234
+#: pgscm/templates/index.html:260
 msgid "Summary report about PGS status"
 msgstr "Báo cáo thống kê trạng thái hiện tại của hệ thống PGS"
 
-#: pgscm/templates/index.html:237
+#: pgscm/templates/index.html:263
 msgid " Home"
 msgstr " Trang chủ"
 
-#: pgscm/templates/index.html:243
+#: pgscm/templates/index.html:269
 msgid "PGS Status"
 msgstr "Trạng thái của PGS"
 
-#: pgscm/templates/index.html:244
+#: pgscm/templates/index.html:270
 msgid "Quickly summary about <code>PGS Certificates</code> analytics."
 msgstr "Thống kê nhanh về <code>Chứng chỉ PGS</code>."
 
@@ -150,3 +166,4 @@ msgstr "Đăng ký tài khoản PGS mới!"
 #: pgscm/templates/security/register_user.html:14
 msgid "Please register new PGS account!"
 msgstr "Hãy đăng ký tài khoản PGS mới!"
+
