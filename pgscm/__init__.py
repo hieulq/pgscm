@@ -4,7 +4,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_moment import Moment
 from flask_potion import Api
-from flask_security import Security, SQLAlchemyUserDatastore, utils
+from flask_security import Security, SQLAlchemyUserDatastore, utils as security_utils
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import user_registered
 from flask_babelex import Babel
@@ -91,13 +91,13 @@ def create_app(config_name):
 
         if not user_datastore.find_user(email='admin@pgs.com'):
             user_datastore.create_user(email='admin@pgs.com', fullname="Admin",
-                                       password=utils.hash_password('password'))
+                                       password=security_utils.hash_password('password'))
         if not user_datastore.find_user(email='mod@pgs.com'):
             user_datastore.create_user(email='mod@pgs.com', fullname="Mod",
-                                       password=utils.hash_password('password'))
+                                       password=security_utils.hash_password('password'))
         if not user_datastore.find_user(email='user@pgs.com'):
             user_datastore.create_user(email='user@pgs.com', fullname="User",
-                                       password=utils.hash_password('password'))
+                                       password=security_utils.hash_password('password'))
         # Commit any database changes; the User and Roles must exist
         # before we can add a Role to the User
         sqla.session.commit()
