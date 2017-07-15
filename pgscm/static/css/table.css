@@ -1,0 +1,72 @@
+.table_actions {
+    float: right;
+}
+
+.table_search, .table_filter {
+    display: inline-block;
+}
+
+.table_search input[type="text"] {
+    padding-right: 32.5px;
+}
+
+/*.form-control {*/
+/*height: 32.5px;*/
+
+/*}*/
+
+.form-control, .datepicker input {
+    display: block;
+    width: 100%;
+    /*height: 32.5px;*/
+    padding: 6px 12px;
+    font-size: 13px;
+    line-height: 1.42857;
+    color: #6e6e6e;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+/*.form-control-feedback {*/
+/*position: absolute;*/
+/*top: 0;*/
+/*right: 0;*/
+/*z-index: 2;*/
+/*display: block;*/
+/*width: 32.5px;*/
+/*height: 32.5px;*/
+/*line-height: 32.5px;*/
+/*text-align: center;*/
+/*pointer-events: none;*/
+/*}*/
+
+.form-inline .form-group, .table_actions .form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+.table-action-default, .table-action-danger {
+    text-align: left;
+
+}
+/*.table-action-danger{*/
+    /*color: red;*/
+/*}*/
+
+.dropdown-menu > li > a.table-action-danger{
+    color: red;
+}
+
+.dropdown-menu > li > a.table-action-danger:hover{
+    color: white;
+    background-color:#f44253 ;
+
+}

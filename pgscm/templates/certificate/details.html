@@ -1,0 +1,100 @@
+{% extends "index.html" %}
+{%- block styles %}
+    {{ super() }}
+    <link href="{{ adminlte_find_resource('plugins/datatables/dataTables.bootstrap.css', cdn='local', use_minified=False) }}"
+          rel="stylesheet" type="text/css">
+{%- endblock styles %}
+
+{% block scripts %}
+    {{ super() }}
+    <!-- DataTables -->
+    <script src="{{ adminlte_find_resource('plugins/datatables/jquery.dataTables.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('plugins/datatables/dataTables.bootstrap.js', cdn='local', use_minified=True) }}"></script>
+    <!-- page script -->
+    <script>
+        $(function () {
+            $('#pgs_certificate_details').DataTable({
+                "lengthChange": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true
+            });
+        });
+    </script>
+{%- endblock scripts %}
+{% block content_header -%}
+    <h1>
+        PGS Certificate Details
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="{{ url_for('main.index') }}"><i
+                class="fa fa-home"></i> Home</a></li>
+        <li><a href="{{ url_for('certificate.index') }}"><i class="fa fa-balance-scale"></i> Certificates</a></li>
+
+        <li><a href="#"><i class="fa fa-key"></i> Certificate Details</a></li>
+    </ol>
+{%- endblock content_header %}
+{% block content -%}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                {#                <div class="box-header">#}
+                {#                    <h3 class="box-title">PGS Certificates</h3>#}
+                {#                </div>#}
+                {#                <!-- /.box-header -->#}
+                <div class="box-body">
+
+                    <table id="pgs_certificate_details"
+                           class="table table-bordered table-hover">
+                        <tbody>
+                        <tr>
+                            <td><strong>Certificate ID</strong></td>
+                            <td>Programming</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Certificate Name</strong></td>
+                            <td>06/23/2013</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Owner Group</strong></td>
+                            <td>01/24/1988</td>
+                        </tr>
+
+                        <tr>
+                        <tr>
+                            <td><strong>Active Date</strong></td>
+                            <td>Female</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Expiry Date</strong></td>
+                            <td>Female</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Group Area When Active Certificate</strong></td>
+                            <td>Kathmandu,Nepal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Goverment Certificate ID</strong></td>
+                            <td>Kathmandu,Nepal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Note</strong></td>
+                            <td>Kathmandu,Nepal</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Re-Verify Certification State</strong></td>
+                            <td>Kathmandu,Nepal</td>
+                        </tr>
+                        </tbody>
+                    </table>
+{#                    <a href="#" class="btn btn-primary">My Sales Performance</a>#}
+{#                    <a href="#" class="btn btn-primary">Team Sales Performance</a>#}
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+{%- endblock content %}

@@ -19,3 +19,9 @@ def users():
 @roles_required('admin')
 def configs():
     return render_template('admin/index.html')
+
+
+@admin.route('/regions')
+@roles_required('admin')
+def regions():
+    return render_template('admin/regions_management.html')

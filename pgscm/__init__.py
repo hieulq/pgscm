@@ -67,7 +67,8 @@ def create_app(config_name):
 
     from pgscm.admin import admin as admin_blueprint
     app.register_blueprint(admin_blueprint, url_prefix='/admin')
-
+    from pgscm.certificate import certificate as certificate_blueprint
+    app.register_blueprint(certificate_blueprint, url_prefix='/certificates')
     from pgscm.db import resources
     resources.init_resources(api)
 

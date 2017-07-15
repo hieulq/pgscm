@@ -1,0 +1,137 @@
+{% extends "index.html" %}
+{%- block styles %}
+    {{ super() }}
+    <link href="{{ adminlte_find_resource('plugins/datatables/dataTables.bootstrap.css', cdn='local', use_minified=False) }}"
+          rel="stylesheet" type="text/css">
+{%- endblock styles %}
+
+{% block scripts %}
+    {{ super() }}
+    <!-- DataTables -->
+    <script src="{{ adminlte_find_resource('plugins/datatables/jquery.dataTables.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('plugins/datatables/dataTables.bootstrap.js', cdn='local', use_minified=True) }}"></script>
+    <!-- page script -->
+    <script>
+        $(function () {
+            $('#pgs_certificates').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true
+            });
+        });
+    </script>
+{%- endblock scripts %}
+{% block content_header -%}
+    <h1>
+        Certificate Advance Search
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="{{ url_for('main.index') }}"><i
+                class="fa fa-home"></i> Home</a></li>
+        <li><a href="{{ url_for('certificate.index') }}"><i class="fa fa-balance-scale"></i>Certificates</a></li>
+
+        <li><a href="#"><i class="fa fa-search-plus"></i>Advance Search</a></li>
+    </ol>
+{%- endblock content_header %}
+{% block content -%}
+
+    <div class="row">
+
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <div class="col-sm-4">
+                        <div class="dataTables_length" id="pgs_certificates_length"><label>Show <select
+                                name="pgs_certificates_length"
+                                aria-controls="pgs_certificates"
+                                class="form-control input-sm">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+
+                        </select> entries</label></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div id="pgs_certificates_filter" class="dataTables_filter" style="float:right">
+                            <span>
+
+                                <label>Select Field</label>
+                            </span>
+                            <span>
+                                <select name="pgs_certificates_select_field">
+                                    <option value="10">Certificate ID</option>
+                                    <option value="25">Certificate Name</option>
+                                    <option value="50">Active Date</option>
+                                    <option value="100">Expiry Date</option>
+                                    <option value="100">Owner Group</option>
+                                </select>
+                            </span>
+                            <span>
+                                <input
+                                        class="form-control input-sm"
+                                        placeholder=""
+                                        aria-controls="pgs_certificates"
+                                        type="search">
+                            </span>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="pgs_certificates"
+                           class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>{{ _('Certificate ID') }}</th>
+                            <th>{{ _('Certificate Name') }}</th>
+                            <th>{{ _('Owner Group') }}</th>
+                            <th>{{ _('Active Date') }}</th>
+                            <th>{{ _('Status') }}</th>
+                            {#                            <th>{{ _('Actions') }}</th>#}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for certificate in certificates %}
+                            <tr>
+                                <td>
+                                    <a href="{{ url_for('certificate.details',
+                                                        certificate_id=certificate.certificate_id) }}">
+                                        {{ certificate.certificate_id }}
+                                    </a>
+                                </td>
+                                <td>{{ certificate.certificate_name }}</td>
+                                <td>{{ certificate.owner_group }}</td>
+                                <td>{{ certificate.active_date }}</td>
+                                <td>{{ certificate.status }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>{{ _('Certificate ID') }}</th>
+                            <th>{{ _('Certificate Name') }}</th>
+                            <th>{{ _('Owner Group') }}</th>
+                            <th>{{ _('Active Date') }}</th>
+                            <th>{{ _('Status') }}</th>
+                            {#                            <th>{{ _('Actions') }}</th>#}
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+{%- endblock content %}
