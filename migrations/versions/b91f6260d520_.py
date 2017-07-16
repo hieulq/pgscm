@@ -73,6 +73,22 @@ def upgrade():
     op.add_column('user', sa.Column('region_id', sa.String(length=64), nullable=True))
     op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
     op.create_index(op.f('ix_user_fullname'), 'user', ['fullname'], unique=True)
+
+    op.create_index(op.f('ix_farmer_name'), 'farmer', ['name'], unique=False)
+    op.create_index(op.f('ix_farmer_deleted_at'), 'farmer', ['deleted_at'], unique=False)
+
+    op.create_index(op.f('ix_group_deleted_at'), 'group', ['deleted_at'], unique=False)
+    op.create_index(op.f('ix_group_name'), 'group', ['name'], unique=False)
+    op.create_index(op.f('ix_group_address'), 'group', ['address'], unique=False)
+
+    op.create_index(op.f('ix_associate_group_name'), 'associate_group', ['name'], unique=False)
+    op.create_index(op.f('ix_associate_group_email'), 'associate_group', ['email'], unique=False)
+    op.create_index(op.f('ix_associate_group_deleted_at'), 'associate_group', ['deleted_at'], unique=False)
+
+    op.create_index(op.f('ix_certificate_group_area'), 'certificate', ['group_area'], unique=False)
+    op.create_index(op.f('ix_certificate_certificate_start_date'), 'certificate', ['certificate_start_date'], unique=False)
+    op.create_index(op.f('ix_certificate_gov_certificate_id'), 'certificate', ['gov_certificate_id'], unique=False)
+
     op.drop_index('ix_users_email', table_name='user')
     op.create_foreign_key(None, 'user', 'region', ['region_id'], ['id'])
     # ### end Alembic commands ###
