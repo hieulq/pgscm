@@ -1,15 +1,15 @@
 {% extends "index.html" %}
 {%- block styles %}
     {{ super() }}
-    <link href="{{ adminlte_find_resource('plugins/datatables/dataTables.bootstrap.css', cdn='local', use_minified=False) }}"
+    <link href="{{ adminlte_find_resource('js/plugins/datatables/dataTables.bootstrap.css', cdn='local', use_minified=False) }}"
           rel="stylesheet" type="text/css">
 {%- endblock styles %}
 
 {% block scripts %}
     {{ super() }}
     <!-- DataTables -->
-    <script src="{{ adminlte_find_resource('plugins/datatables/jquery.dataTables.js', cdn='local', use_minified=True) }}"></script>
-    <script src="{{ adminlte_find_resource('plugins/datatables/dataTables.bootstrap.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/jquery.dataTables.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/dataTables.bootstrap.js', cdn='local', use_minified=True) }}"></script>
     <!-- page script -->
     <script>
         $(function () {

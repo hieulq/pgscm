@@ -11,6 +11,7 @@ from flask_babelex import Babel
 
 from adminlte import AdminLTE
 from config import config
+import uuid
 
 from pgscm.security import forms
 
@@ -91,13 +92,14 @@ def create_app(config_name):
                                            description='Normal User')
 
         if not user_datastore.find_user(email='admin@pgs.com'):
-            user_datastore.create_user(email='admin@pgs.com', fullname="Admin",
+            user_datastore.create_user(id=str(uuid.uuid4()), email='admin@pgs.com',
+                                       fullname="Admin",
                                        password=security_utils.hash_password('password'))
         if not user_datastore.find_user(email='mod@pgs.com'):
-            user_datastore.create_user(email='mod@pgs.com', fullname="Mod",
+            user_datastore.create_user(id=str(uuid.uuid4()), email='mod@pgs.com', fullname="Mod",
                                        password=security_utils.hash_password('password'))
         if not user_datastore.find_user(email='user@pgs.com'):
-            user_datastore.create_user(email='user@pgs.com', fullname="User",
+            user_datastore.create_user(id=str(uuid.uuid4()), email='user@pgs.com', fullname="User",
                                        password=security_utils.hash_password('password'))
         # Commit any database changes; the User and Roles must exist
         # before we can add a Role to the User
