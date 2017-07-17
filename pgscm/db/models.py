@@ -121,6 +121,8 @@ class Group(sqla.Model):
 
 
 class Farmer(sqla.Model):
+    __tablename__ = 'farmer'
+
     id = sqla.Column(sqla.String(64), primary_key=True, default=str(uuid.uuid4()))
     farmer_code = sqla.Column(sqla.String(64))
     name = sqla.Column(sqla.String(80))
@@ -136,6 +138,7 @@ class Farmer(sqla.Model):
 
 
 class Certificate(sqla.Model):
+    __tablename__ = 'certificate'
     id = sqla.Column(sqla.String(64), primary_key=True, default=str(uuid.uuid4()))
     certificate_code = sqla.Column(sqla.String(64))
     owner_group_id = sqla.Column(sqla.String(64), sqla.ForeignKey('group.id'), nullable=True)
