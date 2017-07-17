@@ -13,6 +13,9 @@
     <script>
         $(function () {
             $('#pgs_users').DataTable({
+                "language": {
+                    "url": "{{ url_for('static', filename='vi.json') }}"
+                },
                 "paging": true,
                 "lengthChange": true,
                 "searching": true,
@@ -25,16 +28,15 @@
 {%- endblock scripts %}
 {% block content_header -%}
     <h1>
-        PGS Users
-        <small>Managing roles and permissions in PGS system</small>
+        {{ _('PGS Users') }}
+        <small>{{ _('Managing roles and permissions in PGS system') }}</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="{{ url_for('main.index') }}"><i
-                class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#"><i class="fa fa-key"></i> Administrator</a></li>
+                class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
+        <li><a href="#"><i class="fa fa-key"></i> {{ _('Administrator') }}</a></li>
         <li class="active"><a href="{{ url_for('admin.users') }}"><i
-                class="fa fa-user"></i>Users
-            Management</a></li>
+                class="fa fa-user"></i>{{ _('Users Management') }}</a></li>
     </ol>
 {%- endblock content_header %}
 {% block content -%}
@@ -42,7 +44,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">PGS Users</h3>
+                    <h3 class="box-title">{{ _('PGS Users') }}</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
