@@ -15,7 +15,7 @@ class Certificate:
 
 
 @certificate.route('/')
-@roles_accepted('admin', 'moderator', 'user')
+@roles_accepted('national_admin', 'national_moderator', 'national_user')
 def index():
     sample_certificate = Certificate(11, 'certificate smp', datetime.date(2015, 8, 23), 100, "OK", "Group 1")
     result_certificates = []
@@ -25,7 +25,7 @@ def index():
 
 
 @certificate.route('/details/<string:certificate_id>')
-@roles_accepted('admin', 'moderator', 'user')
+@roles_accepted('national_admin', 'national_moderator', 'national_user')
 def details(certificate_id):
     sample_certificate = Certificate(11, 'certificate smp', datetime.date(2015, 8, 23), 100, "OK", "Group 1")
     result_certificates = []
@@ -35,7 +35,7 @@ def details(certificate_id):
 
 
 @certificate.route('/advance_search')
-@roles_accepted('admin', 'moderator', 'user')
+@roles_accepted('national_admin', 'national_moderator', 'national_user')
 def advance_search():
     sample_certificate = Certificate(11, 'certificate smp', datetime.date(2015, 8, 23), 100, "OK", "Group 1")
     result_certificates = []

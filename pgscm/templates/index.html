@@ -23,8 +23,8 @@
     </a>
     <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-            {% if current_user.is_authenticated and ('admin' in current_user.roles or
-            'mod' in current_user.roles) %}
+            {% if current_user.is_authenticated and ('national_admin' in current_user.roles or
+            'national_moderator' in current_user.roles) %}
                 <!-- Messages: style can be found in dropdown.less-->
                 <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -187,8 +187,8 @@
                 <i class="fa fa-dashboard"></i> <span>{{ _('Dashboard') }}</span>
             </a>
         </li>
-        {% if current_user.is_authenticated and ('admin' in current_user.roles or
-        'mod' in current_user.roles) %}
+        {% if current_user.is_authenticated and ('national_admin' in current_user.roles or
+        'national_moderator' in current_user.roles) %}
             <li class="{{ is_active_in_tree(request, 'certificate') }}">
                 <a href="{{ url_for('certificate.index') }}">
                     <i class="fa fa-balance-scale"></i> <span>{{ _('Certificate') }}</span>
@@ -211,7 +211,7 @@
                     <i class="fa fa-home"></i> <span>{{ _('Associated Group') }}</span>
                 </a>
             </li>
-            {% if 'admin' in current_user.roles %}
+            {% if 'national_admin' in current_user.roles %}
                 <li class="header">{{ _('DMZ') }}</li>
                 <li class="{{ is_active_in_tree(request, 'admin') }}">
                     <a href="{{ url_for('admin.index') }}">
