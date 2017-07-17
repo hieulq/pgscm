@@ -11,6 +11,7 @@ from flask_babelex import Babel
 import uuid
 from adminlte import AdminLTE
 from config import config
+import uuid
 
 from pgscm.security import forms
 

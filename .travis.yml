@@ -1,11 +1,14 @@
 language: python
 python:
   - "3.5"
-install: "pip install -r requirements.txt"
-script: tox -e pep8,py35,cover
+before_install: "rm -f data-test.sqlite"
+install: "pip install -r requirements.txt -r test-requirements.txt"
+script: tox -e cover
 notifications:
   email:
     recipients:
       - hieulq19@gmail.com
+      - haminhcongbkhn@gmail.com
+      - dongha.27995@gmail.com
     on_success: change
 on_failure: always

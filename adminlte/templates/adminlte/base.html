@@ -22,7 +22,7 @@
             <link href="{{ adminlte_find_resource('css/ionicons.css', cdn='local') }}"
                   rel="stylesheet" type="text/css"/>
             <!-- jvectormap -->
-            <link href="{{ adminlte_find_resource('plugins/jvectormap/jquery-jvectormap-1.2.2.css', cdn='local', use_minified=False) }}"
+            <link href="{{ adminlte_find_resource('js/plugins/jvectormap/jquery-jvectormap-1.2.2.css', cdn='local', use_minified=False) }}"
                   rel="stylesheet" type="text/css">
             <!-- Theme style -->
             <link href="{{ adminlte_find_resource('css/AdminLTE.css', cdn='local', use_minified=False) }}"
@@ -31,7 +31,7 @@
             <link href="{{ adminlte_find_resource('css/skins/_all-skins.css', cdn='local', use_minified=True) }}"
                   rel="stylesheet" type="text/css"/>
             <!-- Pace -->
-            <link href="{{ adminlte_find_resource('plugins/pace/pace.css', cdn='local') }}"
+            <link href="{{ adminlte_find_resource('js/plugins/pace/pace.css', cdn='local') }}"
                   rel="stylesheet" type="text/css">
 
         {%- endblock styles %}
@@ -118,13 +118,15 @@
 {% block scripts %}
     <!-- jQuery -->
     <!--<script src="{{ adminlte_find_resource('jquery.js', cdn='jquery') }}"></script>-->
-    <script src="{{ adminlte_find_resource('plugins/jQuery/jquery-2.2.3.js', cdn='local', use_minified=True)}}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/jQuery/jquery-2.2.3.js', cdn='local', use_minified=True)}}"></script>
     <!-- jQuery UI 1.11.4 -->
-    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!--<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>-->
+    <script src="{{ adminlte_find_resource('js/plugins/jQueryUI/jquery-ui.js', cdn='local', use_minified=True)}}"></script>
     <!-- Bootstrap -->
     <script src="{{ adminlte_find_resource('js/bootstrap.js', cdn='local') }}"></script>
     <!-- Toastr Notifications -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>-->
+    <script src="{{ adminlte_find_resource('js/plugins/toastr.js', cdn='local', use_minified=True)}}"></script>
     <!-- PACE -->
     <script src="{{ adminlte_find_resource('js/plugins/pace/pace.js', cdn='local', use_minified=False) }}"></script>
     <!-- Slimscroll -->

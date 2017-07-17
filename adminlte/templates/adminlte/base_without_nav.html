@@ -29,7 +29,8 @@
 
     {% block scripts %}
     <!-- jQuery 2.0.2 -->
-    <script src="{{ adminlte_find_resource('jquery.js', cdn='jquery') }}"></script>
+    <!--<script src="{{ adminlte_find_resource('jquery.js', cdn='jquery') }}"></script>-->
+    <script src="{{ adminlte_find_resource('js/plugins/jQuery/jquery-2.2.3.js', cdn='local', use_minified=True)}}"></script>
     <!-- Bootstrap -->
     <script src="{{ adminlte_find_resource('js/bootstrap.js', cdn='local') }}"></script>
     <!-- AdminLTE App -->
