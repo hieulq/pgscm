@@ -8,5 +8,7 @@ notifications:
   email:
     recipients:
       - hieulq19@gmail.com
+      - haminhcongbkhn@gmail.com
+      - dongha.27995@gmail.com
     on_success: change
 on_failure: always
