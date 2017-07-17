@@ -9,8 +9,8 @@
                   name='viewport'>
         {%- endblock metas %}
         {%- block styles %}
-            <!-- bootstrap 3.0.2 -->
-            <link href="{{ adminlte_find_resource('css/bootstrap.css', cdn='local') }}"
+            <!-- bootstrap -->
+            <link href="{{ adminlte_find_resource('css/bootstrap.css', cdn='local', use_minified=True) }}"
                   rel="stylesheet" type="text/css"/>
             <!-- Toastr Notifications -->
             <link href="{{ adminlte_find_resource('css/toastr.css', cdn='local', use_minified=True) }}"
