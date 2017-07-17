@@ -8,7 +8,7 @@ from flask_security import Security, SQLAlchemyUserDatastore, utils as security_
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import user_registered
 from flask_babelex import Babel
-
+import uuid
 from adminlte import AdminLTE
 from config import config
 
@@ -25,6 +25,7 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = 'security.login'
 
 from pgscm.db.models import User, Role
+
 user_datastore = SQLAlchemyUserDatastore(sqla, User, Role)
 sec = Security()
 api = Api()
@@ -83,29 +84,29 @@ def create_app(config_name):
     def create_user():
         sqla.create_all()
         # Create the Roles "admin" and "end-user" -- unless they already exist
-        user_datastore.find_or_create_role(name='admin',
+        user_datastore.find_or_create_role(id=str(uuid.uuid4()), name='national_admin',
                                            description='Administrator')
-        user_datastore.find_or_create_role(name='mod',
+        user_datastore.find_or_create_role(id=str(uuid.uuid4()), name='national_moderator',
                                            description='Moderator')
-        user_datastore.find_or_create_role(name='user',
+        user_datastore.find_or_create_role(id=str(uuid.uuid4()), name='national_user',
                                            description='Normal User')
 
         if not user_datastore.find_user(email='admin@pgs.com'):
-            user_datastore.create_user(email='admin@pgs.com', fullname="Admin",
+            user_datastore.create_user(id=str(uuid.uuid4()), email='admin@pgs.com', fullname="Admin",
                                        password=security_utils.hash_password('password'))
         if not user_datastore.find_user(email='mod@pgs.com'):
-            user_datastore.create_user(email='mod@pgs.com', fullname="Mod",
+            user_datastore.create_user(id=str(uuid.uuid4()), email='mod@pgs.com', fullname="Mod",
                                        password=security_utils.hash_password('password'))
         if not user_datastore.find_user(email='user@pgs.com'):
-            user_datastore.create_user(email='user@pgs.com', fullname="User",
+            user_datastore.create_user(id=str(uuid.uuid4()), email='user@pgs.com', fullname="User",
                                        password=security_utils.hash_password('password'))
         # Commit any database changes; the User and Roles must exist
         # before we can add a Role to the User
         sqla.session.commit()
 
-        user_datastore.add_role_to_user('admin@pgs.com', 'admin')
-        user_datastore.add_role_to_user('mod@pgs.com', 'mod')
-        user_datastore.add_role_to_user('user@pgs.com', 'user')
+        user_datastore.add_role_to_user('admin@pgs.com', 'national_admin')
+        user_datastore.add_role_to_user('mod@pgs.com', 'national_moderator')
+        user_datastore.add_role_to_user('user@pgs.com', 'national_user')
         sqla.session.commit()
 
     return app

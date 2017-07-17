@@ -14,5 +14,5 @@ WTForms
 Werkzeug
 alembic
 bcrypt
-
+pymysql
 mock
