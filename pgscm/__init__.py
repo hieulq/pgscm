@@ -86,11 +86,11 @@ def create_app(config_name):
         sqla.create_all()
         # Create the Roles "admin" and "end-user" -- unless they already exist
         user_datastore.find_or_create_role(id=str(uuid.uuid4()), name='national_admin',
-                                           description='Administrator')
+                                           description='National Administrator')
         user_datastore.find_or_create_role(id=str(uuid.uuid4()), name='national_moderator',
-                                           description='Moderator')
+                                           description='National Moderator')
         user_datastore.find_or_create_role(id=str(uuid.uuid4()), name='national_user',
-                                           description='Normal User')
+                                           description='National User')
 
         if not user_datastore.find_user(email='admin@pgs.com'):
             user_datastore.create_user(id=str(uuid.uuid4()), email='admin@pgs.com', fullname="Admin",

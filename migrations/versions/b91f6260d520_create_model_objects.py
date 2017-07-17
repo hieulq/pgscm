@@ -1,4 +1,4 @@
-"""empty message
+"""create model objects: region, farmer, group, associate group, change id type of role and user
 Revision ID: b91f6260d520
 Revises: 56502d362ab5
 Create Date: 2017-07-16 18:17:32.791453
@@ -10,6 +10,7 @@ down_revision = '56502d362ab5'
 
 from alembic import op
 import sqlalchemy as sa
+import uuid
 
 
 def upgrade():
@@ -73,15 +74,15 @@ def upgrade():
     )
     op.create_index('a_group_code_index', 'associate_group', ['associate_group_code', 'deleted_at'], unique=False)
 
-
-
-
     # - create table group, foreign key and index
     op.create_table('group',
     sa.Column('id', sa.String(length=64), nullable=False),
     sa.Column('group_code', sa.String(length=64), nullable=True),
     sa.Column('name', sa.String(length=80), nullable=True),
-    sa.Column('address', sa.String(length=255), nullable=True),
+    sa.Column('village', sa.String(length=255), nullable=True),
+    sa.Column('ward', sa.String(length=255), nullable=True),
+    sa.Column('district', sa.String(length=255), nullable=True),
+    sa.Column('province', sa.String(length=255), nullable=True),
     sa.Column('associate_group_id', sa.String(length=64), nullable=True),
     sa.Column('region_id', sa.String(length=64), nullable=True),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
@@ -101,8 +102,8 @@ def upgrade():
     sa.Column('certificate_start_date', sa.DateTime(), nullable=True),
     sa.Column('gov_certificate_id', sa.String(length=64), nullable=True),
     sa.Column('certificate_expiry_date', sa.DateTime(), nullable=True),
-    sa.Column('state', sa.Enum('valid', 'invalid', 'checking', name='certificatestatetype'), nullable=True),
-    sa.Column('re_verify_state', sa.Enum('not_check', 'ok', 'warning', name='certificatereverifystatetype'), nullable=True),
+    sa.Column('status', sa.Enum('valid', 'invalid', 'checking', name='certificatestatustype'), nullable=True),
+    sa.Column('re_verify_status', sa.Enum('not_check', 'ok', 'warning', name='certificatereverifystatustype'), nullable=True),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
     sa.Column('modify_info', sa.String(length=255), nullable=True),
     sa.ForeignKeyConstraint(['owner_group_id'], ['group.id'], ),
@@ -124,6 +125,26 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index('farmer_code_index', 'farmer', ['farmer_code', 'deleted_at'], unique=False)
+
+    # Create an ad-hoc table to use for the insert statement.
+    from sqlalchemy.sql import table, column
+    from sqlalchemy import String, Integer, Date
+    role_table = table('role',
+                           column('id', String),
+                           column('name', String),
+                           column('description', String)
+                           )
+    op.bulk_insert(
+        role_table,
+        [
+            {'id':str(uuid.uuid4()), "name": "national_admin", "description": "National Admin"},
+            {'id':str(uuid.uuid4()), "name": "national_moderator", "description": "National Moderator"},
+            {'id':str(uuid.uuid4()), "name": "national_user", "description": "National User"},
+            {'id':str(uuid.uuid4()), "name": "regional_admin", "description": "Regional Admin"},
+            {'id':str(uuid.uuid4()), "name": "regional_moderator", "description": "Regional Moderator"},
+            {'id':str(uuid.uuid4()), "name": "regional_user", "description": "Regional User"},
+        ]
+    )
 
     # op.create_index(op.f('ix_farmer_name'), 'farmer', ['name'], unique=False)
     # op.create_index(op.f('ix_farmer_deleted_at'), 'farmer', ['deleted_at'], unique=False)
