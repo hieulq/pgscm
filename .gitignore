@@ -8,6 +8,8 @@ __pycache__/
 *.sqlite
 # Distribution / packaging
 .Python
+cover/
+.testrepository/
 env/
 build/
 develop-eggs/
