@@ -21,6 +21,7 @@ class Config:
     PGS_ADMIN = os.environ.get('PGS_ADMIN')
 
     # i18n
+    MULTILANGUAGE_LANGS = ['en', 'vi']
     BABEL_DEFAULT_LOCALE = 'vi'
     BABEL_DEFAULT_TIMEZONE = 'ICT'
 
@@ -30,10 +31,6 @@ class Config:
     SECURITY_REGISTERABLE = True
     SECURITY_URL_PREFIX = '/auth'
     SECURITY_SEND_REGISTER_EMAIL = False
-
-    @staticmethod
-    def init_app(app):
-        pass
 
 
 class DevelopmentConfig(Config):

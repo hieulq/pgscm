@@ -29,7 +29,7 @@
                 <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-envelope"></i>
-                        <span class="label label-success">1</span>
+                        <span class="label label-warning">1</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li class="header">You have 1 message</li>
@@ -89,7 +89,8 @@
                 <!-- Language choosing -->
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-flag"></i>
+                        <i class="fa fa-globe"></i>
+                        <span class="label label-danger">{{ g.language }}</span>
                     </a>
                     <ul class="dropdown-menu" style="width: 140px;height: 120px;">
                         <li class="header">{{ _('Change the language.') }}</li>
@@ -97,13 +98,13 @@
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
                                 <li>
-                                    <a href="#">
-                                        <i class="fa fa-check-circle"></i>
+                                    <a href="{{ url_for(request.endpoint[:-2] + 'vi') }}">
+                                        <i class="fa fa-circle"></i>
                                         {{ _('Vietnamese') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="{{ url_for(request.endpoint[:-2] + 'en') }}">
                                         <i class="fa fa-circle"></i>
                                         {{ _('English') }}
                                     </a>
@@ -183,7 +184,7 @@
     <ul class="sidebar-menu">
         <li class="header">{{ _('PGS MANAGEMENT') }}</li>
         <li class="{{ is_active_in_tree(request, 'main') }}">
-            <a href="{{ url_for('main.index') }}">
+            <a href="{{ lurl_for('main.index') }}">
                 <i class="fa fa-dashboard"></i> <span>{{ _('Dashboard') }}</span>
             </a>
         </li>
@@ -214,26 +215,26 @@
             {% if 'national_admin' in current_user.roles %}
                 <li class="header">{{ _('DMZ') }}</li>
                 <li class="{{ is_active_in_tree(request, 'admin') }}">
-                    <a href="{{ url_for('admin.index') }}">
+                    <a href="{{ lurl_for('admin.index') }}">
                         <i class="fa fa-key"></i>
                         <span>{{ _('Administrator') }}</span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
                         <li>
-                            <a href="{{ url_for('admin.users') }}">
+                            <a href="{{ lurl_for('admin.users') }}">
                                 <i class="fa fa-user"></i>
                                 {{ _('Users Management') }}
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url_for('admin.regions') }}">
+                            <a href="{{ lurl_for('admin.regions') }}">
                                 <i class="fa fa-map"></i>
                                 {{ _('PGS Regions Management') }}
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url_for('admin.configs') }}">
+                            <a href="{{ lurl_for('admin.configs') }}">
                                 <i class="fa fa-cogs"></i>
                                 {{ _('Configurations') }}
                             </a>

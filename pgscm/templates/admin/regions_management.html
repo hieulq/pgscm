@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 {%- block styles %}
     {{ super() }}
-    <link href="{{ adminlte_find_resource('js/plugins/datatables/dataTables.bootstrap.css', cdn='local', use_minified=False) }}"
+    <link href="{{ adminlte_find_resource('js/plugins/datatables/dataTables.bootstrap.css', cdn='local', use_minified=True) }}"
           rel="stylesheet" type="text/css">
 {%- endblock styles %}
 
@@ -10,16 +10,48 @@
     <!-- DataTables -->
     <script src="{{ adminlte_find_resource('js/plugins/datatables/jquery.dataTables.js', cdn='local', use_minified=True) }}"></script>
     <script src="{{ adminlte_find_resource('js/plugins/datatables/dataTables.bootstrap.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/dataTables.buttons.js', cdn='local', use_minified=True)}}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/buttons.bootstrap.js', cdn='local', use_minified=True)}}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/buttons.print.js', cdn='local', use_minified=True)}}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/buttons.html5.js', cdn='local', use_minified=True)}}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/jszip.js', cdn='local', use_minified=True)}}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/pdfmake.js', cdn='local', use_minified=True)}}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/vfs_fonts.js', cdn='local', use_minified=False)}}"></script>
     <!-- page script -->
     <script>
         $(function () {
-            $('#pgs_users').DataTable({
+            var table = $('#pgs_users').DataTable({
+                "language": {
+                    "url": "/static/" + '{{ g.language }}' + '.json'
+                },
+                buttons: [
+                    {
+                        extend:    'excelHtml5',
+                        text:      '<i class="fa fa-file-excel-o"></i>',
+                        titleAttr: 'Excel'
+                    },
+                    {
+                        extend:    'pdfHtml5',
+                        text:      '<i class="fa fa-file-pdf-o"></i>',
+                        titleAttr: 'PDF'
+                    },
+                    {
+                        extend:    'print',
+                        text:      '<i class="fa fa-print"></i>',
+                        titleAttr: 'Print'
+                    }
+                ],
+                "processing": true,
+                "serverSide": false,
                 "paging": true,
                 "lengthChange": true,
                 "searching": true,
                 "ordering": true,
                 "info": true,
-                "autoWidth": true
+                "autoWidth": true,
+                "initComplete" : function (settings, json) {
+                    table.buttons().container().appendTo('#pgs_users_filter');
+                }
             });
         });
     </script>
@@ -30,10 +62,10 @@
         <small>Managing Regions in PGS system</small>
     </h1>
     <ol class="breadcrumb">
-        <li><a href="{{ url_for('main.index') }}"><i
+        <li><a href="{{ lurl_for('main.index') }}"><i
                 class="fa fa-home"></i> Home</a></li>
         <li><a href="#"><i class="fa fa-key"></i> Administrator</a></li>
-        <li class="active"><a href="{{ url_for('admin.regions') }}"><i
+        <li class="active"><a href="{{ lurl_for('admin.regions') }}"><i
                 class="fa fa-university"></i>Regions Management</a></li>
     </ol>
 {%- endblock content_header %}

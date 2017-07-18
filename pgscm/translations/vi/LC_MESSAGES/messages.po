@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-07-09 16:42+0900\n"
+"POT-Creation-Date: 2017-07-18 15:24+0700\n"
 "PO-Revision-Date: 2017-07-08 21:17+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: vi\n"
@@ -44,52 +44,52 @@ msgstr "Máy chủ gặp sự cố"
 msgid "Toggle navigation"
 msgstr "Kích hoạt trang điều phối"
 
-#: pgscm/templates/index.html:95
+#: pgscm/templates/index.html:96
 msgid "Change the language."
 msgstr "Đổi ngôn ngữ."
 
-#: pgscm/templates/index.html:102
+#: pgscm/templates/index.html:103
 msgid "Vietnamese"
 msgstr "Tiếng Việt"
 
-#: pgscm/templates/index.html:108
+#: pgscm/templates/index.html:109
 msgid "English"
 msgstr "Tiếng Anh"
 
-#: pgscm/templates/index.html:138
+#: pgscm/templates/index.html:139
 msgid "Profile"
 msgstr "Hồ sơ cá nhân"
 
-#: pgscm/templates/index.html:142
+#: pgscm/templates/index.html:143
 msgid "Sign out"
 msgstr "Đăng xuất"
 
-#: pgscm/templates/index.html:174
+#: pgscm/templates/index.html:175
 msgid "Search..."
 msgstr "Tìm kiếm..."
 
-#: pgscm/templates/index.html:184
+#: pgscm/templates/index.html:185
 msgid "PGS MANAGEMENT"
 msgstr "DANH MỤC QUẢN LÝ PGS"
 
-#: pgscm/templates/index.html:187 pgscm/templates/index.html:259
-#: pgscm/templates/index.html:264
+#: pgscm/templates/index.html:188 pgscm/templates/index.html:289
+#: pgscm/templates/index.html:294
 msgid "Dashboard"
 msgstr "Tổng quan"
 
-#: pgscm/templates/index.html:194
+#: pgscm/templates/index.html:195 pgscm/templates/index.html:248
 msgid "Certificate"
 msgstr "Chứng chỉ"
 
-#: pgscm/templates/index.html:200
+#: pgscm/templates/index.html:201 pgscm/templates/index.html:254
 msgid "Farmer"
 msgstr "Nông dân"
 
-#: pgscm/templates/index.html:206
+#: pgscm/templates/index.html:206 pgscm/templates/index.html:259
 msgid "Group"
 msgstr "Nhóm"
 
-#: pgscm/templates/index.html:212
+#: pgscm/templates/index.html:212 pgscm/templates/index.html:265
 msgid "Associated Group"
 msgstr "Liên nhóm"
 
@@ -97,45 +97,112 @@ msgstr "Liên nhóm"
 msgid "DMZ"
 msgstr "KHU VỰC QUẢN TRỊ"
 
-#: pgscm/templates/index.html:220
+#: pgscm/templates/admin/index.html:66 pgscm/templates/index.html:220
 msgid "Administrator"
 msgstr "Danh mục quản trị"
 
-#: pgscm/templates/index.html:227
+#: pgscm/templates/admin/index.html:68 pgscm/templates/index.html:227
 msgid "Users Management"
 msgstr "Quản lý người dùng hệ thống"
 
 #: pgscm/templates/index.html:233
+msgid "PGS Regions Management"
+msgstr "Quản lý vùng PGS"
+
+#: pgscm/templates/index.html:239
 msgid "Configurations"
 msgstr "Quản lý cấu hình"
 
-#: pgscm/templates/index.html:241
+#: pgscm/templates/index.html:271
 msgid "USER"
 msgstr "TÁC VỤ NGƯỜI DÙNG"
 
-#: pgscm/templates/index.html:244
+#: pgscm/templates/index.html:274
 msgid "Login"
 msgstr "Đăng nhập"
 
-#: pgscm/templates/index.html:249 pgscm/templates/security/register_user.html:3
+#: pgscm/templates/index.html:279 pgscm/templates/security/register_user.html:3
 msgid "Register"
 msgstr "Đăng ký"
 
-#: pgscm/templates/index.html:260
+#: pgscm/templates/index.html:290
 msgid "Summary report about PGS status"
 msgstr "Báo cáo thống kê trạng thái hiện tại của hệ thống PGS"
 
-#: pgscm/templates/index.html:263
+#: pgscm/templates/index.html:293
 msgid " Home"
 msgstr " Trang chủ"
 
-#: pgscm/templates/index.html:269
+#: pgscm/templates/index.html:299
 msgid "PGS Status"
 msgstr "Trạng thái của PGS"
 
-#: pgscm/templates/index.html:270
+#: pgscm/templates/index.html:300
 msgid "Quickly summary about <code>PGS Certificates</code> analytics."
 msgstr "Thống kê nhanh về <code>Chứng chỉ PGS</code>."
+
+#: pgscm/templates/admin/index.html:60 pgscm/templates/admin/index.html:76
+msgid "PGS Users"
+msgstr "Người dùng PGS"
+
+#: pgscm/templates/admin/index.html:61
+msgid "Managing roles and permissions in PGS system"
+msgstr "Quản lý quyền hạn người dùng trong hệ thống PGS"
+
+#: pgscm/templates/admin/index.html:65
+msgid "Home"
+msgstr "Trang chủ"
+
+#: pgscm/templates/certificate/advance_search.html:94
+#: pgscm/templates/certificate/advance_search.html:120
+#: pgscm/templates/certificate/index.html:101
+#: pgscm/templates/certificate/index.html:150
+#: pgscm/templates/certificate/index.html:210
+#: pgscm/templates/certificate/index.html:260
+msgid "Certificate ID"
+msgstr "ID Chứng Chỉ"
+
+#: pgscm/templates/certificate/advance_search.html:95
+#: pgscm/templates/certificate/advance_search.html:121
+#: pgscm/templates/certificate/index.html:102
+#: pgscm/templates/certificate/index.html:151
+#: pgscm/templates/certificate/index.html:211
+#: pgscm/templates/certificate/index.html:261
+msgid "Certificate Name"
+msgstr "Tên Chứng Chỉ"
+
+#: pgscm/templates/certificate/advance_search.html:96
+#: pgscm/templates/certificate/advance_search.html:122
+#: pgscm/templates/certificate/index.html:103
+#: pgscm/templates/certificate/index.html:152
+#: pgscm/templates/certificate/index.html:212
+#: pgscm/templates/certificate/index.html:262
+msgid "Owner Group"
+msgstr "Nhóm"
+
+#: pgscm/templates/certificate/advance_search.html:97
+#: pgscm/templates/certificate/advance_search.html:123
+#: pgscm/templates/certificate/index.html:104
+#: pgscm/templates/certificate/index.html:153
+#: pgscm/templates/certificate/index.html:213
+#: pgscm/templates/certificate/index.html:263
+msgid "Active Date"
+msgstr "Ngày kích hoạt"
+
+#: pgscm/templates/certificate/advance_search.html:98
+#: pgscm/templates/certificate/advance_search.html:124
+#: pgscm/templates/certificate/index.html:105
+#: pgscm/templates/certificate/index.html:154
+#: pgscm/templates/certificate/index.html:214
+#: pgscm/templates/certificate/index.html:264
+msgid "Status"
+msgstr "Trạng thái"
+
+#: pgscm/templates/certificate/index.html:106
+#: pgscm/templates/certificate/index.html:215
+#: pgscm/templates/certificate/index.html:265
+msgid "Actions"
+msgstr "Thao tác"
 
 #: pgscm/templates/security/login_user.html:3
 msgid "Log In"
@@ -166,4 +233,3 @@ msgstr "Đăng ký tài khoản PGS mới!"
 #: pgscm/templates/security/register_user.html:14
 msgid "Please register new PGS account!"
 msgstr "Hãy đăng ký tài khoản PGS mới!"
-

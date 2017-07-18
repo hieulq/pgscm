@@ -1,4 +1,4 @@
-from flask import Flask, request, session
+from flask import Flask, request, g, url_for
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_mail import Mail
@@ -8,12 +8,16 @@ from flask_security import Security, SQLAlchemyUserDatastore, utils as security_
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import user_registered
 from flask_babelex import Babel
-import uuid
 from adminlte import AdminLTE
 from config import config
 import uuid
 
 from pgscm.security import forms
+
+# Blueprint
+from pgscm.admin import admin as admin_blueprint
+from pgscm.certificate import certificate as certificate_blueprint
+from pgscm.main import main as main_blueprint
 
 bootstrap = Bootstrap()
 mail = Mail()
@@ -32,20 +36,7 @@ sec = Security()
 api = Api()
 
 
-@babel.localeselector
-def get_locale():
-    override = request.args.get('lang')
-    if override:
-        session['lang'] = override
-    rv = session.get('lang', 'vi')
-    return rv
-
-
-def create_app(config_name):
-    app = Flask(__name__)
-    app.config.from_object(config[config_name])
-    config[config_name].init_app(app)
-
+def register_extensions(app):
     babel.init_app(app)
     bootstrap.init_app(app)
     AdminLTE(app)
@@ -53,6 +44,7 @@ def create_app(config_name):
     moment.init_app(app)
     sqla.init_app(app)
     login_manager.init_app(app)
+
     # Init flask security using factory method, then change the localized
     # domain to our own
     sec_state = sec.init_app(app,
@@ -64,42 +56,72 @@ def create_app(config_name):
     api.app = app
     api.init_app(app)
 
-    from pgscm.main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
 
-    from pgscm.admin import admin as admin_blueprint
-    app.register_blueprint(admin_blueprint, url_prefix='/admin')
-    from pgscm.certificate import certificate as certificate_blueprint
-    app.register_blueprint(certificate_blueprint, url_prefix='/certificates')
+def register_api_resource(api):
     from pgscm.db import resources
     resources.init_resources(api)
+
+
+def register_blueprint(app):
+    app.register_blueprint(main_blueprint)
+    app.register_blueprint(admin_blueprint)
+    app.register_blueprint(certificate_blueprint)
+
+
+def create_app(config_name):
+    app = Flask(__name__)
+    app.config.from_object(config[config_name])
+
+    register_extensions(app)
+    register_blueprint(app)
+    register_api_resource(api)
+
+    # i18n locale selector
+    @babel.localeselector
+    def get_locale():
+        lang = request.path[1:].split('/', 1)[0]
+        if lang in config[config_name].MULTILANGUAGE_LANGS:
+            return lang
+        else:
+            return 'vi'
 
     # Default role for new user is 'user'
     @user_registered.connect_via(app)
     def user_registered_sighandler(app, user, confirm_token):
-        default_role = user_datastore.find_role('user')
+        default_role = user_datastore.find_role('regional_user')
         user_datastore.add_role_to_user(user, default_role)
         sqla.session.commit()
 
+    @app.context_processor
+    def inject_custom():
+        filters = {
+            'lurl_for': lambda ep, **kwargs: url_for(ep + '_' + g.language,
+                                                     **kwargs)
+        }
+        return filters
+
+    @app.before_request
+    def inject_global_proxy():
+        # append babel i18n to flask global proxy object
+        g.babel = babel
+        g.language = get_locale()
+
     @app.before_first_request
     def create_user():
+        # for master data in DB
         sqla.create_all()
-        # Create the Roles "admin" and "end-user" -- unless they already exist
-        user_datastore.find_or_create_role(id=str(uuid.uuid4()), name='national_admin',
-                                           description='National Administrator')
-        user_datastore.find_or_create_role(id=str(uuid.uuid4()), name='national_moderator',
-                                           description='National Moderator')
-        user_datastore.find_or_create_role(id=str(uuid.uuid4()), name='national_user',
-                                           description='National User')
 
         if not user_datastore.find_user(email='admin@pgs.com'):
-            user_datastore.create_user(id=str(uuid.uuid4()), email='admin@pgs.com', fullname="Admin",
+            user_datastore.create_user(id=str(uuid.uuid4()),
+                                       email='admin@pgs.com', fullname="Admin",
                                        password=security_utils.hash_password('password'))
         if not user_datastore.find_user(email='mod@pgs.com'):
-            user_datastore.create_user(id=str(uuid.uuid4()), email='mod@pgs.com', fullname="Mod",
+            user_datastore.create_user(id=str(uuid.uuid4()),
+                                       email='mod@pgs.com', fullname="Mod",
                                        password=security_utils.hash_password('password'))
         if not user_datastore.find_user(email='user@pgs.com'):
-            user_datastore.create_user(id=str(uuid.uuid4()), email='user@pgs.com', fullname="User",
+            user_datastore.create_user(id=str(uuid.uuid4()),
+                                       email='user@pgs.com', fullname="User",
                                        password=security_utils.hash_password('password'))
         # Commit any database changes; the User and Roles must exist
         # before we can add a Role to the User

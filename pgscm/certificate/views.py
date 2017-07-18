@@ -1,6 +1,6 @@
 from flask import render_template, current_app
 from . import certificate
-from flask_security import roles_required, roles_accepted
+from flask_security import roles_accepted
 import datetime
 
 
@@ -14,7 +14,7 @@ class Certificate:
         self.owner_group = owner_group
 
 
-@certificate.route('/')
+@certificate.route('/certificates')
 @roles_accepted('national_admin', 'national_moderator', 'national_user')
 def index():
     sample_certificate = Certificate(11, 'certificate smp', datetime.date(2015, 8, 23), 100, "OK", "Group 1")
@@ -24,7 +24,7 @@ def index():
     return render_template('certificate/index.html', certificates=result_certificates)
 
 
-@certificate.route('/details/<string:certificate_id>')
+@certificate.route('/certificates/details/<string:certificate_id>')
 @roles_accepted('national_admin', 'national_moderator', 'national_user')
 def details(certificate_id):
     sample_certificate = Certificate(11, 'certificate smp', datetime.date(2015, 8, 23), 100, "OK", "Group 1")
@@ -34,7 +34,7 @@ def details(certificate_id):
     return render_template('certificate/details.html', certificates=result_certificates)
 
 
-@certificate.route('/advance_search')
+@certificate.route('/certificates/advance_search')
 @roles_accepted('national_admin', 'national_moderator', 'national_user')
 def advance_search():
     sample_certificate = Certificate(11, 'certificate smp', datetime.date(2015, 8, 23), 100, "OK", "Group 1")
@@ -42,20 +42,3 @@ def advance_search():
     for i in range(1, 30):
         result_certificates.append(sample_certificate)
     return render_template('certificate/advance_search.html', certificates=result_certificates)
-
-# @certificate.route('/users')
-# @roles_required('admin')
-# def users():
-#     return render_template('admin/index.html')
-#
-#
-# @certificate.route('/configs')
-# @roles_required('admin')
-# def configs():
-#     return render_template('admin/index.html')
-#
-#
-# @certificate.route('/regions')
-# @roles_required('admin')
-# def regions():
-#     return render_template('admin/regions_management.html')

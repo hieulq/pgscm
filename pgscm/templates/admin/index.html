@@ -21,7 +21,7 @@
         $(function () {
             var table = $('#pgs_users').DataTable({
                 "language": {
-                    "url": "{{ url_for('static', filename='vi.json') }}"
+                    "url": "/static/" + '{{ g.language }}' + '.json'
                 },
                 buttons: [
                     {
@@ -61,10 +61,10 @@
         <small>{{ _('Managing roles and permissions in PGS system') }}</small>
     </h1>
     <ol class="breadcrumb">
-        <li><a href="{{ url_for('main.index') }}"><i
+        <li><a href="{{ lurl_for('main.index') }}"><i
                 class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
         <li><a href="#"><i class="fa fa-key"></i> {{ _('Administrator') }}</a></li>
-        <li class="active"><a href="{{ url_for('admin.users') }}"><i
+        <li class="active"><a href="{{ lurl_for('admin.users') }}"><i
                 class="fa fa-user"></i>{{ _('Users Management') }}</a></li>
     </ol>
 {%- endblock content_header %}

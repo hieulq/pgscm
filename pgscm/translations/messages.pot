@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PGSCM 1.0.0\n"
 "Report-Msgid-Bugs-To: hieulq19@gmail.com\n"
-"POT-Creation-Date: 2017-07-09 16:42+0900\n"
+"POT-Creation-Date: 2017-07-18 15:24+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,52 +42,52 @@ msgstr ""
 msgid "Toggle navigation"
 msgstr ""
 
-#: pgscm/templates/index.html:95
+#: pgscm/templates/index.html:96
 msgid "Change the language."
 msgstr ""
 
-#: pgscm/templates/index.html:102
+#: pgscm/templates/index.html:103
 msgid "Vietnamese"
 msgstr ""
 
-#: pgscm/templates/index.html:108
+#: pgscm/templates/index.html:109
 msgid "English"
 msgstr ""
 
-#: pgscm/templates/index.html:138
+#: pgscm/templates/index.html:139
 msgid "Profile"
 msgstr ""
 
-#: pgscm/templates/index.html:142
+#: pgscm/templates/index.html:143
 msgid "Sign out"
 msgstr ""
 
-#: pgscm/templates/index.html:174
+#: pgscm/templates/index.html:175
 msgid "Search..."
 msgstr ""
 
-#: pgscm/templates/index.html:184
+#: pgscm/templates/index.html:185
 msgid "PGS MANAGEMENT"
 msgstr ""
 
-#: pgscm/templates/index.html:187 pgscm/templates/index.html:259
-#: pgscm/templates/index.html:264
+#: pgscm/templates/index.html:188 pgscm/templates/index.html:289
+#: pgscm/templates/index.html:294
 msgid "Dashboard"
 msgstr ""
 
-#: pgscm/templates/index.html:194
+#: pgscm/templates/index.html:195 pgscm/templates/index.html:248
 msgid "Certificate"
 msgstr ""
 
-#: pgscm/templates/index.html:200
+#: pgscm/templates/index.html:201 pgscm/templates/index.html:254
 msgid "Farmer"
 msgstr ""
 
-#: pgscm/templates/index.html:206
+#: pgscm/templates/index.html:206 pgscm/templates/index.html:259
 msgid "Group"
 msgstr ""
 
-#: pgscm/templates/index.html:212
+#: pgscm/templates/index.html:212 pgscm/templates/index.html:265
 msgid "Associated Group"
 msgstr ""
 
@@ -95,44 +95,111 @@ msgstr ""
 msgid "DMZ"
 msgstr ""
 
-#: pgscm/templates/index.html:220
+#: pgscm/templates/admin/index.html:66 pgscm/templates/index.html:220
 msgid "Administrator"
 msgstr ""
 
-#: pgscm/templates/index.html:227
+#: pgscm/templates/admin/index.html:68 pgscm/templates/index.html:227
 msgid "Users Management"
 msgstr ""
 
 #: pgscm/templates/index.html:233
+msgid "PGS Regions Management"
+msgstr ""
+
+#: pgscm/templates/index.html:239
 msgid "Configurations"
 msgstr ""
 
-#: pgscm/templates/index.html:241
+#: pgscm/templates/index.html:271
 msgid "USER"
 msgstr ""
 
-#: pgscm/templates/index.html:244
+#: pgscm/templates/index.html:274
 msgid "Login"
 msgstr ""
 
-#: pgscm/templates/index.html:249 pgscm/templates/security/register_user.html:3
+#: pgscm/templates/index.html:279 pgscm/templates/security/register_user.html:3
 msgid "Register"
 msgstr ""
 
-#: pgscm/templates/index.html:260
+#: pgscm/templates/index.html:290
 msgid "Summary report about PGS status"
 msgstr ""
 
-#: pgscm/templates/index.html:263
+#: pgscm/templates/index.html:293
 msgid " Home"
 msgstr ""
 
-#: pgscm/templates/index.html:269
+#: pgscm/templates/index.html:299
 msgid "PGS Status"
 msgstr ""
 
-#: pgscm/templates/index.html:270
+#: pgscm/templates/index.html:300
 msgid "Quickly summary about <code>PGS Certificates</code> analytics."
+msgstr ""
+
+#: pgscm/templates/admin/index.html:60 pgscm/templates/admin/index.html:76
+msgid "PGS Users"
+msgstr ""
+
+#: pgscm/templates/admin/index.html:61
+msgid "Managing roles and permissions in PGS system"
+msgstr ""
+
+#: pgscm/templates/admin/index.html:65
+msgid "Home"
+msgstr ""
+
+#: pgscm/templates/certificate/advance_search.html:94
+#: pgscm/templates/certificate/advance_search.html:120
+#: pgscm/templates/certificate/index.html:101
+#: pgscm/templates/certificate/index.html:150
+#: pgscm/templates/certificate/index.html:210
+#: pgscm/templates/certificate/index.html:260
+msgid "Certificate ID"
+msgstr ""
+
+#: pgscm/templates/certificate/advance_search.html:95
+#: pgscm/templates/certificate/advance_search.html:121
+#: pgscm/templates/certificate/index.html:102
+#: pgscm/templates/certificate/index.html:151
+#: pgscm/templates/certificate/index.html:211
+#: pgscm/templates/certificate/index.html:261
+msgid "Certificate Name"
+msgstr ""
+
+#: pgscm/templates/certificate/advance_search.html:96
+#: pgscm/templates/certificate/advance_search.html:122
+#: pgscm/templates/certificate/index.html:103
+#: pgscm/templates/certificate/index.html:152
+#: pgscm/templates/certificate/index.html:212
+#: pgscm/templates/certificate/index.html:262
+msgid "Owner Group"
+msgstr ""
+
+#: pgscm/templates/certificate/advance_search.html:97
+#: pgscm/templates/certificate/advance_search.html:123
+#: pgscm/templates/certificate/index.html:104
+#: pgscm/templates/certificate/index.html:153
+#: pgscm/templates/certificate/index.html:213
+#: pgscm/templates/certificate/index.html:263
+msgid "Active Date"
+msgstr ""
+
+#: pgscm/templates/certificate/advance_search.html:98
+#: pgscm/templates/certificate/advance_search.html:124
+#: pgscm/templates/certificate/index.html:105
+#: pgscm/templates/certificate/index.html:154
+#: pgscm/templates/certificate/index.html:214
+#: pgscm/templates/certificate/index.html:264
+msgid "Status"
+msgstr ""
+
+#: pgscm/templates/certificate/index.html:106
+#: pgscm/templates/certificate/index.html:215
+#: pgscm/templates/certificate/index.html:265
+msgid "Actions"
 msgstr ""
 
 #: pgscm/templates/security/login_user.html:3
