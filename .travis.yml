@@ -1,7 +1,10 @@
 language: python
 python:
   - "3.5"
-before_install: "rm -f data-test.sqlite"
+services:
+  - mysql
+before_install:
+  - mysql -e 'create database pgscm_test;'
 install: "pip install -r requirements.txt -r test-requirements.txt"
 script: tox -e cover
 notifications:

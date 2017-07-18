@@ -11,6 +11,8 @@ down_revision = '56502d362ab5'
 from alembic import op
 import sqlalchemy as sa
 import uuid
+from sqlalchemy.sql import table, column
+from sqlalchemy import String
 
 
 def upgrade():
@@ -37,7 +39,8 @@ def upgrade():
     # - add new column user.region_id and create foreign key constraint
     # - drop index user.ix_users_email
     # - create indexes
-    op.alter_column('user', 'id', existing_type=sa.Integer(), type_=sa.String(length=64))
+    op.alter_column('user', 'id', existing_type=sa.Integer(), nullable=False,
+                    type_=sa.String(length=64))
     op.add_column('user', sa.Column('region_id', sa.String(length=64), nullable=True))
     op.create_foreign_key(None, 'user', 'region', ['region_id'], ['id'])
 
@@ -48,7 +51,8 @@ def upgrade():
     # ### table role:
     # - change column role.id from integer to String(64)
 
-    op.alter_column('role', 'id', existing_type=sa.Integer(), type_=sa.String(length=64))
+    op.alter_column('role', 'id', existing_type=sa.Integer(), nullable=False,
+                    type_=sa.String(length=64))
 
     # ### table roles_users:
     # - change columns roles_users.user_id and roles_users.role_id from integer to String(64)
@@ -127,40 +131,27 @@ def upgrade():
     op.create_index('farmer_code_index', 'farmer', ['farmer_code', 'deleted_at'], unique=False)
 
     # Create an ad-hoc table to use for the insert statement.
-    from sqlalchemy.sql import table, column
-    from sqlalchemy import String, Integer, Date
     role_table = table('role',
-                           column('id', String),
-                           column('name', String),
-                           column('description', String)
-                           )
+                       column('id', String),
+                       column('name', String),
+                       column('description', String))
     op.bulk_insert(
         role_table,
         [
-            {'id':str(uuid.uuid4()), "name": "national_admin", "description": "National Admin"},
-            {'id':str(uuid.uuid4()), "name": "national_moderator", "description": "National Moderator"},
-            {'id':str(uuid.uuid4()), "name": "national_user", "description": "National User"},
-            {'id':str(uuid.uuid4()), "name": "regional_admin", "description": "Regional Admin"},
-            {'id':str(uuid.uuid4()), "name": "regional_moderator", "description": "Regional Moderator"},
-            {'id':str(uuid.uuid4()), "name": "regional_user", "description": "Regional User"},
+            {'id': str(uuid.uuid4()), "name": "national_admin",
+             "description": "National Admin"},
+            {'id': str(uuid.uuid4()), "name": "national_moderator",
+             "description": "National Moderator"},
+            {'id': str(uuid.uuid4()), "name": "national_user",
+             "description": "National User"},
+            {'id': str(uuid.uuid4()), "name": "regional_admin",
+             "description": "Regional Admin"},
+            {'id': str(uuid.uuid4()), "name": "regional_moderator",
+             "description": "Regional Moderator"},
+            {'id': str(uuid.uuid4()), "name": "regional_user",
+             "description": "Regional User"},
         ]
     )
-
-    # op.create_index(op.f('ix_farmer_name'), 'farmer', ['name'], unique=False)
-    # op.create_index(op.f('ix_farmer_deleted_at'), 'farmer', ['deleted_at'], unique=False)
-    #
-    # op.create_index(op.f('ix_group_deleted_at'), 'group', ['deleted_at'], unique=False)
-    # op.create_index(op.f('ix_group_name'), 'group', ['name'], unique=False)
-    # op.create_index(op.f('ix_group_address'), 'group', ['address'], unique=False)
-    #
-    # op.create_index(op.f('ix_associate_group_name'), 'associate_group', ['name'], unique=False)
-    # op.create_index(op.f('ix_associate_group_email'), 'associate_group', ['email'], unique=False)
-    # op.create_index(op.f('ix_associate_group_deleted_at'), 'associate_group', ['deleted_at'], unique=False)
-    #
-    # op.create_index(op.f('ix_certificate_group_area'), 'certificate', ['group_area'], unique=False)
-    # op.create_index(op.f('ix_certificate_certificate_start_date'), 'certificate', ['certificate_start_date'], unique=False)
-    # op.create_index(op.f('ix_certificate_gov_certificate_id'), 'certificate', ['gov_certificate_id'], unique=False)
-
     # ### end Alembic commands ###
 
 

@@ -57,10 +57,10 @@ MariaDB [(none)]>
 ...
 
 CREATE DATABASE pgscm;
-GRANT ALL PRIVILEGES ON pgscm.* TO 'root'@'localhost' \
+GRANT ALL PRIVILEGES ON pgscm.* TO 'pgs'@'localhost' \
   IDENTIFIED BY 'pgscm';
 
-GRANT ALL PRIVILEGES ON pgscm.* TO 'root'@'%' \
+GRANT ALL PRIVILEGES ON pgscm.* TO 'pgs'@'%' \
   IDENTIFIED BY 'pgscm';
 exit
 
@@ -75,7 +75,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
 ...
     SQLALCHEMY_DATABASE_URI = \
-        'mysql+pymysql://root:pgscm@localhost:3306/pgscm'
+        'mysql+pymysql://pgs:pgscm@localhost:3306/pgscm'
 ```
 
 - Populate the pgscm database
