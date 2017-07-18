@@ -1,7 +1,7 @@
 import unittest
 import mock
 from flask import current_app
-from pgscm import create_app, sqla, api
+from pgscm import create_app, api
 
 
 class BasicsTestCase(unittest.TestCase):
@@ -10,12 +10,9 @@ class BasicsTestCase(unittest.TestCase):
             self.app = create_app('testing')
         self.app_context = self.app.app_context()
         self.app_context.push()
-        sqla.create_all()
 
     def tearDown(self):
         self.app = None
-        sqla.session.remove()
-        sqla.drop_all()
         self.app_context.pop()
 
     def test_app_exists(self):
