@@ -5,14 +5,13 @@ Revises: 456a945560f6
 Create Date: 2017-07-05 15:05:42.204968
 
 """
+from alembic import op
+import sqlalchemy as sa
+from sqlalchemy import func
 
 # revision identifiers, used by Alembic.
 revision = '56502d362ab5'
 down_revision = '456a945560f6'
-
-from alembic import op
-import sqlalchemy as sa
-from sqlalchemy import func
 
 
 def upgrade():

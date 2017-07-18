@@ -1,18 +1,17 @@
-"""create model objects: region, farmer, group, associate group, change id type of role and user
+"""create model objects: region, farmer, group, associate group
 Revision ID: b91f6260d520
 Revises: 56502d362ab5
 Create Date: 2017-07-16 18:17:32.791453
 """
-
-# revision identifiers, used by Alembic.
-revision = 'b91f6260d520'
-down_revision = '56502d362ab5'
-
 from alembic import op
 import sqlalchemy as sa
 import uuid
 from sqlalchemy.sql import table, column
 from sqlalchemy import String
+
+# revision identifiers, used by Alembic.
+revision = 'b91f6260d520'
+down_revision = '56502d362ab5'
 
 
 def upgrade():
@@ -20,19 +19,23 @@ def upgrade():
 
     # ### table roles_users:
     # - drop old foreign key constraints
-    op.drop_constraint(u'roles_users_ibfk_1', 'roles_users', type_='foreignkey')
-    op.drop_constraint(u'roles_users_ibfk_2', 'roles_users', type_='foreignkey')
-
+    op.drop_constraint(u'roles_users_ibfk_1', 'roles_users',
+                       type_='foreignkey')
+    op.drop_constraint(u'roles_users_ibfk_2', 'roles_users',
+                       type_='foreignkey')
 
     # - create table region, foreign key and index
     op.create_table('region',
-    sa.Column('id', sa.String(length=64), nullable=False),
-    sa.Column('region_code', sa.String(length=64), nullable=True),
-    sa.Column('name', sa.String(length=64), nullable=True),
-    sa.Column('description', sa.String(length=255), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index('region_code_index', 'region', ['region_code'], unique=False)
+                    sa.Column('id', sa.String(length=64), nullable=False),
+                    sa.Column('region_code', sa.String(length=64),
+                              nullable=True),
+                    sa.Column('name', sa.String(length=64), nullable=True),
+                    sa.Column('description', sa.String(length=255),
+                              nullable=True),
+                    sa.PrimaryKeyConstraint('id')
+                    )
+    op.create_index('region_code_index', 'region', ['region_code'],
+                    unique=False)
 
     # ### table user:
     # - change column user.user_id from integer to String(64)
@@ -41,12 +44,14 @@ def upgrade():
     # - create indexes
     op.alter_column('user', 'id', existing_type=sa.Integer(), nullable=False,
                     type_=sa.String(length=64))
-    op.add_column('user', sa.Column('region_id', sa.String(length=64), nullable=True))
+    op.add_column('user',
+                  sa.Column('region_id', sa.String(length=64), nullable=True))
     op.create_foreign_key(None, 'user', 'region', ['region_id'], ['id'])
 
     op.drop_index('ix_users_email', table_name='user')
     op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
-    op.create_index(op.f('ix_user_fullname'), 'user', ['fullname'], unique=True)
+    op.create_index(op.f('ix_user_fullname'), 'user', ['fullname'],
+                    unique=True)
 
     # ### table role:
     # - change column role.id from integer to String(64)
@@ -55,80 +60,117 @@ def upgrade():
                     type_=sa.String(length=64))
 
     # ### table roles_users:
-    # - change columns roles_users.user_id and roles_users.role_id from integer to String(64)
+    # - change columns roles_users.user_id and roles_users.role_id
+    #   from integer to String(64)
     # - recreate foreign key constraints
 
-    op.alter_column('roles_users', 'user_id', existing_type=sa.Integer(), type_=sa.String(length=64))
-    op.alter_column('roles_users', 'role_id', existing_type=sa.Integer(), type_=sa.String(length=64))
+    op.alter_column('roles_users', 'user_id', existing_type=sa.Integer(),
+                    type_=sa.String(length=64))
+    op.alter_column('roles_users', 'role_id', existing_type=sa.Integer(),
+                    type_=sa.String(length=64))
 
-    op.create_foreign_key(u'roles_users_ibfk_1', 'roles_users', 'user', ['user_id'], ['id'])
-    op.create_foreign_key(u'roles_users_ibfk_2', 'roles_users', 'role', ['role_id'], ['id'])
+    op.create_foreign_key(u'roles_users_ibfk_1', 'roles_users', 'user',
+                          ['user_id'], ['id'])
+    op.create_foreign_key(u'roles_users_ibfk_2', 'roles_users', 'role',
+                          ['role_id'], ['id'])
 
     # - create table associate_group, foreign key and index
     op.create_table('associate_group',
-    sa.Column('id', sa.String(length=64), nullable=False),
-    sa.Column('associate_group_code', sa.String(length=64), nullable=True),
-    sa.Column('name', sa.String(length=80), nullable=True),
-    sa.Column('email', sa.String(length=80), nullable=True),
-    sa.Column('region_id', sa.String(length=64), nullable=True),
-    sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('modify_info', sa.String(length=255), nullable=True),
-    sa.ForeignKeyConstraint(['region_id'], ['region.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index('a_group_code_index', 'associate_group', ['associate_group_code', 'deleted_at'], unique=False)
+                    sa.Column('id', sa.String(length=64), nullable=False),
+                    sa.Column('associate_group_code', sa.String(length=64),
+                              nullable=True),
+                    sa.Column('name', sa.String(length=80), nullable=True),
+                    sa.Column('email', sa.String(length=80), nullable=True),
+                    sa.Column('region_id', sa.String(length=64),
+                              nullable=True),
+                    sa.Column('deleted_at', sa.DateTime(), nullable=True),
+                    sa.Column('modify_info', sa.String(length=255),
+                              nullable=True),
+                    sa.ForeignKeyConstraint(['region_id'], ['region.id'], ),
+                    sa.PrimaryKeyConstraint('id')
+                    )
+    op.create_index('a_group_code_index', 'associate_group',
+                    ['associate_group_code', 'deleted_at'], unique=False)
 
     # - create table group, foreign key and index
     op.create_table('group',
-    sa.Column('id', sa.String(length=64), nullable=False),
-    sa.Column('group_code', sa.String(length=64), nullable=True),
-    sa.Column('name', sa.String(length=80), nullable=True),
-    sa.Column('village', sa.String(length=255), nullable=True),
-    sa.Column('ward', sa.String(length=255), nullable=True),
-    sa.Column('district', sa.String(length=255), nullable=True),
-    sa.Column('province', sa.String(length=255), nullable=True),
-    sa.Column('associate_group_id', sa.String(length=64), nullable=True),
-    sa.Column('region_id', sa.String(length=64), nullable=True),
-    sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('modify_info', sa.String(length=255), nullable=True),
-    sa.ForeignKeyConstraint(['associate_group_id'], ['associate_group.id'], ),
-    sa.ForeignKeyConstraint(['region_id'], ['region.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index('group_code_index', 'group', ['group_code', 'deleted_at'], unique=False)
+                    sa.Column('id', sa.String(length=64), nullable=False),
+                    sa.Column('group_code', sa.String(length=64),
+                              nullable=True),
+                    sa.Column('name', sa.String(length=80), nullable=True),
+                    sa.Column('village', sa.String(length=255), nullable=True),
+                    sa.Column('ward', sa.String(length=255), nullable=True),
+                    sa.Column('district', sa.String(length=255),
+                              nullable=True),
+                    sa.Column('province', sa.String(length=255),
+                              nullable=True),
+                    sa.Column('associate_group_id', sa.String(length=64),
+                              nullable=True),
+                    sa.Column('region_id', sa.String(length=64),
+                              nullable=True),
+                    sa.Column('deleted_at', sa.DateTime(), nullable=True),
+                    sa.Column('modify_info', sa.String(length=255),
+                              nullable=True),
+                    sa.ForeignKeyConstraint(['associate_group_id'],
+                                            ['associate_group.id'], ),
+                    sa.ForeignKeyConstraint(['region_id'], ['region.id'], ),
+                    sa.PrimaryKeyConstraint('id')
+                    )
+    op.create_index('group_code_index', 'group', ['group_code', 'deleted_at'],
+                    unique=False)
 
     # - create table certificate, foreign key and index
     op.create_table('certificate',
-    sa.Column('id', sa.String(length=64), nullable=False),
-    sa.Column('certificate_code', sa.String(length=64), nullable=True),
-    sa.Column('owner_group_id', sa.String(length=64), nullable=True),
-    sa.Column('group_area', sa.String(length=64), nullable=True),
-    sa.Column('certificate_start_date', sa.DateTime(), nullable=True),
-    sa.Column('gov_certificate_id', sa.String(length=64), nullable=True),
-    sa.Column('certificate_expiry_date', sa.DateTime(), nullable=True),
-    sa.Column('status', sa.Enum('valid', 'invalid', 'checking', name='certificatestatustype'), nullable=True),
-    sa.Column('re_verify_status', sa.Enum('not_check', 'ok', 'warning', name='certificatereverifystatustype'), nullable=True),
-    sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('modify_info', sa.String(length=255), nullable=True),
-    sa.ForeignKeyConstraint(['owner_group_id'], ['group.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index('certificate_code_index', 'certificate', ['certificate_code', 'deleted_at'], unique=False)
+                    sa.Column('id', sa.String(length=64), nullable=False),
+                    sa.Column('certificate_code', sa.String(length=64),
+                              nullable=True),
+                    sa.Column('owner_group_id', sa.String(length=64),
+                              nullable=True),
+                    sa.Column('group_area', sa.String(length=64),
+                              nullable=True),
+                    sa.Column('certificate_start_date', sa.DateTime(),
+                              nullable=True),
+                    sa.Column('gov_certificate_id', sa.String(length=64),
+                              nullable=True),
+                    sa.Column('certificate_expiry_date', sa.DateTime(),
+                              nullable=True),
+                    sa.Column('status', sa.Enum('valid', 'invalid', 'checking',
+                                                name='certificatestatustype'),
+                              nullable=True),
+                    sa.Column('re_verify_status',
+                              sa.Enum('not_check', 'ok', 'warning',
+                                      name='certificatereverifystatustype'),
+                              nullable=True),
+                    sa.Column('deleted_at', sa.DateTime(), nullable=True),
+                    sa.Column('modify_info', sa.String(length=255),
+                              nullable=True),
+                    sa.ForeignKeyConstraint(['owner_group_id'], ['group.id'],),
+                    sa.PrimaryKeyConstraint('id')
+                    )
+    op.create_index('certificate_code_index', 'certificate',
+                    ['certificate_code', 'deleted_at'], unique=False)
 
     # - create table farmer, foreign key and index
     op.create_table('farmer',
-    sa.Column('id', sa.String(length=64), nullable=False),
-    sa.Column('farmer_code', sa.String(length=64), nullable=True),
-    sa.Column('name', sa.String(length=80), nullable=True),
-    sa.Column('gender', sa.Enum('male', 'female', name='gendertype'), nullable=True),
-    sa.Column('type', sa.Enum('member', 'reviewer', name='farmertype'), nullable=True),
-    sa.Column('group_id', sa.String(length=64), nullable=True),
-    sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('modify_info', sa.String(length=255), nullable=True),
-    sa.ForeignKeyConstraint(['group_id'], ['group.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index('farmer_code_index', 'farmer', ['farmer_code', 'deleted_at'], unique=False)
+                    sa.Column('id', sa.String(length=64), nullable=False),
+                    sa.Column('farmer_code', sa.String(length=64),
+                              nullable=True),
+                    sa.Column('name', sa.String(length=80), nullable=True),
+                    sa.Column('gender',
+                              sa.Enum('male', 'female', name='gendertype'),
+                              nullable=True),
+                    sa.Column('type',
+                              sa.Enum('member', 'reviewer', name='farmertype'),
+                              nullable=True),
+                    sa.Column('group_id', sa.String(length=64), nullable=True),
+                    sa.Column('deleted_at', sa.DateTime(), nullable=True),
+                    sa.Column('modify_info', sa.String(length=255),
+                              nullable=True),
+                    sa.ForeignKeyConstraint(['group_id'], ['group.id'], ),
+                    sa.PrimaryKeyConstraint('id')
+                    )
+    op.create_index('farmer_code_index', 'farmer',
+                    ['farmer_code', 'deleted_at'], unique=False)
 
     # Create an ad-hoc table to use for the insert statement.
     role_table = table('role',
@@ -172,4 +214,4 @@ def downgrade():
     op.drop_table('associate_group')
     op.drop_index('region_code_index', table_name='region')
     op.drop_table('region')
-# ### end Alembic commands ###
+    # ### end Alembic commands ###
