@@ -160,7 +160,7 @@ msgstr "Trang chủ"
 #: pgscm/templates/certificate/index.html:210
 #: pgscm/templates/certificate/index.html:260
 msgid "Certificate ID"
-msgstr "ID Chứng Chỉ"
+msgstr "Mã chứng chỉ"
 
 #: pgscm/templates/certificate/advance_search.html:95
 #: pgscm/templates/certificate/advance_search.html:121
@@ -169,7 +169,7 @@ msgstr "ID Chứng Chỉ"
 #: pgscm/templates/certificate/index.html:211
 #: pgscm/templates/certificate/index.html:261
 msgid "Certificate Name"
-msgstr "Tên Chứng Chỉ"
+msgstr "Tên chứng chỉ"
 
 #: pgscm/templates/certificate/advance_search.html:96
 #: pgscm/templates/certificate/advance_search.html:122

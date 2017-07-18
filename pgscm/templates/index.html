@@ -191,7 +191,7 @@
         {% if current_user.is_authenticated and ('national_admin' in current_user.roles or
         'national_moderator' in current_user.roles) %}
             <li class="{{ is_active_in_tree(request, 'certificate') }}">
-                <a href="{{ url_for('certificate.index') }}">
+                <a href="{{ lurl_for('certificate.index') }}">
                     <i class="fa fa-balance-scale"></i> <span>{{ _('Certificate') }}</span>
                 </a>
             </li>
@@ -244,7 +244,7 @@
             {% endif %}
         {% elif current_user.is_authenticated and ('user' in current_user.roles) %}
             <li class="{{ is_active_in_tree(request, 'certificate') }}">
-                <a href="{{ url_for('certificate.index') }}">
+                <a href="{{ lurl_for('certificate.index') }}">
                     <i class="fa fa-balance-scale"></i> <span>{{ _('Certificate') }}</span>
                 </a>
             </li>

@@ -14,7 +14,8 @@ class Certificate:
         self.owner_group = owner_group
 
 
-@certificate.route('/certificates')
+@certificate.route('/vi/chung-chi', endpoint='index_vi')
+@certificate.route('/en/certificates', endpoint='index_en')
 @roles_accepted('national_admin', 'national_moderator', 'national_user')
 def index():
     sample_certificate = Certificate(11, 'certificate smp', datetime.date(2015, 8, 23), 100, "OK", "Group 1")
@@ -24,7 +25,10 @@ def index():
     return render_template('certificate/index.html', certificates=result_certificates)
 
 
-@certificate.route('/certificates/details/<string:certificate_id>')
+@certificate.route('/vi/chung-chi/chi-tiet/<string:certificate_id>',
+                   endpoint='details_vi')
+@certificate.route('/en/certificates/details/<string:certificate_id>',
+                   endpoint='details_en')
 @roles_accepted('national_admin', 'national_moderator', 'national_user')
 def details(certificate_id):
     sample_certificate = Certificate(11, 'certificate smp', datetime.date(2015, 8, 23), 100, "OK", "Group 1")
@@ -34,7 +38,10 @@ def details(certificate_id):
     return render_template('certificate/details.html', certificates=result_certificates)
 
 
-@certificate.route('/certificates/advance_search')
+@certificate.route('/vi/chung-chi/tim-kiem',
+                   endpoint='advance_search_vi')
+@certificate.route('/en/certificates/advance_search',
+                   endpoint='advance_search_en')
 @roles_accepted('national_admin', 'national_moderator', 'national_user')
 def advance_search():
     sample_certificate = Certificate(11, 'certificate smp', datetime.date(2015, 8, 23), 100, "OK", "Group 1")

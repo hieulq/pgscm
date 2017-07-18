@@ -31,7 +31,7 @@
     <ol class="breadcrumb">
         <li><a href="{{ lurl_for('main.index') }}"><i
                 class="fa fa-home"></i> Home</a></li>
-        <li><a href="{{ url_for('certificate.index') }}"><i class="fa fa-balance-scale"></i>Certificates</a></li>
+        <li><a href="{{ lurl_for('certificate.index') }}"><i class="fa fa-balance-scale"></i>Certificates</a></li>
 
         <li><a href="#"><i class="fa fa-search-plus"></i>Advance Search</a></li>
     </ol>
@@ -103,8 +103,8 @@
                         {% for certificate in certificates %}
                             <tr>
                                 <td>
-                                    <a href="{{ url_for('certificate.details',
-                                                        certificate_id=certificate.certificate_id) }}">
+                                    <a href="{{ lurl_for('certificate.details',
+                                                         certificate_id=certificate.certificate_id) }}">
                                         {{ certificate.certificate_id }}
                                     </a>
                                 </td>

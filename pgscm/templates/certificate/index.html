@@ -65,7 +65,7 @@
                                         <span class="fa fa-search search-icon form-control-feedback"></span>
                                     </div>
                                 </div>
-                                <a href="{{ url_for('certificate.advance_search') }}"
+                                <a href="{{ lurl_for('certificate.advance_search') }}"
                                    id="keypairs__action_create"
                                    class="btn data-table-action btn-default ajax-modal"
                                    title="Create Key Pair"><span
@@ -110,7 +110,7 @@
                             {% for certificate in certificates %}
                                 <tr>
                                     <td>
-                                        <a href="{{ url_for('certificate.details',
+                                        <a href="{{ lurl_for('certificate.details',
                                                         certificate_id=certificate.certificate_id) }}">
                                             {{ certificate.certificate_id }}
                                         </a>
@@ -191,7 +191,7 @@
                                         <span class="fa fa-search search-icon form-control-feedback"></span>
                                     </div>
                                 </div>
-                                <a href="{{ url_for('certificate.advance_search') }}"
+                                <a href="{{ lurl_for('certificate.advance_search') }}"
                                    id="keypairs__action_create"
                                    class="btn data-table-action btn-default ajax-modal"
                                    title="Create Key Pair"><span
@@ -219,7 +219,7 @@
                             {% for certificate in certificates %}
                                 <tr>
                                     <td>
-                                        <a href="{{ url_for('certificate.details',
+                                        <a href="{{ lurl_for('certificate.details',
                                                         certificate_id=certificate.certificate_id) }}">
                                             {{ certificate.certificate_id }}
                                         </a>
