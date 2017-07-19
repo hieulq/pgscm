@@ -54,9 +54,9 @@ class User(sqla.Model, UserMixin):
     fullname = sqla.Column(sqla.String(64), unique=True, index=True)
     roles = sqla.relationship('Role', secondary=roles_users,
                               backref=sqla.backref('user', lazy='dynamic'))
-    region_id = sqla.Column(sqla.String(64), sqla.ForeignKey('region.id'),
-                            nullable=True)
-    region = sqla.relationship('Region', back_populates='users')
+    province_id = sqla.Column(sqla.String(64), sqla.ForeignKey(
+        'province.province_id'), nullable=True)
+    province = sqla.relationship('Province', back_populates='users')
 
     active = sqla.Column(sqla.Boolean())
     password = sqla.Column(sqla.String(255))
@@ -71,20 +71,6 @@ class User(sqla.Model, UserMixin):
         return '<User %r >' % self.fullname
 
 
-class Region(sqla.Model):
-    __tablename__ = 'region'
-    id = sqla.Column(sqla.String(64), primary_key=True,
-                     default=lambda: str(uuid.uuid4()))
-    region_code = sqla.Column(sqla.String(64))  # ma vung
-    name = sqla.Column(sqla.String(64))
-    description = sqla.Column(sqla.String(255))
-    users = sqla.relationship('User', back_populates='region')
-    associate_groups = sqla.relationship('AssociateGroup',
-                                         back_populates='region')
-    groups = sqla.relationship('Group', back_populates='region')
-    __table_args__ = (sqla.Index('region_code_index', "region_code"),)
-
-
 class AssociateGroup(sqla.Model):
     __tablename = 'associate_group'
     id = sqla.Column(sqla.String(64), primary_key=True,
@@ -94,8 +80,9 @@ class AssociateGroup(sqla.Model):
     name = sqla.Column(sqla.String(80))
     email = sqla.Column(sqla.String(80))
 
-    region_id = sqla.Column(sqla.String(64), sqla.ForeignKey('region.id'))
-    region = sqla.relationship('Region', back_populates='associate_groups')
+    province_id = sqla.Column(sqla.String(64), sqla.ForeignKey(
+        'province.province_id'))
+    province = sqla.relationship('Province', back_populates='associate_groups')
 
     groups = sqla.relationship('Group', back_populates='associate_group')
 
@@ -112,19 +99,25 @@ class Group(sqla.Model):
     group_code = sqla.Column(sqla.String(64))
     name = sqla.Column(sqla.String(80))
 
-    village = sqla.Column(sqla.String(255))  # lang, thon
-    ward = sqla.Column(sqla.String(255))  # xa, phuong, thi tran
-    district = sqla.Column(sqla.String(255))  # huyen, thi xa
-    province = sqla.Column(sqla.String(255))  # tinh, thanh pho
+    village = sqla.Column(sqla.String(64))  # lang, thon
+    ward_id = sqla.Column(sqla.String(64),
+                          sqla.ForeignKey('ward.ward_id'),
+                          nullable=True, index=True)  # xa, phuong, thi tran
+    ward = sqla.relationship('Ward', back_populates='groups')
+    district_id = sqla.Column(sqla.String(64),
+                              sqla.ForeignKey('district.district_id'),
+                              nullable=True, index=True)  # huyen, thi xa
+    district = sqla.relationship('District', back_populates='groups')
 
     associate_group_id = sqla.Column(
         sqla.String(64), sqla.ForeignKey('associate_group.id'), nullable=True)
     associate_group = sqla.relationship('AssociateGroup',
                                         back_populates='groups')
 
-    region_id = sqla.Column(sqla.String(64), sqla.ForeignKey('region.id'),
-                            nullable=True)
-    region = sqla.relationship('Region', back_populates='groups')
+    province_id = sqla.Column(sqla.String(64),
+                              sqla.ForeignKey('province.province_id'),
+                              nullable=True, index=True)
+    province = sqla.relationship('Province', back_populates='groups')
 
     farmers = sqla.relationship('Farmer', back_populates='group')
 
@@ -166,7 +159,7 @@ class Certificate(sqla.Model):
                                  nullable=True)
     owner_group = sqla.relationship('Group', back_populates='certificates')
 
-    group_area = sqla.Column(sqla.String(64))
+    group_area = sqla.Column(sqla.Integer())
     certificate_start_date = sqla.Column(sqla.DateTime())
     gov_certificate_id = sqla.Column(sqla.String(64))
     certificate_expiry_date = sqla.Column(sqla.DateTime())
@@ -179,6 +172,48 @@ class Certificate(sqla.Model):
     __table_args__ = (
         sqla.Index('certificate_code_index', 'certificate_code',
                    "deleted_at"),)
+
+
+class Ward(sqla.Model):
+    __tablename__ = 'ward'
+    ward_id = sqla.Column(sqla.String(64), primary_key=True,
+                          default=lambda: str(uuid.uuid4()))
+    name = sqla.Column(sqla.String(100), nullable=False, index=True)
+    type = sqla.Column(sqla.String(100), nullable=False)
+    location = sqla.Column(sqla.String(100), nullable=False)
+    district_id = sqla.Column(sqla.String(100),
+                              sqla.ForeignKey('district.district_id'),
+                              nullable=False, index=True)
+    district = sqla.relationship('District', back_populates='wards')
+    groups = sqla.relationship('Group', back_populates='ward')
+
+
+class District(sqla.Model):
+    __tablename__ = 'district'
+    district_id = sqla.Column(sqla.String(64), primary_key=True,
+                              default=lambda: str(uuid.uuid4()))
+    name = sqla.Column(sqla.String(100), nullable=False, index=True)
+    type = sqla.Column(sqla.String(30), nullable=False)
+    location = sqla.Column(sqla.String(30), nullable=False)
+    province_id = sqla.Column(sqla.String(64),
+                              sqla.ForeignKey('province.province_id'),
+                              nullable=False, index=True)
+    province = sqla.relationship('Province', back_populates='districts')
+    wards = sqla.relationship('Ward', back_populates='district')
+    groups = sqla.relationship('Group', back_populates='district')
+
+
+class Province(sqla.Model):
+    __tablename__ = 'province'
+    province_id = sqla.Column(sqla.String(64), primary_key=True,
+                              default=lambda: str(uuid.uuid4()))
+    name = sqla.Column(sqla.String(100), nullable=False, index=True)
+    type = sqla.Column(sqla.String(30), nullable=False)
+    districts = sqla.relationship('District', back_populates='province')
+    groups = sqla.relationship('Group', back_populates='province')
+    associate_groups = sqla.relationship('AssociateGroup',
+                                         back_populates='province')
+    users = sqla.relationship('User', back_populates='province')
 
 
 @login_manager.user_loader

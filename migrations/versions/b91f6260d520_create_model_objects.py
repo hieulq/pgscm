@@ -1,7 +1,9 @@
 """create model objects: region, farmer, group, associate group
+
 Revision ID: b91f6260d520
 Revises: 56502d362ab5
 Create Date: 2017-07-16 18:17:32.791453
+
 """
 from alembic import op
 import sqlalchemy as sa
@@ -32,8 +34,7 @@ def upgrade():
                     sa.Column('name', sa.String(length=64), nullable=True),
                     sa.Column('description', sa.String(length=255),
                               nullable=True),
-                    sa.PrimaryKeyConstraint('id')
-                    )
+                    sa.PrimaryKeyConstraint('id'), mysql_default_charset='utf8')
     op.create_index('region_code_index', 'region', ['region_code'],
                     unique=False)
 
@@ -87,8 +88,7 @@ def upgrade():
                     sa.Column('modify_info', sa.String(length=255),
                               nullable=True),
                     sa.ForeignKeyConstraint(['region_id'], ['region.id'], ),
-                    sa.PrimaryKeyConstraint('id')
-                    )
+                    sa.PrimaryKeyConstraint('id'), mysql_default_charset='utf8')
     op.create_index('a_group_code_index', 'associate_group',
                     ['associate_group_code', 'deleted_at'], unique=False)
 
@@ -114,8 +114,7 @@ def upgrade():
                     sa.ForeignKeyConstraint(['associate_group_id'],
                                             ['associate_group.id'], ),
                     sa.ForeignKeyConstraint(['region_id'], ['region.id'], ),
-                    sa.PrimaryKeyConstraint('id')
-                    )
+                    sa.PrimaryKeyConstraint('id'), mysql_default_charset='utf8')
     op.create_index('group_code_index', 'group', ['group_code', 'deleted_at'],
                     unique=False)
 
@@ -126,7 +125,7 @@ def upgrade():
                               nullable=True),
                     sa.Column('owner_group_id', sa.String(length=64),
                               nullable=True),
-                    sa.Column('group_area', sa.String(length=64),
+                    sa.Column('group_area', sa.Integer(),
                               nullable=True),
                     sa.Column('certificate_start_date', sa.DateTime(),
                               nullable=True),
@@ -145,8 +144,7 @@ def upgrade():
                     sa.Column('modify_info', sa.String(length=255),
                               nullable=True),
                     sa.ForeignKeyConstraint(['owner_group_id'], ['group.id'],),
-                    sa.PrimaryKeyConstraint('id')
-                    )
+                    sa.PrimaryKeyConstraint('id'), mysql_default_charset='utf8')
     op.create_index('certificate_code_index', 'certificate',
                     ['certificate_code', 'deleted_at'], unique=False)
 
@@ -167,8 +165,7 @@ def upgrade():
                     sa.Column('modify_info', sa.String(length=255),
                               nullable=True),
                     sa.ForeignKeyConstraint(['group_id'], ['group.id'], ),
-                    sa.PrimaryKeyConstraint('id')
-                    )
+                    sa.PrimaryKeyConstraint('id'), mysql_default_charset='utf8')
     op.create_index('farmer_code_index', 'farmer',
                     ['farmer_code', 'deleted_at'], unique=False)
 

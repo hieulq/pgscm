@@ -22,14 +22,14 @@ def upgrade():
                     sa.Column('description', sa.String(length=255),
                               nullable=True),
                     sa.PrimaryKeyConstraint('id'),
-                    sa.UniqueConstraint('name'))
+                    sa.UniqueConstraint('name'), mysql_default_charset='utf8')
 
     op.create_table('user',
                     sa.Column('id', sa.Integer(), nullable=False),
                     sa.Column('fullname', sa.String(length=64), nullable=True),
                     sa.Column('active', sa.Boolean(), nullable=True,
                               default=True),
-                    sa.PrimaryKeyConstraint('id'))
+                    sa.PrimaryKeyConstraint('id'), mysql_default_charset='utf8')
     # ### end Alembic commands ###
 
 

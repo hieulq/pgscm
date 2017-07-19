@@ -32,7 +32,8 @@ def upgrade():
                     sa.Column('user_id', sa.Integer(), nullable=True),
                     sa.Column('role_id', sa.Integer(), nullable=True),
                     sa.ForeignKeyConstraint(['role_id'], ['role.id'], ),
-                    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ))
+                    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+                    mysql_default_charset='utf8')
     # ### end Alembic commands ###
 
 
