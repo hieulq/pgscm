@@ -32,7 +32,8 @@ def upgrade():
                               nullable=False),
                     sa.Column('name', sa.String(length=100), nullable=False),
                     sa.Column('type', sa.String(length=30), nullable=False),
-                    sa.Column('location', sa.String(length=30), nullable=False),
+                    sa.Column('location', sa.String(length=30),
+                              nullable=False),
                     sa.Column('province_id', sa.String(length=64),
                               nullable=False),
                     sa.ForeignKeyConstraint(['province_id'],
@@ -61,16 +62,19 @@ def upgrade():
                     unique=False)
     op.create_index(op.f('ix_ward_name'), 'ward', ['name'], unique=False)
     op.add_column('associate_group',
-                  sa.Column('province_id', sa.String(length=64), nullable=True))
+                  sa.Column('province_id', sa.String(length=64),
+                            nullable=True))
     op.drop_constraint('associate_group_ibfk_1', 'associate_group',
                        type_='foreignkey')
     op.create_foreign_key(None, 'associate_group', 'province', ['province_id'],
                           ['province_id'])
     op.drop_column('associate_group', 'region_id')
     op.add_column('group',
-                  sa.Column('district_id', sa.String(length=64), nullable=True))
+                  sa.Column('district_id', sa.String(length=64),
+                            nullable=True))
     op.add_column('group',
-                  sa.Column('province_id', sa.String(length=64), nullable=True))
+                  sa.Column('province_id', sa.String(length=64),
+                            nullable=True))
     op.add_column('group',
                   sa.Column('ward_id', sa.String(length=64), nullable=True))
     op.create_index(op.f('ix_group_district_id'), 'group', ['district_id'],
@@ -90,7 +94,8 @@ def upgrade():
     op.drop_column('group', 'ward')
     op.drop_column('group', 'district')
     op.add_column('user',
-                  sa.Column('province_id', sa.String(length=64), nullable=True))
+                  sa.Column('province_id', sa.String(length=64),
+                            nullable=True))
     op.drop_constraint('user_ibfk_1', 'user', type_='foreignkey')
     op.create_foreign_key(None, 'user', 'province', ['province_id'],
                           ['province_id'])
@@ -130,7 +135,8 @@ def downgrade():
                   sa.Column('region_id', mysql.VARCHAR(length=64),
                             nullable=True))
     op.drop_constraint(None, 'associate_group', type_='foreignkey')
-    op.create_foreign_key('associate_group_ibfk_1', 'associate_group', 'region',
+    op.create_foreign_key('associate_group_ibfk_1', 'associate_group',
+                          'region',
                           ['region_id'], ['id'])
     op.drop_column('associate_group', 'province_id')
     op.create_table('region',

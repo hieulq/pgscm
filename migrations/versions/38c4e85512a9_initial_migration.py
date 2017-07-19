@@ -29,7 +29,8 @@ def upgrade():
                     sa.Column('fullname', sa.String(length=64), nullable=True),
                     sa.Column('active', sa.Boolean(), nullable=True,
                               default=True),
-                    sa.PrimaryKeyConstraint('id'), mysql_default_charset='utf8')
+                    sa.PrimaryKeyConstraint('id'),
+                    mysql_default_charset='utf8')
     # ### end Alembic commands ###
 
 

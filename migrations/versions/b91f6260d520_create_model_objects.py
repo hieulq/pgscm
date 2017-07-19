@@ -34,7 +34,8 @@ def upgrade():
                     sa.Column('name', sa.String(length=64), nullable=True),
                     sa.Column('description', sa.String(length=255),
                               nullable=True),
-                    sa.PrimaryKeyConstraint('id'), mysql_default_charset='utf8')
+                    sa.PrimaryKeyConstraint('id'),
+                    mysql_default_charset='utf8')
     op.create_index('region_code_index', 'region', ['region_code'],
                     unique=False)
 
@@ -88,7 +89,8 @@ def upgrade():
                     sa.Column('modify_info', sa.String(length=255),
                               nullable=True),
                     sa.ForeignKeyConstraint(['region_id'], ['region.id'], ),
-                    sa.PrimaryKeyConstraint('id'), mysql_default_charset='utf8')
+                    sa.PrimaryKeyConstraint('id'),
+                    mysql_default_charset='utf8')
     op.create_index('a_group_code_index', 'associate_group',
                     ['associate_group_code', 'deleted_at'], unique=False)
 
@@ -114,7 +116,8 @@ def upgrade():
                     sa.ForeignKeyConstraint(['associate_group_id'],
                                             ['associate_group.id'], ),
                     sa.ForeignKeyConstraint(['region_id'], ['region.id'], ),
-                    sa.PrimaryKeyConstraint('id'), mysql_default_charset='utf8')
+                    sa.PrimaryKeyConstraint('id'),
+                    mysql_default_charset='utf8')
     op.create_index('group_code_index', 'group', ['group_code', 'deleted_at'],
                     unique=False)
 
@@ -143,8 +146,10 @@ def upgrade():
                     sa.Column('deleted_at', sa.DateTime(), nullable=True),
                     sa.Column('modify_info', sa.String(length=255),
                               nullable=True),
-                    sa.ForeignKeyConstraint(['owner_group_id'], ['group.id'],),
-                    sa.PrimaryKeyConstraint('id'), mysql_default_charset='utf8')
+                    sa.ForeignKeyConstraint(['owner_group_id'],
+                                            ['group.id'], ),
+                    sa.PrimaryKeyConstraint('id'),
+                    mysql_default_charset='utf8')
     op.create_index('certificate_code_index', 'certificate',
                     ['certificate_code', 'deleted_at'], unique=False)
 
@@ -165,7 +170,8 @@ def upgrade():
                     sa.Column('modify_info', sa.String(length=255),
                               nullable=True),
                     sa.ForeignKeyConstraint(['group_id'], ['group.id'], ),
-                    sa.PrimaryKeyConstraint('id'), mysql_default_charset='utf8')
+                    sa.PrimaryKeyConstraint('id'),
+                    mysql_default_charset='utf8')
     op.create_index('farmer_code_index', 'farmer',
                     ['farmer_code', 'deleted_at'], unique=False)
 
