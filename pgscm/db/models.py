@@ -15,16 +15,16 @@ class FarmerType(enum.Enum):
 
 
 class CertificateStatusType(enum.Enum):
-    valid = 0  # hop le
-    invalid = 1  # thu hoi do vi pham
-    checking = 2  # dang xem xet
-    warning = 3  # canh cao
+    approve = 0  # dong y cap
+    reject = 1  # tu choi cap
 
 
 class CertificateReVerifyStatusType(enum.Enum):
     not_check = 0  # chua thanh tra
-    ok = 1  # ok
-    warning = 2  # Canh cao
+    valid = 1  # ok
+    decline = 2  # thu hoi
+    warning = 3  # canh cao
+    punish = 4  # dinh chi, xu phat
 
 
 # Create a table to support a many-to-many relationship between Users and Roles
@@ -155,7 +155,7 @@ class Certificate(sqla.Model):
     __tablename__ = 'certificate'
     id = sqla.Column(sqla.String(64), primary_key=True,
                      default=lambda: str(uuid.uuid4()))
-    certificate_code = sqla.Column(sqla.String(64), nullable=False)
+    certificate_code = sqla.Column(sqla.String(64))
     owner_group_id = sqla.Column(sqla.String(64), sqla.ForeignKey('group.id'),
                                  nullable=True)
     owner_group = sqla.relationship('Group', back_populates='certificates')
@@ -165,9 +165,12 @@ class Certificate(sqla.Model):
     certificate_start_date = sqla.Column(sqla.DateTime(), nullable=False)
     gov_certificate_id = sqla.Column(sqla.String(64), nullable=False)
     certificate_expiry_date = sqla.Column(sqla.DateTime())
-    status = sqla.Column(sqla.Enum(CertificateStatusType))
+    status = sqla.Column(sqla.Enum(CertificateStatusType),
+                         default=CertificateStatusType.approve)
 
-    re_verify_status = sqla.Column(sqla.Enum(CertificateReVerifyStatusType))
+    re_verify_status = sqla.Column(sqla.Enum(CertificateReVerifyStatusType),
+                                   default=
+                                   CertificateReVerifyStatusType.not_check)
 
     deleted_at = sqla.Column(sqla.DateTime())
     modify_info = sqla.Column(sqla.String(255))
