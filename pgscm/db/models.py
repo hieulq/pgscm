@@ -18,7 +18,7 @@ class CertificateStatusType(enum.Enum):
     valid = 0  # hop le
     invalid = 1  # thu hoi do vi pham
     checking = 2  # dang xem xet
-    warning = 3 # canh cao
+    warning = 3  # canh cao
 
 
 class CertificateReVerifyStatusType(enum.Enum):
