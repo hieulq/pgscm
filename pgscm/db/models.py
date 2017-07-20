@@ -169,8 +169,7 @@ class Certificate(sqla.Model):
                          default=CertificateStatusType.approve)
 
     re_verify_status = sqla.Column(sqla.Enum(CertificateReVerifyStatusType),
-                                   default=
-                                   CertificateReVerifyStatusType.not_check)
+        default=CertificateReVerifyStatusType.not_check)
 
     deleted_at = sqla.Column(sqla.DateTime())
     modify_info = sqla.Column(sqla.String(255))
