@@ -144,6 +144,8 @@ class Farmer(sqla.Model):
     group_id = sqla.Column(sqla.String(64), sqla.ForeignKey('group.id'),
                            nullable=True)
     group = sqla.relationship('Group', back_populates='farmers')
+    certificates = sqla.relationship('Certificate',
+                                    back_populates='owner_farmer')
 
     deleted_at = sqla.Column(sqla.DateTime())
     modify_info = sqla.Column(sqla.String(255))
@@ -158,18 +160,19 @@ class Certificate(sqla.Model):
     certificate_code = sqla.Column(sqla.String(64))
     owner_group_id = sqla.Column(sqla.String(64), sqla.ForeignKey('group.id'),
                                  nullable=True)
+    owner_farmer_id = sqla.Column(sqla.String(64),
+                                  sqla.ForeignKey('farmer.id'), nullable=True)
     owner_group = sqla.relationship('Group', back_populates='certificates')
+    owner_farmer = sqla.relationship('Farmer', back_populates='certificates')
 
     group_area = sqla.Column(sqla.Integer(), nullable=False)
     member_count = sqla.Column(sqla.Integer(), nullable=False)
     certificate_start_date = sqla.Column(sqla.DateTime(), nullable=False)
     gov_certificate_id = sqla.Column(sqla.String(64), nullable=False)
     certificate_expiry_date = sqla.Column(sqla.DateTime())
-    status = sqla.Column(sqla.Enum(CertificateStatusType),
-                         default=CertificateStatusType.approve)
+    status = sqla.Column(sqla.Enum(CertificateStatusType))
 
-    re_verify_status = sqla.Column(sqla.Enum(CertificateReVerifyStatusType),
-        default=CertificateReVerifyStatusType.not_check)
+    re_verify_status = sqla.Column(sqla.Enum(CertificateReVerifyStatusType))
 
     deleted_at = sqla.Column(sqla.DateTime())
     modify_info = sqla.Column(sqla.String(255))
