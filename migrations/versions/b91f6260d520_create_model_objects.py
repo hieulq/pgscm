@@ -137,6 +137,7 @@ def upgrade():
                     sa.Column('certificate_expiry_date', sa.DateTime(),
                               nullable=True),
                     sa.Column('status', sa.Enum('valid', 'invalid', 'checking',
+                                                'warning',
                                                 name='certificatestatustype'),
                               nullable=True),
                     sa.Column('re_verify_status',

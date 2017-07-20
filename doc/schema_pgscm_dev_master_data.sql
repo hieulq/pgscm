@@ -146,8 +146,8 @@ DROP TABLE IF EXISTS `farmer`;
 CREATE TABLE `farmer` (
   `id` varchar(64) NOT NULL,
   `farmer_code` varchar(64) DEFAULT NULL,
-  `name` varchar(80) DEFAULT NULL,
-  `gender` enum('male','female') DEFAULT NULL,
+  `name` varchar(80) NOT NULL,
+  `gender` enum('male','female') NOT NULL,
   `type` enum('member','reviewer') DEFAULT NULL,
   `group_id` varchar(64) DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,

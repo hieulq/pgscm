@@ -18,6 +18,7 @@ class CertificateStatusType(enum.Enum):
     valid = 0  # hop le
     invalid = 1  # thu hoi do vi pham
     checking = 2  # dang xem xet
+    warning = 3 # canh cao
 
 
 class CertificateReVerifyStatusType(enum.Enum):
@@ -136,8 +137,8 @@ class Farmer(sqla.Model):
     id = sqla.Column(sqla.String(64), primary_key=True,
                      default=lambda: str(uuid.uuid4()))
     farmer_code = sqla.Column(sqla.String(64))
-    name = sqla.Column(sqla.String(80))
-    gender = sqla.Column(sqla.Enum(GenderType))
+    name = sqla.Column(sqla.String(80), nullable=False)
+    gender = sqla.Column(sqla.Enum(GenderType), nullable=False)
     type = sqla.Column(sqla.Enum(FarmerType))
 
     group_id = sqla.Column(sqla.String(64), sqla.ForeignKey('group.id'),
@@ -154,14 +155,15 @@ class Certificate(sqla.Model):
     __tablename__ = 'certificate'
     id = sqla.Column(sqla.String(64), primary_key=True,
                      default=lambda: str(uuid.uuid4()))
-    certificate_code = sqla.Column(sqla.String(64))
+    certificate_code = sqla.Column(sqla.String(64), nullable=False)
     owner_group_id = sqla.Column(sqla.String(64), sqla.ForeignKey('group.id'),
                                  nullable=True)
     owner_group = sqla.relationship('Group', back_populates='certificates')
 
-    group_area = sqla.Column(sqla.Integer())
-    certificate_start_date = sqla.Column(sqla.DateTime())
-    gov_certificate_id = sqla.Column(sqla.String(64))
+    group_area = sqla.Column(sqla.Integer(), nullable=False)
+    member_count = sqla.Column(sqla.Integer(), nullable=False)
+    certificate_start_date = sqla.Column(sqla.DateTime(), nullable=False)
+    gov_certificate_id = sqla.Column(sqla.String(64), nullable=False)
     certificate_expiry_date = sqla.Column(sqla.DateTime())
     status = sqla.Column(sqla.Enum(CertificateStatusType))
 
