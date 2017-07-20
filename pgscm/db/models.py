@@ -17,6 +17,8 @@ class FarmerType(enum.Enum):
 class CertificateStatusType(enum.Enum):
     approve = 0  # dong y cap
     reject = 1  # tu choi cap
+    not_check = 2  # chua xac nhan
+    approve_no_cert = 3  # khong co chung chi
 
 
 class CertificateReVerifyStatusType(enum.Enum):
@@ -165,7 +167,7 @@ class Certificate(sqla.Model):
     owner_group = sqla.relationship('Group', back_populates='certificates')
     owner_farmer = sqla.relationship('Farmer', back_populates='certificates')
 
-    group_area = sqla.Column(sqla.Integer(), nullable=False)
+    group_area = sqla.Column(sqla.Integer(), nullable=False, default=0)
     member_count = sqla.Column(sqla.Integer(), nullable=False)
     certificate_start_date = sqla.Column(sqla.DateTime(), nullable=False)
     gov_certificate_id = sqla.Column(sqla.String(64), nullable=False)
