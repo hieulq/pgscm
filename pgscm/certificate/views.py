@@ -3,6 +3,8 @@ from . import certificate
 from flask_security import roles_accepted
 import datetime
 
+from pgscm import const as c
+
 
 class Certificate:
     def __init__(self, certificate_id, certificate_name, active_date,
@@ -17,7 +19,7 @@ class Certificate:
 
 @certificate.route('/vi/chung-chi', endpoint='index_vi')
 @certificate.route('/en/certificates', endpoint='index_en')
-@roles_accepted('national_admin', 'national_moderator', 'national_user')
+@roles_accepted(c.N_ADMIN, c.R_ADMIN, c.N_USER)
 def index():
     sample_certificate = Certificate(11, 'certificate smp',
                                      datetime.date(2015, 8, 23),
@@ -33,7 +35,7 @@ def index():
                    endpoint='details_vi')
 @certificate.route('/en/certificates/details/<string:certificate_id>',
                    endpoint='details_en')
-@roles_accepted('national_admin', 'national_moderator', 'national_user')
+@roles_accepted(c.N_ADMIN, c.R_ADMIN, c.N_USER)
 def details(certificate_id):
     sample_certificate = Certificate(11, 'certificate smp',
                                      datetime.date(2015, 8, 23), 100,
@@ -49,7 +51,7 @@ def details(certificate_id):
                    endpoint='advance_search_vi')
 @certificate.route('/en/certificates/advance_search',
                    endpoint='advance_search_en')
-@roles_accepted('national_admin', 'national_moderator', 'national_user')
+@roles_accepted(c.N_ADMIN, c.R_ADMIN, c.N_USER)
 def advance_search():
     sample_certificate = Certificate(11, 'certificate smp',
                                      datetime.date(2015, 8, 23), 100, "OK",

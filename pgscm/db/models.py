@@ -1,33 +1,8 @@
-from flask_security import UserMixin, RoleMixin
-from pgscm import sqla, login_manager
-from enum import IntEnum
 import uuid
 
+from flask_security import UserMixin, RoleMixin
 
-class GenderType(IntEnum):
-    male = 0  # nam
-    female = 1  # nu
-
-
-class FarmerType(IntEnum):
-    member = 0  # thanh vien
-    reviewer = 1  # thanh tra
-
-
-class CertificateStatusType(IntEnum):
-    approve = 0  # dong y cap
-    reject = 1  # tu choi cap
-    not_check = 2  # chua xac nhan
-    approve_no_cert = 3  # khong co chung chi
-
-
-class CertificateReVerifyStatusType(IntEnum):
-    not_check = 0  # chua thanh tra
-    valid = 1  # ok
-    decline = 2  # thu hoi
-    warning = 3  # canh cao
-    punish = 4  # dinh chi, xu phat
-
+from pgscm import sqla, login_manager, const
 
 # Create a table to support a many-to-many relationship between Users and Roles
 
@@ -140,8 +115,8 @@ class Farmer(sqla.Model):
                      default=lambda: str(uuid.uuid4()))
     farmer_code = sqla.Column(sqla.String(64))
     name = sqla.Column(sqla.String(80), nullable=False)
-    gender = sqla.Column(sqla.Enum(GenderType), nullable=False)
-    type = sqla.Column(sqla.Enum(FarmerType))
+    gender = sqla.Column(sqla.Enum(const.GenderType), nullable=False)
+    type = sqla.Column(sqla.Enum(const.FarmerType))
 
     group_id = sqla.Column(sqla.String(64), sqla.ForeignKey('group.id'),
                            nullable=True)
@@ -172,9 +147,10 @@ class Certificate(sqla.Model):
     certificate_start_date = sqla.Column(sqla.Date(), nullable=True)
     gov_certificate_id = sqla.Column(sqla.String(64), nullable=True)
     certificate_expiry_date = sqla.Column(sqla.Date())
-    status = sqla.Column(sqla.Enum(CertificateStatusType))
+    status = sqla.Column(sqla.Enum(const.CertificateStatusType))
 
-    re_verify_status = sqla.Column(sqla.Enum(CertificateReVerifyStatusType))
+    re_verify_status = sqla.Column(
+        sqla.Enum(const.CertificateReVerifyStatusType))
 
     deleted_at = sqla.Column(sqla.DateTime())
     modify_info = sqla.Column(sqla.String(255))

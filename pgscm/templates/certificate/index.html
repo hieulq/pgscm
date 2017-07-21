@@ -36,8 +36,8 @@
     </ol>
 {%- endblock content_header %}
 {% block content -%}
-    {% if current_user.is_authenticated and ('national_admin' in current_user.roles or
-        'national_moderator' in current_user.roles) %}
+    {% if current_user.is_authenticated and (g.c.N_ADMIN in current_user.roles or
+        g.c.N_MOD in current_user.roles) %}
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
@@ -163,7 +163,7 @@
             </div>
             <!-- /.col -->
         </div>
-    {% elif current_user.is_authenticated and ('national_user' in current_user.roles) %}
+    {% elif current_user.is_authenticated and (g.c.N_USER in current_user.roles) %}
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">

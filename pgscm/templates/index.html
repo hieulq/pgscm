@@ -5,11 +5,8 @@
 {% block title %}{{ _('PGS Certificate Manager') }}{% endblock %}
 {% block head %}
     {{ super() }}
-    <link rel="shortcut icon"
-          href="{{ url_for('static', filename='favicon.ico') }}"
-          type="image/x-icon">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}"
-          type="image/x-icon">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 {% endblock %}
 
 {% block skin %}skin-green{% endblock %}
@@ -23,8 +20,8 @@
     </a>
     <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-            {% if current_user.is_authenticated and ('national_admin' in current_user.roles or
-            'national_moderator' in current_user.roles) %}
+            {% if current_user.is_authenticated and (g.c.N_ADMIN in current_user.roles or
+            g.c.N_MOD in current_user.roles) %}
                 <!-- Messages: style can be found in dropdown.less-->
                 <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -188,8 +185,8 @@
                 <i class="fa fa-dashboard"></i> <span>{{ _('Dashboard') }}</span>
             </a>
         </li>
-        {% if current_user.is_authenticated and ('national_admin' in current_user.roles or
-        'national_moderator' in current_user.roles) %}
+        {% if current_user.is_authenticated and (g.c.N_ADMIN in current_user.roles or
+        g.c.N_MOD in current_user.roles) %}
             <li class="{{ is_active_in_tree(request, 'certificate') }}">
                 <a href="{{ lurl_for('certificate.index') }}">
                     <i class="fa fa-balance-scale"></i> <span>{{ _('Certificate') }}</span>
@@ -208,11 +205,11 @@
             </li>
 
             <li class="{{ is_active_in_tree(request, 'associate_group') }}">
-                <a href="#">
+                <a href="{{ lurl_for('agroup.index') }}">
                     <i class="fa fa-home"></i> <span>{{ _('Associated Group') }}</span>
                 </a>
             </li>
-            {% if 'national_admin' in current_user.roles %}
+            {% if g.c.N_ADMIN in current_user.roles or g.c.R_ADMIN in current_user.roles %}
                 <li class="header">{{ _('DMZ') }}</li>
                 <li class="{{ is_active_in_tree(request, 'admin') }}">
                     <a href="{{ lurl_for('admin.index') }}">

@@ -1,10 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "index.html" %}
+{%- block styles %}
+    {{ super() }}
+    <link href="{{ adminlte_find_resource('js/plugins/datatables/dataTables.bootstrap.css', cdn='local', use_minified=True) }}" rel="stylesheet" type="text/css">
+{%- endblock styles %}
 
-</body>
-</html>
+{% block scripts %}
+    {{ super() }}
+    <!-- DataTables -->
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/jquery.dataTables.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/dataTables.bootstrap.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/dataTables.buttons.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/buttons.bootstrap.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/buttons.print.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/buttons.html5.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/jszip.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/pdfmake.js', cdn='local', use_minified=True) }}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/vfs_fonts.js', cdn='local', use_minified=False) }}"></script>
+    <!-- page script -->
+    <script>
+        $(function () {
+            var table = $('#pgs_agroups').DataTable({
+                "language": {
+                    "url": "/static/" + '{{ g.language }}' + '.json'
+                },
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel-o"></i>',
+                        titleAttr: 'Excel'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="fa fa-file-pdf-o"></i>',
+                        titleAttr: 'PDF'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i>',
+                        titleAttr: 'Print'
+                    }
+                ],
+                "processing": true,
+                "serverSide": false,
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true,
+                "initComplete": function (settings, json) {
+                    table.buttons().container().appendTo('#pgs_agroups_filter');
+                }
+            })
+        });
+    </script>
+{%- endblock scripts %}
+{% block content_header -%}
+    <h1>
+        {{ _('PGS Associate Groups') }}
+        <small>{{ _('Managing regional associate groups in PGS system') }}</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="{{ lurl_for('main.index') }}"><i
+                class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
+        <li class="active"><a href="{{ lurl_for('agroup.index') }}"><i
+                class="fa fa-user"></i>{{ _('Associated Group') }}</a></li>
+    </ol>
+{%- endblock content_header %}
+{% block content -%}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">{{ _('PGS Associate Groups') }}</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="pgs_agroups"
+                           class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>{{ _('Code') }}</th>
+                            <th>{{ _('Name') }}
+                            <th>{{ _('Email') }}</th>
+                            <th>{{ _('Province') }}</th>
+                            <th>{{ _('Actions') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for ag in ags %}
+                            <tr>
+                                <td>
+                                    <a href="{{ lurl_for('group.index', ags_id=ag.id) }}">
+                                        {{ ag.associate_group_code }}
+                                    </a>
+                                </td>
+                                <td>{{ ag.name }}</td>
+                                <td>{{ ag.email }}</td>
+                                <td>{{ ag.province.name }}</td>
+
+                                <td class="actions_column">
+                                    <button type="button" class="btn btn-info" data-toggle="modal"
+                                            data-target="#modal-default" title="{{ _('Edit') }}">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+    <!-- .modal -->
+    <div class="modal fade in" id="modal-default" style="display: none;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Default Modal</h4>
+              </div>
+              <div class="modal-body">
+                <p>One fine body…</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+{%- endblock content %}

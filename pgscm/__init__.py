@@ -14,11 +14,8 @@ from config import config
 import uuid
 
 from pgscm.security import forms
+from pgscm import const
 
-# Blueprint
-from pgscm.admin import admin as admin_blueprint
-from pgscm.certificate import certificate as certificate_blueprint
-from pgscm.main import main as main_blueprint
 
 bootstrap = Bootstrap()
 mail = Mail()
@@ -64,9 +61,20 @@ def register_api_resource(api):
 
 
 def register_blueprint(app):
+    # Blueprint
+    from pgscm.admin import admin as admin_blueprint
+    from pgscm.certificate import certificate as certificate_blueprint
+    from pgscm.main import main as main_blueprint
+    from pgscm.group import group as group_blueprint
+    from pgscm.farmer import farmer as farmer_blueprint
+    from pgscm.associate_group import agroup as agroup_blueprint
+
     app.register_blueprint(main_blueprint)
     app.register_blueprint(admin_blueprint)
     app.register_blueprint(certificate_blueprint)
+    app.register_blueprint(group_blueprint)
+    app.register_blueprint(agroup_blueprint)
+    app.register_blueprint(farmer_blueprint)
 
 
 def create_app(config_name):
@@ -106,6 +114,7 @@ def create_app(config_name):
         # append babel i18n to flask global proxy object
         g.babel = babel
         g.language = get_locale()
+        g.c = const
 
     @app.before_first_request
     def create_user():
@@ -131,9 +140,9 @@ def create_app(config_name):
         # before we can add a Role to the User
         sqla.session.commit()
 
-        user_datastore.add_role_to_user('admin@pgs.com', 'national_admin')
-        user_datastore.add_role_to_user('mod@pgs.com', 'national_moderator')
-        user_datastore.add_role_to_user('user@pgs.com', 'national_user')
+        user_datastore.add_role_to_user('admin@pgs.com', const.N_ADMIN)
+        user_datastore.add_role_to_user('mod@pgs.com', const.N_MOD)
+        user_datastore.add_role_to_user('user@pgs.com', const.N_USER)
         sqla.session.commit()
 
     return app

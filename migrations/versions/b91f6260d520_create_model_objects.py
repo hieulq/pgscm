@@ -5,11 +5,14 @@ Revises: 56502d362ab5
 Create Date: 2017-07-16 18:17:32.791453
 
 """
-from alembic import op
-import sqlalchemy as sa
 import uuid
-from sqlalchemy.sql import table, column
+
+import sqlalchemy as sa
+from alembic import op
 from sqlalchemy import String
+from sqlalchemy.sql import table, column
+
+from pgscm import const
 
 # revision identifiers, used by Alembic.
 revision = 'b91f6260d520'
@@ -187,17 +190,17 @@ def upgrade():
     op.bulk_insert(
         role_table,
         [
-            {'id': str(uuid.uuid4()), "name": "national_admin",
+            {'id': str(uuid.uuid4()), "name": const.N_ADMIN,
              "description": "National Admin"},
-            {'id': str(uuid.uuid4()), "name": "national_moderator",
+            {'id': str(uuid.uuid4()), "name": const.N_MOD,
              "description": "National Moderator"},
-            {'id': str(uuid.uuid4()), "name": "national_user",
+            {'id': str(uuid.uuid4()), "name": const.N_USER,
              "description": "National User"},
-            {'id': str(uuid.uuid4()), "name": "regional_admin",
+            {'id': str(uuid.uuid4()), "name": const.R_ADMIN,
              "description": "Regional Admin"},
-            {'id': str(uuid.uuid4()), "name": "regional_moderator",
+            {'id': str(uuid.uuid4()), "name": const.R_MOD,
              "description": "Regional Moderator"},
-            {'id': str(uuid.uuid4()), "name": "regional_user",
+            {'id': str(uuid.uuid4()), "name": const.R_USER,
              "description": "Regional User"},
         ]
     )
