@@ -1,27 +1,27 @@
 from flask_security import UserMixin, RoleMixin
 from pgscm import sqla, login_manager
-import enum
+from enum import IntEnum
 import uuid
 
 
-class GenderType(enum.Enum):
+class GenderType(IntEnum):
     male = 0  # nam
     female = 1  # nu
 
 
-class FarmerType(enum.Enum):
+class FarmerType(IntEnum):
     member = 0  # thanh vien
     reviewer = 1  # thanh tra
 
 
-class CertificateStatusType(enum.Enum):
+class CertificateStatusType(IntEnum):
     approve = 0  # dong y cap
     reject = 1  # tu choi cap
     not_check = 2  # chua xac nhan
     approve_no_cert = 3  # khong co chung chi
 
 
-class CertificateReVerifyStatusType(enum.Enum):
+class CertificateReVerifyStatusType(IntEnum):
     not_check = 0  # chua thanh tra
     valid = 1  # ok
     decline = 2  # thu hoi
