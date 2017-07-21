@@ -168,10 +168,10 @@ class Certificate(sqla.Model):
     owner_farmer = sqla.relationship('Farmer', back_populates='certificates')
 
     group_area = sqla.Column(sqla.Integer(), nullable=False, default=0)
-    member_count = sqla.Column(sqla.Integer(), nullable=False)
-    certificate_start_date = sqla.Column(sqla.DateTime(), nullable=False)
-    gov_certificate_id = sqla.Column(sqla.String(64), nullable=False)
-    certificate_expiry_date = sqla.Column(sqla.DateTime())
+    member_count = sqla.Column(sqla.Integer(), nullable=False, default=0)
+    certificate_start_date = sqla.Column(sqla.Date(), nullable=True)
+    gov_certificate_id = sqla.Column(sqla.String(64), nullable=True)
+    certificate_expiry_date = sqla.Column(sqla.Date())
     status = sqla.Column(sqla.Enum(CertificateStatusType))
 
     re_verify_status = sqla.Column(sqla.Enum(CertificateReVerifyStatusType))

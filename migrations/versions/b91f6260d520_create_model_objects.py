@@ -154,6 +154,8 @@ def upgrade():
                     mysql_default_charset='utf8')
     op.create_index('certificate_code_index', 'certificate',
                     ['certificate_code', 'deleted_at'], unique=False)
+    op.create_index('certificate_code_index2', 'certificate',
+                    ['certificate_code'], unique=False)
 
     # - create table farmer, foreign key and index
     op.create_table('farmer',
@@ -212,6 +214,7 @@ def downgrade():
     op.drop_index('farmer_code_index', table_name='farmer')
     op.drop_table('farmer')
     op.drop_index('certificate_code_index', table_name='certificate')
+    op.drop_index('certificate_code_index2', table_name='certificate')
     op.drop_table('certificate')
     op.drop_index('group_code_index', table_name='group')
     op.drop_table('group')
