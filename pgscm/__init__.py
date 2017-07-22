@@ -1,6 +1,6 @@
 from flask import Flask, request, g, url_for
 from flask_bootstrap import Bootstrap
-from flask_login import LoginManager
+from flask_login import LoginManager, login_required
 from flask_mail import Mail
 from flask_moment import Moment
 from flask_potion import Api
@@ -53,6 +53,7 @@ def register_extensions(app):
     # Flask potion do not initialize with current Flask app, so the below line
     # is the work-around for potion to init_app correctly.
     api.app = app
+    api.decorators = [login_required]
     api.init_app(app)
 
 
