@@ -45,8 +45,9 @@ def register_extensions(app):
 
     # Init flask security using factory method, then change the localized
     # domain to our own
-    sec_state = sec.init_app(app,
-                             user_datastore, register_form=forms.RegisterForm)
+    sec_state = sec.init_app(app, user_datastore,
+                             register_form=forms.RegisterForm,
+                             login_form=forms.LoginForm)
     sec_state.i18n_domain.dirname = None
 
     # Flask potion do not initialize with current Flask app, so the below line
