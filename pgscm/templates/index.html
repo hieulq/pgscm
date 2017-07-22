@@ -20,8 +20,7 @@
     </a>
     <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-            {% if current_user.is_authenticated and (g.c.N_ADMIN in current_user.roles or
-            g.c.N_MOD in current_user.roles) %}
+            {% if current_user.is_authenticated and check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD]) %}
                 <!-- Messages: style can be found in dropdown.less-->
                 <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -185,8 +184,7 @@
                 <i class="fa fa-dashboard"></i> <span>{{ _('Dashboard') }}</span>
             </a>
         </li>
-        {% if current_user.is_authenticated and (g.c.N_ADMIN in current_user.roles or
-        g.c.N_MOD in current_user.roles) %}
+        {% if current_user.is_authenticated %}
             <li class="{{ is_active_in_tree(request, 'certificate') }}">
                 <a href="{{ lurl_for('certificate.index') }}">
                     <i class="fa fa-balance-scale"></i> <span>{{ _('Certificate') }}</span>
@@ -209,7 +207,7 @@
                     <i class="fa fa-home"></i> <span>{{ _('Associated Group') }}</span>
                 </a>
             </li>
-            {% if g.c.N_ADMIN in current_user.roles or g.c.R_ADMIN in current_user.roles %}
+            {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN]) %}
                 <li class="header">{{ _('DMZ') }}</li>
                 <li class="{{ is_active_in_tree(request, 'admin') }}">
                     <a href="{{ lurl_for('admin.index') }}">
@@ -239,29 +237,6 @@
                     </ul>
                 </li>
             {% endif %}
-        {% elif current_user.is_authenticated and ('user' in current_user.roles) %}
-            <li class="{{ is_active_in_tree(request, 'certificate') }}">
-                <a href="{{ lurl_for('certificate.index') }}">
-                    <i class="fa fa-balance-scale"></i> <span>{{ _('Certificate') }}</span>
-                </a>
-            </li>
-
-            <li class="{{ is_active_in_tree(request, 'farmer') }}">
-                <a href="#">
-                    <i class="fa fa-child"></i> <span>{{ _('Farmer') }}</span>
-                </a>
-            </li>
-            <li class="{{ is_active_in_tree(request, 'group') }}">
-                <a href="#">
-                    <i class="fa fa-group"></i> <span>{{ _('Group') }}</span>
-                </a>
-            </li>
-
-            <li class="{{ is_active_in_tree(request, 'associate_group') }}">
-                <a href="#">
-                    <i class="fa fa-home"></i> <span>{{ _('Associated Group') }}</span>
-                </a>
-            </li>
         {% endif %}
 
         {% if not current_user.is_authenticated %}

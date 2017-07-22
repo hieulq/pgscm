@@ -2,7 +2,7 @@ import uuid
 
 from flask_security import UserMixin, RoleMixin
 
-from pgscm import sqla, login_manager, const
+from pgscm import sqla, const
 
 # Create a table to support a many-to-many relationship between Users and Roles
 
@@ -30,7 +30,7 @@ class User(sqla.Model, UserMixin):
                      default=lambda: str(uuid.uuid4()))
     email = sqla.Column(sqla.String(64), unique=True, index=True)
     fullname = sqla.Column(sqla.String(64), unique=True, index=True)
-    roles = sqla.relationship('Role', secondary=roles_users,
+    roles = sqla.relationship(Role, secondary=roles_users,
                               backref=sqla.backref('user', lazy='dynamic'))
     province_id = sqla.Column(sqla.String(64), sqla.ForeignKey(
         'province.province_id'), nullable=True)
@@ -199,8 +199,3 @@ class Province(sqla.Model):
     associate_groups = sqla.relationship('AssociateGroup',
                                          back_populates='province')
     users = sqla.relationship('User', back_populates='province')
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(str(user_id))

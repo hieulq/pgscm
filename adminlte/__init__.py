@@ -105,6 +105,13 @@ def is_active_in_tree(request, bp_name):
         return 'treeview'
 
 
+def check_role(current, target):
+    for role in current:
+        if role in target:
+            return True
+    return False
+
+
 def breadcrumb_gen():
     pass
 
@@ -139,6 +146,8 @@ class AdminLTE(object):
             adminlte_find_resource
         app.jinja_env.globals['is_active_in_tree'] = \
             is_active_in_tree
+        app.jinja_env.globals['check_role'] = \
+            check_role
 
         if not hasattr(app, 'extensions'):
             app.extensions = {}

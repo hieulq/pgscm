@@ -1,4 +1,9 @@
 from flask_potion import ModelResource
+from flask_login import current_user
+from flask_potion.routes import Route
+from flask_potion.instances import Instances
+from flask_potion import fields
+
 from pgscm.db import models
 
 
@@ -30,6 +35,18 @@ class GroupResource(ModelResource):
 class AssociateGroupResource(ModelResource):
     class Meta:
         model = models.AssociateGroup
+
+    class Schema:
+        province = fields.ToOne('province')
+
+    @Route.GET('', rel="instances", schema=Instances(),
+               response_schema=Instances())
+    def instances(self, **kwargs):
+        province_id = current_user.province_id
+        if province_id:
+            kwargs['where'] += \
+                (self.manager.filters['province'][None].convert(province_id),)
+        return self.manager.paginated_instances(**kwargs)
 
 
 class WardResource(ModelResource):
