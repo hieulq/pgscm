@@ -21,7 +21,7 @@ class FarmerType(IntEnum):
 class CertificateStatusType(IntEnum):
     approve = 0  # dong y cap
     reject = 1  # tu choi cap
-    not_check = 2  # chua xac nhan
+    in_conversion = 2  # chua xac nhan
     approve_no_cert = 3  # khong co chung chi
 
 

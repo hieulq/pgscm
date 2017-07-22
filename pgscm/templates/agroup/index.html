@@ -23,26 +23,37 @@
                 "language": {
                     "url": "/static/" + '{{ g.language }}' + '.json'
                 },
+                responsive: true,
                 buttons: [
                     {
                         extend: 'excelHtml5',
                         text: '<i class="fa fa-file-excel-o"></i>',
-                        titleAttr: 'Excel'
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3 ]
+                        }
                     },
                     {
                         extend: 'pdfHtml5',
                         text: '<i class="fa fa-file-pdf-o"></i>',
-                        titleAttr: 'PDF'
+                        titleAttr: 'PDF',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3 ]
+                        }
                     },
                     {
                         extend: 'print',
                         text: '<i class="fa fa-print"></i>',
-                        titleAttr: 'Print'
+                        titleAttr: 'Print',
+                        exportOptions: {
+                            columns: [ 0, 1, 2, 3 ]
+                        }
                     }
                 ],
                 "processing": true,
                 "serverSide": false,
                 "paging": true,
+                "pagingType": "full_numbers",
                 "lengthChange": true,
                 "searching": true,
                 "ordering": true,
@@ -50,6 +61,7 @@
                 "autoWidth": true,
                 "initComplete": function (settings, json) {
                     table.buttons().container().appendTo('#pgs_agroups_filter');
+                    $('.dt-buttons').css("margin-left", "10px");
                 }
             })
         });
@@ -100,7 +112,7 @@
                                 <td>{{ ag.province.name }}</td>
 
                                 <td class="actions_column">
-                                    <button type="button" class="btn btn-info" data-toggle="modal"
+                                    <button type="button" class="btn btn-xs btn-info" data-toggle="modal"
                                             data-target="#modal-default" title="{{ _('Edit') }}">
                                         <i class="fa fa-edit"></i>
                                     </button>
