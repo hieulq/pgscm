@@ -4,11 +4,14 @@ from flask_login import LoginManager, login_required
 from flask_mail import Mail
 from flask_moment import Moment
 from flask_potion import Api
+from flask_potion.contrib.principals import principals
+from flask_potion.contrib.alchemy import SQLAlchemyManager
 from flask_security import Security, SQLAlchemyUserDatastore, \
     utils as security_utils
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import user_registered
 from flask_babelex import Babel
+
 from adminlte import AdminLTE
 from config import config
 import uuid
@@ -54,6 +57,7 @@ def register_extensions(app):
     # is the work-around for potion to init_app correctly.
     api.app = app
     api.decorators = [login_required]
+    api.default_manager = principals(SQLAlchemyManager)
     api.init_app(app)
 
 

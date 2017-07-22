@@ -9,5 +9,6 @@ class RegisterForm(forms.RegisterForm):
 class LoginForm(forms.LoginForm):
     def __init__(self, *args, **kwargs):
         # disable csrf for only login form to enable token auth
-        kwargs['csrf_enabled'] = False
+        kwargs['meta'] = {}
+        kwargs['meta'].setdefault('csrf', False)
         super(LoginForm, self).__init__(*args, **kwargs)
