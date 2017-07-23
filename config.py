@@ -7,6 +7,7 @@ class Config:
     # common
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    AJAX_CALL_ENABLED = False
 
     # mail config options
     MAIL_SERVER = 'smtp.googlemail.com'

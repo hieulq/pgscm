@@ -20,6 +20,7 @@
     <script>
 
         $(function () {
+            {% if config['AJAX_CALL_ENABLED'] %}
             function updateTable(data, status, state) {
                 var settings = jQuery.fn.dataTable.settings[0]
                 var api = jQuery.fn.dataTableExt.oApi
@@ -46,8 +47,9 @@
                 settings.bAjaxDataGet = true;
                 api._fnProcessingDisplay( settings, false );
             }
+            {% endif %}
 
-            var table = $('#pgs_agroups').DataTable({
+            var table = $('#pgs_data').DataTable({
                 "language": {
                     "url": "/static/" + '{{ g.language }}' + '.json'
                 },
@@ -79,24 +81,35 @@
                     }
                 ],
                 "processing": true,
+                {% if config['AJAX_CALL_ENABLED'] %}
                 "serverSide": false,
-{#                "ajax": function(data, callback, settings) {#}
-{#                    data.page = data.start + 1#}
-{#                    data.per_page = data.length#}
-{#                    delete data.columns#}
-{#                    delete data.start#}
-{#                    delete data.length#}
-{#                    delete data.order#}
-{#                    delete data.draw#}
-{#                    delete data.search#}
-{#                    request = $.ajax({#}
-{#                        "dataType" : "json",#}
-{#                        "type" : "GET",#}
-{#                        "url" : '/associate_group',#}
-{#                        "data" : data,#}
-{#                        "success" : updateTable#}
-{#                    });#}
-{#                },#}
+                "ajax": function(data, callback, settings) {
+                    data.page = data.start + 1
+                    data.per_page = data.length
+                    delete data.columns
+                    delete data.start
+                    delete data.length
+                    delete data.order
+                    delete data.draw
+                    delete data.search
+                    request = $.ajax({
+                        "dataType" : "json",
+                        "type" : "GET",
+                        "url" : '/associate_group',
+                        "data" : data,
+                        "success" : updateTable
+                    });
+                },
+                "columns": [
+                    { "data": "associate_group_code"},
+                    { "data": "name"},
+                    { "data": "email"},
+                    { "data": "province"},
+                    { "data": "province"},
+                ],
+                {% else %}
+                "serverSide": false,
+                {% endif %}
                 "paging": true,
                 "pagingType": "full_numbers",
                 "lengthChange": true,
@@ -105,16 +118,9 @@
                 "info": true,
                 "autoWidth": true,
                 "initComplete": function (settings, json) {
-                    table.buttons().container().appendTo('#pgs_agroups_filter');
+                    table.buttons().container().appendTo('#pgs_data_filter');
                     $('.dt-buttons').css("margin-left", "10px");
                 },
-{#                "columns": [#}
-{#                    { "data": "associate_group_code"},#}
-{#                    { "data": "name"},#}
-{#                    { "data": "email"},#}
-{#                    { "data": "province"},#}
-{#                    { "data": "province"},#}
-{#                ]#}
             })
         });
     </script>
@@ -140,7 +146,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table id="pgs_agroups"
+                    <table id="pgs_data"
                            class="table table-bordered table-hover">
                         <thead>
                         <tr>
