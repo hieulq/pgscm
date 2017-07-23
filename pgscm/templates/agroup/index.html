@@ -18,7 +18,35 @@
     <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/vfs_fonts.js', cdn='local', use_minified=False) }}"></script>
     <!-- page script -->
     <script>
+
         $(function () {
+            function updateTable(data, status, state) {
+                var settings = jQuery.fn.dataTable.settings[0]
+                var api = jQuery.fn.dataTableExt.oApi
+                var draw            = 'draw';
+                var recordsTotal    = data.length
+                var recordsFiltered = data.length
+
+                api._fnClearTable( settings );
+                settings._iRecordsTotal   = parseInt(recordsTotal, 10);
+                settings._iRecordsDisplay = parseInt(recordsFiltered, 10);
+
+                for ( var i=0, ien=data.length ; i<ien ; i++ ) {
+                    api._fnAddData( settings, data[i] );
+                }
+                settings.aiDisplay = settings.aiDisplayMaster.slice();
+
+                settings.bAjaxDataGet = false;
+                api._fnDraw( settings );
+
+                if ( ! settings._bInitComplete ) {
+                    api._fnInitComplete( settings, data );
+                }
+
+                settings.bAjaxDataGet = true;
+                api._fnProcessingDisplay( settings, false );
+            }
+
             var table = $('#pgs_agroups').DataTable({
                 "language": {
                     "url": "/static/" + '{{ g.language }}' + '.json'
@@ -52,7 +80,23 @@
                 ],
                 "processing": true,
                 "serverSide": false,
-{#                ajax: '/associate_group',#}
+{#                "ajax": function(data, callback, settings) {#}
+{#                    data.page = data.start + 1#}
+{#                    data.per_page = data.length#}
+{#                    delete data.columns#}
+{#                    delete data.start#}
+{#                    delete data.length#}
+{#                    delete data.order#}
+{#                    delete data.draw#}
+{#                    delete data.search#}
+{#                    request = $.ajax({#}
+{#                        "dataType" : "json",#}
+{#                        "type" : "GET",#}
+{#                        "url" : '/associate_group',#}
+{#                        "data" : data,#}
+{#                        "success" : updateTable#}
+{#                    });#}
+{#                },#}
                 "paging": true,
                 "pagingType": "full_numbers",
                 "lengthChange": true,
@@ -68,6 +112,7 @@
 {#                    { "data": "associate_group_code"},#}
 {#                    { "data": "name"},#}
 {#                    { "data": "email"},#}
+{#                    { "data": "province"},#}
 {#                    { "data": "province"},#}
 {#                ]#}
             })
