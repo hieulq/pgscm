@@ -99,7 +99,7 @@ def adminlte_find_resource(filename, cdn, use_minified=None, local=True):
 
 
 def is_active_in_tree(request, endpoint, tree=True):
-    if endpoint in request.endpoint:
+    if endpoint == request.endpoint[:-3]:
         return 'active'
     elif tree:
         return 'treeview'

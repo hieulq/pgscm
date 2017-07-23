@@ -52,6 +52,7 @@
                 ],
                 "processing": true,
                 "serverSide": false,
+{#                ajax: '/associate_group',#}
                 "paging": true,
                 "pagingType": "full_numbers",
                 "lengthChange": true,
@@ -62,7 +63,13 @@
                 "initComplete": function (settings, json) {
                     table.buttons().container().appendTo('#pgs_agroups_filter');
                     $('.dt-buttons').css("margin-left", "10px");
-                }
+                },
+{#                "columns": [#}
+{#                    { "data": "associate_group_code"},#}
+{#                    { "data": "name"},#}
+{#                    { "data": "email"},#}
+{#                    { "data": "province"},#}
+{#                ]#}
             })
         });
     </script>

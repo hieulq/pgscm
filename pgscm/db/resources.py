@@ -1,8 +1,9 @@
 from flask_potion import ModelResource
-from flask_login import current_user
+from flask_security import current_user
 from flask_potion.routes import Route
-from flask_potion.instances import Instances
 from flask_potion import fields
+from flask_potion.instances import Instances
+
 
 from pgscm.db import models
 
@@ -46,7 +47,7 @@ class AssociateGroupResource(ModelResource):
         if province_id:
             kwargs['where'] += \
                 (self.manager.filters['province'][None].convert(province_id),)
-        return self.manager.paginated_instances(**kwargs)
+        return self.manager.paginated_instances_dt(**kwargs)
 
 
 class WardResource(ModelResource):

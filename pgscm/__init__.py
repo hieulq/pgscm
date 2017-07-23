@@ -5,7 +5,6 @@ from flask_mail import Mail
 from flask_moment import Moment
 from flask_potion import Api
 from flask_potion.contrib.principals import principals
-from flask_potion.contrib.alchemy import SQLAlchemyManager
 from flask_security import Security, SQLAlchemyUserDatastore, \
     utils as security_utils
 from flask_sqlalchemy import SQLAlchemy
@@ -17,6 +16,7 @@ from config import config
 import uuid
 
 from pgscm.security import forms
+from pgscm.db.resource_manager import PgsResourceManager
 from pgscm import const
 
 
@@ -57,7 +57,7 @@ def register_extensions(app):
     # is the work-around for potion to init_app correctly.
     api.app = app
     api.decorators = [login_required]
-    api.default_manager = principals(SQLAlchemyManager)
+    api.default_manager = principals(PgsResourceManager)
     api.init_app(app)
 
 
