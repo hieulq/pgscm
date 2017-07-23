@@ -25,6 +25,6 @@ window.popupMessages.forEach(function (m, i) {
   var category = m[0] || 'info';
   var text = m[1];
   setTimeout(function () {
-    toastr.info(text);
+    toastr[category](text);
   }, (1 + i) * 1500);
 });
