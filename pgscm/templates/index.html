@@ -179,30 +179,30 @@
     <!-- /.search form -->
     <ul class="sidebar-menu">
         <li class="header">{{ _('PGS MANAGEMENT') }}</li>
-        <li class="{{ is_active_in_tree(request, 'main') }}">
+        <li class="{{ is_active_in_tree(request, 'main.index') }}">
             <a href="{{ lurl_for('main.index') }}">
                 <i class="fa fa-dashboard"></i> <span>{{ _('Dashboard') }}</span>
             </a>
         </li>
         {% if current_user.is_authenticated %}
-            <li class="{{ is_active_in_tree(request, 'certificate') }}">
+            <li class="{{ is_active_in_tree(request, 'certificate.index') }}">
                 <a href="{{ lurl_for('certificate.index') }}">
                     <i class="fa fa-balance-scale"></i> <span>{{ _('Certificate') }}</span>
                 </a>
             </li>
 
-            <li class="{{ is_active_in_tree(request, 'farmer') }}">
+            <li class="{{ is_active_in_tree(request, 'farmer.index') }}">
                 <a href="#">
                     <i class="fa fa-child"></i> <span>{{ _('Farmer') }}</span>
                 </a>
             </li>
-            <li class="{{ is_active_in_tree(request, 'group') }}">
+            <li class="{{ is_active_in_tree(request, 'group.index') }}">
                 <a href="#">
                     <i class="fa fa-group"></i> <span>{{ _('Group') }}</span>
                 </a>
             </li>
 
-            <li class="{{ is_active_in_tree(request, 'agroup') }}">
+            <li class="{{ is_active_in_tree(request, 'agroup.index') }}">
                 <a href="{{ lurl_for('agroup.index') }}">
                     <i class="fa fa-home"></i> <span>{{ _('Associated Group') }}</span>
                 </a>
@@ -216,19 +216,19 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li>
+                        <li class="{{ is_active_in_tree(request, 'admin.users', False) }}">
                             <a href="{{ lurl_for('admin.users') }}">
                                 <i class="fa fa-user"></i>
                                 {{ _('Users Management') }}
                             </a>
                         </li>
-                        <li>
+                        <li class="{{ is_active_in_tree(request, 'admin.regions', False) }}">
                             <a href="{{ lurl_for('admin.regions') }}">
                                 <i class="fa fa-map"></i>
                                 {{ _('PGS Regions Management') }}
                             </a>
                         </li>
-                        <li>
+                        <li class="{{ is_active_in_tree(request, 'admin.configs', False) }}">
                             <a href="{{ lurl_for('admin.configs') }}">
                                 <i class="fa fa-cogs"></i>
                                 {{ _('Configurations') }}

@@ -98,11 +98,13 @@ def adminlte_find_resource(filename, cdn, use_minified=None, local=True):
     return resource_url
 
 
-def is_active_in_tree(request, bp_name):
-    if request.blueprint == bp_name:
+def is_active_in_tree(request, endpoint, tree=True):
+    if endpoint in request.endpoint:
         return 'active'
-    else:
+    elif tree:
         return 'treeview'
+    else:
+        return 'node'
 
 
 def check_role(current, target):
