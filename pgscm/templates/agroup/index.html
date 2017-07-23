@@ -1,129 +1,16 @@
 {% extends "index.html" %}
 {%- block styles %}
     {{ super() }}
-    <link href="{{ adminlte_find_resource('js/plugins/datatables/dataTables.bootstrap.css', cdn='local', use_minified=True) }}" rel="stylesheet" type="text/css">
+    {{ load_datatables_script(js=False) }}
 {%- endblock styles %}
 
 {% block scripts %}
     {{ super() }}
     <!-- DataTables -->
-    <script src="{{ adminlte_find_resource('js/plugins/datatables/jquery.dataTables.js', cdn='local', use_minified=True) }}"></script>
-    <script src="{{ adminlte_find_resource('js/plugins/datatables/dataTables.bootstrap.js', cdn='local', use_minified=True) }}"></script>
-    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/dataTables.buttons.js', cdn='local', use_minified=True) }}"></script>
-    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/buttons.bootstrap.js', cdn='local', use_minified=True) }}"></script>
-    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/buttons.print.js', cdn='local', use_minified=True) }}"></script>
-    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/buttons.html5.js', cdn='local', use_minified=True) }}"></script>
-    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/jszip.js', cdn='local', use_minified=True) }}"></script>
-    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/pdfmake.js', cdn='local', use_minified=True) }}"></script>
-    <script src="{{ adminlte_find_resource('js/plugins/datatables/extensions/Buttons/js/vfs_fonts.js', cdn='local', use_minified=False) }}"></script>
-    <!-- page script -->
-    <script>
-
-        $(function () {
-            {% if config['AJAX_CALL_ENABLED'] %}
-            function updateTable(data, status, state) {
-                var settings = jQuery.fn.dataTable.settings[0]
-                var api = jQuery.fn.dataTableExt.oApi
-                var draw            = 'draw';
-                var recordsTotal    = data.length
-                var recordsFiltered = data.length
-
-                api._fnClearTable( settings );
-                settings._iRecordsTotal   = parseInt(recordsTotal, 10);
-                settings._iRecordsDisplay = parseInt(recordsFiltered, 10);
-
-                for ( var i=0, ien=data.length ; i<ien ; i++ ) {
-                    api._fnAddData( settings, data[i] );
-                }
-                settings.aiDisplay = settings.aiDisplayMaster.slice();
-
-                settings.bAjaxDataGet = false;
-                api._fnDraw( settings );
-
-                if ( ! settings._bInitComplete ) {
-                    api._fnInitComplete( settings, data );
-                }
-
-                settings.bAjaxDataGet = true;
-                api._fnProcessingDisplay( settings, false );
-            }
-            {% endif %}
-
-            var table = $('#pgs_data').DataTable({
-                "language": {
-                    "url": "/static/" + '{{ g.language }}' + '.json'
-                },
-                responsive: true,
-                buttons: [
-                    {
-                        extend: 'excelHtml5',
-                        text: '<i class="fa fa-file-excel-o"></i>',
-                        titleAttr: 'Excel',
-                        exportOptions: {
-                            columns: [ 0, 1, 2, 3 ]
-                        }
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        text: '<i class="fa fa-file-pdf-o"></i>',
-                        titleAttr: 'PDF',
-                        exportOptions: {
-                            columns: [ 0, 1, 2, 3 ]
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text: '<i class="fa fa-print"></i>',
-                        titleAttr: 'Print',
-                        exportOptions: {
-                            columns: [ 0, 1, 2, 3 ]
-                        }
-                    }
-                ],
-                "processing": true,
-                {% if config['AJAX_CALL_ENABLED'] %}
-                "serverSide": false,
-                "ajax": function(data, callback, settings) {
-                    data.page = data.start + 1
-                    data.per_page = data.length
-                    delete data.columns
-                    delete data.start
-                    delete data.length
-                    delete data.order
-                    delete data.draw
-                    delete data.search
-                    request = $.ajax({
-                        "dataType" : "json",
-                        "type" : "GET",
-                        "url" : '/associate_group',
-                        "data" : data,
-                        "success" : updateTable
-                    });
-                },
-                "columns": [
-                    { "data": "associate_group_code"},
-                    { "data": "name"},
-                    { "data": "email"},
-                    { "data": "province"},
-                    { "data": "province"},
-                ],
-                {% else %}
-                "serverSide": false,
-                {% endif %}
-                "paging": true,
-                "pagingType": "full_numbers",
-                "lengthChange": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": true,
-                "initComplete": function (settings, json) {
-                    table.buttons().container().appendTo('#pgs_data_filter');
-                    $('.dt-buttons').css("margin-left", "10px");
-                },
-            })
-        });
-    </script>
+    {{ load_datatables_script(
+            ajax_endpoint='associate_group',
+            export_columns='0,1,2,3',
+            column_names=["associate_group_code", "name", "email", "province", "province"]) }}
 {%- endblock scripts %}
 {% block content_header -%}
     <h1>
@@ -138,6 +25,10 @@
     </ol>
 {%- endblock content_header %}
 {% block content -%}
+    <button id="addBtn" type="button" class="btn btn-default" data-toggle="modal"
+        data-target="#modal-delete" title="{{ _('Delete') }}">
+        <span class="fa fa-plus"></span> {{ _('Create New') }}
+    </button>
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -165,14 +56,18 @@
                                         {{ ag.associate_group_code }}
                                     </a>
                                 </td>
-                                <td>{{ ag.name }}</td>
+                                <td><b>{{ ag.name }}</b></td>
                                 <td>{{ ag.email }}</td>
                                 <td>{{ ag.province.name }}</td>
 
                                 <td class="actions_column">
                                     <button type="button" class="btn btn-xs btn-info" data-toggle="modal"
-                                            data-target="#modal-default" title="{{ _('Edit') }}">
+                                            data-target="#modal-edit" title="{{ _('Edit') }}">
                                         <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-danger" data-toggle="modal"
+                                            data-target="#modal-delete" title="{{ _('Delete') }}">
+                                        <i class="fa fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -188,24 +83,44 @@
     </div>
     <!-- /.row -->
     <!-- .modal -->
-    <div class="modal fade in" id="modal-default" style="display: none;">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Default Modal</h4>
-              </div>
-              <div class="modal-body">
-                <p>One fine body…</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
-            </div>
-            <!-- /.modal-content -->
+    <div class="modal fade in" id="modal-edit" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Default Modal</h4>
           </div>
-          <!-- /.modal-dialog -->
+          <div class="modal-body">
+            <p>One fine body…</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
         </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <div class="modal modal-danger fade" id="modal-delete" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Danger Modal</h4>
+          </div>
+          <div class="modal-body">
+            <p>One fine body…</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-outline">Save changes</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
 {%- endblock content %}

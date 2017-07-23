@@ -5,7 +5,8 @@ __version__ = '2.3.3'
 
 import re
 
-from flask import Blueprint, current_app, url_for
+from jinja2 import Markup
+from flask import Blueprint, current_app, url_for, g
 
 
 class CDN(object):
@@ -107,6 +108,183 @@ def is_active_in_tree(request, endpoint, tree=True):
         return 'node'
 
 
+def load_datatables_script(ajax_endpoint="", export_columns="",
+                           column_names=[], js=True):
+    if js:
+        function_script = ""
+        datatables_script = """
+        <script src="{0}"></script>
+        <script src="{1}"></script>
+        <script src="{2}"></script>
+        <script src="{3}"></script>
+        <script src="{4}"></script>
+        <script src="{5}"></script>
+        <script src="{6}"></script>
+        <script src="{7}"></script>
+        <script src="{8}"></script>
+        <script src="{9}"></script>
+        <script src="{10}"></script>
+        """.format(
+            adminlte_find_resource('js/plugins/datatables/jquery.dataTables.js',  # noqa
+                                   cdn='local', use_minified=True),
+            adminlte_find_resource('js/plugins/datatables/dataTables.bootstrap.js',  # noqa
+                                   cdn='local', use_minified=True),
+            adminlte_find_resource(
+                'js/plugins/datatables/extensions/Buttons/js/dataTables.buttons.js',  # noqa
+                cdn='local', use_minified=True),
+            adminlte_find_resource(
+                'js/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js',  # noqa
+                cdn='local', use_minified=True),
+            adminlte_find_resource(
+                'js/plugins/datatables/extensions/Responsive/js/responsive.bootstrap.js',  # noqa
+                cdn='local', use_minified=True),
+            adminlte_find_resource(
+                'js/plugins/datatables/extensions/Buttons/js/buttons.bootstrap.js',  # noqa
+                cdn='local', use_minified=True),
+            adminlte_find_resource(
+                'js/plugins/datatables/extensions/Buttons/js/buttons.print.js',
+                cdn='local', use_minified=True),
+            adminlte_find_resource(
+                'js/plugins/datatables/extensions/Buttons/js/buttons.html5.js',
+                cdn='local', use_minified=True),
+            adminlte_find_resource(
+                'js/plugins/datatables/extensions/Buttons/js/jszip.js',
+                cdn='local', use_minified=True),
+            adminlte_find_resource(
+                'js/plugins/datatables/extensions/Buttons/js/pdfmake.js',
+                cdn='local', use_minified=True),
+            adminlte_find_resource(
+                'js/plugins/datatables/extensions/Buttons/js/vfs_fonts.js',
+                cdn='local', use_minified=False)
+        )
+        if current_app.config['AJAX_CALL_ENABLED']:
+            mapping = ""
+            for column in column_names:
+                mapping += """{{ "data": "{}"}},
+                """.format(column)
+
+            server_script = """
+            "serverSide": true,
+            "ajax": function(data, callback, settings) {{
+                data.page = data.start + 1
+                data.per_page = data.length
+                delete data.columns
+                delete data.start
+                delete data.length
+                delete data.order
+                delete data.draw
+                delete data.search
+                request = $.ajax({{
+                    "dataType" : "json",
+                    "type" : "GET",
+                    "url" : '/{0}',
+                    "data" : data,
+                    "success" : updateTable
+                }});
+            }},
+            "columns": [
+                {1}
+            ],
+            """.format(ajax_endpoint, mapping)
+            function_script = """
+            function updateTable(data, status, state) {
+                var settings = jQuery.fn.dataTable.settings[0]
+                var api = jQuery.fn.dataTableExt.oApi
+                var draw            = 'draw';
+                var recordsTotal    = data.length
+                var recordsFiltered = data.length
+                api._fnClearTable( settings );
+                settings._iRecordsTotal   = parseInt(recordsTotal, 10);
+                settings._iRecordsDisplay = parseInt(recordsFiltered, 10);
+                for ( var i=0, ien=data.length ; i<ien ; i++ ) {
+                    api._fnAddData( settings, data[i] );
+                }
+                settings.aiDisplay = settings.aiDisplayMaster.slice();
+                settings.bAjaxDataGet = false;
+                api._fnDraw( settings );
+                if ( ! settings._bInitComplete ) {
+                    api._fnInitComplete( settings, data );
+                }
+                settings.bAjaxDataGet = true;
+                api._fnProcessingDisplay( settings, false );
+            }
+            """
+        else:
+            server_script = """
+            "serverSide": false,
+            """
+        script = Markup("""
+        {0}
+        <!-- page script -->
+        <script>
+            $(function () {{
+                {1}
+                var table = $('#pgs_data').DataTable({{
+                    "language": {{
+                        "url": "/static/{2}.json"
+                    }},
+                    responsive: true,
+                    buttons: [
+                        {{
+                            extend: 'excelHtml5',
+                            text: '<i class="fa fa-file-excel-o"></i>',
+                            titleAttr: 'Excel',
+                            exportOptions: {{
+                                columns: [{3}]
+                            }}
+                        }},
+                        {{
+                            extend: 'pdfHtml5',
+                            text: '<i class="fa fa-file-pdf-o"></i>',
+                            titleAttr: 'PDF',
+                            exportOptions: {{
+                                columns: [{3}]
+                            }}
+                        }},
+                        {{
+                            extend: 'print',
+                            text: '<i class="fa fa-print"></i>',
+                            titleAttr: 'Print',
+                            exportOptions: {{
+                                columns: [{3}]
+                            }}
+                        }}
+                    ],
+                    "processing": true,
+                    {4}
+                    "paging": true,
+                    "pagingType": "full_numbers",
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": true,
+                    "initComplete": function (settings, json) {{
+                        $('#addBtn').appendTo('#pgs_data_filter');
+                        table.buttons().container().appendTo('#pgs_data_filter');
+                        $('.dt-buttons').css("margin-left", "5px")
+                        $('#addBtn').css("margin-left", "5px");
+                    }},
+                }})
+            }});
+        </script>
+        """.format(datatables_script, function_script, g.language,
+                   export_columns, server_script))
+        return script
+    else:
+        return Markup("""
+            <link href="{0}" rel="stylesheet" type="text/css">
+            <link href="{1}" rel="stylesheet" type="text/css">
+                """.format(
+            adminlte_find_resource(
+                'js/plugins/datatables/dataTables.bootstrap.css', cdn='local',
+                use_minified=True),
+            adminlte_find_resource(
+                'js/plugins/datatables/extensions/Responsive/css/responsive.bootstrap.css',  # noqa
+                cdn='local', use_minified=True)
+        ))
+
+
 def check_role(current, target):
     for role in current:
         if role in target:
@@ -150,6 +328,8 @@ class AdminLTE(object):
             is_active_in_tree
         app.jinja_env.globals['check_role'] = \
             check_role
+        app.jinja_env.globals['load_datatables_script'] = \
+            load_datatables_script
 
         if not hasattr(app, 'extensions'):
             app.extensions = {}

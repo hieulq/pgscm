@@ -38,10 +38,7 @@
     {%- endblock head %}
 </head>
 
-{#<body class="{% block skin %}skin-blue{% endblock %} sidebar-mini">#}
-
-<body class="{% block skin %}skin-blue{% endblock %} fixed">
-
+<body class="{% block skin %}skin-blue{% endblock %} sidebar-mini">
 
 <noscript>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -68,7 +65,7 @@
             {% block brand %}
                 <a href="{{ lurl_for('main.index') }}" class="logo">
                     <span class="logo-mini"><strong>PGS</strong></span>
-                    <span class="logo-lg">PGS<strong> Cert Mgr</strong></span>
+                    <span class="logo-lg">PGS<strong> Cert Manager</strong></span>
                 </a>
             {% endblock %}
 

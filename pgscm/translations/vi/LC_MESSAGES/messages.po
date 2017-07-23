@@ -115,7 +115,7 @@ msgstr "Danh mục quản trị"
 
 #: pgscm/templates/admin/index.html:68 pgscm/templates/index.html:222
 msgid "Users Management"
-msgstr "Quản lý người dùng hệ thống"
+msgstr "Người dùng hệ thống"
 
 #: pgscm/templates/index.html:228
 msgid "PGS Regions Management"
@@ -187,7 +187,7 @@ msgstr "Email"
 
 #: pgscm/templates/agroup/index.html:156
 msgid "Province"
-msgstr "Thành phố/Tỉnh"
+msgstr "Khu vực"
 
 #: pgscm/templates/agroup/index.html:157
 #: pgscm/templates/certificate/index.html:106
