@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PGSCM 1.0.0\n"
 "Report-Msgid-Bugs-To: hieulq19@gmail.com\n"
-"POT-Creation-Date: 2017-07-18 15:24+0700\n"
+"POT-Creation-Date: 2017-07-23 19:09+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.4.0\n"
+
+#: adminlte/templates/adminlte/widgets.html:17
+msgid "More info"
+msgstr ""
+
+#: pgscm/associate_group/forms.py:8
+msgid "Associate group code"
+msgstr ""
+
+#: pgscm/associate_group/forms.py:9
+msgid "Associate group code required!"
+msgstr ""
 
 #: pgscm/security/forms.py:6
 msgid "Full name"
@@ -38,104 +50,104 @@ msgstr ""
 msgid "Internal Server Error"
 msgstr ""
 
-#: pgscm/templates/base.html:16 pgscm/templates/index.html:19
+#: pgscm/templates/base.html:16 pgscm/templates/index.html:16
 msgid "Toggle navigation"
 msgstr ""
 
-#: pgscm/templates/index.html:96
+#: pgscm/templates/index.html:92
 msgid "Change the language."
 msgstr ""
 
-#: pgscm/templates/index.html:103
+#: pgscm/templates/index.html:99
 msgid "Vietnamese"
 msgstr ""
 
-#: pgscm/templates/index.html:109
+#: pgscm/templates/index.html:105
 msgid "English"
 msgstr ""
 
-#: pgscm/templates/index.html:139
+#: pgscm/templates/index.html:135
 msgid "Profile"
 msgstr ""
 
-#: pgscm/templates/index.html:143
+#: pgscm/templates/index.html:139
 msgid "Sign out"
 msgstr ""
 
-#: pgscm/templates/index.html:175
+#: pgscm/templates/index.html:171
 msgid "Search..."
 msgstr ""
 
-#: pgscm/templates/index.html:185
+#: pgscm/templates/index.html:181
 msgid "PGS MANAGEMENT"
 msgstr ""
 
-#: pgscm/templates/index.html:188 pgscm/templates/index.html:289
-#: pgscm/templates/index.html:294
+#: pgscm/templates/index.html:184 pgscm/templates/index.html:261
+#: pgscm/templates/index.html:266
 msgid "Dashboard"
 msgstr ""
 
-#: pgscm/templates/index.html:195 pgscm/templates/index.html:248
+#: pgscm/templates/index.html:190
 msgid "Certificate"
 msgstr ""
 
-#: pgscm/templates/index.html:201 pgscm/templates/index.html:254
+#: pgscm/templates/index.html:196
 msgid "Farmer"
 msgstr ""
 
-#: pgscm/templates/index.html:206 pgscm/templates/index.html:259
+#: pgscm/templates/index.html:201
 msgid "Group"
 msgstr ""
 
-#: pgscm/templates/index.html:212 pgscm/templates/index.html:265
+#: pgscm/templates/agroup/index.html:137 pgscm/templates/index.html:207
 msgid "Associated Group"
 msgstr ""
 
-#: pgscm/templates/index.html:216
+#: pgscm/templates/index.html:211
 msgid "DMZ"
 msgstr ""
 
-#: pgscm/templates/admin/index.html:66 pgscm/templates/index.html:220
+#: pgscm/templates/admin/index.html:66 pgscm/templates/index.html:215
 msgid "Administrator"
 msgstr ""
 
-#: pgscm/templates/admin/index.html:68 pgscm/templates/index.html:227
+#: pgscm/templates/admin/index.html:68 pgscm/templates/index.html:222
 msgid "Users Management"
 msgstr ""
 
-#: pgscm/templates/index.html:233
+#: pgscm/templates/index.html:228
 msgid "PGS Regions Management"
 msgstr ""
 
-#: pgscm/templates/index.html:239
+#: pgscm/templates/index.html:234
 msgid "Configurations"
 msgstr ""
 
-#: pgscm/templates/index.html:271
+#: pgscm/templates/index.html:243
 msgid "USER"
 msgstr ""
 
-#: pgscm/templates/index.html:274
+#: pgscm/templates/index.html:246
 msgid "Login"
 msgstr ""
 
-#: pgscm/templates/index.html:279 pgscm/templates/security/register_user.html:3
+#: pgscm/templates/index.html:251 pgscm/templates/security/register_user.html:3
 msgid "Register"
 msgstr ""
 
-#: pgscm/templates/index.html:290
+#: pgscm/templates/index.html:262
 msgid "Summary report about PGS status"
 msgstr ""
 
-#: pgscm/templates/index.html:293
+#: pgscm/templates/index.html:265
 msgid " Home"
 msgstr ""
 
-#: pgscm/templates/index.html:299
+#: pgscm/templates/index.html:271
 msgid "PGS Status"
 msgstr ""
 
-#: pgscm/templates/index.html:300
+#: pgscm/templates/index.html:272
 msgid "Quickly summary about <code>PGS Certificates</code> analytics."
 msgstr ""
 
@@ -147,8 +159,43 @@ msgstr ""
 msgid "Managing roles and permissions in PGS system"
 msgstr ""
 
-#: pgscm/templates/admin/index.html:65
+#: pgscm/templates/admin/index.html:65 pgscm/templates/agroup/index.html:135
 msgid "Home"
+msgstr ""
+
+#: pgscm/templates/agroup/index.html:130 pgscm/templates/agroup/index.html:145
+msgid "PGS Associate Groups"
+msgstr ""
+
+#: pgscm/templates/agroup/index.html:131
+msgid "Managing regional associate groups in PGS system"
+msgstr ""
+
+#: pgscm/templates/agroup/index.html:153
+msgid "Code"
+msgstr ""
+
+#: pgscm/templates/agroup/index.html:154
+msgid "Name"
+msgstr ""
+
+#: pgscm/templates/agroup/index.html:155
+msgid "Email"
+msgstr ""
+
+#: pgscm/templates/agroup/index.html:156
+msgid "Province"
+msgstr ""
+
+#: pgscm/templates/agroup/index.html:157
+#: pgscm/templates/certificate/index.html:106
+#: pgscm/templates/certificate/index.html:215
+#: pgscm/templates/certificate/index.html:265
+msgid "Actions"
+msgstr ""
+
+#: pgscm/templates/agroup/index.html:174
+msgid "Edit"
 msgstr ""
 
 #: pgscm/templates/certificate/advance_search.html:94
@@ -194,12 +241,6 @@ msgstr ""
 #: pgscm/templates/certificate/index.html:214
 #: pgscm/templates/certificate/index.html:264
 msgid "Status"
-msgstr ""
-
-#: pgscm/templates/certificate/index.html:106
-#: pgscm/templates/certificate/index.html:215
-#: pgscm/templates/certificate/index.html:265
-msgid "Actions"
 msgstr ""
 
 #: pgscm/templates/security/login_user.html:3
