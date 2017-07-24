@@ -123,7 +123,6 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
         <script src="{7}"></script>
         <script src="{8}"></script>
         <script src="{9}"></script>
-        <script src="{10}"></script>
         """.format(
             adminlte_find_resource('js/plugins/datatables/jquery.dataTables.js',  # noqa
                                    cdn='local', use_minified=True),
@@ -134,9 +133,6 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                 cdn='local', use_minified=True),
             adminlte_find_resource(
                 'js/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js',  # noqa
-                cdn='local', use_minified=True),
-            adminlte_find_resource(
-                'js/plugins/datatables/extensions/Responsive/js/responsive.bootstrap.js',  # noqa
                 cdn='local', use_minified=True),
             adminlte_find_resource(
                 'js/plugins/datatables/extensions/Buttons/js/buttons.bootstrap.js',  # noqa
@@ -223,7 +219,6 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     "language": {{
                         "url": "/static/{2}.json"
                     }},
-                    responsive: true,
                     buttons: [
                         {{
                             extend: 'excelHtml5',
@@ -274,14 +269,10 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
     else:
         return Markup("""
             <link href="{0}" rel="stylesheet" type="text/css">
-            <link href="{1}" rel="stylesheet" type="text/css">
                 """.format(
             adminlte_find_resource(
                 'js/plugins/datatables/dataTables.bootstrap.css', cdn='local',
-                use_minified=True),
-            adminlte_find_resource(
-                'js/plugins/datatables/extensions/Responsive/css/responsive.bootstrap.css',  # noqa
-                cdn='local', use_minified=True)
+                use_minified=True)
         ))
 
 
