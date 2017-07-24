@@ -1,10 +1,16 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators
+from wtforms import StringField, SelectField, HiddenField, validators
 
 from pgscm.utils import __
 
 
+data_required = validators.DataRequired(message=__('Required field!'))
+
+
 class AssociateGroupForm(FlaskForm):
-    code = StringField(__('Associate group code'), validators=[
-        validators.DataRequired(message=__('Associate group code '
-                                           'required!'))])
+    code = StringField(__('Associate group code'), validators=[data_required])
+    name = StringField(__('Name'), validators=[data_required])
+    email = StringField(__('Email'), validators=[validators.Email])
+    province = SelectField(__('Province'), validators=[data_required],
+                           coerce=str)
+    id = HiddenField(__('Id'), validators=[data_required])

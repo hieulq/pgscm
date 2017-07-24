@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PGSCM 1.0.0\n"
 "Report-Msgid-Bugs-To: hieulq19@gmail.com\n"
-"POT-Creation-Date: 2017-07-23 19:09+0700\n"
+"POT-Creation-Date: 2017-07-25 00:47+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,12 +21,28 @@ msgstr ""
 msgid "More info"
 msgstr ""
 
-#: pgscm/associate_group/forms.py:8
+#: pgscm/associate_group/forms.py:7
+msgid "Required field!"
+msgstr ""
+
+#: pgscm/associate_group/forms.py:11
 msgid "Associate group code"
 msgstr ""
 
-#: pgscm/associate_group/forms.py:9
-msgid "Associate group code required!"
+#: pgscm/associate_group/forms.py:12 pgscm/templates/agroup/index.html:44
+msgid "Name"
+msgstr ""
+
+#: pgscm/associate_group/forms.py:13 pgscm/templates/agroup/index.html:45
+msgid "Email"
+msgstr ""
+
+#: pgscm/associate_group/forms.py:14 pgscm/templates/agroup/index.html:46
+msgid "Province"
+msgstr ""
+
+#: pgscm/associate_group/forms.py:16
+msgid "Id"
 msgstr ""
 
 #: pgscm/security/forms.py:6
@@ -99,7 +115,7 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:137 pgscm/templates/index.html:207
+#: pgscm/templates/agroup/index.html:26 pgscm/templates/index.html:207
 msgid "Associated Group"
 msgstr ""
 
@@ -159,43 +175,55 @@ msgstr ""
 msgid "Managing roles and permissions in PGS system"
 msgstr ""
 
-#: pgscm/templates/admin/index.html:65 pgscm/templates/agroup/index.html:135
+#: pgscm/templates/admin/index.html:65 pgscm/templates/agroup/index.html:24
 msgid "Home"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:130 pgscm/templates/agroup/index.html:145
+#: pgscm/templates/agroup/index.html:19 pgscm/templates/agroup/index.html:35
 msgid "PGS Associate Groups"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:131
+#: pgscm/templates/agroup/index.html:20
 msgid "Managing regional associate groups in PGS system"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:153
+#: pgscm/templates/agroup/index.html:30 pgscm/templates/agroup/index.html:76
+msgid "Create New"
+msgstr ""
+
+#: pgscm/templates/agroup/index.html:43
 msgid "Code"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:154
-msgid "Name"
-msgstr ""
-
-#: pgscm/templates/agroup/index.html:155
-msgid "Email"
-msgstr ""
-
-#: pgscm/templates/agroup/index.html:156
-msgid "Province"
-msgstr ""
-
-#: pgscm/templates/agroup/index.html:157
+#: pgscm/templates/agroup/index.html:47
 #: pgscm/templates/certificate/index.html:106
 #: pgscm/templates/certificate/index.html:215
 #: pgscm/templates/certificate/index.html:265
 msgid "Actions"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:174
-msgid "Edit"
+#: pgscm/templates/agroup/index.html:77
+msgid "Update Data"
+msgstr ""
+
+#: pgscm/templates/agroup/index.html:78
+msgid "Confirm to delete"
+msgstr ""
+
+#: pgscm/templates/agroup/macro.html:16
+msgid "Do you really want to delete data?"
+msgstr ""
+
+#: pgscm/templates/agroup/macro.html:21
+msgid "Close"
+msgstr ""
+
+#: pgscm/templates/agroup/macro.html:24
+msgid "Delete it!"
+msgstr ""
+
+#: pgscm/templates/agroup/macro.html:26
+msgid "Save changes!"
 msgstr ""
 
 #: pgscm/templates/certificate/advance_search.html:94

@@ -255,10 +255,10 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     "info": true,
                     "autoWidth": true,
                     "initComplete": function (settings, json) {{
-                        $('#addBtn').appendTo('#pgs_data_filter');
+                        $('.addBtn').appendTo('#pgs_data_filter');
                         table.buttons().container().appendTo('#pgs_data_filter');
                         $('.dt-buttons').css("margin-left", "5px")
-                        $('#addBtn').css("margin-left", "5px");
+                        $('.addBtn').css("margin-left", "5px");
                     }},
                 }})
             }});

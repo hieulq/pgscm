@@ -1,5 +1,5 @@
 {% extends "index.html" %}
-{% from 'agroup/macro.html' import render_modal, render_btn %}
+{% from 'agroup/macro.html' import render_modal, render_btn  with context %}
 
 {%- block styles %}
     {{ super() }}
@@ -27,7 +27,7 @@
     </ol>
 {%- endblock content_header %}
 {% block content -%}
-    {{ render_btn('btn-default', '', 'modal-add', "{{ _('Create New') }}", 'plus') }}
+    {{ render_btn('addBtn', 'btn-default', '', 'modal-add', _('Create New'), 'plus') }}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -59,8 +59,8 @@
                                 <td>{{ ag.email }}</td>
                                 <td>{{ ag.province.name }}</td>
                                 <td class="actions_column">
-                                    {{ render_btn('btn-xs', 'btn-info', 'modal-add', '', 'edit') }}
-                                    {{ render_btn('btn-xs', 'btn-danger', 'modal-delete', '', 'trash') }}
+                                    {{ render_btn('editBtn', 'btn-xs', 'btn-info', 'modal-edit', '', 'edit') }}
+                                    {{ render_btn('delBtn', 'btn-xs', 'btn-danger', 'modal-delete', '', 'trash') }}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -73,7 +73,7 @@
         <!-- /.col -->
     </div>
     <!-- /.row -->
-    {{ render_modal('add', 'modal') }}
-    {{ render_modal('edit', 'modal') }}
-    {{ render_modal('delete', 'modal-danger' ) }}
+    {{ render_modal('add', 'modal', _('Create New')) }}
+    {{ render_modal('edit', 'modal', _('Update Data')) }}
+    {{ render_modal('delete', 'modal-danger', _('Confirm to delete') ) }}
 {%- endblock content %}
