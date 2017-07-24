@@ -20,4 +20,5 @@ def index():
                 province_id=province_id).all()
         else:
             ags = models.AssociateGroup.query.all()
-        return render_template('agroup/index.html', ags=ags)
+        return render_template('agroup/index.html', ags=ags,
+                               enabled_action=['edit', 'delete', 'add'])
