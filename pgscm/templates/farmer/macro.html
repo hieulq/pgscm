@@ -1,4 +1,5 @@
-{% macro render_modal(id, type) -%}
+{% import "bootstrap/wtf.html" as wtf%}
+{% macro render_modal(id, type, title) -%}
     <div class="modal {{ type }} fade" id="modal-{{ id }}" style="display: none">
         <!-- .modal -->
         <div class="modal-dialog">
@@ -6,16 +7,24 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title">Default Modal</h4>
+                    <h4 class="modal-title">{{ title }}</h4>
                 </div>
                 <div class="modal-body">
-                    <p>One fine body…</p>
+                    {% if id == 'add' or id == 'edit' %}
+                        {{wtf.quick_form(form)}}
+                    {% elif id == 'delete' %}
+                        {{ _('Do you really want to delete data?') }}
+                    {% endif %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">
-                        Close
+                        {{ _('Close') }}
                     </button>
-                    <button type="button" class="btn btn-primary">Save changes
+                    {% if id == 'delete' %}
+                        <button type="button" class="btn bg-navy">{{ _('Delete it!') }}
+                    {% else %}
+                        <button type="button" class="btn btn-primary">{{ _('Save changes!') }}
+                    {% endif %}
                     </button>
                 </div>
             </div>
@@ -25,9 +34,9 @@
     </div>
 {%- endmacro %}
 
-{% macro render_btn(size='btn-xs', type='btn-default', modal_target='modal', title="{{ _('Create New') }}", css_class='plus') -%}
-<button type="button" class="btn {{ size }} {{ type }}" data-toggle="modal"
+{% macro render_btn(id, size='btn-xs', type='btn-default', modal_target='modal', title="", css_class='plus') -%}
+<button type="button" class="btn {{ id }} {{ size }} {{ type }}" data-toggle="modal"
         data-target="#{{ modal_target }}">
-    <span class="fa fa-{{ css_class }}"></span>{{ title }}
+    <span class="fa fa-{{ css_class }}"></span>  {% if title %}{{ title }}{% endif %}
 </button>
 {%- endmacro %}
