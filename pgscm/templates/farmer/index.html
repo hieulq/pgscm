@@ -1,10 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "index.html" %}
 
-</body>
-</html>
+{%- block styles %}
+    {{ super() }}
+    {{ load_datatables_script(js=False) }}
+{%- endblock styles %}
+
+{% block scripts %}
+    {{ super() }}
+    <!-- DataTables -->
+    {{ load_datatables_script(
+            ajax_endpoint='associate_group',
+            export_columns='0,1,2,3',
+            column_names=["farmer_code", "name", "gender", "type", "group_id"]) }}
+{%- endblock scripts %}
+{% block content_header -%}
+    <h1>
+        {{ _('PGS Associate Groups') }}
+        <small>{{ _('Managing regional associate groups in PGS system') }}</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="{{ lurl_for('main.index') }}"><i
+                class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
+        <li class="active"><a href="{{ lurl_for('farmer.index') }}"><i
+                class="fa fa-home"></i>{{ _('Associated Group') }}</a></li>
+    </ol>
+{%- endblock content_header %}
+{% block content -%}
+{#    {{ render_btn('btn-default', '', 'modal-add', "{{ _('Create New') }}", 'plus') }}#}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">{{ _('PGS Associate Groups') }}</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="pgs_data"
+                           class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>{{ _('Code') }}</th>
+                            <th>{{ _('Name') }}
+                            <th>{{ _('Gender') }}</th>
+                            <th>{{ _('Province') }}</th>
+                            <th>{{ _('Province') }}</th>
+                            <th>{{ _('Actions') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for farmer in farmers %}
+                            <tr>
+                                <td>
+                                    <a href="#">
+                                        {{ farmer.farmer_code }}
+                                    </a>
+                                </td>
+                                <td><b>{{ farmer.name }}</b></td>
+                                <td>{{ farmer.gender }}</td>
+                                <td>{{ farmer.type }}</td>
+                                <td>{{ farmer.group_id }}</td>
+                                <td class="actions_column">
+{#                                    {{ render_btn('btn-xs', 'btn-info', 'modal-add', '', 'edit') }}#}
+{#                                    {{ render_btn('btn-xs', 'btn-danger', 'modal-delete', '', 'trash') }}#}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+{#    {{ render_modal('add', 'modal') }}#}
+{#    {{ render_modal('edit', 'modal') }}#}
+{#    {{ render_modal('delete', 'modal-danger' ) }}#}
+{%- endblock content %}
