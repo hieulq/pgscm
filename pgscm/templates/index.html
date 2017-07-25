@@ -20,7 +20,7 @@
     </a>
     <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-            {% if current_user.is_authenticated and check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD]) %}
+            {% if current_user.is_authenticated and check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
                 <!-- Messages: style can be found in dropdown.less-->
                 <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
