@@ -18,14 +18,24 @@ def index():
     else:
         province_id = current_user.province_id
         form = FarmerForm()
-        form.gender.choices = [(c.GenderType.male, __('Male')), (c.GenderType.female, __('Female'))]
-        form.type.choices = [(c.FarmerType.member, __('Member')), (c.FarmerType.reviewer, __('Reviewer'))]
-        form.group.choices = [(p.id, p.name) for p in
-                              models.Group.query.all()]
+        form.gender.choices = [(c.GenderType.male, __('Male')),
+                               (c.GenderType.female, __('Female'))]
+        form.type.choices = [(c.FarmerType.member, __('Member')),
+                             (c.FarmerType.reviewer, __('Reviewer'))]
         if province_id:
-            farmers = models.Farmer.query.join(models.Group).filter(models.Group.query.filter_by(
-                province_id=province_id).all())
+            farmers = models.Farmer.query.join(models.Group).filter(
+                models.Group.query.filter_by(province_id=province_id).all())
+
+            form.group.choices = [(p.id, p.name) for p in
+                                  models.Group.query.filter_by(
+                                      province_id=province_id).all()]
+            form.group.data = province_id
         else:
             farmers = models.Farmer.query.all()
+            form.group.choices = [(p.id, p.name) for p in
+                                  models.Group.query.order_by(
+                                      models.Group.name.asc()).all()]
+
         return render_template('farmer/index.html', farmers=farmers,
-                               form=form)
+                               genderType=c.GenderType, form=form,
+                               farmerType=c.FarmerType)

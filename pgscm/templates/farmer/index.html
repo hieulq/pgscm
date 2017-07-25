@@ -1,9 +1,9 @@
 {% extends "index.html" %}
-{% from 'agroup/macro.html' import render_modal, render_btn  with context %}
+{% from 'macro.html' import render_modal, render_btn  with context %}
 
 {%- block styles %}
     {{ super() }}
-    {{ load_datatables_script(js=False) }}
+    {{ load_datatables_script(js=False, select2_class=g.c.SELECT_DEFAULT_ID) }}
 {%- endblock styles %}
 
 {% block scripts %}
@@ -12,7 +12,8 @@
     {{ load_datatables_script(
             ajax_endpoint='farmer',
             export_columns='0,1,2,3',
-            column_names=["farmer_code", "name", "gender", "type", "group_id"]) }}
+            column_names=["farmer_code", "name", "gender", "type", "group_id"],
+            select2_class=g.c.SELECT_DEFAULT_ID) }}
 {%- endblock scripts %}
 {% block content_header -%}
     <h1>
@@ -57,9 +58,9 @@
                                     </a>
                                 </td>
                                 <td><b>{{ farmer.name }}</b></td>
-                                <td>{{ farmer.gender }}</td>
-                                <td>{{ farmer.type }}</td>
-                                <td>{{ farmer.group_id }}</td>
+                                <td>{{ genderType(farmer.gender).name }}</td>
+                                <td>{{ farmerType(farmer.type).name }}</td>
+                                <td>{{ farmer.group.name }}</td>
                                 <td class="actions_column">
                                     {{ render_btn('editBtn', 'btn-xs', 'btn-info', 'modal-edit', '', 'edit') }}
                                     {{ render_btn('delBtn', 'btn-xs', 'btn-danger', 'modal-delete', '', 'trash') }}
