@@ -3,7 +3,7 @@
 
 {%- block styles %}
     {{ super() }}
-    {{ load_datatables_script(js=False) }}
+    {{ load_datatables_script(js=False, select2_class=g.c.SELECT_DEFAULT_ID) }}
 {%- endblock styles %}
 
 {% block scripts %}
@@ -12,7 +12,8 @@
     {{ load_datatables_script(
             ajax_endpoint='associate_group',
             export_columns='0,1,2,3',
-            column_names=["associate_group_code", "name", "email", "province", "province"]) }}
+            column_names=["associate_group_code", "name", "email", "province", "province"],
+            select2_class=g.c.SELECT_DEFAULT_ID) }}
 {%- endblock scripts %}
 {% block content_header -%}
     <h1>

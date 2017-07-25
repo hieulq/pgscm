@@ -1,14 +1,16 @@
 from flask_security import forms
 from wtforms import SelectField, validators
 
-from pgscm.utils import __
+from pgscm.utils import __, Select
 from pgscm.db import models
+from pgscm import const as c
 
 
 class RegisterForm(forms.RegisterForm):
     fullname = forms.StringField(__('Full name'))
     province_id = SelectField(
-        __('Province'),
+        __('Province'), id=c.SELECT_DEFAULT_ID,
+        widget=Select(),
         validators=[validators.DataRequired(message=__('Required field!'))])
 
     def __init__(self, *args, **kwargs):
