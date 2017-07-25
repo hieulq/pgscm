@@ -16,7 +16,6 @@ from adminlte import AdminLTE
 from config import config
 import uuid
 
-from pgscm.security import forms
 from pgscm import const
 
 
@@ -37,6 +36,16 @@ sec = Security()
 api = Api()
 
 
+def register_security(app):
+    # Init flask security using factory method, then change the localized
+    # domain to our own
+    from pgscm.security import forms
+    sec_state = sec.init_app(app, user_datastore,
+                             register_form=forms.RegisterForm,
+                             login_form=forms.LoginForm)
+    sec_state.i18n_domain.dirname = None
+
+
 def register_extensions(app):
     babel.init_app(app)
     bootstrap.init_app(app)
@@ -46,13 +55,6 @@ def register_extensions(app):
     sqla.init_app(app)
     login_manager.init_app(app)
 
-    # Init flask security using factory method, then change the localized
-    # domain to our own
-    sec_state = sec.init_app(app, user_datastore,
-                             register_form=forms.RegisterForm,
-                             login_form=forms.LoginForm)
-    sec_state.i18n_domain.dirname = None
-
     # Flask potion do not initialize with current Flask app, so the below line
     # is the work-around for potion to init_app correctly.
     api.app = app
@@ -61,9 +63,9 @@ def register_extensions(app):
     api.init_app(app)
 
 
-def register_api_resource(api):
+def register_api_resource(api_mgr):
     from pgscm.db import resources
-    resources.init_resources(api)
+    resources.init_resources(api_mgr)
 
 
 def register_blueprint(app):
@@ -90,6 +92,7 @@ def create_app(config_name):
     register_extensions(app)
     register_blueprint(app)
     register_api_resource(api)
+    register_security(app)
 
     # i18n locale selector
     @babel.localeselector
@@ -132,6 +135,12 @@ def create_app(config_name):
                                        email='admin@pgs.com', fullname="Admin",
                                        password=security_utils.hash_password(
                                            'password'))
+        if not user_datastore.find_user(email='radmin@pgs.com'):
+            user_datastore.create_user(id=str(uuid.uuid4()),
+                                       email='radmin@pgs.com',
+                                       fullname="Regional Admin",
+                                       password=security_utils.hash_password(
+                                           'password'))
         if not user_datastore.find_user(email='mod@pgs.com'):
             user_datastore.create_user(id=str(uuid.uuid4()),
                                        email='mod@pgs.com', fullname="Mod",
@@ -147,6 +156,7 @@ def create_app(config_name):
         sqla.session.commit()
 
         user_datastore.add_role_to_user('admin@pgs.com', const.N_ADMIN)
+        user_datastore.add_role_to_user('radmin@pgs.com', const.R_ADMIN)
         user_datastore.add_role_to_user('mod@pgs.com', const.N_MOD)
         user_datastore.add_role_to_user('user@pgs.com', const.N_USER)
         sqla.session.commit()

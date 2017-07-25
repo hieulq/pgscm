@@ -7,7 +7,6 @@ __pycache__/
 *.so
 *.sqlite
 # Distribution / packaging
-config.py
 .Python
 cover/
 .testrepository/
@@ -101,3 +100,4 @@ ENV/
 
 # mypy
 .mypy_cache/
+/config.py

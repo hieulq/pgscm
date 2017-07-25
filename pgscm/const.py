@@ -6,6 +6,7 @@ N_USER = 'national_user'
 R_ADMIN = 'regional_admin'
 R_MOD = 'regional_moderator'
 R_USER = 'regional_user'
+SELECT_DEFAULT_ID = 'pgs_select'
 
 
 class GenderType(IntEnum):

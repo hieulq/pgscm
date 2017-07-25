@@ -109,9 +109,10 @@ def is_active_in_tree(request, endpoint, tree=True):
 
 
 def load_datatables_script(ajax_endpoint="", export_columns="",
-                           column_names=[], js=True):
+                           column_names=[], js=True, select2_class=None):
     if js:
         function_script = ""
+        select2_script = ""
         datatables_script = """
         <script src="{0}"></script>
         <script src="{1}"></script>
@@ -153,6 +154,16 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                 'js/plugins/datatables/extensions/Buttons/js/vfs_fonts.js',
                 cdn='local', use_minified=False)
         )
+        if select2_class:
+            datatables_script += """
+                <script src="{0}"></script>
+                """.format(
+                adminlte_find_resource(
+                    'js/plugins/select2/select2.js',
+                    cdn='local', use_minified=False))
+            select2_script = """$(".{0}").select2({{width: '100%'}});""".\
+                format(select2_class)
+
         if current_app.config['AJAX_CALL_ENABLED']:
             mapping = ""
             for column in column_names:
@@ -259,21 +270,27 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                         table.buttons().container().appendTo('#pgs_data_filter');
                         $('.dt-buttons').css("margin-left", "5px")
                         $('.addBtn').css("margin-left", "5px");
+                        {5}
                     }},
                 }})
             }});
         </script>
         """.format(datatables_script, function_script, g.language,
-                   export_columns, server_script))
+                   export_columns, server_script, select2_script))
         return script
     else:
-        return Markup("""
+        css_script = """
             <link href="{0}" rel="stylesheet" type="text/css">
-                """.format(
-            adminlte_find_resource(
+                """.format(adminlte_find_resource(
                 'js/plugins/datatables/dataTables.bootstrap.css', cdn='local',
-                use_minified=True)
-        ))
+                use_minified=True))
+        if select2_class:
+            css_script += """
+            <link href="{0}" rel="stylesheet" type="text/css">
+                """.format(adminlte_find_resource(
+                'js/plugins/select2/select2.css', cdn='local',
+                use_minified=True))
+        return Markup(css_script)
 
 
 def check_role(current, target):

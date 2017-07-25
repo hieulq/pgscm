@@ -17,15 +17,17 @@ def index():
     else:
         province_id = current_user.province_id
         form = AssociateGroupForm()
-        form.province.choices = [(p.province_id, p.name) for p in
-                                 models.Province.query.all()]
         if province_id:
             ags = models.AssociateGroup.query.filter_by(
                 province_id=province_id).all()
-            choice = [(p, n) for (p, n) in form.province.choices
-                      if p == province_id]
-            form.province.default = choice[0]
+            form.province.choices = [(p.province_id, p.name) for p in
+                                     models.Province.query.filter_by(
+                                     province_id=province_id).all()]
+            form.province.data = province_id
         else:
             ags = models.AssociateGroup.query.all()
+            form.province.choices = [(p.province_id, p.name) for p in
+                                     models.Province.query.order_by(
+                                        models.Province.name.asc()).all()]
         return render_template('agroup/index.html', ags=ags,
                                form=form)
