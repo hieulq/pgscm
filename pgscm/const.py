@@ -6,6 +6,10 @@ N_USER = 'national_user'
 R_ADMIN = 'regional_admin'
 R_MOD = 'regional_moderator'
 R_USER = 'regional_user'
+ALL_ROLES = [N_ADMIN, N_MOD, N_USER, R_ADMIN, R_MOD, R_USER]
+ONLY_ADMIN_ROLE = [N_ADMIN, R_ADMIN]
+ADMIN_MOD_ROLE = [N_ADMIN, R_ADMIN, N_MOD, R_MOD]
+
 SELECT_DEFAULT_ID = 'pgs_select'
 
 

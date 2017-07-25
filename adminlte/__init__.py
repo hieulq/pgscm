@@ -155,12 +155,12 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                 cdn='local', use_minified=False)
         )
         if select2_class:
-            datatables_script += """
+            datatables_script = """
                 <script src="{0}"></script>
                 """.format(
                 adminlte_find_resource(
                     'js/plugins/select2/select2.js',
-                    cdn='local', use_minified=False))
+                    cdn='local', use_minified=True)) + datatables_script
             select2_script = """$(".{0}").select2({{width: '100%'}});""".\
                 format(select2_class)
 

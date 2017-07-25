@@ -10,7 +10,7 @@ from pgscm import const as c
 
 @agroup.route('/vi/lien-nhom', endpoint='index_vi')
 @agroup.route('/en/associate-group', endpoint='index_en')
-@roles_accepted(c.N_ADMIN, c.R_ADMIN, c.R_MOD, c.N_MOD, c.N_USER)
+@roles_accepted(*c.ALL_ROLES)
 def index():
     if current_app.config['AJAX_CALL_ENABLED']:
         return render_template('agroup/index.html')
