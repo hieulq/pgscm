@@ -4,6 +4,24 @@
 {% block description %}{{ _('Register new PGS account!') }}{% endblock %}
 {% block bodytag %}register-page{% endblock %}
 
+{% block head %}
+    {{ super() }}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+{% endblock %}
+
+{%- block styles %}
+    {{ super() }}
+    <link href="{{ adminlte_find_resource('js/plugins/select2/select2.css', cdn='local', use_minified=True) }}" rel="stylesheet" type="text/css">
+{%- endblock styles %}
+
+{% block scripts %}
+    {{ super() }}
+    <!-- Select2 -->
+    <script src="{{ adminlte_find_resource('js/plugins/select2/select2.js', cdn='local', use_minified=True) }}"></script>
+    <script>$(".pgs_select").select2({width: '100%'});</script>
+{%- endblock scripts %}
+
 {% block body %}
 
   <div class="register-box">
