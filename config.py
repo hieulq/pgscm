@@ -37,7 +37,7 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = \
-        'mysql+pymysql://root@localhost:3306/pgscm_dev'
+        'mysql+pymysql://pgs:pgscm@localhost:3306/pgscm_dev'
 
 
 class TestingConfig(Config):
