@@ -1,4 +1,4 @@
-from flask import render_template, current_app, request, redirect, url_for
+from flask import render_template, current_app, request
 from flask_security import roles_accepted, current_user
 
 from . import farmer
@@ -37,10 +37,12 @@ def index():
                                       models.Group.name.asc()).all()]
 
         if request.method == 'POST' and form.is_submitted():
-            group_farmer = models.Group.query.filter_by(id=form.group.data).one()
-            new_farmer = models.Farmer(farmer_code=form.code.data, name=form.name.data,
-                                       gender=form.gender.data, type=form.type.data,
-                                       group=group_farmer)
+            group_farmer = models.Group.query.filter_by(
+                id=form.group.data).one()
+            new_farmer = models.Farmer(farmer_code=form.code.data,
+                                       name=form.name.data, group=group_farmer,
+                                       gender=form.gender.data,
+                                       type=form.type.data)
             sqla.session.add(new_farmer)
             sqla.session.commit()
 

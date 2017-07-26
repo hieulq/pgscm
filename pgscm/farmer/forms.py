@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, HiddenField, validators, SubmitField
+from wtforms import StringField, SelectField, HiddenField, \
+    validators, SubmitField
 
 from pgscm.utils import __, Select
 
