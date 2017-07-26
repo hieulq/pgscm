@@ -1,29 +1,34 @@
-{% import "bootstrap/wtf.html" as wtf%}
+{% import "bootstrap/wtf.html" as wtf %}
 {% macro render_modal(id, type, title) -%}
-    <div class="modal {{ type }} fade" id="modal-{{ id }}" style="display: none">
+    <div class="modal {{ type }} fade" id="{{ id }}"
+         style="display: none">
         <!-- .modal -->
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
                         <span aria-hidden="true">×</span></button>
                     <h4 class="modal-title">{{ title }}</h4>
                 </div>
                 <div class="modal-body">
-                    {% if id == 'add' or id == 'edit' %}
-                        {{wtf.quick_form(form)}}
-                    {% elif id == 'delete' %}
+                    {% if id == g.c.MODAL_ADD_ID or id == g.c.MODAL_EDIT_ID %}
+                        {{ wtf.quick_form(form) }}
+                    {% elif id == g.c.MODAL_DEL_ID %}
                         {{ _('Do you really want to delete data?') }}
                     {% endif %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">
+                    <button type="button" class="btn btn-default pull-left"
+                            data-dismiss="modal">
                         {{ _('Close') }}
                     </button>
-                    {% if id == 'delete' %}
-                        <button type="button" class="btn bg-navy">{{ _('Delete it!') }}
+                    {% if id == g.c.MODAL_DEL_ID %}
+                        <button type="button" class="btn bg-navy">
+                        {{ _('Delete it!') }}
                     {% else %}
-                        <button type="button" class="btn btn-primary">{{ _('Save changes!') }}
+                        <button type="button" class="btn btn-primary">
+                        {{ _('Save changes!') }}
                     {% endif %}
                     </button>
                 </div>
@@ -34,9 +39,18 @@
     </div>
 {%- endmacro %}
 
-{% macro render_btn(id, size='btn-xs', type='btn-default', modal_target='modal', title="", css_class='plus') -%}
-<button type="button" class="btn {{ id }} {{ size }} {{ type }}" data-toggle="modal"
-        data-target="#{{ modal_target }}">
-    <span class="fa fa-{{ css_class }}"></span>  {% if title %}{{ title }}{% endif %}
-</button>
+{% macro render_btn(id, size='btn-xs', type='btn-default', modal_target='modal', title="", css_class='plus', data=None) -%}
+    <button type="button" class="btn {{ id }} {{ size }} {{ type }}"
+            data-toggle="modal"
+            data-target="#{{ modal_target }}"
+            {% if data %}
+                {% for col in data.__table__.c._data %}
+                    {% if not col.startswith('_') %}
+                        data-{{ col }}="{{ data.__getattribute__(col) }}"
+                    {% endif %}
+                {% endfor %}
+            {% endif %}>
+        <span class="fa fa-{{ css_class }}"></span>
+        {% if title %}{{ title }}{% endif %}
+    </button>
 {%- endmacro %}
