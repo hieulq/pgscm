@@ -28,7 +28,7 @@
     </ol>
 {%- endblock content_header %}
 {% block content -%}
-    {{ render_btn('addBtn', 'btn-default', '', 'modal-add', _('Create New'), 'plus') }}
+    {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '') }}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -60,8 +60,8 @@
                                 <td>{{ ag.email }}</td>
                                 <td>{{ ag.province.name }}</td>
                                 <td class="actions_column">
-                                    {{ render_btn('editBtn', 'btn-xs', 'btn-info', 'modal-edit', '', 'edit') }}
-                                    {{ render_btn('delBtn', 'btn-xs', 'btn-danger', 'modal-delete', '', 'trash') }}
+                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', ag) }}
+                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', ag) }}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -74,7 +74,7 @@
         <!-- /.col -->
     </div>
     <!-- /.row -->
-    {{ render_modal('add', 'modal', _('Create New')) }}
-    {{ render_modal('edit', 'modal', _('Update Data')) }}
-    {{ render_modal('delete', 'modal-danger', _('Confirm to delete') ) }}
+    {{ render_modal(g.c.MODAL_ADD_ID, 'modal', _('Create New')) }}
+    {{ render_modal(g.c.MODAL_EDIT_ID, 'modal', _('Update Data')) }}
+    {{ render_modal(g.c.MODAL_DEL_ID, 'modal-danger', _('Confirm to delete') ) }}
 {%- endblock content %}

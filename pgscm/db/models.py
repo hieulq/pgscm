@@ -64,10 +64,10 @@ class AssociateGroup(sqla.Model):
 
     groups = sqla.relationship('Group', back_populates='associate_group')
 
-    deleted_at = sqla.Column(sqla.DateTime())
-    modify_info = sqla.Column(sqla.String(255))
+    _deleted_at = sqla.Column(sqla.DateTime())
+    _modify_info = sqla.Column(sqla.String(255))
     __table_args__ = (sqla.Index('a_group_code_index', 'associate_group_code',
-                                 "deleted_at"),)
+                                 "_deleted_at"),)
 
 
 class Group(sqla.Model):
@@ -99,13 +99,13 @@ class Group(sqla.Model):
 
     farmers = sqla.relationship('Farmer', back_populates='group')
 
-    deleted_at = sqla.Column(sqla.DateTime())
-    modify_info = sqla.Column(sqla.String(255))
+    _deleted_at = sqla.Column(sqla.DateTime())
+    _modify_info = sqla.Column(sqla.String(255))
 
     certificates = sqla.relationship('Certificate',
                                      back_populates='owner_group')
     __table_args__ = (
-        sqla.Index('group_code_index', 'group_code', "deleted_at"),)
+        sqla.Index('group_code_index', 'group_code', "_deleted_at"),)
 
 
 class Farmer(sqla.Model):
@@ -124,10 +124,10 @@ class Farmer(sqla.Model):
     certificates = sqla.relationship('Certificate',
                                     back_populates='owner_farmer')
 
-    deleted_at = sqla.Column(sqla.DateTime())
-    modify_info = sqla.Column(sqla.String(255))
+    _deleted_at = sqla.Column(sqla.DateTime())
+    _modify_info = sqla.Column(sqla.String(255))
     __table_args__ = (
-        sqla.Index('farmer_code_index', 'farmer_code', "deleted_at"),)
+        sqla.Index('farmer_code_index', 'farmer_code', "_deleted_at"),)
 
 
 class Certificate(sqla.Model):
@@ -152,11 +152,11 @@ class Certificate(sqla.Model):
     re_verify_status = sqla.Column(
         sqla.Enum(const.CertificateReVerifyStatusType))
 
-    deleted_at = sqla.Column(sqla.DateTime())
-    modify_info = sqla.Column(sqla.String(255))
+    _deleted_at = sqla.Column(sqla.DateTime())
+    _modify_info = sqla.Column(sqla.String(255))
     __table_args__ = (
         sqla.Index('certificate_code_index', 'certificate_code',
-                   "deleted_at"),)
+                   "_deleted_at"),)
 
 
 class Ward(sqla.Model):

@@ -266,25 +266,33 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     "info": true,
                     "autoWidth": true,
                     "initComplete": function (settings, json) {{
-                        $('.addBtn').appendTo('#pgs_data_filter');
+                        $('.{8}').appendTo('#pgs_data_filter');
                         table.buttons().container().appendTo('#pgs_data_filter');
                         $('.dt-buttons').css("margin-left", "5px")
-                        $('.addBtn').css("margin-left", "5px");
-                        {5}
+                        $('.{8}').css("margin-left", "5px");
                     }},
                 }})
-                
-                $('#pgs_data tbody tr td').on( 'click', '.editBtn', function () {{
-                    var data = table.cells(this.closest("tr"), ':visible').data()
-                    for (var k in data){{
-                        console.log(data[k])
+                $('.{5}').on('click', function (event) {{
+                    var data = $(this).data()
+                    var modal = $('#{6}')
+                    for (var key in data) {{
+                        var target = modal.find('#' + key)
+                        value = ''
+                        if (data[key]!='None'){{value = data[key]}}
+                        if (target.is('select')){{
+                            target.val(data[key])
+                        }} else {{
+                            modal.find('#' + key).val(value)
+                        }}
                     }}
+                    {7}
                 }})
 
             }});
         </script>
         """.format(datatables_script, function_script, g.language,
-                   export_columns, server_script, select2_script))
+                   export_columns, server_script, g.c.BTNEDIT_ID,
+                   g.c.MODAL_EDIT_ID, select2_script, g.c.BTNADD_ID))
         return script
     else:
         css_script = """
