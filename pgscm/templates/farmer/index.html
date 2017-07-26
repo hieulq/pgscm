@@ -11,7 +11,7 @@
     <!-- DataTables -->
     {{ load_datatables_script(
             ajax_endpoint='farmer',
-            export_columns='0,1,2,3',
+            export_columns='0,1,2,3,4',
             column_names=["farmer_code", "name", "gender", "type", "group_id"],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
 {%- endblock scripts %}
@@ -23,8 +23,8 @@
     <ol class="breadcrumb">
         <li><a href="{{ lurl_for('main.index') }}"><i
                 class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
-        <li class="active"><a href="{{ lurl_for('agroup.index') }}"><i
-                class="fa fa-home"></i>{{ _('Associated Group') }}</a></li>
+        <li class="active"><a href="{{ lurl_for('farmer.index') }}"><i
+                class="fa fa-home"></i>{{ _('Farmer') }}</a></li>
     </ol>
 {%- endblock content_header %}
 {% block content -%}
@@ -78,5 +78,5 @@
     <!-- /.row -->
     {{ render_modal('add', 'modal', _('Create New')) }}
     {{ render_modal('edit', 'modal', _('Update Data')) }}
-    {{ render_modal('delete', 'modal-warning', _('Confirm to delete') ) }}
+    {{ render_modal('delete', 'modal-danger', _('Confirm to delete') ) }}
 {%- endblock content %}

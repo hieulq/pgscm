@@ -11,7 +11,7 @@ from pgscm.utils import __
 
 @farmer.route('/vi/nong-dan', endpoint='index_vi')
 @farmer.route('/en/farmer', endpoint='index_en')
-@roles_accepted(c.N_ADMIN, c.R_ADMIN, c.R_MOD, c.N_MOD, c.N_USER)
+@roles_accepted(*c.ALL_ROLES)
 def index():
     if current_app.config['AJAX_CALL_ENABLED']:
         return render_template('farmer/index.html')
@@ -29,7 +29,6 @@ def index():
             form.group.choices = [(p.id, p.name) for p in
                                   models.Group.query.filter_by(
                                       province_id=province_id).all()]
-            form.group.data = province_id
         else:
             farmers = models.Farmer.query.all()
             form.group.choices = [(p.id, p.name) for p in
