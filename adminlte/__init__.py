@@ -273,6 +273,14 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                         {5}
                     }},
                 }})
+                
+                $('#pgs_data tbody tr td').on( 'click', '.editBtn', function () {{
+                    var data = table.cells(this.closest("tr"), ':visible').data()
+                    for (var k in data){{
+                        console.log(data[k])
+                    }}
+                }})
+
             }});
         </script>
         """.format(datatables_script, function_script, g.language,
