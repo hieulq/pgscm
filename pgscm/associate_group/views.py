@@ -12,22 +12,22 @@ from pgscm import const as c
 @agroup.route('/en/associate-group', endpoint='index_en')
 @roles_accepted(*c.ALL_ROLES)
 def index():
+    form = AssociateGroupForm()
     if current_app.config['AJAX_CALL_ENABLED']:
-        return render_template('agroup/index.html')
+        form.province.choices = []
+        return render_template('agroup/index.html', form=form)
     else:
         province_id = current_user.province_id
-        form = AssociateGroupForm()
         if province_id:
             ags = models.AssociateGroup.query.filter_by(
                 province_id=province_id).all()
-            form.province.choices = [(p.province_id, p.name) for p in
-                                     models.Province.query.filter_by(
-                                     province_id=province_id).all()]
-            form.province.data = province_id
+            form.province_id.choices = [(p.province_id, p.name) for p in
+                                        models.Province.query.filter_by(
+                                        province_id=province_id).all()]
         else:
             ags = models.AssociateGroup.query.all()
-            form.province.choices = [(p.province_id, p.name) for p in
-                                     models.Province.query.order_by(
+            form.province_id.choices = [(p.province_id, p.name) for p in
+                                        models.Province.query.order_by(
                                         models.Province.name.asc()).all()]
         return render_template('agroup/index.html', ags=ags,
                                form=form)

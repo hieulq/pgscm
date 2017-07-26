@@ -10,6 +10,13 @@ ALL_ROLES = [N_ADMIN, N_MOD, N_USER, R_ADMIN, R_MOD, R_USER]
 ONLY_ADMIN_ROLE = [N_ADMIN, R_ADMIN]
 ADMIN_MOD_ROLE = [N_ADMIN, R_ADMIN, N_MOD, R_MOD]
 
+MODAL_ADD_ID = 'modal-add'
+MODAL_DEL_ID = 'modal-delete'
+MODAL_EDIT_ID = 'modal-edit'
+BTNADD_ID = 'addBtn'
+BTNEDIT_ID = 'editBtn'
+BTNDEL_ID = 'delBtn'
+
 SELECT_DEFAULT_ID = 'pgs_select'
 
 
