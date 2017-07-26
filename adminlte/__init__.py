@@ -160,7 +160,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                 """.format(
                 adminlte_find_resource(
                     'js/plugins/select2/select2.js',
-                    cdn='local', use_minified=False))
+                    cdn='local', use_minified=True))
             select2_script = """$(".{0}").select2({{width: '100%'}});""".\
                 format(select2_class)
 

@@ -2,13 +2,13 @@
 {% from 'macro.html' import render_modal, render_btn  with context %}
 
 {%- block styles %}
-    {{ super() }}
     {{ load_datatables_script(js=False, select2_class=g.c.SELECT_DEFAULT_ID) }}
+    {{ super() }}
 {%- endblock styles %}
 
 {% block scripts %}
     {{ super() }}
-    <!-- DataTables -->
+    <!-- DataTables with select2 enabled -->
     {{ load_datatables_script(
             ajax_endpoint='associate_group',
             export_columns='0,1,2,3',
