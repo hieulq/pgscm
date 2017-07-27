@@ -14,20 +14,21 @@ from pgscm import const as c
 def index():
     form = AssociateGroupForm()
     if current_app.config['AJAX_CALL_ENABLED']:
-        form.province.choices = []
+        form.province_id.choices = []
         return render_template('agroup/index.html', form=form)
     else:
         province_id = current_user.province_id
         if province_id:
             ags = models.AssociateGroup.query.filter_by(
                 province_id=province_id).all()
-            form.province_id.choices = [(p.province_id, p.name) for p in
-                                        models.Province.query.filter_by(
-                                        province_id=province_id).all()]
+            form.province_id.choices = [
+                (p.province_id, p.type + " " + p.name) for p in
+                models.Province.query.filter_by(province_id=province_id).all()]
         else:
             ags = models.AssociateGroup.query.all()
-            form.province_id.choices = [(p.province_id, p.name) for p in
-                                        models.Province.query.order_by(
-                                        models.Province.name.asc()).all()]
+            form.province_id.choices = [
+                (p.province_id, p.type + " " +p.name) for p in
+                models.Province.query.order_by(
+                    models.Province.name.asc()).all()]
         return render_template('agroup/index.html', ags=ags,
                                form=form)
