@@ -39,7 +39,7 @@ def index():
                     province_id=province_id).order_by(
                     models.District.name.asc()).all()]
             form.ward_id.choices = [
-                (w.ward_id, w.type + " " +w.name) for w in
+                (w.ward_id, w.type + " " + w.name) for w in
                 models.Ward.query.join(models.District).filter(
                     models.District.query.filter_by(
                         province_id=province_id).all()).order_by(

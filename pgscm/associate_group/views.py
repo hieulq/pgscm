@@ -27,7 +27,7 @@ def index():
         else:
             ags = models.AssociateGroup.query.all()
             form.province_id.choices = [
-                (p.province_id, p.type + " " +p.name) for p in
+                (p.province_id, p.type + " " + p.name) for p in
                 models.Province.query.order_by(
                     models.Province.name.asc()).all()]
         return render_template('agroup/index.html', ags=ags,

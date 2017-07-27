@@ -1,63 +1,46 @@
-from flask import render_template
+from flask import render_template, current_app
+from flask_security import roles_accepted, current_user
+
 from . import certificate
-from flask_security import roles_accepted
-import datetime
 
+from .forms import CertificateForm
+from pgscm.db import models
 from pgscm import const as c
-
-
-class Certificate:
-    def __init__(self, certificate_id, certificate_name, active_date,
-                 group_area, status, owner_group):
-        self.certificate_id = certificate_id
-        self.certificate_name = certificate_name
-        self.active_date = active_date
-        self.group_area = group_area
-        self.status = status
-        self.owner_group = owner_group
 
 
 @certificate.route('/vi/chung-chi', endpoint='index_vi')
 @certificate.route('/en/certificates', endpoint='index_en')
-@roles_accepted(c.N_ADMIN, c.R_ADMIN, c.N_USER)
+@roles_accepted(*c.ALL_ROLES)
 def index():
-    sample_certificate = Certificate(11, 'certificate smp',
-                                     datetime.date(2015, 8, 23),
-                                     100, "OK", "Group 1")
-    result_certificates = []
-    for i in range(1, 30):
-        result_certificates.append(sample_certificate)
-    return render_template('certificate/index.html',
-                           certificates=result_certificates)
-
-
-@certificate.route('/vi/chung-chi/chi-tiet/<string:certificate_id>',
-                   endpoint='details_vi')
-@certificate.route('/en/certificates/details/<string:certificate_id>',
-                   endpoint='details_en')
-@roles_accepted(c.N_ADMIN, c.R_ADMIN, c.N_USER)
-def details(certificate_id):
-    sample_certificate = Certificate(11, 'certificate smp',
-                                     datetime.date(2015, 8, 23), 100,
-                                     "OK", "Group 1")
-    result_certificates = []
-    for i in range(1, 30):
-        result_certificates.append(sample_certificate)
-    return render_template('certificate/details.html',
-                           certificates=result_certificates)
-
-
-@certificate.route('/vi/chung-chi/tim-kiem',
-                   endpoint='advance_search_vi')
-@certificate.route('/en/certificates/advance_search',
-                   endpoint='advance_search_en')
-@roles_accepted(c.N_ADMIN, c.R_ADMIN, c.N_USER)
-def advance_search():
-    sample_certificate = Certificate(11, 'certificate smp',
-                                     datetime.date(2015, 8, 23), 100, "OK",
-                                     "Group 1")
-    result_certificates = []
-    for i in range(1, 30):
-        result_certificates.append(sample_certificate)
-    return render_template('certificate/advance_search.html',
-                           certificates=result_certificates)
+    form = CertificateForm()
+    if current_app.config['AJAX_CALL_ENABLED']:
+        form.owner_farmer_id.choices = []
+        form.owner_group_id.choices = []
+        return render_template('certificate/index.html', form=form)
+    else:
+        province_id = current_user.province_id
+        if province_id:
+            cs = models.Group.query.filter_by(
+                province_id=province_id).all()
+            form.district_id.choices = [
+                (d.district_id, d.type + " " + d.name) for d in
+                models.District.query.filter_by(
+                    province_id=province_id).order_by(
+                    models.District.name.asc()).all()]
+            form.ward_id.choices = [
+                (w.ward_id, w.type + " " + w.name) for w in
+                models.Ward.query.join(models.District).filter(
+                    models.District.query.filter_by(
+                        province_id=province_id).all()).order_by(
+                    models.Ward.name.asc())]
+        else:
+            cs = models.Group.query.all()
+            form.province_id.choices = [
+                (p.province_id, p.type + " " + p.name) for p in
+                models.Province.query.order_by(
+                    models.Province.name.asc()).all()]
+            form.district_id.choices = [
+                (d.district_id, d.type + " " + d.name) for d in
+                models.District.query.order_by(
+                    models.District.name.asc()).all()]
+        return render_template('certificate/index.html', cs=cs, form=form)
