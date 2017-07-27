@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PGSCM 1.0.0\n"
 "Report-Msgid-Bugs-To: hieulq19@gmail.com\n"
-"POT-Creation-Date: 2017-07-25 00:47+0700\n"
+"POT-Creation-Date: 2017-07-27 16:27+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,31 +21,59 @@ msgstr ""
 msgid "More info"
 msgstr ""
 
-#: pgscm/associate_group/forms.py:7
+#: pgscm/associate_group/forms.py:6 pgscm/group/forms.py:6
+#: pgscm/security/forms.py:14
 msgid "Required field!"
 msgstr ""
 
-#: pgscm/associate_group/forms.py:11
+#: pgscm/associate_group/forms.py:10 pgscm/associate_group/forms.py:13
 msgid "Associate group code"
 msgstr ""
 
-#: pgscm/associate_group/forms.py:12 pgscm/templates/agroup/index.html:44
+#: pgscm/associate_group/forms.py:15 pgscm/associate_group/forms.py:16
+#: pgscm/group/forms.py:15 pgscm/group/forms.py:16
+#: pgscm/templates/agroup/index.html:45 pgscm/templates/group/index.html:45
 msgid "Name"
 msgstr ""
 
-#: pgscm/associate_group/forms.py:13 pgscm/templates/agroup/index.html:45
+#: pgscm/associate_group/forms.py:17 pgscm/associate_group/forms.py:18
+#: pgscm/templates/agroup/index.html:46
 msgid "Email"
 msgstr ""
 
-#: pgscm/associate_group/forms.py:14 pgscm/templates/agroup/index.html:46
+#: pgscm/associate_group/forms.py:19 pgscm/group/forms.py:26
+#: pgscm/security/forms.py:12 pgscm/templates/agroup/index.html:47
+#: pgscm/templates/group/index.html:49
 msgid "Province"
 msgstr ""
 
-#: pgscm/associate_group/forms.py:16
+#: pgscm/associate_group/forms.py:21 pgscm/group/forms.py:28
 msgid "Id"
 msgstr ""
 
-#: pgscm/security/forms.py:6
+#: pgscm/group/forms.py:10 pgscm/group/forms.py:13
+msgid "Group code"
+msgstr ""
+
+#: pgscm/group/forms.py:17 pgscm/group/forms.py:18
+#: pgscm/templates/group/index.html:46
+msgid "Village"
+msgstr ""
+
+#: pgscm/group/forms.py:19 pgscm/templates/agroup/index.html:27
+#: pgscm/templates/group/index.html:50 pgscm/templates/index.html:207
+msgid "Associated Group"
+msgstr ""
+
+#: pgscm/group/forms.py:22 pgscm/templates/group/index.html:48
+msgid "District"
+msgstr ""
+
+#: pgscm/group/forms.py:24 pgscm/templates/group/index.html:47
+msgid "Ward"
+msgstr ""
+
+#: pgscm/security/forms.py:10
 msgid "Full name"
 msgstr ""
 
@@ -111,12 +139,8 @@ msgstr ""
 msgid "Farmer"
 msgstr ""
 
-#: pgscm/templates/index.html:201
+#: pgscm/templates/group/index.html:27 pgscm/templates/index.html:201
 msgid "Group"
-msgstr ""
-
-#: pgscm/templates/agroup/index.html:26 pgscm/templates/index.html:207
-msgid "Associated Group"
 msgstr ""
 
 #: pgscm/templates/index.html:211
@@ -167,6 +191,38 @@ msgstr ""
 msgid "Quickly summary about <code>PGS Certificates</code> analytics."
 msgstr ""
 
+#: pgscm/templates/index.html:281
+msgid "Certificates"
+msgstr ""
+
+#: pgscm/templates/index.html:289
+msgid "Expiry Certificates"
+msgstr ""
+
+#: pgscm/templates/index.html:297
+msgid "Farmers"
+msgstr ""
+
+#: pgscm/templates/index.html:305
+msgid "Groups"
+msgstr ""
+
+#: pgscm/templates/macro.html:18
+msgid "Do you really want to delete data?"
+msgstr ""
+
+#: pgscm/templates/macro.html:24
+msgid "Close"
+msgstr ""
+
+#: pgscm/templates/macro.html:28
+msgid "Delete it!"
+msgstr ""
+
+#: pgscm/templates/macro.html:31
+msgid "Save changes!"
+msgstr ""
+
 #: pgscm/templates/admin/index.html:60 pgscm/templates/admin/index.html:76
 msgid "PGS Users"
 msgstr ""
@@ -175,55 +231,42 @@ msgstr ""
 msgid "Managing roles and permissions in PGS system"
 msgstr ""
 
-#: pgscm/templates/admin/index.html:65 pgscm/templates/agroup/index.html:24
+#: pgscm/templates/admin/index.html:65 pgscm/templates/agroup/index.html:25
+#: pgscm/templates/group/index.html:25
 msgid "Home"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:19 pgscm/templates/agroup/index.html:35
+#: pgscm/templates/agroup/index.html:20 pgscm/templates/agroup/index.html:36
 msgid "PGS Associate Groups"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:20
+#: pgscm/templates/agroup/index.html:21
 msgid "Managing regional associate groups in PGS system"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:30 pgscm/templates/agroup/index.html:76
+#: pgscm/templates/agroup/index.html:31 pgscm/templates/agroup/index.html:77
+#: pgscm/templates/group/index.html:31 pgscm/templates/group/index.html:83
 msgid "Create New"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:43
+#: pgscm/templates/agroup/index.html:44 pgscm/templates/group/index.html:44
 msgid "Code"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:47
+#: pgscm/templates/agroup/index.html:48
 #: pgscm/templates/certificate/index.html:106
 #: pgscm/templates/certificate/index.html:215
 #: pgscm/templates/certificate/index.html:265
+#: pgscm/templates/group/index.html:51
 msgid "Actions"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:77
+#: pgscm/templates/agroup/index.html:78 pgscm/templates/group/index.html:84
 msgid "Update Data"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:78
+#: pgscm/templates/agroup/index.html:79 pgscm/templates/group/index.html:85
 msgid "Confirm to delete"
-msgstr ""
-
-#: pgscm/templates/agroup/macro.html:16
-msgid "Do you really want to delete data?"
-msgstr ""
-
-#: pgscm/templates/agroup/macro.html:21
-msgid "Close"
-msgstr ""
-
-#: pgscm/templates/agroup/macro.html:24
-msgid "Delete it!"
-msgstr ""
-
-#: pgscm/templates/agroup/macro.html:26
-msgid "Save changes!"
 msgstr ""
 
 #: pgscm/templates/certificate/advance_search.html:94
@@ -271,25 +314,33 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+#: pgscm/templates/group/index.html:20 pgscm/templates/group/index.html:36
+msgid "PGS Groups"
+msgstr ""
+
+#: pgscm/templates/group/index.html:21
+msgid "Managing regional groups in PGS system"
+msgstr ""
+
 #: pgscm/templates/security/login_user.html:3
 msgid "Log In"
 msgstr ""
 
 #: pgscm/templates/security/login_user.html:4
-#: pgscm/templates/security/login_user.html:13
+#: pgscm/templates/security/login_user.html:17
 msgid "Log into your account!"
 msgstr ""
 
-#: pgscm/templates/security/login_user.html:10
-#: pgscm/templates/security/register_user.html:11
+#: pgscm/templates/security/login_user.html:14
+#: pgscm/templates/security/register_user.html:29
 msgid "Certificate Management"
 msgstr ""
 
-#: pgscm/templates/security/login_user.html:19
+#: pgscm/templates/security/login_user.html:23
 msgid "New user? "
 msgstr ""
 
-#: pgscm/templates/security/login_user.html:19
+#: pgscm/templates/security/login_user.html:23
 msgid "Click here to register"
 msgstr ""
 
@@ -297,7 +348,7 @@ msgstr ""
 msgid "Register new PGS account!"
 msgstr ""
 
-#: pgscm/templates/security/register_user.html:14
+#: pgscm/templates/security/register_user.html:32
 msgid "Please register new PGS account!"
 msgstr ""
 

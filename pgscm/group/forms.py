@@ -16,7 +16,7 @@ class GroupForm(FlaskForm):
                        render_kw={"placeholder": __('Name')})
     village = StringField(__('Village'),
                           render_kw={"placeholder": __('Village')})
-    associate_group_id = SelectField(__('Associate Group'),
+    associate_group_id = SelectField(__('Associated Group'),
                                      validators=[data_required], coerce=str,
                                      widget=Select())
     district_id = SelectField(__('District'), validators=[data_required],
