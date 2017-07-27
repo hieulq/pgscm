@@ -11,6 +11,7 @@ from flask import Blueprint, current_app, url_for, g
 
 class CDN(object):
     """Base class for CDN objects."""
+
     def get_resource_url(self, filename):
         """Return resource url for filename."""
         raise NotImplementedError
@@ -22,6 +23,7 @@ class StaticCDN(object):
     :param static_endpoint: Endpoint to use.
     :param rev: If ``True``, honor ``ADMINLTE_QUERYSTRING_REVVING``.
     """
+
     def __init__(self, static_endpoint='static', rev=False):
         self.static_endpoint = static_endpoint
         self.rev = rev
@@ -40,6 +42,7 @@ class WebCDN(object):
 
     :param baseurl: The baseurl. Filenames are simply appended to this URL.
     """
+
     def __init__(self, baseurl):
         self.baseurl = baseurl
 
@@ -55,6 +58,7 @@ class ConditionalCDN(object):
     :param primary: CDN to use if the configuration variable is ``True``.
     :param fallback: CDN to use otherwise.
     """
+
     def __init__(self, confvar, primary, fallback):
         self.confvar = confvar
         self.primary = primary
@@ -161,7 +165,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                 adminlte_find_resource(
                     'js/plugins/select2/select2.js',
                     cdn='local', use_minified=True))
-            select2_script = """$(".{0}").select2({{width: '100%'}});""".\
+            select2_script = """$(".{0}").select2({{width: '100%'}});""". \
                 format(select2_class)
 
         if current_app.config['AJAX_CALL_ENABLED']:
@@ -288,6 +292,14 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     {7}
                 }})
 
+                $('#pgscm_form_submit').parent()
+                .append('<button type="button" class="btn btn-default"'+
+                 'data-dismiss="modal">Cancel</button>')
+
+                $('#pgscm_form_submit').removeClass('btn-default')
+                .addClass('btn-primary pull-right')
+                .before("<hr />" )
+
             }});
         </script>
         """.format(datatables_script, function_script, g.language,
@@ -298,8 +310,8 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
         css_script = """
             <link href="{0}" rel="stylesheet" type="text/css">
                 """.format(adminlte_find_resource(
-                'js/plugins/datatables/dataTables.bootstrap.css', cdn='local',
-                use_minified=True))
+            'js/plugins/datatables/dataTables.bootstrap.css', cdn='local',
+            use_minified=True))
         if select2_class:
             css_script += """
             <link href="{0}" rel="stylesheet" type="text/css">
@@ -346,7 +358,7 @@ class AdminLTE(object):
 
         app.register_blueprint(blueprint)
 
-        app.jinja_env.globals['adminlte_find_resource'] =\
+        app.jinja_env.globals['adminlte_find_resource'] = \
             adminlte_find_resource
         app.jinja_env.globals['is_active_in_tree'] = \
             is_active_in_tree
