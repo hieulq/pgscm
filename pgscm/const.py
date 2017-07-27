@@ -21,13 +21,13 @@ SELECT_DEFAULT_ID = 'pgs_select'
 
 
 class GenderType(IntEnum):
-    male = 0  # nam
-    female = 1  # nu
+    male = 1  # nam
+    female = 2  # nu
 
 
 class FarmerType(IntEnum):
-    member = 0  # thanh vien
-    reviewer = 1  # thanh tra
+    member = 1  # thanh vien
+    reviewer = 2  # thanh tra
 
 
 class CertificateStatusType(IntEnum):

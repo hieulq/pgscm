@@ -18,5 +18,5 @@ class FarmerForm(FlaskForm):
                        coerce=int, widget=Select())
     group = SelectField(__('Group'), validators=[data_required],
                         coerce=str, widget=Select())
-    id = HiddenField(__('Id'), validators=[data_required])
+    id = HiddenField(__('Id'))
     submit = SubmitField(__('Submit'), id='pgscm_form_submit')

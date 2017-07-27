@@ -21,8 +21,10 @@ def index():
         form = FarmerForm()
         form.gender.choices = [(c.GenderType.male.value, __('Male')),
                                (c.GenderType.female.value, __('Female'))]
+        form.gender.default = 1
         form.type.choices = [(c.FarmerType.member.value, __('Member')),
                              (c.FarmerType.reviewer.value, __('Reviewer'))]
+        form.type.default = 0
         if province_id:
             farmers = models.Farmer.query.join(models.Group).filter(
                 models.Group.query.filter_by(province_id=province_id).all())
@@ -36,7 +38,8 @@ def index():
                                   models.Group.query.order_by(
                                       models.Group.name.asc()).all()]
 
-        if request.method == 'POST' and form.is_submitted():
+        if request.method == 'POST' and form.validate_on_submit():
+            print(type(form.gender.data))
             group_farmer = models.Group.query.filter_by(
                 id=form.group.data).one()
             new_farmer = models.Farmer(farmer_code=form.code.data,
