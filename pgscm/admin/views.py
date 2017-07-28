@@ -1,7 +1,11 @@
-from flask import render_template
-from flask_security import roles_accepted
+from flask import render_template, current_app
+from flask_security import roles_accepted, current_user
 
 from . import admin
+from .forms import UserForm
+
+from pgscm.db import models
+from pgscm.utils import DeleteForm
 from pgscm import const as c
 
 
@@ -16,7 +20,27 @@ def index():
 @admin.route('/en/admin/users', endpoint='users_en')
 @roles_accepted(*c.ONLY_ADMIN_ROLE)
 def users():
-    return render_template('admin/index.html')
+    form = UserForm()
+    dform = DeleteForm()
+    if current_app.config['AJAX_CALL_ENABLED']:
+        form.province_id.choices = []
+        return render_template('admin/user.html', form=form, dform=dform)
+    else:
+        province_id = current_user.province_id
+        if province_id:
+            us = models.User.query.filter_by(
+                province_id=province_id).all()
+            form.province_id.choices = [
+                (p.province_id, p.type + " " + p.name) for p in
+                models.Province.query.filter_by(province_id=province_id).all()]
+        else:
+            us = models.User.query.all()
+            form.province_id.choices = [
+                (p.province_id, p.type + " " + p.name) for p in
+                models.Province.query.order_by(
+                    models.Province.name.asc()).all()]
+        return render_template('admin/user.html', us=us,
+                               form=form, dform=dform)
 
 
 @admin.route('/vi/quan-tri/cau-hinh', endpoint='configs_vi')

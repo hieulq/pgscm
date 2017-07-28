@@ -1,0 +1,87 @@
+{% extends "index.html" %}
+{% from 'macro.html' import render_modal, render_btn  with context %}
+
+{%- block styles %}
+    {{ load_datatables_script(js=False, select2_class=g.c.SELECT_DEFAULT_ID) }}
+    {{ super() }}
+{%- endblock styles %}
+
+{% block scripts %}
+    {{ super() }}
+    <!-- DataTables with select2 enabled -->
+    {{ load_datatables_script(
+            ajax_endpoint='user',
+            export_columns='0,1,2,3,4,5,6',
+            column_names=["associate_group_code", "name", "email", "province", "province"],
+            select2_class=g.c.SELECT_DEFAULT_ID) }}
+{%- endblock scripts %}
+{% block content_header -%}
+    <h1>
+        {{ _('PGS Users') }}
+        <small>{{ _('Managing roles and permissions in PGS system') }}</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="{{ lurl_for('main.index') }}"><i
+                class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
+                <li><a href="#"><i class="fa fa-key"></i> {{ _('Administrator') }}</a></li>
+        <li class="active"><a href="{{ lurl_for('admin.users') }}"><i
+                class="fa fa-user"></i>{{ _('Users Management') }}</a></li>
+    </ol>
+{%- endblock content_header %}
+{% block content -%}
+    {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '') }}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">{{ _('PGS Users') }}</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="pgs_data"
+                           class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>{{ _('Fullname') }}</th>
+                            <th>{{ _('Email') }}</th>
+                            <th>{{ _('Province') }}</th>
+                            <th>{{ _('Current login IP') }}
+                            <th>{{ _('Last login IP') }}
+                            <th>{{ _('Current login at') }}
+                            <th>{{ _('Last login at') }}
+                            <th>{{ _('Actions') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for u in us %}
+                            <tr>
+                                <td>
+                                    <a href="{{ lurl_for('group.index', user=u.id) }}">
+                                        {{ u.fullname }}
+                                    </a>
+                                </td>
+                                <td><b>{{ u.email }}</b></td>
+                                <td>{{ u.province.name }}</td>
+                                <td>{{ u.last_login_ip }}</td>
+                                <td>{{ u.current_login_ip }}</td>
+                                <td>{{ u.last_login_at }}</td>
+                                <td>{{ u.current_login_at }}</td>
+                                <td class="actions_column">
+                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', u) }}
+                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', u) }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+    {{ render_modal(g.c.MODAL_ADD_ID, 'modal', _('Create New')) }}
+    {{ render_modal(g.c.MODAL_EDIT_ID, 'modal', _('Update Data')) }}
+    {{ render_modal(g.c.MODAL_DEL_ID, 'modal-danger', _('Confirm to delete') ) }}
+{%- endblock content %}
