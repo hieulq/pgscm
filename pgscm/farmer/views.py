@@ -7,18 +7,19 @@ from .forms import FarmerForm
 from pgscm import sqla
 from pgscm.db import models
 from pgscm import const as c
-from pgscm.utils import __
+from pgscm.utils import __, DeleteForm
 
 
 @farmer.route('/vi/nong-dan', endpoint='index_vi', methods=['GET', 'POST'])
 @farmer.route('/en/farmer', endpoint='index_en', methods=['GET', 'POST'])
 @roles_accepted(*c.ALL_ROLES)
 def index():
+    form = FarmerForm()
+    dform = DeleteForm()
     if current_app.config['AJAX_CALL_ENABLED']:
-        return render_template('farmer/index.html')
+        return render_template('farmer/index.html', form=form, dform=dform)
     else:
         province_id = current_user.province_id
-        form = FarmerForm()
         form.gender.choices = [(c.GenderType.male.value, __('Male')),
                                (c.GenderType.female.value, __('Female'))]
         form.gender.default = 1
@@ -52,5 +53,4 @@ def index():
             # return redirect(url_for('/vi/nong-dan'))
 
         return render_template('farmer/index.html', farmers=farmers,
-                               genderType=c.GenderType, form=form,
-                               farmerType=c.FarmerType)
+                               form=form, dform=dform)

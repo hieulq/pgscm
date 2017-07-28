@@ -1,4 +1,4 @@
-"""Make deleted_at and modify_info column to private property
+"""make deleted_at and modify_info column to private property
 
 Revision ID: 5c3ebec69cdd
 Revises: ef552a46d4ff

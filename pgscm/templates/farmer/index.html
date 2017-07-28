@@ -58,8 +58,8 @@
                                     </a>
                                 </td>
                                 <td><b>{{ farmer.name }}</b></td>
-                                <td>{{ genderType(farmer.gender).name }}</td>
-                                <td>{{ farmerType(farmer.type).name }}</td>
+                                <td>{{ g.c.GenderType(farmer.gender).name }}</td>
+                                <td>{{ g.c.FarmerType(farmer.type).name }}</td>
                                 <td>{{ farmer.group.name }}</td>
                                 <td class="actions_column">
                                     {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', ag) }}

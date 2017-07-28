@@ -5,6 +5,7 @@ from . import agroup
 from .forms import AssociateGroupForm
 
 from pgscm.db import models
+from pgscm.utils import DeleteForm
 from pgscm import const as c
 
 
@@ -13,9 +14,10 @@ from pgscm import const as c
 @roles_accepted(*c.ALL_ROLES)
 def index():
     form = AssociateGroupForm()
+    dform = DeleteForm()
     if current_app.config['AJAX_CALL_ENABLED']:
         form.province_id.choices = []
-        return render_template('agroup/index.html', form=form)
+        return render_template('agroup/index.html', form=form, dform=dform)
     else:
         province_id = current_user.province_id
         if province_id:
@@ -31,4 +33,4 @@ def index():
                 models.Province.query.order_by(
                     models.Province.name.asc()).all()]
         return render_template('agroup/index.html', ags=ags,
-                               form=form)
+                               form=form, dform=dform)

@@ -289,9 +289,8 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                             modal.find('#' + key).val(value)
                         }}
                     }}
-                    {7}
                 }})
-
+                {7}
                 $('#pgscm_form_submit').parent()
                 .append('<button type="button" class="btn btn-default"'+
                  'data-dismiss="modal">Cancel</button>')

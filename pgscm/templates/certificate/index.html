@@ -1,1 +1,92 @@
 {% extends "index.html" %}
+{% from 'macro.html' import render_modal, render_btn  with context %}
+
+{%- block styles %}
+    {{ load_datatables_script(js=False, select2_class=g.c.SELECT_DEFAULT_ID) }}
+    {{ super() }}
+{%- endblock styles %}
+
+{% block scripts %}
+    {{ super() }}
+    <!-- DataTables with select2 enabled -->
+    {{ load_datatables_script(
+            ajax_endpoint='certificate',
+            export_columns='0,1,2,3,4,5,6,7,8,9',
+            column_names=["group_code", "name", "email", "province", "province"],
+            select2_class=g.c.SELECT_DEFAULT_ID) }}
+{%- endblock scripts %}
+{% block content_header -%}
+    <h1>
+        {{ _('PGS Certificates') }}
+        <small>{{ _('Managing PGS certificates') }}</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="{{ lurl_for('main.index') }}"><i
+                class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
+        <li class="active"><a href="{{ lurl_for('group.index') }}"><i
+                class="fa fa-group"></i>{{ _('Group') }}</a></li>
+    </ol>
+{%- endblock content_header %}
+{% block content -%}
+    {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '') }}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">{{ _('PGS Groups') }}</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="pgs_data"
+                           class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>{{ _('Code') }}</th>
+                            <th>{{ _('Certified group') }}
+                            <th>{{ _('Certified farmer') }}</th>
+                            <th>{{ _('Area/Count') }}</th>
+                            <th>{{ _('Member count') }}</th>
+                            <th>{{ _('Decision') }}</th>
+                            <th>{{ _('Status') }}</th>
+                            <th>{{ _('Verify status') }}</th>
+                            <th>{{ _('Start date') }}</th>
+                            <th>{{ _('Expiry date') }}</th>
+                            <th>{{ _('Actions') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for cert in cs %}
+                            <tr>
+                                <td>
+                                    <a href="{{ lurl_for('certificate.detail', certificate_id=cert.id) }}">
+                                        {{ cert.certificate_code }}
+                                    </a>
+                                </td>
+                                <td><b>{{ cert.owner_group.name }}</b></td>
+                                <td>{{ cert.owner_farmer.name }}</td>
+                                <td>{{ cert.group_area }}</td>
+                                <td>{{ cert.member_count }}</td>
+                                <td>{{ cert.gov_certificate_id }}</td>
+                                <td>{{ g.c.CertificateStatusType(cert.status).name }}</td>
+                                <td>{{ g.c.CertificateReVerifyStatusType(cert.re_verify_status).name }}</td>
+                                <td>{{ cert.certificate_start_date }}</td>
+                                <td>{{ cert.certificate_expiry_date }}</td>
+                                <td class="actions_column">
+                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', c) }}
+                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', c) }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+    {{ render_modal(g.c.MODAL_ADD_ID, 'modal', _('Create New')) }}
+    {{ render_modal(g.c.MODAL_EDIT_ID, 'modal', _('Update Data')) }}
+    {{ render_modal(g.c.MODAL_DEL_ID, 'modal-danger', _('Confirm to delete') ) }}
+{%- endblock content %}

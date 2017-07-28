@@ -5,6 +5,7 @@ from . import group
 from .forms import GroupForm
 
 from pgscm.db import models
+from pgscm.utils import DeleteForm
 from pgscm import const as c
 
 
@@ -13,11 +14,12 @@ from pgscm import const as c
 @roles_accepted(*c.ALL_ROLES)
 def index():
     form = GroupForm()
+    dform = DeleteForm()
     if current_app.config['AJAX_CALL_ENABLED']:
         form.ward_id.choices = []
         form.district_id.choices = []
         form.province_id.choices = []
-        return render_template('group/index.html', form=form)
+        return render_template('group/index.html', form=form, dform=dform)
     else:
         province_id = current_user.province_id
         if province_id:
@@ -62,4 +64,4 @@ def index():
                                     models.Ward.query.order_by(
                                         models.Ward.name.asc()).all()]
         return render_template('group/index.html', gs=gs,
-                               form=form)
+                               form=form, dform=dform)

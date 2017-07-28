@@ -16,6 +16,7 @@
                         {{ wtf.quick_form(form) }}
                     {% elif id == g.c.MODAL_DEL_ID %}
                         {{ _('Do you really want to delete data?') }}
+                        {{ wtf.quick_form(dform) }}
                     {% endif %}
                 </div>
             </div>
