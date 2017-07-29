@@ -27,6 +27,24 @@
                 class="fa fa-home"></i>{{ _('Farmer') }}</a></li>
     </ol>
 {%- endblock content_header %}
+
+{#{% for message in get_flashed_messages() %}#}
+{#    <div class="alert alert-message block-message error">#}
+{#        <button type="button" class="close" data-dismiss="alert">&times;</button>#}
+{#        {{ message[1] }}#}
+{#    </div>#}
+{#{% endfor %}#}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul class=flashes>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
 {% block content -%}
     {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '') }}
     <div class="row">
@@ -62,8 +80,8 @@
                                 <td>{{ g.c.FarmerType(farmer.type).name }}</td>
                                 <td>{{ farmer.group.name }}</td>
                                 <td class="actions_column">
-                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', ag) }}
-                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', ag) }}
+                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', farmer) }}
+                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', farmer) }}
                                 </td>
                             </tr>
                         {% endfor %}

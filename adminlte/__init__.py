@@ -291,6 +291,11 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     }}
                 }})
                 {7}
+                $('.delBtn').on('click', function (event) {{
+                    var data = $(this).data()
+                    var modal_del = $('#modal-delete')
+                    modal_del.find('#id').val(data['id'])
+                }})
                 $('#pgscm_form_submit').parent()
                 .append('<button type="button" class="btn btn-default"'+
                  'data-dismiss="modal">Cancel</button>')
