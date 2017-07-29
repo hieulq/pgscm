@@ -1,4 +1,5 @@
-from flask import render_template, current_app, request, flash
+from flask import render_template, current_app, request, \
+    flash, redirect, url_for
 from flask_security import roles_accepted, current_user
 from sqlalchemy import func
 
@@ -40,7 +41,6 @@ def index():
                                      models.Group.query.order_by(
                                          models.Group.name.asc()).all()]
 
-        print(request)
         if request.method == 'POST' and form.data['submit'] \
                 and form.validate_on_submit():
             # edit user
@@ -76,6 +76,8 @@ def index():
                 farmers.append(new_farmer)
                 flash('Add farmer success!', 'info')
 
+            return redirect(url_for(request.endpoint))
+
         if request.method == 'POST' and dform.data['submit_del'] \
                 and dform.validate_on_submit():
             del_farmer = sqla.session.query(models.Farmer) \
@@ -87,7 +89,7 @@ def index():
             farmers.remove(del_farmer)
             flash('Delete farmer success!', 'info')
 
-            # return redirect(url_for('/'))
+            return redirect(url_for(request.endpoint))
 
         return render_template('farmer/index.html', farmers=farmers,
                                form=form, dform=dform)
