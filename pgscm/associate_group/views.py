@@ -22,12 +22,12 @@ def index():
         province_id = current_user.province_id
         if province_id:
             ags = models.AssociateGroup.query.filter_by(
-                province_id=province_id).all()
+                province_id=province_id, _deleted_at=None).all()
             form.province_id.choices = [
                 (p.province_id, p.type + " " + p.name) for p in
                 models.Province.query.filter_by(province_id=province_id).all()]
         else:
-            ags = models.AssociateGroup.query.all()
+            ags = models.AssociateGroup.query.filter_by(_deleted_at=None).all()
             form.province_id.choices = [
                 (p.province_id, p.type + " " + p.name) for p in
                 models.Province.query.order_by(
