@@ -39,5 +39,5 @@ def check_role(roles):
     for r in roles:
         if r == current_user.roles[0].name:
             return True
-    flash('You have no permission!', 'warning')
+    flash(str(__('You have no permission!')), 'warning')
     return False
