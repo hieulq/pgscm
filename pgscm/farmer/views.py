@@ -9,7 +9,7 @@ from .forms import FarmerForm
 from pgscm import sqla
 from pgscm.db import models
 from pgscm import const as c
-from pgscm.utils import __, DeleteForm
+from pgscm.utils import __, DeleteForm, check_role
 
 crud_role = c.ADMIN_MOD_ROLE
 
@@ -45,7 +45,7 @@ def index():
 
         # form create or edit submit
         if request.method == 'POST' and form.data['submit']:
-            if not check_role():
+            if not check_role(crud_role):
                 return redirect(url_for(request.endpoint))
             elif form.validate_on_submit():
                 # edit user
@@ -83,7 +83,7 @@ def index():
 
         # form delete submit
         if request.method == 'POST' and dform.data['submit_del']:
-            if not check_role():
+            if not check_role(crud_role):
                 return redirect(url_for(request.endpoint))
             elif dform.validate_on_submit():
                 del_farmer = sqla.session.query(models.Farmer) \
@@ -99,11 +99,3 @@ def index():
 
         return render_template('farmer/index.html', farmers=farmers,
                                form=form, dform=dform)
-
-
-def check_role():
-    for r in crud_role:
-        if r == current_user.roles[0].name:
-            return True
-    flash('You have no permission!', 'warning')
-    return False

@@ -2,7 +2,9 @@ from flask_babelex import gettext
 from flask_babelex import ngettext
 from flask_babelex import lazy_gettext
 
+from flask import flash
 from flask_wtf import FlaskForm
+from flask_security import current_user
 
 from wtforms.widgets.core import Select as BaseSelectWidget
 from wtforms import TextAreaField, SubmitField, HiddenField
@@ -24,13 +26,6 @@ class Select(BaseSelectWidget):
         return super(Select, self).__call__(field, **kwargs)
 
 
-# class CustomSubmitField(SubmitField):
-#     def __call__(self, **kwargs):
-#         c = kwargs.pop('class', '') or kwargs.pop('class_', '')
-#         kwargs['class'] = c + " " + const.SUBMIT_DEFAULT_CLASS
-#         return super(CustomSubmitField, self).__call__(**kwargs)
-
-
 class DeleteForm(FlaskForm):
     id = HiddenField(__('Id'))
     modify_info = TextAreaField(
@@ -38,3 +33,11 @@ class DeleteForm(FlaskForm):
         render_kw={
             "placeholder": __('Describe your reasons to delete this data')})
     submit_del = SubmitField(__('Delete'))
+
+
+def check_role(roles):
+    for r in roles:
+        if r == current_user.roles[0].name:
+            return True
+    flash('You have no permission!', 'warning')
+    return False
