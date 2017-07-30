@@ -27,8 +27,11 @@
                 class="fa fa-home"></i>{{ _('Farmer') }}</a></li>
     </ol>
 {%- endblock content_header %}
+
 {% block content -%}
-    {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '') }}
+    {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
+        {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '') }}
+    {% endif %}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -46,7 +49,9 @@
                             <th>{{ _('Gender') }}</th>
                             <th>{{ _('Type') }}</th>
                             <th>{{ _('Group') }}</th>
-                            <th>{{ _('Actions') }}</th>
+                            {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
+                                <th>{{ _('Actions') }}</th>
+                            {% endif %}
                         </tr>
                         </thead>
                         <tbody>
@@ -61,10 +66,12 @@
                                 <td>{{ g.c.GenderType(farmer.gender).name }}</td>
                                 <td>{{ g.c.FarmerType(farmer.type).name }}</td>
                                 <td>{{ farmer.group.name }}</td>
+                                {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
                                 <td class="actions_column">
-                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', ag) }}
-                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', ag) }}
+                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', farmer) }}
+                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', farmer) }}
                                 </td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     </table>
