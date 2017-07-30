@@ -7,6 +7,7 @@ from flask_wtf import FlaskForm
 from flask_security import current_user
 
 from wtforms.widgets.core import Select as BaseSelectWidget
+from wtforms.widgets.core import Input as SubmitWidget
 from wtforms import TextAreaField, SubmitField, HiddenField
 
 from pgscm import const
@@ -26,13 +27,25 @@ class Select(BaseSelectWidget):
         return super(Select, self).__call__(field, **kwargs)
 
 
+class Submit(SubmitWidget):
+    def __init__(self, input_type='submit'):
+        super(Submit, self).__init__(input_type)
+
+    def __call__(self, field, **kwargs):
+        kwargs.setdefault('value', field.label.text)
+        c = kwargs.pop('class', '') or kwargs.pop('class_', '')
+        kwargs['class'] = c + " " + const.SUBMIT_DEFAULT_CLASS
+        return super(Submit, self).__call__(field, **kwargs)
+
+
 class DeleteForm(FlaskForm):
     id = HiddenField(__('Id'))
     modify_info = TextAreaField(
         __('Reason'),
         render_kw={
             "placeholder": __('Describe your reasons to delete this data')})
-    submit_del = SubmitField(__('Delete!'))
+    submit_del = SubmitField(__('Delete!'), id=const.DEL_SUBMIT_ID,
+                             widget=Submit())
 
 
 def check_role(roles):

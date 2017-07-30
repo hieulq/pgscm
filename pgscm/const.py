@@ -19,6 +19,10 @@ BTNDEL_ID = 'delBtn'
 
 SELECT_DEFAULT_ID = 'pgs_select'
 
+SUBMIT_DEFAULT_CLASS = 'pgs_submit'
+
+DEL_SUBMIT_ID = 'pgs_del_submit'
+
 
 class GenderType(IntEnum):
     male = 1  # nam

@@ -267,24 +267,29 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     }}
                 }})
                 {6}
-                $('.delBtn').on('click', function (event) {{
+                $('.{8}').on('click', function (event) {{
                     var data = $(this).data()
-                    var modal_del = $('#modal-delete')
+                    var modal_del = $('#{9}')
                     modal_del.find('#id').val(data['id'])
                 }})
-                $('#pgscm_form_submit').parent()
+                $('.{10}').parent()
                 .append('<button type="button" class="btn btn-default"'+
                  'data-dismiss="modal">Cancel</button>')
 
-                $('#pgscm_form_submit').removeClass('btn-default')
+                $('.{10}').removeClass('btn-default')
                 .addClass('btn-primary pull-right')
                 .before("<hr />" )
+                
+                $('#{11}').removeClass('btn-primary')
+                .addClass('btn-warning')
 
             }});
         </script>
         """.format(datatables_script, g.language,
                    export_columns, server_script, g.c.BTNEDIT_ID,
-                   g.c.MODAL_EDIT_ID, select2_script, g.c.BTNADD_ID))
+                   g.c.MODAL_EDIT_ID, select2_script, g.c.BTNADD_ID,
+                   g.c.BTNDEL_ID, g.c.MODAL_DEL_ID, g.c.SUBMIT_DEFAULT_CLASS,
+                   g.c.DEL_SUBMIT_ID))
         return script
     else:
         css_script = """
