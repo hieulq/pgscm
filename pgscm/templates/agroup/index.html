@@ -12,7 +12,7 @@
     {{ load_datatables_script(
             ajax_endpoint='associate_group',
             export_columns='0,1,2,3',
-            column_names=["associate_group_code", "name", "email", "province", "province"],
+            column_names=["associate_group_code", "name", "email", "province.name", "province"],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
 {%- endblock scripts %}
 {% block content_header -%}

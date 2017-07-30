@@ -38,7 +38,7 @@ class AssociateGroupResource(ModelResource):
         model = models.AssociateGroup
 
     class Schema:
-        province = fields.ToOne('province')
+        province = fields.Inline('province')
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())

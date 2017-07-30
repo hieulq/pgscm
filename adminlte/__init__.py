@@ -127,17 +127,13 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
         <script src="{6}"></script>
         <script src="{7}"></script>
         <script src="{8}"></script>
-        <script src="{9}"></script>
         """.format(
             adminlte_find_resource('js/plugins/datatables/jquery.dataTables.js',  # noqa
-                                   cdn='local', use_minified=True),
+                                   cdn='local', use_minified=False),
             adminlte_find_resource('js/plugins/datatables/dataTables.bootstrap.js',  # noqa
                                    cdn='local', use_minified=True),
             adminlte_find_resource(
                 'js/plugins/datatables/extensions/Buttons/js/dataTables.buttons.js',  # noqa
-                cdn='local', use_minified=True),
-            adminlte_find_resource(
-                'js/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js',  # noqa
                 cdn='local', use_minified=True),
             adminlte_find_resource(
                 'js/plugins/datatables/extensions/Buttons/js/buttons.bootstrap.js',  # noqa
@@ -177,49 +173,31 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
             server_script = """
             "serverSide": true,
             "ajax": function(data, callback, settings) {{
-                data.page = data.start + 1
-                data.per_page = data.length
-                delete data.columns
-                delete data.start
-                delete data.length
-                delete data.order
-                delete data.draw
-                delete data.search
-                request = $.ajax({{
-                    "dataType" : "json",
-                    "type" : "GET",
-                    "url" : '/{0}',
-                    "data" : data,
-                    "success" : updateTable
-                }});
+                var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g,"__");
+                var direction = ""
+                var where_params = {{}}
+                var sort_params = {{}}
+                sort_params[sort_column_name] = true; 
+                if (typeof data.search.value == undefined) {{where_params[data]=data.search.value}};
+                if (data.order[0].dir == "desc") {{ direction = "-"}};
+                $.get('/{0}', {{
+                    per_page: data.length,
+                    page: data.start + 1,
+                    where: JSON.stringify(where_params),
+                    sort: JSON.stringify(sort_params)
+                    }}, 
+                    function(res, status, req) {{
+                        callback({{
+                            recordsTotal: req.getResponseHeader('X-Total-Count'),
+                            recordsFiltered: res.length,
+                            data: res
+                            }});
+                    }});
             }},
             "columns": [
                 {1}
             ],
             """.format(ajax_endpoint, mapping)
-            function_script = """
-            function updateTable(data, status, state) {
-                var settings = jQuery.fn.dataTable.settings[0]
-                var api = jQuery.fn.dataTableExt.oApi
-                var draw            = 'draw';
-                var recordsTotal    = data.length
-                var recordsFiltered = data.length
-                api._fnClearTable( settings );
-                settings._iRecordsTotal   = parseInt(recordsTotal, 10);
-                settings._iRecordsDisplay = parseInt(recordsFiltered, 10);
-                for ( var i=0, ien=data.length ; i<ien ; i++ ) {
-                    api._fnAddData( settings, data[i] );
-                }
-                settings.aiDisplay = settings.aiDisplayMaster.slice();
-                settings.bAjaxDataGet = false;
-                api._fnDraw( settings );
-                if ( ! settings._bInitComplete ) {
-                    api._fnInitComplete( settings, data );
-                }
-                settings.bAjaxDataGet = true;
-                api._fnProcessingDisplay( settings, false );
-            }
-            """
         else:
             server_script = """
             "serverSide": false,
@@ -229,10 +207,9 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
         <!-- page script -->
         <script>
             $(function () {{
-                {1}
                 var table = $('#pgs_data').DataTable({{
                     "language": {{
-                        "url": "/static/{2}.json"
+                        "url": "/static/{1}.json"
                     }},
                     buttons: [
                         {{
@@ -240,7 +217,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                             text: '<i class="fa fa-file-excel-o"></i>',
                             titleAttr: 'Excel',
                             exportOptions: {{
-                                columns: [{3}]
+                                columns: [{2}]
                             }}
                         }},
                         {{
@@ -248,7 +225,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                             text: '<i class="fa fa-file-pdf-o"></i>',
                             titleAttr: 'PDF',
                             exportOptions: {{
-                                columns: [{3}]
+                                columns: [{2}]
                             }}
                         }},
                         {{
@@ -256,12 +233,12 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                             text: '<i class="fa fa-print"></i>',
                             titleAttr: 'Print',
                             exportOptions: {{
-                                columns: [{3}]
+                                columns: [{2}]
                             }}
                         }}
                     ],
                     "processing": true,
-                    {4}
+                    {3}
                     "paging": true,
                     "pagingType": "full_numbers",
                     "lengthChange": true,
@@ -270,15 +247,15 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     "info": true,
                     "autoWidth": true,
                     "initComplete": function (settings, json) {{
-                        $('.{8}').appendTo('#pgs_data_filter');
+                        $('.{7}').appendTo('#pgs_data_filter');
                         table.buttons().container().appendTo('#pgs_data_filter');
                         $('.dt-buttons').css("margin-left", "5px")
-                        $('.{8}').css("margin-left", "5px");
+                        $('.{7}').css("margin-left", "5px");
                     }},
                 }})
-                $('.{5}').on('click', function (event) {{
+                $('.{4}').on('click', function (event) {{
                     var data = $(this).data()
-                    var modal = $('#{6}')
+                    var modal = $('#{5}')
                     for (var key in data) {{
                         var target = modal.find('#' + key)
                         value = ''
@@ -290,7 +267,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                         }}
                     }}
                 }})
-                {7}
+                {6}
                 $('#pgscm_form_submit').parent()
                 .append('<button type="button" class="btn btn-default"'+
                  'data-dismiss="modal">Cancel</button>')
@@ -301,7 +278,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
 
             }});
         </script>
-        """.format(datatables_script, function_script, g.language,
+        """.format(datatables_script, g.language,
                    export_columns, server_script, g.c.BTNEDIT_ID,
                    g.c.MODAL_EDIT_ID, select2_script, g.c.BTNADD_ID))
         return script
