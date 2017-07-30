@@ -32,7 +32,7 @@ class DeleteForm(FlaskForm):
         __('Reason'),
         render_kw={
             "placeholder": __('Describe your reasons to delete this data')})
-    submit_del = SubmitField(__('Delete'))
+    submit_del = SubmitField(__('Delete!'))
 
 
 def check_role(roles):

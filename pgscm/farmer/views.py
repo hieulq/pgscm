@@ -18,7 +18,6 @@ crud_role = c.ADMIN_MOD_ROLE
 @farmer.route('/en/farmer', endpoint='index_en', methods=['GET', 'POST'])
 @roles_accepted(*c.ALL_ROLES)
 def index():
-    flash(str(__('Reviewer')), 'warning')
     form = FarmerForm()
     dform = DeleteForm()
     if current_app.config['AJAX_CALL_ENABLED']:
@@ -66,7 +65,7 @@ def index():
                         if fm.id == edit_farmer.id:
                             farmers.remove(fm)
                             farmers.append(edit_farmer)
-                    flash(str(__('Update farmer success!')), 'info')
+                    flash(str(__('Update farmer success!')), 'success')
 
                 # add user
                 else:
@@ -78,7 +77,7 @@ def index():
                     sqla.session.add(new_farmer)
                     sqla.session.commit()
                     farmers.append(new_farmer)
-                    flash(str(__('Add farmer success!')), 'info')
+                    flash(str(__('Add farmer success!')), 'success')
 
                 return redirect(url_for(request.endpoint))
 
@@ -94,7 +93,7 @@ def index():
                     del_farmer._modify_info = dform.modify_info.data
                 sqla.session.commit()
                 farmers.remove(del_farmer)
-                flash(str(__('Delete farmer success!')), 'info')
+                flash(str(__('Delete farmer success!')), 'success')
 
                 return redirect(url_for(request.endpoint))
 

@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, HiddenField, validators
+from wtforms import StringField, SelectField, HiddenField, validators, \
+    SubmitField
 
 from pgscm.utils import __, Select
 
@@ -18,4 +19,5 @@ class AssociateGroupForm(FlaskForm):
                         render_kw={"placeholder": __('Email')})
     province_id = SelectField(__('Province'), validators=[data_required],
                               coerce=str, widget=Select())
-    id = HiddenField(__('Id'), validators=[data_required])
+    id = HiddenField(__('Id'))
+    submit = SubmitField(__('Submit'), id='pgscm_form_submit')

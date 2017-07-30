@@ -115,7 +115,6 @@ def is_active_in_tree(request, endpoint, tree=True):
 def load_datatables_script(ajax_endpoint="", export_columns="",
                            column_names=[], js=True, select2_class=None):
     if js:
-        function_script = ""
         select2_script = ""
         datatables_script = """
         <script src="{0}"></script>

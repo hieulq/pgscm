@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, HiddenField, validators, \
-    DateTimeField
+    DateTimeField, SubmitField
 
 from pgscm.utils import __, Select
 
@@ -18,4 +18,5 @@ class UserForm(FlaskForm):
     current_login_at = DateTimeField(__('Current login at'))
     province_id = SelectField(__('Province'), validators=[data_required],
                               coerce=str, widget=Select())
-    id = HiddenField(__('Id'), validators=[data_required])
+    id = HiddenField(__('Id'))
+    submit = SubmitField(__('Submit'), id='pgscm_form_submit')
