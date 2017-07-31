@@ -11,31 +11,37 @@ from pgscm.db import models
 class RoleResource(ModelResource):
     class Meta:
         model = models.Role
+        id_field_class = fields.String
 
 
 class UserResource(ModelResource):
     class Meta:
         model = models.User
+        id_field_class = fields.String
 
 
 class CertResource(ModelResource):
     class Meta:
         model = models.Certificate
+        id_field_class = fields.String
 
 
 class FarmerResource(ModelResource):
     class Meta:
         model = models.Farmer
+        id_field_class = fields.String
 
 
 class GroupResource(ModelResource):
     class Meta:
         model = models.Group
+        id_field_class = fields.String
 
 
 class AssociateGroupResource(ModelResource):
     class Meta:
         model = models.AssociateGroup
+        id_field_class = fields.String
 
     class Schema:
         province = fields.Inline('province')
@@ -53,16 +59,19 @@ class AssociateGroupResource(ModelResource):
 class WardResource(ModelResource):
     class Meta:
         model = models.Ward
+        id_field_class = fields.String
 
 
 class DistrictResource(ModelResource):
     class Meta:
         model = models.District
+        id_field_class = fields.String
 
 
 class ProvinceResource(ModelResource):
     class Meta:
         model = models.Province
+        id_field_class = fields.String
 
 
 def init_resources(api):

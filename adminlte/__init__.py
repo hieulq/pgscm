@@ -172,13 +172,12 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
             server_script = """
             "serverSide": true,
             "ajax": function(data, callback, settings) {{
-                var sort_column_name = data.columns[data.order[0].column].data.replace(/\./g,"__");
-                var direction = ""
+                var sort_column_name = data.columns[data.order[0].column].data;
+                var direction = data.order[0].dir == 'asc' ? true : false
                 var where_params = {{}}
                 var sort_params = {{}}
-                sort_params[sort_column_name] = true; 
+                sort_params[sort_column_name] = direction; 
                 if (typeof data.search.value == undefined) {{where_params[data]=data.search.value}};
-                if (data.order[0].dir == "desc") {{ direction = "-"}};
                 $.get('/{0}', {{
                     per_page: data.length,
                     page: data.start + 1,
