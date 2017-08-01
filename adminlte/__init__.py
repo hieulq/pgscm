@@ -113,7 +113,7 @@ def is_active_in_tree(request, endpoint, tree=True):
 
 
 def load_datatables_script(ajax_endpoint="", export_columns="",
-                           column_names=[], js=True, select2_class=None):
+            column_names=[], js=True, select2_class=None, multi_select2_class=None):
     if js:
         select2_script = ""
         datatables_script = """
@@ -162,6 +162,11 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     cdn='local', use_minified=True))
             select2_script = """$(".{0}").select2({{width: '100%'}});""". \
                 format(select2_class)
+            if multi_select2_class:
+                select2_script += """$('.{0}').select2({{width: '100%'}})
+                .attr('multiple', 'multiple');
+                $('.select2-search__field').css('border', 'none');
+                """.format(multi_select2_class)
 
         if current_app.config['AJAX_CALL_ENABLED']:
             mapping = ""
@@ -281,7 +286,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                 
                 $('#{11}').removeClass('btn-primary')
                 .addClass('btn-warning')
-
+                
             }});
         </script>
         """.format(datatables_script, g.language,

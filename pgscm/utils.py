@@ -10,7 +10,10 @@ from wtforms.widgets.core import Select as BaseSelectWidget
 from wtforms.widgets.core import Input as SubmitWidget
 from wtforms import TextAreaField, SubmitField, HiddenField
 
+from sqlalchemy import exc
+
 from pgscm import const
+from pgscm.db import models
 
 _ = gettext
 _n = ngettext
@@ -25,6 +28,16 @@ class Select(BaseSelectWidget):
         c = kwargs.pop('class', '') or kwargs.pop('class_', '')
         kwargs['class'] = c + " " + const.SELECT_DEFAULT_ID
         return super(Select, self).__call__(field, **kwargs)
+
+
+class MultiSelect(BaseSelectWidget):
+    def __init__(self, multiple=True):
+        super(MultiSelect, self).__init__(multiple)
+
+    def __call__(self, field, **kwargs):
+        c = kwargs.pop('class', '') or kwargs.pop('class_', '')
+        kwargs['class'] = c + " " + const.MULTI_SELECT_DEFAULT_CLASS
+        return super(MultiSelect, self).__call__(field, **kwargs)
 
 
 class Submit(SubmitWidget):
@@ -54,3 +67,12 @@ def check_role(roles):
             return True
     flash(str(__('You have no permission!')), 'warning')
     return False
+
+
+def email_is_exist(email):
+    try:
+        models.User.query.filter_by(
+            email=email).one()
+        return True
+    except exc.SQLAlchemyError:
+        return False

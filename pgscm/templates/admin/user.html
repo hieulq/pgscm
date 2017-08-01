@@ -2,7 +2,7 @@
 {% from 'macro.html' import render_modal, render_btn  with context %}
 
 {%- block styles %}
-    {{ load_datatables_script(js=False, select2_class=g.c.SELECT_DEFAULT_ID) }}
+    {{ load_datatables_script(js=False, select2_class=g.c.SELECT_DEFAULT_ID, multi_select2_class=g.c.MULTI_SELECT_DEFAULT_CLASS) }}
     {{ super() }}
 {%- endblock styles %}
 
@@ -11,9 +11,9 @@
     <!-- DataTables with select2 enabled -->
     {{ load_datatables_script(
             ajax_endpoint='user',
-            export_columns='0,1,2,3,4,5,6',
+            export_columns='0,1,2,3,4',
             column_names=["associate_group_code", "name", "email", "province", "province"],
-            select2_class=g.c.SELECT_DEFAULT_ID) }}
+            select2_class=g.c.SELECT_DEFAULT_ID, multi_select2_class=g.c.MULTI_SELECT_DEFAULT_CLASS) }}
 {%- endblock scripts %}
 {% block content_header -%}
     <h1>
