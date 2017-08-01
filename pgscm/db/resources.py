@@ -53,7 +53,7 @@ class AssociateGroupResource(ModelResource):
         if province_id:
             kwargs['where'] += \
                 (self.manager.filters['province'][None].convert(province_id),)
-        return self.manager.paginated_instances(**kwargs)
+        return self.manager.paginated_instances_or(**kwargs)
 
 
 class WardResource(ModelResource):
