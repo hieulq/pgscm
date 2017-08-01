@@ -1,13 +1,18 @@
-from flask import render_template, current_app
+from flask import render_template, current_app, request, \
+    flash, redirect, url_for
 from flask_security import roles_accepted, current_user
+from sqlalchemy import exc
 
 from . import admin
 from .forms import UserForm
 
+from pgscm import sqla
 from pgscm.db import models
-from pgscm.utils import DeleteForm
 from pgscm import const as c
+from pgscm.utils import __, DeleteForm, check_role, email_is_exist
 
+
+crud_role = c.ONLY_ADMIN_ROLE
 
 @admin.route('/vi/quan-tri', endpoint='index_vi')
 @admin.route('/en/admin', endpoint='index_en')
@@ -16,8 +21,8 @@ def index():
     return render_template('admin/index.html')
 
 
-@admin.route('/vi/quan-tri/nguoi-dung', endpoint='users_vi')
-@admin.route('/en/admin/users', endpoint='users_en')
+@admin.route('/vi/quan-tri/nguoi-dung', endpoint='users_vi', methods=['GET', 'POST'])
+@admin.route('/en/admin/users', endpoint='users_en', methods=['GET', 'POST'])
 @roles_accepted(*c.ONLY_ADMIN_ROLE)
 def users():
     form = UserForm()
@@ -39,6 +44,75 @@ def users():
                 (p.province_id, p.type + " " + p.name) for p in
                 models.Province.query.order_by(
                     models.Province.name.asc()).all()]
+        form.roles.choices = [
+            (r.id, r.description) for r in
+            models.Role.query.order_by(
+                models.Role.name.asc()).all()]
+
+        # form create or edit submit
+        if request.method == 'POST' and form.data['submit']:
+            if not check_role(crud_role):
+                return redirect(url_for(request.endpoint))
+            elif form.validate_on_submit():
+                # edit user
+                if form.id.data:
+                    pass
+                    # edit_user = sqla.session.query(models.User) \
+                    #     .filter_by(id=form.id.data).one()
+                    # if edit_user.email != form.email.data and email_is_exist(form.email.data):
+                    #     flash(str(__('Email existed!')), 'error')
+                    # else:
+                    #     edit_user.email = form.email.data
+                    #     edit_user.fullname = form.fullname.data
+                    #     if edit_user.group_id != form.group_id.data:
+                    #         new_group = models.Group.query.filter_by(
+                    #             id=form.group_id.data).one()
+                    #         edit_user.group = new_group
+                    #     sqla.session.commit()
+                    #     # for fm in farmers:
+                    #     #     if fm.id == edit_farmer.id:
+                    #     #         farmers.remove(fm)
+                    #     #         farmers.append(edit_farmer)
+                    #     flash(str(__('Update farmer success!')), 'success')
+                    #     return redirect(url_for(request.endpoint))
+
+                # add user
+                else:
+                    if email_is_exist(form.email.data):
+                        flash(str(__('Email existed!')), 'error')
+                    else:
+                        roles = []
+                        for role_id in form.roles.data:
+                            roles.append(models.Role.query.filter_by(
+                                id=role_id).one())
+                        provice = None
+                        if form.province_id.data:
+                            provice = models.Province.query.filter_by(
+                                province_id=form.province_id.data).one()
+                        new_user = models.User(email=form.email.data,
+                            fullname=form.fullname.data, roles=roles, province=provice)
+                        sqla.session.add(new_user)
+                        sqla.session.commit()
+                        us.append(new_user)
+                        flash(str(__('Add user success!')), 'success')
+                        return redirect(url_for(request.endpoint))
+            else:
+                flash(str(__('The form not validated!')), 'error')
+
+        # form delete submit
+        if request.method == 'POST' and dform.data['submit_del']:
+            if not check_role(crud_role):
+                return redirect(url_for(request.endpoint))
+            elif dform.validate_on_submit():
+                try:
+                    del_user = sqla.session.query(models.User) \
+                        .filter_by(id=dform.id.data).one()
+                    sqla.session.delete(del_user)
+                    flash(str(__('Delete farmer success!')), 'success')
+                    return redirect(url_for(request.endpoint))
+                except exc.SQLAlchemyError:
+                    flash(str(__('Can not delete user!')), 'error')
+
         return render_template('admin/user.html', us=us,
                                form=form, dform=dform)
 
