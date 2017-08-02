@@ -22,4 +22,3 @@ class UserForm(FlaskForm):
                               coerce=str, widget=Select())
     id = HiddenField(__('Id'))
     submit = SubmitField(__('Submit'), widget=Submit())
-

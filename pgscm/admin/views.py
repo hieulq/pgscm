@@ -14,6 +14,7 @@ from pgscm.utils import __, DeleteForm, check_role, email_is_exist
 
 crud_role = c.ONLY_ADMIN_ROLE
 
+
 @admin.route('/vi/quan-tri', endpoint='index_vi')
 @admin.route('/en/admin', endpoint='index_en')
 @roles_accepted(*c.ONLY_ADMIN_ROLE)
@@ -21,7 +22,8 @@ def index():
     return render_template('admin/index.html')
 
 
-@admin.route('/vi/quan-tri/nguoi-dung', endpoint='users_vi', methods=['GET', 'POST'])
+@admin.route('/vi/quan-tri/nguoi-dung', endpoint='users_vi',
+             methods=['GET', 'POST'])
 @admin.route('/en/admin/users', endpoint='users_en', methods=['GET', 'POST'])
 @roles_accepted(*c.ONLY_ADMIN_ROLE)
 def users():
@@ -56,25 +58,29 @@ def users():
             elif form.validate_on_submit():
                 # edit user
                 if form.id.data:
-                    pass
-                    # edit_user = sqla.session.query(models.User) \
-                    #     .filter_by(id=form.id.data).one()
-                    # if edit_user.email != form.email.data and email_is_exist(form.email.data):
-                    #     flash(str(__('Email existed!')), 'error')
-                    # else:
-                    #     edit_user.email = form.email.data
-                    #     edit_user.fullname = form.fullname.data
-                    #     if edit_user.group_id != form.group_id.data:
-                    #         new_group = models.Group.query.filter_by(
-                    #             id=form.group_id.data).one()
-                    #         edit_user.group = new_group
-                    #     sqla.session.commit()
-                    #     # for fm in farmers:
-                    #     #     if fm.id == edit_farmer.id:
-                    #     #         farmers.remove(fm)
-                    #     #         farmers.append(edit_farmer)
-                    #     flash(str(__('Update farmer success!')), 'success')
-                    #     return redirect(url_for(request.endpoint))
+                    edit_user = sqla.session.query(models.User) \
+                        .filter_by(id=form.id.data).one()
+                    if edit_user.email != form.email.data and \
+                            email_is_exist(form.email.data):
+                        flash(str(__('Email existed!')), 'error')
+                    else:
+                        edit_user.email = form.email.data
+                        edit_user.fullname = form.fullname.data
+                        if form.province_id.data != edit_user.province_id:
+                            edit_user.province = models.Province.query\
+                                .filter_by(province_id=form.province_id.data)\
+                                .one()
+                        edit_user.roles = []
+                        for role_id in form.roles.data:
+                            edit_user.roles.append(models.Role.query.filter_by(
+                                id=role_id).one())
+                        sqla.session.commit()
+                        for user in us:
+                            if user.id == edit_user.id:
+                                us.remove(user)
+                                us.append(edit_user)
+                        flash(str(__('Update farmer success!')), 'success')
+                        return redirect(url_for(request.endpoint))
 
                 # add user
                 else:
@@ -90,7 +96,8 @@ def users():
                             provice = models.Province.query.filter_by(
                                 province_id=form.province_id.data).one()
                         new_user = models.User(email=form.email.data,
-                            fullname=form.fullname.data, roles=roles, province=provice)
+                            fullname=form.fullname.data, roles=roles,
+                            province=provice)
                         sqla.session.add(new_user)
                         sqla.session.commit()
                         us.append(new_user)
