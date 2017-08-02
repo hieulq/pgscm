@@ -103,6 +103,27 @@ def adminlte_find_resource(filename, cdn, use_minified=None, local=True):
     return resource_url
 
 
+def _render_btn(id, size='btn-xs', type='btn-default', modal_target='modal', title="", css_class='plus', data=None):
+    data_attr = ""
+    if data:
+        for col in data.__table__.c._data:
+            if not col.startswith('_'):
+                data_attr += """
+                    data-{0} = "{1}"
+                """.format(col, data.__getattribute__(col))
+    btn = """
+    <button type="button" class="btn {0} {1} {2}"
+            data-toggle="modal"
+            data-target="#{3}"            
+            {4}
+            >
+        <span class="fa fa-{5}"></span>
+        {6}
+    </button>
+    """.format(id, size, type, modal_target, data_attr, css_class, title)
+    return btn
+
+
 def is_active_in_tree(request, endpoint, tree=True):
     if endpoint == request.endpoint[:-3]:
         return 'active'
@@ -171,8 +192,47 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
         if current_app.config['AJAX_CALL_ENABLED']:
             mapping = ""
             for column in column_names:
-                mapping += """{{ "data": "{0}", "orderable": {1}, "searchable": {1} }},
-                """.format(column[0], str(column[1]).lower())
+                render_func = ""
+                if column[0] == 'action':
+                    render_func = """
+                        "render": function (data, type, row) {{
+                            data_attr = ''
+                            row_attr = Object.keys(row)
+                            for (idx in row_attr) {{
+                                if (row_attr[idx].startsWith('_') == false) {{
+                                    value = row[row_attr[idx]]
+                                    data_attr += 'data-' + row_attr[idx].replace(/[$]/g, '') + '=\"' + value + '\" '
+                                }}
+                            }}
+                            return "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
+                            "data-toggle=\\"modal\\" data-target=\\"#{3}\\"" +
+                            data_attr +
+                            ">" +
+                            "<span class=\\"fa fa-{4}\\"></span>"
+                        }},
+                    """.format(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info',
+                               g.c.MODAL_EDIT_ID, 'edit')
+                    mapping += """{{
+                        {0}
+                        "orderable": {1}, "searchable": {1},
+                    }},""".format(render_func, str(column[1]).lower())
+                else:
+                    if column[2] == g.c.LINK_DISP:
+                        render_func = """
+                            "render": function (data, type, row) {{
+                                return "{0}" + data + "{1}"
+                            }},
+                        """.format("<a>", "</a>")
+                    if column[2] == g.c.BOLD_DISP:
+                        render_func = """
+                            "render": function (data, type, row) {{
+                                return "{0}" + data + "{1}"
+                            }},
+                        """.format("<b>", "</b>")
+                    mapping += """{{ 
+                        {0}
+                        "data": "{1}", "orderable": {2}, "searchable": {2} }},
+                    """.format(render_func, column[0], str(column[1]).lower())
 
             server_script = """
             "serverSide": true,
@@ -256,6 +316,35 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     "ordering": true,
                     "info": true,
                     "autoWidth": true,
+                    "drawCallback": function( settings ) {{
+                        $('.{10}').parent()
+                        .append('<button type="button" class="btn btn-default"'+
+                         'data-dismiss="modal">Cancel</button>')
+                        $('.{10}').removeClass('btn-default')
+                        .addClass('btn-primary pull-right')
+                        .before("<hr />" )
+                        $('.{4}').on('click', function (event) {{
+                            var data = $(this).data()
+                            var modal = $('#{5}')
+                            for (var key in data) {{
+                                var target = modal.find('#' + key)
+                                value = ''
+                                if (data[key]!='None'){{value = data[key]}}
+                                if (target.is('select')){{
+                                    target.val(data[key])
+                                }} else {{
+                                    modal.find('#' + key).val(value)
+                                }}
+                            }}
+                        }})
+                        $('.{8}').on('click', function (event) {{
+                            var data = $(this).data()
+                            var modal_del = $('#{9}')
+                            modal_del.find('#id').val(data['id'])
+                        }})
+                        $('#{11}').removeClass('btn-primary')
+                        .addClass('btn-warning')
+                    }},
                     "initComplete": function (settings, json) {{
                         $('.{7}').appendTo('#pgs_data_filter');
                         table.buttons().container().appendTo('#pgs_data_filter');
@@ -263,37 +352,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                         $('.{7}').css("margin-left", "5px");
                     }},
                 }})
-                $('.{4}').on('click', function (event) {{
-                    var data = $(this).data()
-                    var modal = $('#{5}')
-                    for (var key in data) {{
-                        var target = modal.find('#' + key)
-                        value = ''
-                        if (data[key]!='None'){{value = data[key]}}
-                        if (target.is('select')){{
-                            target.val(data[key])
-                        }} else {{
-                            modal.find('#' + key).val(value)
-                        }}
-                    }}
-                }})
                 {6}
-                $('.{8}').on('click', function (event) {{
-                    var data = $(this).data()
-                    var modal_del = $('#{9}')
-                    modal_del.find('#id').val(data['id'])
-                }})
-                $('.{10}').parent()
-                .append('<button type="button" class="btn btn-default"'+
-                 'data-dismiss="modal">Cancel</button>')
-
-                $('.{10}').removeClass('btn-default')
-                .addClass('btn-primary pull-right')
-                .before("<hr />" )
-                
-                $('#{11}').removeClass('btn-primary')
-                .addClass('btn-warning')
-                
             }});
         </script>
         """.format(datatables_script, g.language,

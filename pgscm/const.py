@@ -25,6 +25,9 @@ SUBMIT_DEFAULT_CLASS = 'pgs_submit'
 
 DEL_SUBMIT_ID = 'pgs_del_submit'
 
+BOLD_DISP = 'bold'
+LINK_DISP = 'link'
+
 
 class GenderType(IntEnum):
     male = 1  # nam
