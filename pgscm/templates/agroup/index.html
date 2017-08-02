@@ -12,8 +12,8 @@
     {{ load_datatables_script(
             ajax_endpoint='associate_group',
             export_columns='0,1,2,3',
-            column_names=[("associate_group_code", True), ("name", True),
-            ("email", True), ("province.name", False), ("province", False)],
+            column_names=[("associate_group_code", True, g.c.LINK_DISP), ("name", True, g.c.BOLD_DISP),
+            ("email", True, None), ("province.name", False, None), ("action", False, None)],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
 {%- endblock scripts %}
 {% block content_header -%}

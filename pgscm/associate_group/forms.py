@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, HiddenField, validators, \
     SubmitField
 
-from pgscm.utils import __, Select
+from pgscm.utils import __, Select, Submit
 
 data_required = validators.DataRequired(message=__('Required field!'))
 
@@ -20,4 +20,4 @@ class AssociateGroupForm(FlaskForm):
     province_id = SelectField(__('Province'), validators=[data_required],
                               coerce=str, widget=Select())
     id = HiddenField(__('Id'))
-    submit = SubmitField(__('Submit'), id='pgscm_form_submit')
+    submit = SubmitField(__('Submit'), widget=Submit())

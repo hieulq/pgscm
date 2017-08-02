@@ -42,6 +42,7 @@ class AssociateGroupResource(ModelResource):
     class Meta:
         model = models.AssociateGroup
         id_field_class = fields.String
+        include_id = True
 
     class Schema:
         province = fields.Inline('province')
