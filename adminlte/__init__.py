@@ -171,8 +171,8 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
         if current_app.config['AJAX_CALL_ENABLED']:
             mapping = ""
             for column in column_names:
-                mapping += """{{ "data": "{}"}},
-                """.format(column)
+                mapping += """{{ "data": "{0}", "orderable": {1}, "searchable": {1} }},
+                """.format(column[0], str(column[1]).lower())
 
             server_script = """
             "serverSide": true,
@@ -182,7 +182,14 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                 var where_params = {{}}
                 var sort_params = {{}}
                 sort_params[sort_column_name] = direction; 
-                if (typeof data.search.value == undefined) {{where_params[data]=data.search.value}};
+                if (data.search.value) {{
+                    for (idx in data.columns) {{
+                        if (data.columns[idx].searchable) {{
+                            where_params[data.columns[idx].data] = {{}};
+                            where_params[data.columns[idx].data]["$contains"]=data.search.value;
+                        }}
+                    }}
+                }};
                 $.get('/{0}', {{
                     per_page: data.length,
                     page: data.start + 1,

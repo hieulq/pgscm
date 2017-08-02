@@ -5,6 +5,8 @@ from flask_babelex import lazy_gettext
 from flask import flash
 from flask_wtf import FlaskForm
 from flask_security import current_user
+from flask_potion.contrib.alchemy import SQLAlchemyManager
+from flask_potion.instances import Pagination
 
 from wtforms.widgets.core import Select as BaseSelectWidget
 from wtforms.widgets.core import Input as SubmitWidget
@@ -76,3 +78,24 @@ def email_is_exist(email):
         return True
     except exc.SQLAlchemyError:
         return False
+
+
+class PgsPotionManager(SQLAlchemyManager):
+    def paginated_instances_or(self, page, per_page, where=None, sort=None):
+        instances = self.instances_or(where=where, sort=sort)
+        if isinstance(instances, list):
+            return Pagination.from_list(instances, page, per_page)
+        return self._query_get_paginated_items(instances, page, per_page)
+
+    def instances_or(self, where=None, sort=None):
+        query = self._query()
+
+        if query is None:
+            return []
+
+        if where:
+            expressions = [self._expression_for_condition(condition)
+                           for condition in where]
+            query = self._query_filter(query, self._or_expression(expressions))
+
+        return self._query_order_by(query, sort)

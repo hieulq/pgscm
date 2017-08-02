@@ -10,13 +10,13 @@ from flask_security import Security, SQLAlchemyUserDatastore, \
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import user_registered
 from flask_babelex import Babel
-from flask_potion.contrib.alchemy import SQLAlchemyManager
 
 from adminlte import AdminLTE
 from config import config
 import uuid
 
 from pgscm import const
+from pgscm.utils import PgsPotionManager
 
 
 bootstrap = Bootstrap()
@@ -59,7 +59,7 @@ def register_extensions(app):
     # is the work-around for potion to init_app correctly.
     api.app = app
     api.decorators = [login_required]
-    api.default_manager = principals(SQLAlchemyManager)
+    api.default_manager = principals(PgsPotionManager)
     api.init_app(app)
 
 
