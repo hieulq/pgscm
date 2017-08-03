@@ -12,7 +12,9 @@
     {{ load_datatables_script(
             ajax_endpoint='group',
             export_columns='0,1,2,3,4,5,6',
-            column_names=["group_code", "name", "email", "province", "province"],
+            column_names=[("group_code", True, g.c.LINK_DISP), ("name", True, g.c.BOLD_DISP), ("village", True, None),
+            ("ward.name", False, None), ("district.name", False, None), ("province.name", False, None),
+            ("associate_group.name", False, None), ("action", False, None)],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
 {%- endblock scripts %}
 {% block content_header -%}

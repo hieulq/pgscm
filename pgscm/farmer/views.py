@@ -20,14 +20,15 @@ crud_role = c.ADMIN_MOD_ROLE
 def index():
     form = FarmerForm()
     dform = DeleteForm()
+    form.gender.choices = [(c.GenderType.male.value, __('Male')),
+                           (c.GenderType.female.value, __('Female'))]
+    form.type.choices = [(c.FarmerType.member.value, __('Member')),
+                         (c.FarmerType.reviewer.value, __('Reviewer'))]
     if current_app.config['AJAX_CALL_ENABLED']:
+        form.group_id.choices = []
         return render_template('farmer/index.html', form=form, dform=dform)
     else:
         province_id = current_user.province_id
-        form.gender.choices = [(c.GenderType.male.value, __('Male')),
-                               (c.GenderType.female.value, __('Female'))]
-        form.type.choices = [(c.FarmerType.member.value, __('Member')),
-                             (c.FarmerType.reviewer.value, __('Reviewer'))]
         if province_id:
             farmers = models.Farmer.query.filter(
                 models.Farmer._deleted_at.is_(None)).join(

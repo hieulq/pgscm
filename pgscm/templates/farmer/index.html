@@ -13,7 +13,7 @@
             ajax_endpoint='farmer',
             export_columns='0,1,2,3,4',
             column_names=[("farmer_code", True, g.c.LINK_DISP), ("name", True, g.c.BOLD_DISP),
-            ("gender", True, None), ("type", True, None), ("group_id", False, None), ("action", False, None)],
+            ("gender", True, g.c.GenderType), ("type", True, g.c.FarmerType), ("group.name", False, None), ("action", False, None)],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
 {%- endblock scripts %}
 {% block content_header -%}
@@ -25,7 +25,7 @@
         <li><a href="{{ lurl_for('main.index') }}"><i
                 class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
         <li class="active"><a href="{{ lurl_for('farmer.index') }}"><i
-                class="fa fa-home"></i>{{ _('Farmer') }}</a></li>
+                class="fa fa-child"></i>{{ _('Farmer') }}</a></li>
     </ol>
 {%- endblock content_header %}
 
