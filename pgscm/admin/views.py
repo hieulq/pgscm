@@ -2,7 +2,6 @@ from flask import render_template, current_app, request, \
     flash, redirect, url_for
 from flask_security import roles_accepted, current_user, \
     utils as security_utils
-from sqlalchemy import exc
 import uuid
 
 from . import admin
@@ -65,13 +64,13 @@ def users():
                 else:
                     if not user_datastore.find_user(email=form.email.data):
                         user_datastore.create_user(id=str(uuid.uuid4()),
-                                                   email=form.email.data,
-                                                   fullname=form.fullname.data,
-                                                   password=security_utils.hash_password(
+                            email=form.email.data, fullname=form.fullname.data,
+                            password=security_utils.hash_password(
                                                        form.password.data))
                         sqla.session.commit()
                         for role in form.roles.data:
-                            user_datastore.add_role_to_user(form.email.data, role)
+                            user_datastore.add_role_to_user(
+                                form.email.data, role)
                         sqla.session.commit()
                         flash(str(__('Add user success!')), 'success')
                         return redirect(url_for(request.endpoint))
