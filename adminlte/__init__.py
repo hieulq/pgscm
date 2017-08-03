@@ -7,7 +7,7 @@ import re
 
 from jinja2 import Markup
 from flask import Blueprint, current_app, url_for, g
-
+from pgscm.utils import _
 
 class CDN(object):
     """Base class for CDN objects."""
@@ -189,8 +189,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
             for column in column_names:
                 render_func = ""
                 if column[0] == 'action':
-                    render_func = """
-                        "render": function (data, type, row) {{
+                    render_func = """"render": function (data, type, row) {{
                             data_attr = ''
                             row_attr = Object.keys(row)
                             for (idx in row_attr) {{
@@ -210,63 +209,63 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                             data_attr +
                             ">" +
                             "<i class=\\"fa fa-{8}\\"></i></button>"
-                        }},
-                    """.format(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info',
+                        }}""".format(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info',
                                g.c.MODAL_EDIT_ID, 'edit', g.c.BTNDEL_ID,
                                'btn-danger', g.c.MODAL_DEL_ID, 'trash')
-                    mapping += """{{
-                        {0}
-                        "orderable": {1}, "searchable": {1},
-                    }},""".format(render_func, str(column[1]).lower())
+                    mapping += """
+                        {{"orderable": {1}, "searchable": {1},
+                         {0}}},"""\
+                        .format(render_func, str(column[1]).lower())
                 else:
-                    render_tmpl = """
-                        "render": function (data, type, row) {{
-                            return "{0}" + data + "{1}"
-                        }},
-                    """
+                    render_tmpl = """"render": function (data, type, row) {{
+                            return "{0}" + {2} + "{1}"
+                        }}"""
                     if column[2] == g.c.LINK_DISP:
-                        render_func = render_tmpl.format("<a>", "</a>")
+                        render_func = render_tmpl.format("<a>", "</a>", "data")
                     if column[2] == g.c.BOLD_DISP:
-                        render_func = render_tmpl.format("<b>", "</b>")
-                    mapping += """{{ 
-                        {0}
-                        "data": "{1}", "orderable": {2}, "searchable": {2} }},
-                    """.format(render_func, column[0], str(column[1]).lower())
+                        render_func = render_tmpl.format("<b>", "</b>", "data")
+                    if column[2] == g.c.FarmerType:
+                        render_func = render_tmpl.format(
+                            "<span>", "</span>", "(data == 1 ? \"" + _('Member') + "\" : \"" + _('Reviewer') + "\")")
+                    if column[2] == g.c.GenderType:
+                        render_func = render_tmpl.format(
+                            "<span>", "</span>", "(data == 1 ? \"" + _('Male') + "\" : \"" + _('Female') + "\")")
+                    mapping += """
+                        {{"data": "{1}", "orderable": {2}, "searchable": {2},
+                         {0}}},"""\
+                        .format(render_func, column[0], str(column[1]).lower())
 
-            server_script = """
-            "serverSide": true,
-            "ajax": function(data, callback, settings) {{
-                var sort_column_name = data.columns[data.order[0].column].data;
-                var direction = data.order[0].dir == 'asc' ? true : false
-                var where_params = {{}}
-                var sort_params = {{}}
-                sort_params[sort_column_name] = direction; 
-                if (data.search.value) {{
-                    for (idx in data.columns) {{
-                        if (data.columns[idx].searchable) {{
-                            where_params[data.columns[idx].data] = {{}};
-                            where_params[data.columns[idx].data]["$contains"]=data.search.value;
-                        }}
-                    }}
-                }};
-                $.get('/{0}', {{
-                    per_page: data.length,
-                    page: data.start/data.length + 1,
-                    where: JSON.stringify(where_params),
-                    sort: JSON.stringify(sort_params)
-                    }}, 
-                    function(res, status, req) {{
-                        callback({{
-                            recordsTotal: req.getResponseHeader('X-Total-Count'),
-                            recordsFiltered: req.getResponseHeader('X-Total-Count'),
-                            data: res
+            server_script = """"serverSide": true,
+                    "ajax": function(data, callback, settings) {{
+                        var sort_column_name = data.columns[data.order[0].column].data;
+                        var direction = data.order[0].dir == 'asc' ? true : false
+                        var where_params = {{}}
+                        var sort_params = {{}}
+                        sort_params[sort_column_name] = direction; 
+                        if (data.search.value) {{
+                            for (idx in data.columns) {{
+                                if (data.columns[idx].searchable) {{
+                                    where_params[data.columns[idx].data] = {{}};
+                                    where_params[data.columns[idx].data]["$contains"]=data.search.value;
+                                }}
+                            }}
+                        }};
+                        $.get('/{0}', {{
+                            per_page: data.length,
+                            page: data.start/data.length + 1,
+                            where: JSON.stringify(where_params),
+                            sort: JSON.stringify(sort_params)
+                            }}, 
+                            function(res, status, req) {{
+                                callback({{
+                                    recordsTotal: req.getResponseHeader('X-Total-Count'),
+                                    recordsFiltered: req.getResponseHeader('X-Total-Count'),
+                                    data: res
+                                    }});
                             }});
-                    }});
-            }},
-            "columns": [
-                {1}
-            ],
-            """.format(ajax_endpoint, mapping)
+                    }},
+                    "columns": [{1}
+                    ],""".format(ajax_endpoint, mapping)
         else:
             server_script = """
             "serverSide": false,
