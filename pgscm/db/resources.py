@@ -36,6 +36,22 @@ class GroupResource(ModelResource):
     class Meta:
         model = models.Group
         id_field_class = fields.String
+        include_id = True
+
+    class Schema:
+        province = fields.Inline('province')
+        ward = fields.Inline('ward')
+        district = fields.Inline('district')
+        associate_group = fields.Inline('associate_group')
+
+    @Route.GET('', rel="instances", schema=Instances(),
+               response_schema=Instances())
+    def instances(self, **kwargs):
+        province_id = current_user.province_id
+        if province_id:
+            kwargs['where'] += \
+                (self.manager.filters['province'][None].convert(province_id),)
+        return self.manager.paginated_instances_or(**kwargs)
 
 
 class AssociateGroupResource(ModelResource):

@@ -16,6 +16,7 @@ def index():
     form = GroupForm()
     dform = DeleteForm()
     if current_app.config['AJAX_CALL_ENABLED']:
+        form.associate_group_id.choices = []
         form.ward_id.choices = []
         form.district_id.choices = []
         form.province_id.choices = []

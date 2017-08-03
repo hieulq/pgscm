@@ -251,14 +251,14 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                 }};
                 $.get('/{0}', {{
                     per_page: data.length,
-                    page: data.start + 1,
+                    page: data.start/data.length + 1,
                     where: JSON.stringify(where_params),
                     sort: JSON.stringify(sort_params)
                     }}, 
                     function(res, status, req) {{
                         callback({{
-                            recordsTotal: req.getResponseHeader('X-Total-Count'),
-                            recordsFiltered: res.length,
+                            recordsTotal: res.length,
+                            recordsFiltered: req.getResponseHeader('X-Total-Count'),
                             data: res
                             }});
                     }});
