@@ -6,12 +6,12 @@
             data-target="#{{ modal_target }}"
             {% if data %}
                 {% for col in data.__table__.c._data %}
-                    {% if not col.startswith('_') %}
+                    {% if not col.startswith('_') and not col.startswith('pass') %}
             data-{{ col }}="{{ data.__getattribute__(col) }}"
                     {% endif %}
                 {% endfor %}
                 {% for role in data.roles %}
-                    data-role-{{ role.name }}="{{ role.id }}"
+                    data-role-{{ role.name }}="{{ role.name }}"
                 {% endfor %}
             {% endif %}>
         <span class="fa fa-{{ css_class }}"></span>

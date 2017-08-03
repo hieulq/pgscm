@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, HiddenField, \
-    validators, SubmitField, SelectMultipleField
+    validators, SubmitField, SelectMultipleField, PasswordField
 from wtforms.fields.html5 import EmailField
 
 from pgscm.utils import __, Select, Submit, MultiSelect
@@ -14,8 +14,10 @@ class UserForm(FlaskForm):
     email = EmailField(__('Email'), validators=[data_required,
                                                 validators.Email('')],
                        render_kw={"placeholder": __('Email')})
-    # roles = SelectField(__('Role'), validators=[data_required],
-    #                     coerce=str, widget=Select())
+    password = PasswordField(__('New Password'), validators=[data_required,
+        validators.EqualTo('confirm', message=__('Passwords must match'))
+    ])
+    confirm = PasswordField(__('Repeat Password'))
     roles = SelectMultipleField(__('Role'), validators=[data_required],
                                 widget=MultiSelect())
     province_id = SelectField(__('Province'), validators=[data_required],

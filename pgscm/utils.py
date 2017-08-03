@@ -12,10 +12,8 @@ from wtforms.widgets.core import Select as BaseSelectWidget
 from wtforms.widgets.core import Input as SubmitWidget
 from wtforms import TextAreaField, SubmitField, HiddenField
 
-from sqlalchemy import exc
 
 from pgscm import const
-from pgscm.db import models
 
 _ = gettext
 _n = ngettext
@@ -69,15 +67,6 @@ def check_role(roles):
             return True
     flash(str(__('You have no permission!')), 'warning')
     return False
-
-
-def email_is_exist(email):
-    try:
-        models.User.query.filter_by(
-            email=email).one()
-        return True
-    except exc.SQLAlchemyError:
-        return False
 
 
 class PgsPotionManager(SQLAlchemyManager):
