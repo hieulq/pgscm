@@ -257,7 +257,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     }}, 
                     function(res, status, req) {{
                         callback({{
-                            recordsTotal: res.length,
+                            recordsTotal: req.getResponseHeader('X-Total-Count'),
                             recordsFiltered: req.getResponseHeader('X-Total-Count'),
                             data: res
                             }});
