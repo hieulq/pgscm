@@ -203,27 +203,31 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                             "data-toggle=\\"modal\\" data-target=\\"#{3}\\"" +
                             data_attr +
                             ">" +
-                            "<span class=\\"fa fa-{4}\\"></span>"
+                            "<i class=\\"fa fa-{4}\\"></i></button>" + 
+                            " " +
+                            "<button type=\\"button\\" class=\\"btn {5} {1} {6}\\"" +
+                            "data-toggle=\\"modal\\" data-target=\\"#{7}\\"" +
+                            data_attr +
+                            ">" +
+                            "<i class=\\"fa fa-{8}\\"></i></button>"
                         }},
                     """.format(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info',
-                               g.c.MODAL_EDIT_ID, 'edit')
+                               g.c.MODAL_EDIT_ID, 'edit', g.c.BTNDEL_ID,
+                               'btn-danger', g.c.MODAL_DEL_ID, 'trash')
                     mapping += """{{
                         {0}
                         "orderable": {1}, "searchable": {1},
                     }},""".format(render_func, str(column[1]).lower())
                 else:
+                    render_tmpl = """
+                        "render": function (data, type, row) {{
+                            return "{0}" + data + "{1}"
+                        }},
+                    """
                     if column[2] == g.c.LINK_DISP:
-                        render_func = """
-                            "render": function (data, type, row) {{
-                                return "{0}" + data + "{1}"
-                            }},
-                        """.format("<a>", "</a>")
+                        render_func = render_tmpl.format("<a>", "</a>")
                     if column[2] == g.c.BOLD_DISP:
-                        render_func = """
-                            "render": function (data, type, row) {{
-                                return "{0}" + data + "{1}"
-                            }},
-                        """.format("<b>", "</b>")
+                        render_func = render_tmpl.format("<b>", "</b>")
                     mapping += """{{ 
                         {0}
                         "data": "{1}", "orderable": {2}, "searchable": {2} }},
