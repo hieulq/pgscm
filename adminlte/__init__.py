@@ -221,15 +221,19 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                             return "{0}" + {2} + "{1}"
                         }}"""
                     if column[2] == g.c.LINK_DISP:
-                        render_func = render_tmpl.format("<a>", "</a>", "data")
+                        render_func = render_tmpl.format("<a>", "</a>", "(data ? data : '')")
                     if column[2] == g.c.BOLD_DISP:
-                        render_func = render_tmpl.format("<b>", "</b>", "data")
+                        render_func = render_tmpl.format("<b>", "</b>", "(data ? data : '')")
+                    if column[2] == g.c.DATE_DISP:
+                        render_func = render_tmpl.format("", "", "(data ? new Date(data).toLocaleDateString() : '')")
+                    if column[2] == g.c.TIME_DISP:
+                        render_func = render_tmpl.format("", "", "(data ? new Date(data).toLocaleString() : '')")
                     if column[2] == g.c.FarmerType:
                         render_func = render_tmpl.format(
-                            "<span>", "</span>", "(data == 1 ? \"" + _('Member') + "\" : \"" + _('Reviewer') + "\")")
+                            "", "", "(data == 1 ? \"" + _('Member') + "\" : \"" + _('Reviewer') + "\")")
                     if column[2] == g.c.GenderType:
                         render_func = render_tmpl.format(
-                            "<span>", "</span>", "(data == 1 ? \"" + _('Male') + "\" : \"" + _('Female') + "\")")
+                            "", "", "(data == 1 ? \"" + _('Male') + "\" : \"" + _('Female') + "\")")
                     mapping += """
                         {{"data": "{1}", "orderable": {2}, "searchable": {2},
                          {0}}},"""\

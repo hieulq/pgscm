@@ -12,7 +12,9 @@
     {{ load_datatables_script(
             ajax_endpoint='user',
             export_columns='0,1,2,3,4,5,6',
-            column_names=["associate_group_code", "name", "email", "province", "province"],
+            column_names=[("fullname", True, g.c.BOLD_DISP), ("email", True, g.c.LINK_DISP), ("province.name", False, None),
+            ("current_login_ip", True, None), ("last_login_ip", True, None), ("current_login_at.$date", True, g.c.TIME_DISP),
+            ("last_login_at.$date", True, g.c.TIME_DISP), ("action", False, None)],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
 {%- endblock scripts %}
 {% block content_header -%}

@@ -25,6 +25,8 @@ DEL_SUBMIT_ID = 'pgs_del_submit'
 
 BOLD_DISP = 'bold'
 LINK_DISP = 'link'
+DATE_DISP = 'date'
+TIME_DISP = 'time'
 
 
 class GenderType(IntEnum):
