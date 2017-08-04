@@ -12,18 +12,52 @@ class RoleResource(ModelResource):
     class Meta:
         model = models.Role
         id_field_class = fields.String
+        include_id = True
 
 
 class UserResource(ModelResource):
     class Meta:
         model = models.User
         id_field_class = fields.String
+        include_id = True
+        exclude_fields = ['password']
+
+    class Schema:
+        roles = fields.Inline('role')
+        province = fields.Inline('province')
+        last_login_at = fields.DateTimeString()
+        current_login_at = fields.DateTimeString()
+
+    @Route.GET('', rel="instances", schema=Instances(),
+               response_schema=Instances())
+    def instances(self, **kwargs):
+        province_id = current_user.province_id
+        if province_id:
+            kwargs['where'] += \
+                (self.manager.filters['province'][None].convert(province_id),)
+        return self.manager.paginated_instances_or(**kwargs)
 
 
 class CertResource(ModelResource):
     class Meta:
         model = models.Certificate
         id_field_class = fields.String
+        include_id = True
+
+    class Schema:
+        owner_group = fields.Inline('group')
+        owner_farmer = fields.Inline('farmer')
+        certificate_start_date = fields.DateString()
+        certificate_expiry_date = fields.DateString()
+
+    @Route.GET('', rel="instances", schema=Instances(),
+               response_schema=Instances())
+    def instances(self, **kwargs):
+        province_id = current_user.province_id
+        if province_id:
+            kwargs['where'] += \
+                (self.manager.filters['province'][None].convert(province_id),)
+        return self.manager.paginated_instances_or(**kwargs)
 
 
 class FarmerResource(ModelResource):
