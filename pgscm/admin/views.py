@@ -75,7 +75,7 @@ def users():
                         flash(str(__('Add user success!')), 'success')
                         return redirect(url_for(request.endpoint))
             else:
-                flash(str(__('The form not validated!')), 'error')
+                flash(str(__('The form is not validated!')), 'error')
 
         # form delete submit
         if request.method == 'POST' and dform.data['submit_del']:
