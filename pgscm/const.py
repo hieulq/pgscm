@@ -19,6 +19,8 @@ BTNDEL_ID = 'delBtn'
 
 SELECT_DEFAULT_ID = 'pgs_select'
 
+MULTI_SELECT_DEFAULT_CLASS = 'pgs_multi_select'
+
 SUBMIT_DEFAULT_CLASS = 'pgs_submit'
 
 DEL_SUBMIT_ID = 'pgs_del_submit'

@@ -2,7 +2,7 @@
 {% from 'macro.html' import render_modal, render_btn  with context %}
 
 {%- block styles %}
-    {{ load_datatables_script(js=False, select2_class=g.c.SELECT_DEFAULT_ID) }}
+    {{ load_datatables_script(js=False, select2_class=g.c.SELECT_DEFAULT_ID, multi_select2_class=g.c.MULTI_SELECT_DEFAULT_CLASS) }}
     {{ super() }}
 {%- endblock styles %}
 
@@ -15,7 +15,8 @@
             column_names=[("fullname", True, g.c.BOLD_DISP), ("email", True, g.c.LINK_DISP), ("province.name", False, None),
             ("current_login_ip", True, None), ("last_login_ip", True, None), ("current_login_at", True, None),
             ("last_login_at", True, None), ("action", False, None)],
-            select2_class=g.c.SELECT_DEFAULT_ID) }}
+            select2_class=g.c.SELECT_DEFAULT_ID, multi_select2_class=g.c.MULTI_SELECT_DEFAULT_CLASS) }}
+
 {%- endblock scripts %}
 {% block content_header -%}
     <h1>
@@ -25,13 +26,13 @@
     <ol class="breadcrumb">
         <li><a href="{{ lurl_for('main.index') }}"><i
                 class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
-                <li><a href="#"><i class="fa fa-key"></i> {{ _('Administrator') }}</a></li>
+        <li><a href="#"><i class="fa fa-key"></i> {{ _('Administrator') }}</a></li>
         <li class="active"><a href="{{ lurl_for('admin.users') }}"><i
                 class="fa fa-user"></i>{{ _('Users Management') }}</a></li>
     </ol>
 {%- endblock content_header %}
 {% block content -%}
-    {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '') }}
+    {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '', '', '') }}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -69,8 +70,8 @@
                                 <td>{{ u.last_login_at }}</td>
                                 <td>{{ u.current_login_at }}</td>
                                 <td class="actions_column">
-                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', u) }}
-                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', u) }}
+                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', u, u.roles, 'name') }}
+                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', u, '', '') }}
                                 </td>
                             </tr>
                         {% endfor %}
