@@ -266,46 +266,52 @@
         <li class="active">{{ _('Dashboard') }}</li>
     </ol>
 {%- endblock content_header %}
+
 {% block content -%}
     <h4 class="page-header">
         {{ _('PGS Status') }}
         <small>{{ _('Quickly summary about <code>PGS Certificates</code> analytics.') }}
         </small>
     </h4>
+    <script src="{{ adminlte_find_resource('js/plugins/jQuery/jquery-2.2.3.js', cdn='local', use_minified=True)}}"></script>
     <!-- Small boxes (Stat box) -->
     <div class="row">
-
         {{ widgets.small_box(
+                id="pgs-cert-wg",
+                url="/certificate",
                 bgcolor="bg-green",
-                header=150,
+                header=0,
                 body=_("Certificates"),
-                iconclass="fa fa-heart",
-                footerlink="#"
+                iconclass="fa fa-balance-scale",
+                footerlink="certificate.index"
               ) }}
-
         {{ widgets.small_box(
-                bgcolor="bg-red",
-                header=53,
-                body=_("Expiry Certificates"),
-                iconclass="fa fa-warning",
-                footerlink="#"
-              ) }}
-
-        {{ widgets.small_box(
+                id="pgs-farmer-wg",
+                url="/farmer",
                 bgcolor="bg-yellow",
-                header=43,
+                header=0,
                 body=_("Farmers"),
                 iconclass="fa fa-child",
-                footerlink="#"
+                footerlink="farmer.index"
               ) }}
-
         {{ widgets.small_box(
+                id="pgs-group-wg",
+                url="/group",
                 bgcolor="bg-aqua",
-                header=65,
+                header=0,
                 body=_("Groups"),
                 iconclass="fa fa-group",
-                footerlink="#"
+                footerlink="group.index"
               ) }}
+        {{ widgets.small_box(
+            id="pgs-agroup-wg",
+            url="/associate_group",
+            bgcolor="bg-orange",
+            header=0,
+            body=_("PGS Associate Groups"),
+            iconclass="fa fa-home",
+            footerlink="agroup.index"
+          ) }}
 
     </div><!-- /.row -->
 {%- endblock content %}
