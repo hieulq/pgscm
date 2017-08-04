@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, DateField, StringField, SelectField, \
-    HiddenField, validators
+    HiddenField, validators, SubmitField
 
 from pgscm import const as c
-from pgscm.utils import __, Select
+from pgscm.utils import __, Select, Submit
 
 data_required = validators.DataRequired(message=__('Required field!'))
 
@@ -32,6 +32,8 @@ class CertificateForm(FlaskForm):
         __('Status'), validators=[data_required], coerce=str, widget=Select(),
         choices=[(c.CertificateStatusType.approve, __('Approve')),
                  (c.CertificateStatusType.reject, __('Reject')),
+                 (c.CertificateStatusType.approve_no_cert, __('Approve no '
+                                                              'cert')),
                  (c.CertificateStatusType.in_conversion, __('In conversion'))])
     re_verify_status = SelectField(
         __('Reverify Status'), validators=[data_required], coerce=str,
@@ -47,3 +49,4 @@ class CertificateForm(FlaskForm):
     owner_group_id = SelectField(__('Certificated group'), validators=[
         data_required], coerce=str, widget=Select())
     id = HiddenField(__('Id'), validators=[data_required])
+    submit = SubmitField(__('Submit'), widget=Submit())

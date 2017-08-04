@@ -25,6 +25,8 @@ class UserResource(ModelResource):
     class Schema:
         roles = fields.Inline('role')
         province = fields.Inline('province')
+        last_login_at = fields.DateTimeString()
+        current_login_at = fields.DateTimeString()
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
@@ -45,6 +47,8 @@ class CertResource(ModelResource):
     class Schema:
         owner_group = fields.Inline('group')
         owner_farmer = fields.Inline('farmer')
+        certificate_start_date = fields.DateString()
+        certificate_expiry_date = fields.DateString()
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())

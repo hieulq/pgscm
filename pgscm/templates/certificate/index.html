@@ -14,7 +14,7 @@
             export_columns='0,1,2,3,4,5,6,7,8,9',
             column_names=[("certificate_code", True, g.c.LINK_DISP), ("owner_group.name", False, g.c.BOLD_DISP), ("owner_farmer.name", False, g.c.BOLD_DISP),
             ("group_area", True, g.c.BOLD_DISP), ("member_count", True, None), ("gov_certificate_id", True, None), ("status", True, g.c.CertificateStatusType),
-            ("re_verify_status", True, g.c.CertificateReVerifyStatusType), ("certificate_start_date.$date", True, g.c.DATE_DISP), ("certificate_expiry_date.$date", True, g.c.DATE_DISP),
+            ("re_verify_status", True, g.c.CertificateReVerifyStatusType), ("certificate_start_date", True, None), ("certificate_expiry_date", True, None),
             ("action", False, None)],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
 {%- endblock scripts %}
@@ -36,7 +36,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">{{ _('PGS Groups') }}</h3>
+                    <h3 class="box-title">{{ _('PGS Certificates') }}</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body table-responsive">

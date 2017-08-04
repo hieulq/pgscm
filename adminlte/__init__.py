@@ -224,16 +224,29 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                         render_func = render_tmpl.format("<a>", "</a>", "(data ? data : '')")
                     if column[2] == g.c.BOLD_DISP:
                         render_func = render_tmpl.format("<b>", "</b>", "(data ? data : '')")
-                    if column[2] == g.c.DATE_DISP:
-                        render_func = render_tmpl.format("", "", "(data ? new Date(data).toLocaleDateString() : '')")
-                    if column[2] == g.c.TIME_DISP:
-                        render_func = render_tmpl.format("", "", "(data ? new Date(data).toLocaleString() : '')")
                     if column[2] == g.c.FarmerType:
                         render_func = render_tmpl.format(
-                            "", "", "(data == 1 ? \"" + _('Member') + "\" : \"" + _('Reviewer') + "\")")
+                            "", "",
+                            "(data == 1 ? \"" + _('Member') + "\" : \"" + _('Reviewer') + "\")")
                     if column[2] == g.c.GenderType:
                         render_func = render_tmpl.format(
-                            "", "", "(data == 1 ? \"" + _('Male') + "\" : \"" + _('Female') + "\")")
+                            "", "",
+                            "(data == 1 ? \"" + _('Male') + "\" : \"" + _('Female') + "\")")
+                    if column[2] == g.c.CertificateStatusType:
+                        render_func = render_tmpl.format(
+                            "", "",
+                            "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ +_('Approve') + "</label></div>" +
+                            "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ +_('Reject') + "</label></div>" +
+                            "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ +_('In conversion') + "</label></div>" +
+                            "\":\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i>""" +_('Approve no cert') + "</label></div>\")")
+                    if column[2] == g.c.CertificateReVerifyStatusType:
+                        render_func = render_tmpl.format(
+                            "", "",
+                            "(data==1?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ +_('Not check') + "</label></div>" +
+                            "\":data==2?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ +_('Valid') + "</label></div>" +
+                            "\":data==3?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ +_('Decline') + "</label></div>" +
+                            "\":data==4?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ +_('Warning') + "</label></div>" +
+                            "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ +_('Punish') + "</label></div>" + "\")")
                     mapping += """
                         {{"data": "{1}", "orderable": {2}, "searchable": {2},
                          {0}}},"""\
@@ -319,12 +332,6 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     "info": true,
                     "autoWidth": true,
                     "drawCallback": function( settings ) {{
-                        $('.{10}').parent()
-                        .append('<button type="button" class="btn btn-default"'+
-                         'data-dismiss="modal">Cancel</button>')
-                        $('.{10}').removeClass('btn-default')
-                        .addClass('btn-primary pull-right')
-                        .before("<hr />" )
                         $('.{4}').on('click', function (event) {{
                             var data = $(this).data()
                             var modal = $('#{5}')
@@ -333,7 +340,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                                 value = ''
                                 if (data[key]!='None'){{value = data[key]}}
                                 if (target.is('select')){{
-                                    target.val(data[key])
+                                    target.val(data[key]).trigger('change.select2')
                                 }} else {{
                                     modal.find('#' + key).val(value)
                                 }}
@@ -355,6 +362,12 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     }},
                 }})
                 {6}
+                $('.{10}').removeClass('btn-default')
+                    .addClass('btn-primary pull-right')
+                    .before("<hr />" )
+                $('.{10}').parent()
+                    .append('<button type="button" class="btn btn-default"'+
+                    'data-dismiss="modal">Cancel</button>')
             }});
         </script>
         """.format(datatables_script, g.language,
