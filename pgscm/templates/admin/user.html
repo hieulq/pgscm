@@ -1,6 +1,5 @@
 {% extends "index.html" %}
-{% from '/admin/macro.html' import render_btn with context %}
-{% from 'macro.html' import render_modal  with context %}
+{% from 'macro.html' import render_modal, render_btn  with context %}
 
 {%- block styles %}
     {{ load_datatables_script(js=False, select2_class=g.c.SELECT_DEFAULT_ID, multi_select2_class=g.c.MULTI_SELECT_DEFAULT_CLASS) }}
@@ -18,21 +17,6 @@
             ("last_login_at", True, None), ("action", False, None)],
             select2_class=g.c.SELECT_DEFAULT_ID, multi_select2_class=g.c.MULTI_SELECT_DEFAULT_CLASS) }}
 
-    <script>
-        $('.{{ g.c.BTNEDIT_ID }}').on('click', function (event) {
-
-            var s2 = $(".{{ g.c.MULTI_SELECT_DEFAULT_CLASS }}");
-            var data = $(this).data();
-            var roles = [];
-            for (var key in data) {
-                if (key.startsWith('role')) {
-                    roles.push(data[key]);
-                }
-            }
-            s2.val(roles).trigger("change");
-        })
-    </script>
-
 {%- endblock scripts %}
 {% block content_header -%}
     <h1>
@@ -48,7 +32,7 @@
     </ol>
 {%- endblock content_header %}
 {% block content -%}
-    {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '') }}
+    {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '', '', '') }}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -86,8 +70,8 @@
                                 <td>{{ u.last_login_at }}</td>
                                 <td>{{ u.current_login_at }}</td>
                                 <td class="actions_column">
-                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', u) }}
-                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', u) }}
+                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', u, u.roles, 'name') }}
+                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', u, '', '') }}
                                 </td>
                             </tr>
                         {% endfor %}

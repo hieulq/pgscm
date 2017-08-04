@@ -340,6 +340,8 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                         $('.{4}').on('click', function (event) {{
                             var data = $(this).data()
                             var modal = $('#{5}')
+                            var s2 = $('.{12}')
+                            var multi_select_data = []
                             for (var key in data) {{
                                 var target = modal.find('#' + key)
                                 value = ''
@@ -349,7 +351,14 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                                 }} else {{
                                     modal.find('#' + key).val(value)
                                 }}
+                                if (key.startsWith('multiSelect')) {{
+                                    multi_select_data.push(data[key])
+                                }}
                             }}
+                            if(s2.length > 0 && multi_select_data.length > 0){{
+                                s2.val(multi_select_data).trigger("change")
+                            }}
+                            
                         }})
                         $('.{8}').on('click', function (event) {{
                             var data = $(this).data()
@@ -379,7 +388,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                    export_columns, server_script, g.c.BTNEDIT_ID,
                    g.c.MODAL_EDIT_ID, select2_script, g.c.BTNADD_ID,
                    g.c.BTNDEL_ID, g.c.MODAL_DEL_ID, g.c.SUBMIT_DEFAULT_CLASS,
-                   g.c.DEL_SUBMIT_ID))
+                   g.c.DEL_SUBMIT_ID, g.c.MULTI_SELECT_DEFAULT_CLASS))
         return script
     else:
         css_script = """
