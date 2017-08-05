@@ -31,6 +31,7 @@ def users():
     dform = DeleteForm()
     if current_app.config['AJAX_CALL_ENABLED']:
         form.province_id.choices = []
+        form.roles.choices = []
         return render_template('admin/user.html', form=form, dform=dform)
     else:
         province_id = current_user.province_id
