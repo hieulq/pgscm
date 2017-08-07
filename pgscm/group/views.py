@@ -85,14 +85,18 @@ def index():
                     edit_group.group_code = form.group_code.data
                     edit_group.name = form.name.data
                     edit_group.village = form.village.data
-                    if edit_group.associate_group_id != form.associate_group_id.data:
-                        edit_group.associate_group = sqla.session.query(models.AssociateGroup) \
+                    if edit_group.associate_group_id != \
+                            form.associate_group_id.data:
+                        edit_group.associate_group = sqla.session\
+                            .query(models.AssociateGroup) \
                             .filter_by(id=form.associate_group_id.data).one()
                     if edit_group.province_id != form.province_id.data:
-                        edit_group.province = sqla.session.query(models.Province) \
+                        edit_group.province = sqla.session\
+                            .query(models.Province) \
                             .filter_by(province_id=form.province_id.data).one()
                     if edit_group.district_id != form.district_id.data:
-                        edit_group.district = sqla.session.query(models.District) \
+                        edit_group.district = sqla.session\
+                            .query(models.District) \
                             .filter_by(district_id=form.district_id.data).one()
                     if edit_group.ward_id != form.ward_id.data:
                         edit_group.ward = sqla.session.query(models.Ward) \
@@ -111,7 +115,8 @@ def index():
             else:
                 setattr(form.id, 'validators', [])
                 if form.validate_on_submit():
-                    associate_group = sqla.session.query(models.AssociateGroup) \
+                    associate_group = sqla.session.query(
+                        models.AssociateGroup) \
                         .filter_by(id=form.associate_group_id.data).one()
                     province = sqla.session.query(models.Province) \
                         .filter_by(province_id=form.province_id.data).one()
