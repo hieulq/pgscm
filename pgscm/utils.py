@@ -63,8 +63,9 @@ class DeleteForm(FlaskForm):
 
 def check_role(roles):
     for r in roles:
-        if r == current_user.roles[0].name:
-            return True
+        for user_role in current_user.roles:
+            if r == user_role.name:
+                return True
     flash(str(__('You have no permission!')), 'warning')
     return False
 
