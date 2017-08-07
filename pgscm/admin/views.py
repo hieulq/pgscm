@@ -75,34 +75,39 @@ def users():
                         else:
                             edit_user.password = security_utils.hash_password(
                                 form.password.data)
-                    edit_user.email = form.email.data
-                    edit_user.fullname = form.fullname.data
-                    if form.province_id.data != edit_user.province_id:
-                        edit_user.province = models.Province.query \
-                            .filter_by(province_id=form.province_id.data) \
-                            .one()
-                    for new_role in form.roles.data:
-                        role_is_added = False
-                        for r in edit_user.roles:
-                            if new_role == r.name:
-                                role_is_added = True
-                                break
-                        if not role_is_added:
-                            user_datastore.add_role_to_user(edit_user.email,
-                                                            new_role)
-                    temp_roles = list(edit_user.roles)
-                    for old_role in temp_roles:
-                        print(old_role.name)
-                        if old_role.name not in form.roles.data:
-                            user_datastore.remove_role_from_user(
-                                edit_user.email, old_role.name)
-                    user_datastore.put(edit_user)
-                    for user in us:
-                        if user.id == edit_user.id:
-                            us.remove(user)
-                            us.append(edit_user)
-                    flash(str(__('Update user success!')), 'success')
-                    return redirect(url_for(request.endpoint))
+                    temp_user = sqla.session.query(models.User) \
+                        .filter_by(email=form.email.data).all()
+                    if len(temp_user) > 2 or temp_user[0].id != edit_user.id:
+                        flash(str(__('The email was existed!')), 'error')
+                    else:
+                        edit_user.email = form.email.data
+                        edit_user.fullname = form.fullname.data
+                        if form.province_id.data != edit_user.province_id:
+                            edit_user.province = models.Province.query \
+                                .filter_by(province_id=form.province_id.data) \
+                                .one()
+                        for new_role in form.roles.data:
+                            role_is_added = False
+                            for r in edit_user.roles:
+                                if new_role == r.name:
+                                    role_is_added = True
+                                    break
+                            if not role_is_added:
+                                user_datastore.add_role_to_user(
+                                    edit_user.email, new_role)
+                        temp_roles = list(edit_user.roles)
+                        for old_role in temp_roles:
+                            print(old_role.name)
+                            if old_role.name not in form.roles.data:
+                                user_datastore.remove_role_from_user(
+                                    edit_user.email, old_role.name)
+                        user_datastore.put(edit_user)
+                        for user in us:
+                            if user.id == edit_user.id:
+                                us.remove(user)
+                                us.append(edit_user)
+                        flash(str(__('Update user success!')), 'success')
+                        return redirect(url_for(request.endpoint))
                 else:
                     flash(str(__('The form is not validated!')), 'error')
 

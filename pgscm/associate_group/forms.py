@@ -15,7 +15,7 @@ class AssociateGroupForm(FlaskForm):
                                                'Associate group code')})
     name = StringField(__('Name'), validators=[data_required],
                        render_kw={"placeholder": __('Name')})
-    email = StringField(__('Email'), validators=[validators.Email],
+    email = StringField(__('Email'), validators=[validators.Email('')],
                         render_kw={"placeholder": __('Email')})
     province_id = SelectField(__('Province'), validators=[data_required],
                               coerce=str, widget=Select())
