@@ -101,7 +101,7 @@ def users():
                         if user.id == edit_user.id:
                             us.remove(user)
                             us.append(edit_user)
-                    flash(str(__('Update farmer success!')), 'success')
+                    flash(str(__('Update user success!')), 'success')
                     return redirect(url_for(request.endpoint))
                 else:
                     flash(str(__('The form is not validated!')), 'error')
