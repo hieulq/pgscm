@@ -9,6 +9,7 @@ from jinja2 import Markup
 from flask import Blueprint, current_app, url_for, g
 from pgscm.utils import _
 
+
 class CDN(object):
     """Base class for CDN objects."""
 
@@ -134,7 +135,7 @@ def is_active_in_tree(request, endpoint, tree=True):
 
 
 def load_datatables_script(ajax_endpoint="", export_columns="",
-            column_names=[], js=True, select2_class=None, multi_select2_class=None):
+                           column_names=[], js=True, select2_class=None, multi_select2_class=None):
     if js:
         select2_script = ""
         datatables_script = """
@@ -215,11 +216,11 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                             ">" +
                             "<i class=\\"fa fa-{8}\\"></i></button>"
                         }}""".format(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info',
-                               g.c.MODAL_EDIT_ID, 'edit', g.c.BTNDEL_ID,
-                               'btn-danger', g.c.MODAL_DEL_ID, 'trash')
+                                     g.c.MODAL_EDIT_ID, 'edit', g.c.BTNDEL_ID,
+                                     'btn-danger', g.c.MODAL_DEL_ID, 'trash')
                     mapping += """
                         {{"orderable": {1}, "searchable": {1},
-                         {0}}},"""\
+                         {0}}},""" \
                         .format(render_func, str(column[1]).lower())
                 else:
                     render_tmpl = """"render": function (data, type, row) {{
@@ -240,21 +241,30 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     if column[2] == g.c.CertificateStatusType:
                         render_func = render_tmpl.format(
                             "", "",
-                            "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ +_('Approve') + "</label></div>" +
-                            "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ +_('Reject') + "</label></div>" +
-                            "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ +_('In conversion') + "</label></div>" +
-                            "\":\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i>""" +_('Approve no cert') + "</label></div>\")")
+                            "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
+                                'Approve') + "</label></div>" +
+                            "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
+                                'Reject') + "</label></div>" +
+                            "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
+                                'In conversion') + "</label></div>" +
+                            "\":\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i>""" + _(
+                                'Approve no cert') + "</label></div>\")")
                     if column[2] == g.c.CertificateReVerifyStatusType:
                         render_func = render_tmpl.format(
                             "", "",
-                            "(data==1?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ +_('Not check') + "</label></div>" +
-                            "\":data==2?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ +_('Valid') + "</label></div>" +
-                            "\":data==3?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ +_('Decline') + "</label></div>" +
-                            "\":data==4?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ +_('Warning') + "</label></div>" +
-                            "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ +_('Punish') + "</label></div>" + "\")")
+                            "(data==1?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
+                                'Not check') + "</label></div>" +
+                            "\":data==2?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
+                                'Valid') + "</label></div>" +
+                            "\":data==3?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
+                                'Decline') + "</label></div>" +
+                            "\":data==4?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
+                                'Warning') + "</label></div>" +
+                            "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
+                                'Punish') + "</label></div>" + "\")")
                     mapping += """
                         {{"data": "{1}", "orderable": {2}, "searchable": {2},
-                         {0}}},"""\
+                         {0}}},""" \
                         .format(render_func, column[0], str(column[1]).lower())
 
             server_script = """"serverSide": true,
@@ -358,7 +368,29 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                             if(s2.length > 0 && multi_select_data.length > 0){{
                                 s2.val(multi_select_data).trigger("change")
                             }}
-                            
+
+                            var op = modal.find('#{14}')
+                            if(op.length > 0 ){{
+                                op.parent().removeClass('hidden')
+                                modal.find('#password').prop('required',false)
+                                modal.find('#password').parent().removeClass('required')
+                                modal.find('#confirm').prop('required',false)
+                                modal.find('#confirm').parent().removeClass('required')
+                            }}
+
+
+                        }})
+                        $('.{7}').on('click', function (event) {{
+                            var modal_add = $('#{13}')
+                            modal_add.find('#id').val('')
+                            var op = modal_add.find('#{14}')
+                            if(op.length > 0 ){{
+                                op.parent().addClass('hidden')
+                                modal_add.find('#password').prop('required',true)
+                                modal_add.find('#password').parent().addClass('required')
+                                modal_add.find('#confirm').prop('required',true)
+                                modal_add.find('#confirm').parent().addClass('required')
+                            }}
                         }})
                         $('.{8}').on('click', function (event) {{
                             var data = $(this).data()
@@ -388,7 +420,8 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                    export_columns, server_script, g.c.BTNEDIT_ID,
                    g.c.MODAL_EDIT_ID, select2_script, g.c.BTNADD_ID,
                    g.c.BTNDEL_ID, g.c.MODAL_DEL_ID, g.c.SUBMIT_DEFAULT_CLASS,
-                   g.c.DEL_SUBMIT_ID, g.c.MULTI_SELECT_DEFAULT_CLASS))
+                   g.c.DEL_SUBMIT_ID, g.c.MULTI_SELECT_DEFAULT_CLASS,
+                   g.c.MODAL_ADD_ID, 'old_pass'))
         return script
     else:
         css_script = """

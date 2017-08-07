@@ -6,6 +6,7 @@ from wtforms.fields.html5 import EmailField
 from pgscm.utils import __, Select, Submit, MultiSelect
 
 data_required = validators.DataRequired(message=__('Required field!'))
+match_pass = validators.EqualTo('confirm', message=__('Passwords must match'))
 
 
 class UserForm(FlaskForm):
@@ -14,13 +15,12 @@ class UserForm(FlaskForm):
     email = EmailField(__('Email'), validators=[data_required,
                                                 validators.Email('')],
                        render_kw={"placeholder": __('Email')})
+    old_password = PasswordField(__('Old password'), id='old_pass')
     password = PasswordField(__('New Password'), validators=[data_required,
-        validators.EqualTo('confirm', message=__('Passwords must match'))
-    ])
-    confirm = PasswordField(__('Repeat Password'))
+                                                             match_pass])
+    confirm = PasswordField(__('Repeat Password'), validators=[data_required])
     roles = SelectMultipleField(__('Role'), validators=[data_required],
                                 widget=MultiSelect())
-    province_id = SelectField(__('Province'), validators=[data_required],
-                              coerce=str, widget=Select())
+    province_id = SelectField(__('Province'), coerce=str, widget=Select())
     id = HiddenField(__('Id'))
     submit = SubmitField(__('Submit'), widget=Submit())

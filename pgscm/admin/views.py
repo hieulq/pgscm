@@ -6,6 +6,7 @@ import uuid
 
 from . import admin
 from .forms import UserForm
+from .forms import data_required, match_pass
 
 from pgscm import sqla, user_datastore
 from pgscm.db import models
@@ -56,13 +57,60 @@ def users():
         if request.method == 'POST' and form.data['submit']:
             if not check_role(crud_role):
                 return redirect(url_for(request.endpoint))
-            elif form.validate_on_submit():
-                # edit user
-                if form.id.data:
-                    pass
+            # edit user
+            if form.id.data:
+                # remove required validator in fields pass and confirm
+                #  when form is edit form
+                setattr(form.password, 'validators', [match_pass])
+                setattr(form.confirm, 'validators', [])
 
-                # add user
+                if form.validate_on_submit():
+                    edit_user = user_datastore.find_user(id=form.id.data)
+                    if form.old_password.data:
+                        if not security_utils.verify_and_update_password(
+                                form.old_password.data, edit_user):
+                            flash(str(__('Old password is wrong!')), 'error')
+                            # TODO: fix return to keep current state of form
+                            return redirect(url_for(request.endpoint))
+                        else:
+                            edit_user.password = security_utils.hash_password(
+                                form.password.data)
+                    edit_user.email = form.email.data
+                    edit_user.fullname = form.fullname.data
+                    if form.province_id.data != edit_user.province_id:
+                        edit_user.province = models.Province.query \
+                            .filter_by(province_id=form.province_id.data) \
+                            .one()
+                    for new_role in form.roles.data:
+                        role_is_added = False
+                        for r in edit_user.roles:
+                            if new_role == r.name:
+                                role_is_added = True
+                                break
+                        if not role_is_added:
+                            user_datastore.add_role_to_user(edit_user.email,
+                                                            new_role)
+                    temp_roles = list(edit_user.roles)
+                    for old_role in temp_roles:
+                        print(old_role.name)
+                        if old_role.name not in form.roles.data:
+                            user_datastore.remove_role_from_user(
+                                edit_user.email, old_role.name)
+                    user_datastore.put(edit_user)
+                    for user in us:
+                        if user.id == edit_user.id:
+                            us.remove(user)
+                            us.append(edit_user)
+                    flash(str(__('Update farmer success!')), 'success')
+                    return redirect(url_for(request.endpoint))
                 else:
+                    flash(str(__('The form is not validated!')), 'error')
+
+            # add user
+            else:
+                setattr(form.password, 'validators', [data_required])
+                setattr(form.confirm, 'validators', [data_required])
+                if form.validate_on_submit():
                     if not user_datastore.find_user(email=form.email.data):
                         user_datastore.create_user(id=str(uuid.uuid4()),
                             email=form.email.data, fullname=form.fullname.data,
@@ -75,8 +123,10 @@ def users():
                         sqla.session.commit()
                         flash(str(__('Add user success!')), 'success')
                         return redirect(url_for(request.endpoint))
-            else:
-                flash(str(__('The form is not validated!')), 'error')
+                    else:
+                        flash(str(__('The email was existed!')), 'error')
+                else:
+                    flash(str(__('The form is not validated!')), 'error')
 
         # form delete submit
         if request.method == 'POST' and dform.data['submit_del']:
@@ -87,7 +137,7 @@ def users():
                 user_datastore.delete_user(del_user)
                 sqla.session.commit()
 
-                flash(str(__('Delete farmer success!')), 'success')
+                flash(str(__('Delete user success!')), 'success')
                 return redirect(url_for(request.endpoint))
 
         return render_template('admin/user.html', us=us,
