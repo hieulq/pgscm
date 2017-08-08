@@ -3,7 +3,7 @@ from wtforms import IntegerField, DateField, StringField, SelectField, \
     HiddenField, validators, SubmitField
 
 from pgscm import const as c
-from pgscm.utils import __, Select, Submit
+from pgscm.utils import __, Select, Submit, Date
 
 data_required = validators.DataRequired(message=__('Required field!'))
 
@@ -19,31 +19,33 @@ class CertificateForm(FlaskForm):
         __('Member count'), validators=[data_required],
         render_kw={"placeholder": __('Member count')})
     certificate_start_date = DateField(
-        __('Certificate start date'),
+        __('Certificate start date'), widget=Date(),
         render_kw={"placeholder": __('Certificate start date')})
     gov_certificate_id = StringField(
         __('Decision code'),
         validators=[data_required],
         render_kw={"placeholder": __('Decision code')})
     certificate_expiry_date = DateField(
-        __('Certificate expiry date'),
+        __('Certificate expiry date'), widget=Date(),
         render_kw={"placeholder": __('Certificate expiry date')})
     status = SelectField(
         __('Status'), validators=[data_required], coerce=str, widget=Select(),
-        choices=[(c.CertificateStatusType.approve, __('Approve')),
-                 (c.CertificateStatusType.reject, __('Reject')),
-                 (c.CertificateStatusType.approve_no_cert, __('Approve no '
-                                                              'cert')),
-                 (c.CertificateStatusType.in_conversion, __('In conversion'))])
+        choices=[(c.CertificateStatusType.approve.name, __('Approve')),
+                 (c.CertificateStatusType.reject.name, __('Reject')),
+                 (c.CertificateStatusType.approve_no_cert.name,
+                  __('Approve no cert')),
+                 (c.CertificateStatusType.in_conversion.name,
+                  __('In conversion'))])
     re_verify_status = SelectField(
         __('Reverify Status'), validators=[data_required], coerce=str,
         widget=Select(),
-        choices=[(c.CertificateReVerifyStatusType.not_check, __('Not '
+        choices=[(c.CertificateReVerifyStatusType.not_check.name, __('Not '
                                                                 'check')),
-                 (c.CertificateReVerifyStatusType.decline, __('Decline')),
-                 (c.CertificateReVerifyStatusType.punish, __('Punish')),
-                 (c.CertificateReVerifyStatusType.valid, __('Valid')),
-                 (c.CertificateReVerifyStatusType.warning, __('Warning'))])
+                 (c.CertificateReVerifyStatusType.decline.name, __('Decline')),
+                 (c.CertificateReVerifyStatusType.punish.name, __('Punish')),
+                 (c.CertificateReVerifyStatusType.valid.name, __('Valid')),
+                 (c.CertificateReVerifyStatusType.warning.name,
+                  __('Warning'))])
     owner_farmer_id = SelectField(__('Certificated farmer'), validators=[
         data_required], coerce=str, widget=Select())
     owner_group_id = SelectField(__('Certificated group'), validators=[

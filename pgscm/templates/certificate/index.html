@@ -75,8 +75,8 @@
                                 <td>{{ cert.certificate_start_date }}</td>
                                 <td>{{ cert.certificate_expiry_date }}</td>
                                 <td class="actions_column">
-                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', c) }}
-                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', c) }}
+                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', cert) }}
+                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', cert) }}
                                 </td>
                             </tr>
                         {% endfor %}
