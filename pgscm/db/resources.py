@@ -59,6 +59,8 @@ class CertResource(ModelResource):
         if province_id:
             kwargs['where'] += \
                 (self.manager.filters['province'][None].convert(province_id),)
+        kwargs['where'] += \
+            (self.manager.filters['_deleted_at'][None].convert(None),)
         return self.manager.paginated_instances_or(**kwargs)
 
 
@@ -78,6 +80,8 @@ class FarmerResource(ModelResource):
         if province_id:
             kwargs['where'] += \
                 (self.manager.filters['province'][None].convert(province_id),)
+        kwargs['where'] += \
+            (self.manager.filters['_deleted_at'][None].convert(None),)
         return self.manager.paginated_instances_or(**kwargs)
 
 
@@ -100,6 +104,8 @@ class GroupResource(ModelResource):
         if province_id:
             kwargs['where'] += \
                 (self.manager.filters['province'][None].convert(province_id),)
+        kwargs['where'] += \
+            (self.manager.filters['_deleted_at'][None].convert(None),)
         return self.manager.paginated_instances_or(**kwargs)
 
 
