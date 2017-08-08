@@ -1,4 +1,4 @@
-from flask import render_template, current_app, request, \
+from flask import render_template, request, \
     flash, redirect, url_for
 from flask_security import roles_accepted, current_user, \
     utils as security_utils
