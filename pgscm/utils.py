@@ -9,7 +9,7 @@ from flask_potion.contrib.alchemy import SQLAlchemyManager
 from flask_potion.instances import Pagination
 
 from wtforms.widgets.core import Select as BaseSelectWidget
-from wtforms.widgets.core import Input as SubmitWidget
+from wtforms.widgets.core import Input
 from wtforms import TextAreaField, SubmitField, HiddenField
 
 
@@ -40,7 +40,7 @@ class MultiSelect(BaseSelectWidget):
         return super(MultiSelect, self).__call__(field, **kwargs)
 
 
-class Submit(SubmitWidget):
+class Submit(Input):
     def __init__(self, input_type='submit'):
         super(Submit, self).__init__(input_type)
 
@@ -49,6 +49,11 @@ class Submit(SubmitWidget):
         c = kwargs.pop('class', '') or kwargs.pop('class_', '')
         kwargs['class'] = c + " " + const.SUBMIT_DEFAULT_CLASS
         return super(Submit, self).__call__(field, **kwargs)
+
+
+class Date(Input):
+    def __init__(self, input_type='date'):
+        super(Date, self).__init__(input_type)
 
 
 class DeleteForm(FlaskForm):
