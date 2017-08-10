@@ -31,12 +31,11 @@ def index():
         if province_id:
             gs = models.Group.query.filter_by(
                 province_id=province_id, _deleted_at=None).all()
-            # gs = models.Group.query.filter_by(
-            #     province_id=province_id).all()
             form.associate_group_id.choices = [(
                 ag.id, ag.name) for ag in
                 models.AssociateGroup.query.filter_by(
-                    province_id=province_id).order_by(
+                    province_id=province_id,
+                    _deleted_at=None).order_by(
                     models.AssociateGroup.name.asc()).all()]
             form.province_id.choices = [
                 (p.province_id, p.type + " " + p.name) for p in
@@ -51,14 +50,14 @@ def index():
             form.ward_id.choices = [
                 (w.ward_id, w.type + " " + w.name) for w in
                 models.Ward.query.join(models.District).filter(
-                    models.District.query.filter_by(
-                        province_id=province_id).all()).order_by(
-                    models.Ward.name.asc())]
+                    models.District.province_id == province_id).order_by(
+                    models.Ward.name.asc()).all()]
         else:
             gs = models.Group.query.filter_by(_deleted_at=None).all()
             form.associate_group_id.choices = [(
                 ag.id, ag.name) for ag in
-                models.AssociateGroup.query.order_by(
+                models.AssociateGroup.query.filter_by(
+                    _deleted_at=None).order_by(
                     models.AssociateGroup.name.asc()).all()]
             form.province_id.choices = [
                 (p.province_id, p.type + " " + p.name) for p in
@@ -87,15 +86,15 @@ def index():
                     edit_group.village = form.village.data
                     if edit_group.associate_group_id != \
                             form.associate_group_id.data:
-                        edit_group.associate_group = sqla.session\
+                        edit_group.associate_group = sqla.session \
                             .query(models.AssociateGroup) \
                             .filter_by(id=form.associate_group_id.data).one()
                     if edit_group.province_id != form.province_id.data:
-                        edit_group.province = sqla.session\
+                        edit_group.province = sqla.session \
                             .query(models.Province) \
                             .filter_by(province_id=form.province_id.data).one()
                     if edit_group.district_id != form.district_id.data:
-                        edit_group.district = sqla.session\
+                        edit_group.district = sqla.session \
                             .query(models.District) \
                             .filter_by(district_id=form.district_id.data).one()
                     if edit_group.ward_id != form.ward_id.data:

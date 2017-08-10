@@ -30,18 +30,20 @@ def index():
     else:
         province_id = current_user.province_id
         if province_id:
-            farmers = models.Farmer.query.filter(
-                models.Farmer._deleted_at.is_(None)).join(
-                models.Group.query.filter_by(province_id=province_id).all())
-
+            farmers = models.Farmer.query.join(models.Group).filter(
+                models.Group.province_id == province_id,
+                models.Group._deleted_at == None,
+                models.Farmer._deleted_at == None).order_by(
+                models.Farmer.name.asc()).all()
             form.group_id.choices = [(p.id, p.name) for p in
                                      models.Group.query.filter_by(
                                          province_id=province_id).all()]
         else:
-            farmers = models.Farmer.query.filter(
-                models.Farmer._deleted_at.is_(None)).all()
+            farmers = models.Farmer.query.filter_by(
+                _deleted_at=None).all()
             form.group_id.choices = [(p.id, p.name) for p in
-                                     models.Group.query.order_by(
+                                     models.Group.query.filter_by(
+                                         _deleted_at=None).order_by(
                                          models.Group.name.asc()).all()]
 
         # form create or edit submit
@@ -73,8 +75,9 @@ def index():
                     group_farmer = models.Group.query.filter_by(
                         id=form.group_id.data).one()
                     new_farmer = models.Farmer(type=form.type.data,
-                        farmer_code=form.farmer_code.data, name=form.name.data,
-                        group=group_farmer, gender=form.gender.data)
+                            farmer_code=form.farmer_code.data,
+                            name=form.name.data, group=group_farmer,
+                            gender=form.gender.data)
                     sqla.session.add(new_farmer)
                     sqla.session.commit()
                     farmers.append(new_farmer)
