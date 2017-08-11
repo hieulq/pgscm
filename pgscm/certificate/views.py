@@ -76,7 +76,7 @@ def index():
                         form.certificate_expiry_date.errors.append(
                             __('The expiry date must greater than start date'))
                         flash((str(__('The expiry date must greater than '
-                                      'start date'))), 'error')
+                                      'start date!'))), 'error')
                     else:
                         edit_certificate = sqla.session \
                             .query(models.Certificate) \
@@ -117,7 +117,7 @@ def index():
                         form.certificate_expiry_date.errors.append(
                             __('The expiry date must greater than start date'))
                         flash((str(__('The expiry date must greater '
-                                      'than start date'))), 'error')
+                                      'than start date!'))), 'error')
                     else:
                         owner_farmer = models.Farmer.query \
                             .filter_by(id=form.owner_farmer_id.data).one()

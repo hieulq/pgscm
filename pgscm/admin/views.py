@@ -157,7 +157,7 @@ def check_user_email(user_list_result, edit_user_email):
         return True
     # email is edit user's email
     elif len(user_list_result) == 1 and \
-            user_list_result[0].id != edit_user_email:
+            user_list_result[0].email == edit_user_email:
         return True
     # email was registered
     else:
