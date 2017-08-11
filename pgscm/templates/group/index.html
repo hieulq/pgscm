@@ -30,7 +30,9 @@
     </ol>
 {%- endblock content_header %}
 {% block content -%}
-    {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '') }}
+    {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
+        {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '') }}
+    {% endif %}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -50,7 +52,9 @@
                             <th>{{ _('District') }}</th>
                             <th>{{ _('Province') }}</th>
                             <th>{{ _('Associated Group') }}</th>
-                            <th>{{ _('Actions') }}</th>
+                            {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
+                                <th>{{ _('Actions') }}</th>
+                            {% endif %}
                         </tr>
                         </thead>
                         <tbody>
@@ -67,10 +71,12 @@
                                 <td>{{ gr.district.name }}</td>
                                 <td>{{ gr.province.name }}</td>
                                 <td>{{ gr.associate_group.name }}</td>
-                                <td class="actions_column">
-                                    {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', gr) }}
-                                    {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', gr) }}
-                                </td>
+                                {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
+                                    <td class="actions_column">
+                                        {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', gr) }}
+                                        {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', gr) }}
+                                    </td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     </table>

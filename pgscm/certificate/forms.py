@@ -29,22 +29,23 @@ class CertificateForm(FlaskForm):
         __('Certificate expiry date'), widget=Date(),
         render_kw={"placeholder": __('Certificate expiry date')})
     status = SelectField(
-        __('Status'), validators=[data_required], coerce=str, widget=Select(),
-        choices=[(c.CertificateStatusType.approve.name, __('Approve')),
-                 (c.CertificateStatusType.reject.name, __('Reject')),
-                 (c.CertificateStatusType.approve_no_cert.name,
+        __('Status'), validators=[data_required], coerce=int, widget=Select(),
+        choices=[(c.CertificateStatusType.approve.value, __('Approve')),
+                 (c.CertificateStatusType.reject.value, __('Reject')),
+                 (c.CertificateStatusType.approve_no_cert.value,
                   __('Approve no cert')),
-                 (c.CertificateStatusType.in_conversion.name,
+                 (c.CertificateStatusType.in_conversion.value,
                   __('In conversion'))])
     re_verify_status = SelectField(
-        __('Reverify Status'), validators=[data_required], coerce=str,
+        __('Reverify Status'), validators=[data_required], coerce=int,
         widget=Select(),
-        choices=[(c.CertificateReVerifyStatusType.not_check.name, __('Not '
-                                                                'check')),
-                 (c.CertificateReVerifyStatusType.decline.name, __('Decline')),
-                 (c.CertificateReVerifyStatusType.punish.name, __('Punish')),
-                 (c.CertificateReVerifyStatusType.valid.name, __('Valid')),
-                 (c.CertificateReVerifyStatusType.warning.name,
+        choices=[(c.CertificateReVerifyStatusType.not_check.value,
+                  __('Not check')),
+                 (c.CertificateReVerifyStatusType.decline.value,
+                  __('Decline')),
+                 (c.CertificateReVerifyStatusType.punish.value, __('Punish')),
+                 (c.CertificateReVerifyStatusType.valid.value, __('Valid')),
+                 (c.CertificateReVerifyStatusType.warning.value,
                   __('Warning'))])
     owner_farmer_id = SelectField(__('Certificated farmer'), validators=[
         data_required], coerce=str, widget=Select())

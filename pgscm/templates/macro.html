@@ -34,13 +34,17 @@
             {% if data %}
                 {% for col in data.__table__.c._data %}
                     {% if not col.startswith('_') and not col.startswith('pass') %}
-                        data-{{ col }}="{{ data.__getattribute__(col) }}"
+                        {% if data.__getattribute__(col).value is defined %}
+                            data-{{ col }}="{{ data.__getattribute__(col).value }}"
+                        {% else %}
+                            data-{{ col }}="{{ data.__getattribute__(col) }}"
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             {% endif %}
             {% if multi_select_data and multi_select_key %}
                 {% for d in multi_select_data %}
-                    data-multi-select-{{ d[multi_select_key] }}="{{ d[multi_select_key] }}"
+            data-multi-select-{{ d[multi_select_key] }}="{{ d[multi_select_key] }}"
                 {% endfor %}
             {% endif %}>
         <span class="fa fa-{{ css_class }}"></span>

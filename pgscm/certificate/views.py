@@ -32,29 +32,32 @@ def index():
         province_id = current_user.province_id
         if province_id:
             cs = models.Certificate.query.join(models.Group).filter(
-                models.Group.query.filter_by(
-                    province_id=province_id.all())).order_by(
-                models.Certificate.name.asc()).all()
+                models.Group.province_id == province_id,
+                models.Group._deleted_at == None,
+                models.Certificate._deleted_at == None).all()
             form.owner_farmer_id.choices = [
                 (f.id, f.name) for f in
                 models.Farmer.query.join(models.Group).filter(
-                    models.Group.query.filter_by(
-                        province_id=province_id.all())).order_by(
+                    models.Group.province_id == province_id,
+                    models.Group._deleted_at == None,
+                    models.Farmer._deleted_at == None).order_by(
                     models.Farmer.name.asc()).all()]
             form.owner_group_id.choices = [
                 (g.id, g.name) for g in
                 models.Group.query.filter_by(
-                    province_id=province_id).all().order_by(
-                    models.Group.name.asc())]
+                    province_id=province_id).order_by(
+                    models.Group.name.asc()).all()]
         else:
             cs = models.Certificate.query.all()
             form.owner_farmer_id.choices = [
                 (f.id, f.name) for f in
-                models.Farmer.query.order_by(
+                models.Farmer.query.filter_by(
+                    _deleted_at=None).order_by(
                     models.Farmer.name.asc()).all()]
             form.owner_group_id.choices = [
                 (g.id, g.name) for g in
-                models.Group.query.order_by(
+                models.Group.query.filter_by(
+                    _deleted_at=None).order_by(
                     models.Group.name.asc()).all()]
 
             # form create or edit submit
