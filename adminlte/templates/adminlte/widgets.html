@@ -23,7 +23,11 @@ percentage=False, body="User Registrations", iconclass="ion ion-person-add", foo
     <script>
         $("#{{ id }}").ready(function (event) {
             $.get('{{ url }}', function(res, status, req) {
-                $("#{{ id }}").find('h3').html(req.getResponseHeader('X-Total-Count'));
+                if (req.getResponseHeader('Content-Type') !== 'application/json') {
+                    $("#{{ id }}").find('h3').html(0);
+                } else {
+                    $("#{{ id }}").find('h3').html(req.getResponseHeader('X-Total-Count'));
+                }
             })
         })
     </script>
