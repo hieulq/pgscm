@@ -72,7 +72,9 @@ def users():
                             form.password.data)
                 temp_user = sqla.session.query(models.User) \
                     .filter_by(email=form.email.data).all()
-                if len(temp_user) > 2 or temp_user[0].id != edit_user.id:
+                if not check_user_email(temp_user, edit_user.email):
+                    form.email.errors.append(
+                        __('The email was existed!'))
                     flash(str(__('The email was existed!')), 'error')
                 else:
                     edit_user.email = form.email.data
@@ -92,7 +94,6 @@ def users():
                                 edit_user.email, new_role)
                     temp_roles = list(edit_user.roles)
                     for old_role in temp_roles:
-                        print(old_role.name)
                         if old_role.name not in form.roles.data:
                             user_datastore.remove_role_from_user(
                                 edit_user.email, old_role.name)
@@ -108,14 +109,16 @@ def users():
 
         # add user
         else:
-            setattr(form.password, 'validators', [data_required])
+            setattr(form.password, 'validators', [data_required, match_pass])
             setattr(form.confirm, 'validators', [data_required])
             if form.validate_on_submit():
                 if not user_datastore.find_user(email=form.email.data):
+                    province = models.Province.query.filter_by(
+                        province_id=form.province_id.data).one()
                     user_datastore.create_user(id=str(uuid.uuid4()),
                         email=form.email.data, fullname=form.fullname.data,
-                        password=security_utils.hash_password(
-                                                   form.password.data))
+                        province=province, password=security_utils
+                                        .hash_password(form.password.data))
                     sqla.session.commit()
                     for role in form.roles.data:
                         user_datastore.add_role_to_user(
@@ -124,6 +127,8 @@ def users():
                     flash(str(__('Add user success!')), 'success')
                     return redirect(url_for(request.endpoint))
                 else:
+                    form.email.errors.append(
+                        __('The email was existed!'))
                     flash(str(__('The email was existed!')), 'error')
             else:
                 flash(str(__('The form is not validated!')), 'error')
@@ -142,6 +147,21 @@ def users():
 
     return render_template('admin/user.html', us=us,
                            form=form, dform=dform)
+
+
+# user_list_result: users list from result of query to user with email
+#                   in form
+def check_user_email(user_list_result, edit_user_email):
+    #  email was not register
+    if not len(user_list_result):
+        return True
+    # email is edit user's email
+    elif len(user_list_result) == 1 and \
+            user_list_result[0].id != edit_user_email:
+        return True
+    # email was registered
+    else:
+        return False
 
 
 @admin.route('/vi/quan-tri/cau-hinh', endpoint='configs_vi')

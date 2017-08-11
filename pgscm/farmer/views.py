@@ -37,7 +37,9 @@ def index():
                 models.Farmer.name.asc()).all()
             form.group_id.choices = [(p.id, p.name) for p in
                                      models.Group.query.filter_by(
-                                         province_id=province_id).all()]
+                                         province_id=province_id,
+                                         _deleted_at=None).order_by(
+                                         models.Group.name.asc()).all()]
         else:
             farmers = models.Farmer.query.filter_by(
                 _deleted_at=None).all()
