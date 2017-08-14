@@ -45,10 +45,11 @@ def index():
             form.owner_group_id.choices = [
                 (g.id, g.name) for g in
                 models.Group.query.filter_by(
-                    province_id=province_id).order_by(
+                    province_id=province_id,
+                    _deleted_at=None).order_by(
                     models.Group.name.asc()).all()]
         else:
-            cs = models.Certificate.query.all()
+            cs = models.Certificate.query.filter_by(_deleted_at=None).all()
             form.owner_farmer_id.choices = [
                 (f.id, f.name) for f in
                 models.Farmer.query.filter_by(
@@ -69,31 +70,40 @@ def index():
             if form.id.data:
                 setattr(form.id, 'validators', [data_required])
                 if form.validate_on_submit():
-                    edit_certificate = sqla.session.query(models.Certificate) \
-                        .filter_by(id=form.id.data).one()
-                    edit_certificate.certificate_code = form \
-                        .certificate_code.data
-                    edit_certificate.group_area = form.group_area.data
-                    edit_certificate.member_count = form.member_count.data
-                    edit_certificate.certificate_start_date = form \
-                        .certificate_start_date.data
-                    edit_certificate.certificate_expiry_date = form \
-                        .certificate_expiry_date.data
-                    edit_certificate.gov_certificate_id = form \
-                        .gov_certificate_id.data
-                    edit_certificate.status = form.status.data
-                    edit_certificate.re_verify_status = form \
-                        .re_verify_status.data
-                    if edit_certificate.owner_farmer_id != \
-                            form.owner_farmer_id.data:
-                        edit_certificate.owner_farmer = models.Farmer.query \
-                            .filter_by(id=form.owner_farmer_id.data).one()
-                    if edit_certificate.owner_group_id != \
-                            form.owner_group_id.data:
-                        edit_certificate.owner_group = models.Group.query \
-                            .filter_by(id=form.owner_group_id.data).one()
-                    flash(str(__('Update certificate success!')), 'success')
-                    return redirect(url_for(request.endpoint))
+                    start_date = form.certificate_start_date.data
+                    expiry_date = form.certificate_expiry_date.data
+                    if start_date > expiry_date:
+                        form.certificate_expiry_date.errors.append(
+                            __('The expiry date must greater than start date'))
+                        flash((str(__('The expiry date must greater than '
+                                      'start date!'))), 'error')
+                    else:
+                        edit_certificate = sqla.session \
+                            .query(models.Certificate) \
+                            .filter_by(id=form.id.data).one()
+                        edit_certificate.certificate_code = form \
+                            .certificate_code.data
+                        edit_certificate.group_area = form.group_area.data
+                        edit_certificate.member_count = form.member_count.data
+                        edit_certificate.certificate_start_date = start_date
+                        edit_certificate.certificate_expiry_date = expiry_date
+                        edit_certificate.gov_certificate_id = form \
+                            .gov_certificate_id.data
+                        edit_certificate.status = form.status.data
+                        edit_certificate.re_verify_status = form \
+                            .re_verify_status.data
+                        if edit_certificate.owner_farmer_id != \
+                                form.owner_farmer_id.data:
+                            edit_certificate.owner_farmer = models.Farmer \
+                                .query.filter_by(
+                                    id=form.owner_farmer_id.data).one()
+                        if edit_certificate.owner_group_id != \
+                                form.owner_group_id.data:
+                            edit_certificate.owner_group = models.Group.query \
+                                .filter_by(id=form.owner_group_id.data).one()
+                        flash(str(__('Update certificate success!')),
+                              'success')
+                        return redirect(url_for(request.endpoint))
                 else:
                     flash(str(__('The form is not validated!')), 'error')
 
@@ -101,26 +111,32 @@ def index():
             else:
                 setattr(form.id, 'validators', [])
                 if form.validate_on_submit():
-                    owner_farmer = models.Farmer.query \
-                        .filter_by(id=form.owner_farmer_id.data).one()
-                    owner_group = models.Group.query \
-                        .filter_by(id=form.owner_group_id.data).one()
                     start_date = form.certificate_start_date.data
                     expiry_date = form.certificate_expiry_date.data
-                    new_cert = models.Certificate(
-                        certificate_code=form.certificate_code.data,
-                        group_area=form.group_area.data,
-                        member_count=form.member_count.data,
-                        certificate_start_date=start_date,
-                        certificate_expiry_date=expiry_date,
-                        gov_certificate_id=form.gov_certificate_id.data,
-                        status=form.status.data,
-                        re_verify_status=form.re_verify_status.data,
-                        owner_farmer=owner_farmer, owner_group=owner_group)
-                    sqla.session.add(new_cert)
-                    sqla.session.commit()
-                    flash(str(__('Add certificate success!')), 'success')
-                    return redirect(url_for(request.endpoint))
+                    if start_date > expiry_date:
+                        form.certificate_expiry_date.errors.append(
+                            __('The expiry date must greater than start date'))
+                        flash((str(__('The expiry date must greater '
+                                      'than start date!'))), 'error')
+                    else:
+                        owner_farmer = models.Farmer.query \
+                            .filter_by(id=form.owner_farmer_id.data).one()
+                        owner_group = models.Group.query \
+                            .filter_by(id=form.owner_group_id.data).one()
+                        new_cert = models.Certificate(
+                            certificate_code=form.certificate_code.data,
+                            group_area=form.group_area.data,
+                            member_count=form.member_count.data,
+                            certificate_start_date=start_date,
+                            certificate_expiry_date=expiry_date,
+                            gov_certificate_id=form.gov_certificate_id.data,
+                            status=form.status.data,
+                            re_verify_status=form.re_verify_status.data,
+                            owner_farmer=owner_farmer, owner_group=owner_group)
+                        sqla.session.add(new_cert)
+                        sqla.session.commit()
+                        flash(str(__('Add certificate success!')), 'success')
+                        return redirect(url_for(request.endpoint))
                 else:
                     flash(str(__('The form is not validated!')), 'error')
 
