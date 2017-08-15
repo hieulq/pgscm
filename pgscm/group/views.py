@@ -63,13 +63,8 @@ def index():
                 (p.province_id, p.type + " " + p.name) for p in
                 models.Province.query.order_by(
                     models.Province.name.asc()).all()]
-            form.district_id.choices = [
-                (d.district_id, d.type + " " + d.name) for d in
-                models.District.query.order_by(
-                    models.District.name.asc()).all()]
-            form.ward_id.choices = [(w.ward_id, w.type + " " + w.name) for w in
-                                    models.Ward.query.order_by(
-                                        models.Ward.name.asc()).all()]
+            form.district_id.choices = []
+            form.ward_id.choices = []
 
         # form create or edit submit
         if request.method == 'POST' and form.data['submit']:

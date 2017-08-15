@@ -16,6 +16,61 @@
             ("ward.name", False, None), ("district.name", False, None), ("province.name", False, None),
             ("associate_group.name", False, None), ("action", False, None)],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
+
+    <script>
+        $(document).ready(function () {
+            $('#province_id').on("select2:select", function (e) {
+                $('#district_id').empty();
+                var value = e.target.value;
+                $.ajax({
+                    type: "get",
+                    url: '/district',
+                    data: 'where={"province": {"$ref": "/province/' + value + '"}}',
+                    success: function (data, text) {
+                        var districts = [];
+                        for (var i = 0; i < data.length; i++) {
+                            districts[i] = {
+                                id: data[i]['$id'],
+                                text: data[i].type + " " + data[i].name
+                            }
+                        }
+                        $('#district_id').select2({data: districts});
+                    },
+                    error: function (request, status, error) {
+                        console.log(request);
+                        console.log(error);
+                        alert(request.responseText);
+                    }
+                });
+            });
+
+            $('#district_id').on("select2:select", function (e) {
+                $('#ward_id').empty();
+                var value = e.target.value;
+                $.ajax({
+                    type: "get",
+                    url: '/ward',
+                    data: 'where={"district": {"$ref": "/district/' + value + '"}}',
+                    success: function (data, text) {
+                        var wards = [];
+                        for (var i = 0; i < data.length; i++) {
+                            wards[i] = {
+                                id: data[i]['$id'],
+                                text: data[i].type + " " + data[i].name
+                            }
+                        }
+                        $('#ward_id').select2({data: wards});
+                    },
+                    error: function (request, status, error) {
+                        console.log(request);
+                        console.log(error);
+                        alert(request.responseText);
+                    }
+                });
+            })
+        });
+    </script>
+
 {%- endblock scripts %}
 {% block content_header -%}
     <h1>
