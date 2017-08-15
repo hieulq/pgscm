@@ -1,6 +1,6 @@
 from flask_potion import ModelResource
 from flask_security import current_user
-from flask_potion.routes import Route
+from flask_potion.routes import Route, Relation
 from flask_potion import fields
 from flask_potion.instances import Instances
 
@@ -134,18 +134,29 @@ class WardResource(ModelResource):
     class Meta:
         model = models.Ward
         id_field_class = fields.String
+        include_id = True
+
+    class Schema:
+        district = fields.ToOne('district')
 
 
 class DistrictResource(ModelResource):
+
     class Meta:
         model = models.District
         id_field_class = fields.String
+        include_id = True
+
+    class Schema:
+        province = fields.ToOne('province')
 
 
 class ProvinceResource(ModelResource):
+
     class Meta:
         model = models.Province
         id_field_class = fields.String
+        include_id = True
 
 
 def init_resources(api):
