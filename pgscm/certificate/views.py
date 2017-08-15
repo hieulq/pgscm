@@ -1,3 +1,5 @@
+import datetime
+
 from flask import render_template, current_app, request, \
     flash, redirect, url_for
 from flask_security import roles_accepted, current_user
@@ -30,11 +32,13 @@ def index():
                                dform=dform)
     else:
         province_id = current_user.province_id
+        today = datetime.datetime.today().strftime('%Y-%m-%d')
         if province_id:
             cs = models.Certificate.query.join(models.Group).filter(
                 models.Group.province_id == province_id,
                 models.Group._deleted_at == None,
-                models.Certificate._deleted_at == None).all()
+                models.Certificate._deleted_at == None,
+                models.Certificate.certificate_expiry_date >= today).all()
             form.owner_farmer_id.choices = [
                 (f.id, f.name) for f in
                 models.Farmer.query.join(models.Group).filter(
@@ -49,7 +53,9 @@ def index():
                     _deleted_at=None).order_by(
                     models.Group.name.asc()).all()]
         else:
-            cs = models.Certificate.query.filter_by(_deleted_at=None).all()
+            cs = models.Certificate.query.filter(
+                models.Certificate._deleted_at == None,
+                models.Certificate.certificate_expiry_date >= today).all()
             form.owner_farmer_id.choices = [
                 (f.id, f.name) for f in
                 models.Farmer.query.filter_by(
