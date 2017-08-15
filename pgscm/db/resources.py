@@ -1,6 +1,6 @@
 from flask_potion import ModelResource
 from flask_security import current_user
-from flask_potion.routes import Route, Relation
+from flask_potion.routes import Route
 from flask_potion import fields
 from flask_potion.instances import Instances
 
