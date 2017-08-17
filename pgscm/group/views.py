@@ -56,16 +56,8 @@ def index():
                     models.Ward.name.asc()).all()]
         else:
             gs = models.Group.query.filter_by(_deleted_at=None).all()
-            form.associate_group_id.choices = [(
-                ag.id, ag.name) for ag in
-                models.AssociateGroup.query.filter_by(
-                    _deleted_at=None).order_by(
-                    models.AssociateGroup.name.asc()).all()]
+            form.associate_group_id.choices = []
             form.province_id.choices = []
-            # form.province_id.choices = [
-            #     (p.province_id, p.type + " " + p.name) for p in
-            #     models.Province.query.order_by(
-            #         models.Province.name.asc()).all()]
             form.district_id.choices = []
             form.ward_id.choices = []
 
@@ -73,11 +65,15 @@ def index():
         if request.method == 'POST' and form.data['submit']:
             if not check_role(crud_role):
                 return redirect(url_for(request.endpoint))
-            form.province_id.choices = [(form.province_id.data, form.province_id.label.text)]
-            form.district_id.choices = [(form.district_id.data, form.district_id.label.text)]
-            form.ward_id.choices = [(form.ward_id.data, form.ward_id.label.text)]
-            form.associate_group_id.choices = [(form.associate_group_id.data,
-                                                form.associate_group_id.label.text)]
+            form.province_id.choices = [(form.province_id.data,
+                                         form.province_id.label.text)]
+            form.district_id.choices = [(form.district_id.data,
+                                         form.district_id.label.text)]
+            form.ward_id.choices = [(form.ward_id.data,
+                                     form.ward_id.label.text)]
+            form.associate_group_id.choices = [
+                (form.associate_group_id.data,
+                 form.associate_group_id.label.text)]
             # edit group
             if form.id.data:
                 if form.validate_on_submit():

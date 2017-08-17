@@ -87,6 +87,8 @@ class FarmerResource(ModelResource):
     @Route.GET('/select2', schema=Instances(),
                response_schema=Instances())
     def select2_api(self, **kwargs):
+        kwargs['where'] += \
+            (self.manager.filters['_deleted_at'][None].convert(None),)
         del kwargs['per_page']
         del kwargs['page']
         return self.manager.instances(**kwargs)
@@ -118,6 +120,8 @@ class GroupResource(ModelResource):
     @Route.GET('/select2', schema=Instances(),
                response_schema=Instances())
     def select2_api(self, **kwargs):
+        kwargs['where'] += \
+            (self.manager.filters['_deleted_at'][None].convert(None),)
         del kwargs['per_page']
         del kwargs['page']
         return self.manager.instances(**kwargs)
@@ -137,12 +141,21 @@ class AssociateGroupResource(ModelResource):
     def instances(self, **kwargs):
         province_id = current_user.province_id
         if province_id:
-            self.manager.filters['province'] = {None:None}
+            self.manager.filters['province'] = {None: None}
             kwargs['where'] += \
                 (self.manager.filters['province'][None].convert(province_id),)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at'][None].convert(None),)
         return self.manager.paginated_instances_or(**kwargs)
+
+    @Route.GET('/select2', schema=Instances(),
+               response_schema=Instances())
+    def select2_api(self, **kwargs):
+        kwargs['where'] += \
+            (self.manager.filters['_deleted_at'][None].convert(None),)
+        del kwargs['per_page']
+        del kwargs['page']
+        return self.manager.instances(**kwargs)
 
 
 class WardResource(ModelResource):
@@ -173,7 +186,7 @@ class ProvinceResource(ModelResource):
         id_field_class = fields.String
         include_id = True
 
-    @Route.GET('/select2',schema=Instances(),
+    @Route.GET('/select2', schema=Instances(),
                response_schema=Instances())
     def select2_api(self, **kwargs):
         del kwargs['per_page']

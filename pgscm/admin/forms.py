@@ -22,6 +22,6 @@ class UserForm(FlaskForm):
     roles = SelectMultipleField(__('Role'), validators=[data_required],
                                 widget=MultiSelect())
     province_id = SelectField(__('Province'), coerce=str, widget=Select(),
-                              id='load_now_province')
+                              id='load_now-province')
     id = HiddenField(__('Id'), validators=[data_required])
     submit = SubmitField(__('Submit'), widget=Submit())

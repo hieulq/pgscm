@@ -62,17 +62,7 @@ def index():
                     models.Certificate.certificate_expiry_date == None)
             ).all()
             form.owner_farmer_id.choices = []
-            # form.owner_farmer_id.choices = [
-            #     (f.id, f.name) for f in
-            #     models.Farmer.query.filter_by(
-            #         _deleted_at=None).order_by(
-            #         models.Farmer.name.asc()).all()]
             form.owner_group_id.choices = []
-            # form.owner_group_id.choices = [
-            #     (g.id, g.name) for g in
-            #     models.Group.query.filter_by(
-            #         _deleted_at=None).order_by(
-            #         models.Group.name.asc()).all()]
 
             # form create or edit submit
         if request.method == 'POST' and form.data['submit']:
@@ -112,7 +102,7 @@ def index():
                                 form.owner_farmer_id.data:
                             edit_certificate.owner_farmer = models.Farmer \
                                 .query.filter_by(
-                                id=form.owner_farmer_id.data).one()
+                                        id=form.owner_farmer_id.data).one()
                         if edit_certificate.owner_group_id != \
                                 form.owner_group_id.data:
                             edit_certificate.owner_group = models.Group.query \

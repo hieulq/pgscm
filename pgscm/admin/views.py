@@ -53,7 +53,8 @@ def users():
     if request.method == 'POST' and form.data['submit']:
         if not check_role(crud_role):
             return redirect(url_for(request.endpoint))
-        form.province_id.choices = [(form.province_id.data, form.province_id.label.text)]
+        form.province_id.choices = [(form.province_id.data,
+                                     form.province_id.label.text)]
         # edit user
         if form.id.data:
             # remove required validator in fields pass and confirm

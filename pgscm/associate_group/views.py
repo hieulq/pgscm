@@ -40,17 +40,14 @@ def index():
             ags = models.AssociateGroup.query.filter_by(_deleted_at=None)\
                 .order_by(models.AssociateGroup.name.asc()).all()
             form.province_id.choices = []
-            # form.province_id.choices = [
-            #     (p.province_id, p.type + " " + p.name) for p in
-            #     models.Province.query.order_by(
-            #         models.Province.name.asc()).all()]
 
         # form create or edit submit
         if request.method == 'POST' and form.data['submit']:
             if not check_role(crud_role):
                 return redirect(url_for(request.endpoint))
 
-            form.province_id.choices = [(form.province_id.data, form.province_id.label.text)]
+            form.province_id.choices = [(form.province_id.data,
+                                         form.province_id.label.text)]
             # edit associate group
             if form.id.data:
                 if form.validate_on_submit():
