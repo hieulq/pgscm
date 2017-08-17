@@ -39,10 +39,11 @@ def users():
             models.Province.query.filter_by(province_id=province_id).all()]
     else:
         us = models.User.query.all()
-        form.province_id.choices = [
-            (p.province_id, p.type + " " + p.name) for p in
-            models.Province.query.order_by(
-                models.Province.name.asc()).all()]
+        form.province_id.choices = []
+        # form.province_id.choices = [
+        #     (p.province_id, p.type + " " + p.name) for p in
+        #     models.Province.query.order_by(
+        #         models.Province.name.asc()).all()]
     form.roles.choices = [
         (r.name, r.description) for r in
         models.Role.query.order_by(
@@ -111,11 +112,12 @@ def users():
         else:
             setattr(form.password, 'validators', [data_required, match_pass])
             setattr(form.confirm, 'validators', [data_required])
+            form.id.data = str(uuid.uuid4())
             if form.validate_on_submit():
                 if not user_datastore.find_user(email=form.email.data):
                     province = models.Province.query.filter_by(
                         province_id=form.province_id.data).one()
-                    user_datastore.create_user(id=str(uuid.uuid4()),
+                    user_datastore.create_user(id=form.id.data,
                         email=form.email.data, fullname=form.fullname.data,
                         province=province, password=security_utils
                                         .hash_password(form.password.data))

@@ -1,10 +1,12 @@
+import uuid
+
 from flask import render_template, current_app, request, \
     flash, redirect, url_for
 from flask_security import roles_accepted, current_user
 from sqlalchemy import func
 
 from . import group
-from .forms import GroupForm, data_required
+from .forms import GroupForm
 
 from pgscm import sqla
 from pgscm.db import models
@@ -59,10 +61,11 @@ def index():
                 models.AssociateGroup.query.filter_by(
                     _deleted_at=None).order_by(
                     models.AssociateGroup.name.asc()).all()]
-            form.province_id.choices = [
-                (p.province_id, p.type + " " + p.name) for p in
-                models.Province.query.order_by(
-                    models.Province.name.asc()).all()]
+            form.province_id.choices = []
+            # form.province_id.choices = [
+            #     (p.province_id, p.type + " " + p.name) for p in
+            #     models.Province.query.order_by(
+            #         models.Province.name.asc()).all()]
             form.district_id.choices = []
             form.ward_id.choices = []
 
@@ -72,7 +75,6 @@ def index():
                 return redirect(url_for(request.endpoint))
             # edit group
             if form.id.data:
-                setattr(form.id, 'validators', [data_required])
                 if form.validate_on_submit():
                     edit_group = sqla.session.query(models.Group) \
                         .filter_by(id=form.id.data).one()
@@ -107,7 +109,7 @@ def index():
 
             # add group
             else:
-                setattr(form.id, 'validators', [])
+                form.id.data = str(uuid.uuid4())
                 if form.validate_on_submit():
                     associate_group = sqla.session.query(
                         models.AssociateGroup) \
@@ -118,12 +120,13 @@ def index():
                         .filter_by(district_id=form.district_id.data).one()
                     ward = sqla.session.query(models.Ward) \
                         .filter_by(ward_id=form.ward_id.data).one()
-                    new_group = models.Group(group_code=form.group_code.data,
-                                             name=form.name.data,
-                                             village=form.village.data,
-                                             ward=ward, district=district,
-                                             associate_group=associate_group,
-                                             province=province)
+                    new_group = models.Group(
+                        id=form.id.data,
+                        group_code=form.group_code.data,
+                        name=form.name.data, village=form.village.data,
+                        ward=ward, district=district,
+                        associate_group=associate_group,
+                        province=province)
                     sqla.session.add(new_group)
                     sqla.session.commit()
                     gs.append(new_group)

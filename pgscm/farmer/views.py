@@ -1,3 +1,5 @@
+import uuid
+
 from flask import render_template, current_app, request, \
     flash, redirect, url_for
 from flask_security import roles_accepted, current_user
@@ -43,18 +45,19 @@ def index():
         else:
             farmers = models.Farmer.query.filter_by(
                 _deleted_at=None).all()
-            form.group_id.choices = [(p.id, p.name) for p in
-                                     models.Group.query.filter_by(
-                                         _deleted_at=None).order_by(
-                                         models.Group.name.asc()).all()]
+            form.group_id.choices = []
+            # form.group_id.choices = [(p.id, p.name) for p in
+            #                          models.Group.query.filter_by(
+            #                              _deleted_at=None).order_by(
+            #                              models.Group.name.asc()).all()]
 
         # form create or edit submit
         if request.method == 'POST' and form.data['submit']:
             if not check_role(crud_role):
                 return redirect(url_for(request.endpoint))
-            elif form.validate_on_submit():
-                # edit user
-                if form.id.data:
+            # edit user
+            if form.id.data:
+                if form.validate_on_submit():
                     edit_farmer = sqla.session.query(models.Farmer) \
                         .filter_by(id=form.id.data).one()
                     edit_farmer.farmer_code = form.farmer_code.data
@@ -72,14 +75,17 @@ def index():
                             farmers.append(edit_farmer)
                     flash(str(__('Update farmer success!')), 'success')
 
-                # add user
-                else:
+            # add user
+            else:
+                form.id.data = str(uuid.uuid4())
+                if form.validate_on_submit():
                     group_farmer = models.Group.query.filter_by(
                         id=form.group_id.data).one()
-                    new_farmer = models.Farmer(type=form.type.data,
-                            farmer_code=form.farmer_code.data,
-                            name=form.name.data, group=group_farmer,
-                            gender=form.gender.data)
+                    new_farmer = models.Farmer(
+                        id=form.id.data, type=form.type.data,
+                        farmer_code=form.farmer_code.data,
+                        name=form.name.data, group=group_farmer,
+                        gender=form.gender.data)
                     sqla.session.add(new_farmer)
                     sqla.session.commit()
                     farmers.append(new_farmer)

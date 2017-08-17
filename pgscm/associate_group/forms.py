@@ -17,7 +17,7 @@ class AssociateGroupForm(FlaskForm):
                        render_kw={"placeholder": __('Name')})
     email = StringField(__('Email'), validators=[validators.Email()],
                         render_kw={"placeholder": __('Email')})
-    province_id = SelectField(__('Province'), validators=[data_required],
-                              coerce=str, widget=Select())
-    id = HiddenField(__('Id'))
+    province_id = SelectField(__('Province'),
+                              widget=Select(), id='load_now_province')
+    id = HiddenField(__('Id'), validators=[data_required])
     submit = SubmitField(__('Submit'), widget=Submit())

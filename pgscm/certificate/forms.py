@@ -48,8 +48,8 @@ class CertificateForm(FlaskForm):
                  (c.CertificateReVerifyStatusType.warning.value,
                   __('Warning'))])
     owner_farmer_id = SelectField(__('Certificated farmer'), validators=[
-        data_required], coerce=str, widget=Select())
+        data_required], coerce=str, widget=Select(), id='load_now_farmer')
     owner_group_id = SelectField(__('Certificated group'), validators=[
-        data_required], coerce=str, widget=Select())
+        data_required], coerce=str, widget=Select(), id='load_now_group')
     id = HiddenField(__('Id'), validators=[data_required])
     submit = SubmitField(__('Submit'), widget=Submit())

@@ -3,8 +3,10 @@ from flask import render_template, current_app, request, \
 from flask_security import roles_accepted, current_user
 from sqlalchemy import func
 
+import uuid
+
 from . import agroup
-from .forms import AssociateGroupForm, data_required
+from .forms import AssociateGroupForm
 
 from pgscm import sqla
 from pgscm.db import models
@@ -37,10 +39,11 @@ def index():
         else:
             ags = models.AssociateGroup.query.filter_by(_deleted_at=None)\
                 .order_by(models.AssociateGroup.name.asc()).all()
-            form.province_id.choices = [
-                (p.province_id, p.type + " " + p.name) for p in
-                models.Province.query.order_by(
-                    models.Province.name.asc()).all()]
+            form.province_id.choices = []
+            # form.province_id.choices = [
+            #     (p.province_id, p.type + " " + p.name) for p in
+            #     models.Province.query.order_by(
+            #         models.Province.name.asc()).all()]
 
         # form create or edit submit
         if request.method == 'POST' and form.data['submit']:
@@ -48,7 +51,7 @@ def index():
                 return redirect(url_for(request.endpoint))
             # edit associate group
             if form.id.data:
-                setattr(form.id, 'validators', [data_required])
+                form.province_id.choices = [(form.province_id.data, form.province_id.label.text)]
                 if form.validate_on_submit():
                     edit_agroup = sqla.session.query(models.AssociateGroup) \
                         .filter_by(id=form.id.data).one()
@@ -68,12 +71,14 @@ def index():
 
             # add associate group
             else:
-                setattr(form.id, 'validators', [])
+                form.id.data = str(uuid.uuid4())
+                form.province_id.choices = [(form.province_id.data, form.province_id.label.text)]
                 if form.validate_on_submit():
                     province = sqla.session.query(models.Province) \
                         .filter_by(province_id=form.province_id.data).one()
                     as_group = form.associate_group_code.data
                     new_agroup = models.AssociateGroup(
+                        id=form.id.data,
                         associate_group_code=as_group,
                         name=form.name.data, province=province,
                         email=form.email.data,

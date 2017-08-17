@@ -1,13 +1,14 @@
 import datetime
+import uuid
 
 from flask import render_template, current_app, request, \
     flash, redirect, url_for
 from flask_security import roles_accepted, current_user
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 from . import certificate
 
-from .forms import CertificateForm, data_required
+from .forms import CertificateForm
 from pgscm import sqla
 from pgscm.db import models
 from pgscm.utils import __, DeleteForm, check_role
@@ -38,7 +39,9 @@ def index():
                 models.Group.province_id == province_id,
                 models.Group._deleted_at == None,
                 models.Certificate._deleted_at == None,
-                models.Certificate.certificate_expiry_date >= today).all()
+                or_(models.Certificate.certificate_expiry_date >= today,
+                    models.Certificate.certificate_expiry_date == None)
+            ).all()
             form.owner_farmer_id.choices = [
                 (f.id, f.name) for f in
                 models.Farmer.query.join(models.Group).filter(
@@ -55,17 +58,21 @@ def index():
         else:
             cs = models.Certificate.query.filter(
                 models.Certificate._deleted_at == None,
-                models.Certificate.certificate_expiry_date >= today).all()
-            form.owner_farmer_id.choices = [
-                (f.id, f.name) for f in
-                models.Farmer.query.filter_by(
-                    _deleted_at=None).order_by(
-                    models.Farmer.name.asc()).all()]
-            form.owner_group_id.choices = [
-                (g.id, g.name) for g in
-                models.Group.query.filter_by(
-                    _deleted_at=None).order_by(
-                    models.Group.name.asc()).all()]
+                or_(models.Certificate.certificate_expiry_date >= today,
+                    models.Certificate.certificate_expiry_date == None)
+            ).all()
+            form.owner_farmer_id.choices = []
+            # form.owner_farmer_id.choices = [
+            #     (f.id, f.name) for f in
+            #     models.Farmer.query.filter_by(
+            #         _deleted_at=None).order_by(
+            #         models.Farmer.name.asc()).all()]
+            form.owner_group_id.choices = []
+            # form.owner_group_id.choices = [
+            #     (g.id, g.name) for g in
+            #     models.Group.query.filter_by(
+            #         _deleted_at=None).order_by(
+            #         models.Group.name.asc()).all()]
 
             # form create or edit submit
         if request.method == 'POST' and form.data['submit']:
@@ -74,7 +81,6 @@ def index():
 
             # edit certificate
             if form.id.data:
-                setattr(form.id, 'validators', [data_required])
                 if form.validate_on_submit():
                     start_date = form.certificate_start_date.data
                     expiry_date = form.certificate_expiry_date.data
@@ -102,7 +108,7 @@ def index():
                                 form.owner_farmer_id.data:
                             edit_certificate.owner_farmer = models.Farmer \
                                 .query.filter_by(
-                                    id=form.owner_farmer_id.data).one()
+                                id=form.owner_farmer_id.data).one()
                         if edit_certificate.owner_group_id != \
                                 form.owner_group_id.data:
                             edit_certificate.owner_group = models.Group.query \
@@ -115,7 +121,7 @@ def index():
 
             # add certificate
             else:
-                setattr(form.id, 'validators', [])
+                form.id.data = str(uuid.uuid4())
                 if form.validate_on_submit():
                     start_date = form.certificate_start_date.data
                     expiry_date = form.certificate_expiry_date.data
@@ -130,6 +136,7 @@ def index():
                         owner_group = models.Group.query \
                             .filter_by(id=form.owner_group_id.data).one()
                         new_cert = models.Certificate(
+                            id=form.id.data,
                             certificate_code=form.certificate_code.data,
                             group_area=form.group_area.data,
                             member_count=form.member_count.data,
