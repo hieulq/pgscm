@@ -84,6 +84,13 @@ class FarmerResource(ModelResource):
             (self.manager.filters['_deleted_at'][None].convert(None),)
         return self.manager.paginated_instances_or(**kwargs)
 
+    @Route.GET('/select2', schema=Instances(),
+               response_schema=Instances())
+    def select2_api(self, **kwargs):
+        del kwargs['per_page']
+        del kwargs['page']
+        return self.manager.instances(**kwargs)
+
 
 class GroupResource(ModelResource):
     class Meta:
@@ -108,6 +115,13 @@ class GroupResource(ModelResource):
             (self.manager.filters['_deleted_at'][None].convert(None),)
         return self.manager.paginated_instances_or(**kwargs)
 
+    @Route.GET('/select2', schema=Instances(),
+               response_schema=Instances())
+    def select2_api(self, **kwargs):
+        del kwargs['per_page']
+        del kwargs['page']
+        return self.manager.instances(**kwargs)
+
 
 class AssociateGroupResource(ModelResource):
     class Meta:
@@ -123,6 +137,7 @@ class AssociateGroupResource(ModelResource):
     def instances(self, **kwargs):
         province_id = current_user.province_id
         if province_id:
+            self.manager.filters['province'] = {None:None}
             kwargs['where'] += \
                 (self.manager.filters['province'][None].convert(province_id),)
         kwargs['where'] += \
@@ -157,6 +172,13 @@ class ProvinceResource(ModelResource):
         model = models.Province
         id_field_class = fields.String
         include_id = True
+
+    @Route.GET('/select2',schema=Instances(),
+               response_schema=Instances())
+    def select2_api(self, **kwargs):
+        del kwargs['per_page']
+        del kwargs['page']
+        return self.manager.instances(**kwargs)
 
 
 def init_resources(api):
