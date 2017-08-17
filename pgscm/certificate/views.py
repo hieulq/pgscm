@@ -79,6 +79,10 @@ def index():
             if not check_role(crud_role):
                 return redirect(url_for(request.endpoint))
 
+            form.owner_farmer_id.choices = [(form.owner_farmer_id.data,
+                                             form.owner_farmer_id.label.text)]
+            form.owner_group_id.choices = [(form.owner_group_id.data,
+                                            form.owner_group_id.label.text)]
             # edit certificate
             if form.id.data:
                 if form.validate_on_submit():

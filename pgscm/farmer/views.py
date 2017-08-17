@@ -51,6 +51,7 @@ def index():
             #                              _deleted_at=None).order_by(
             #                              models.Group.name.asc()).all()]
 
+        form.group_id.choices = [(form.group_id.data, form.group_id.label.text)]
         # form create or edit submit
         if request.method == 'POST' and form.data['submit']:
             if not check_role(crud_role):

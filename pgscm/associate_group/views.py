@@ -49,9 +49,10 @@ def index():
         if request.method == 'POST' and form.data['submit']:
             if not check_role(crud_role):
                 return redirect(url_for(request.endpoint))
+
+            form.province_id.choices = [(form.province_id.data, form.province_id.label.text)]
             # edit associate group
             if form.id.data:
-                form.province_id.choices = [(form.province_id.data, form.province_id.label.text)]
                 if form.validate_on_submit():
                     edit_agroup = sqla.session.query(models.AssociateGroup) \
                         .filter_by(id=form.id.data).one()
@@ -72,7 +73,6 @@ def index():
             # add associate group
             else:
                 form.id.data = str(uuid.uuid4())
-                form.province_id.choices = [(form.province_id.data, form.province_id.label.text)]
                 if form.validate_on_submit():
                     province = sqla.session.query(models.Province) \
                         .filter_by(province_id=form.province_id.data).one()

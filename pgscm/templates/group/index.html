@@ -7,9 +7,6 @@
 {%- endblock styles %}
 
 {% block scripts %}
-    {#    {% if current_user.province_id is defined %}#}
-    {#        {% set a %}#}
-    {#    {% endif %}#}
     {{ super() }}
     <!-- DataTables with select2 enabled -->
     {{ load_datatables_script(
@@ -22,23 +19,6 @@
 
     <script>
         $(document).ready(function () {
-
-
-{#            $.ajax({#}
-{#                type: "get",#}
-{#                url: "/province/select2",#}
-{#                                data: {_deleted_at: 'None'},#}
-{#                success: function (data) {#}
-{#                    console.log(data);#}
-{#                },#}
-{#                error: function (request, status, error) {#}
-{#                    console.log(request);#}
-{#                    console.log(error);#}
-{#                    alert(request.responseText);#}
-{#                }#}
-{#            });#}
-
-
 
             $('#load_now_province').on("select2:select", function (e) {
                 $('#district_id').empty();

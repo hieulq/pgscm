@@ -73,6 +73,11 @@ def index():
         if request.method == 'POST' and form.data['submit']:
             if not check_role(crud_role):
                 return redirect(url_for(request.endpoint))
+            form.province_id.choices = [(form.province_id.data, form.province_id.label.text)]
+            form.district_id.choices = [(form.district_id.data, form.district_id.label.text)]
+            form.ward_id.choices = [(form.ward_id.data, form.ward_id.label.text)]
+            form.associate_group_id.choices = [(form.associate_group_id.data,
+                                                form.associate_group_id.label.text)]
             # edit group
             if form.id.data:
                 if form.validate_on_submit():

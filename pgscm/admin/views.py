@@ -53,13 +53,13 @@ def users():
     if request.method == 'POST' and form.data['submit']:
         if not check_role(crud_role):
             return redirect(url_for(request.endpoint))
+        form.province_id.choices = [(form.province_id.data, form.province_id.label.text)]
         # edit user
         if form.id.data:
             # remove required validator in fields pass and confirm
             #  when form is edit form
             setattr(form.password, 'validators', [match_pass])
             setattr(form.confirm, 'validators', [])
-
             if form.validate_on_submit():
                 edit_user = user_datastore.find_user(id=form.id.data)
                 if form.old_password.data:
