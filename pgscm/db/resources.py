@@ -4,7 +4,6 @@ from flask_potion.routes import Route
 from flask_potion import fields
 from flask_potion.instances import Instances
 
-
 from pgscm.db import models
 
 
@@ -25,6 +24,7 @@ class UserResource(ModelResource):
     class Schema:
         roles = fields.Inline('role')
         province = fields.Inline('province')
+        province_id = fields.String()
         last_login_at = fields.DateTimeString()
         current_login_at = fields.DateTimeString()
 
@@ -34,9 +34,8 @@ class UserResource(ModelResource):
         province_id = current_user.province_id
         if province_id:
             kwargs['where'] += \
-                (self.manager.filters['province'][None].convert(province_id),)
-        kwargs['where'] += \
-            (self.manager.filters['_deleted_at'][None].convert(None),)
+                (self.manager.filters['province_id'][None].convert(
+                    province_id),)
         return self.manager.paginated_instances_or(**kwargs)
 
 
@@ -58,7 +57,8 @@ class CertResource(ModelResource):
         province_id = current_user.province_id
         if province_id:
             kwargs['where'] += \
-                (self.manager.filters['province'][None].convert(province_id),)
+                (self.manager.filters['province_id'][None].convert(
+                    province_id),)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at'][None].convert(None),)
         return self.manager.paginated_instances_or(**kwargs)
@@ -79,7 +79,8 @@ class FarmerResource(ModelResource):
         province_id = current_user.province_id
         if province_id:
             kwargs['where'] += \
-                (self.manager.filters['province'][None].convert(province_id),)
+                (self.manager.filters['province_id'][None].convert(
+                    province_id),)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at'][None].convert(None),)
         return self.manager.paginated_instances_or(**kwargs)
@@ -105,6 +106,7 @@ class GroupResource(ModelResource):
         ward = fields.Inline('ward')
         district = fields.Inline('district')
         associate_group = fields.Inline('associate_group')
+        province_id = fields.String()
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
@@ -112,7 +114,8 @@ class GroupResource(ModelResource):
         province_id = current_user.province_id
         if province_id:
             kwargs['where'] += \
-                (self.manager.filters['province'][None].convert(province_id),)
+                (self.manager.filters['province_id'][None].convert(
+                    province_id),)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at'][None].convert(None),)
         return self.manager.paginated_instances_or(**kwargs)
@@ -135,6 +138,7 @@ class AssociateGroupResource(ModelResource):
 
     class Schema:
         province = fields.Inline('province')
+        province_id = fields.String()
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
@@ -143,7 +147,8 @@ class AssociateGroupResource(ModelResource):
         if province_id:
             self.manager.filters['province'] = {None: None}
             kwargs['where'] += \
-                (self.manager.filters['province'][None].convert(province_id),)
+                (self.manager.filters['province_id'][None].convert(
+                    province_id),)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at'][None].convert(None),)
         return self.manager.paginated_instances_or(**kwargs)
@@ -169,7 +174,6 @@ class WardResource(ModelResource):
 
 
 class DistrictResource(ModelResource):
-
     class Meta:
         model = models.District
         id_field_class = fields.String
@@ -180,7 +184,6 @@ class DistrictResource(ModelResource):
 
 
 class ProvinceResource(ModelResource):
-
     class Meta:
         model = models.Province
         id_field_class = fields.String
