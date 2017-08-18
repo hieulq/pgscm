@@ -126,11 +126,11 @@ def _render_btn(id, size='btn-xs', type='btn-default', modal_target='modal', tit
     return btn
 
 
-def is_active_in_tree(request, endpoint, tree=True):
+def is_active_in_tree(request, endpoint, tree=False):
     if endpoint == request.endpoint[:-3]:
         return 'active'
-    elif tree:
-        return 'treeview'
+    elif tree and endpoint == request.endpoint.split('.')[0]:
+        return 'active'
     else:
         return 'node'
 

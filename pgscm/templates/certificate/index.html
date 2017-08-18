@@ -47,8 +47,11 @@
                         <thead>
                         <tr>
                             <th>{{ _('Code') }}</th>
+                            {% if only_farmer == False %}
                             <th>{{ _('Certified group') }}
+                            {% else %}
                             <th>{{ _('Certified farmer') }}</th>
+                            {% endif %}
                             <th>{{ _('Area/Count') }}</th>
                             <th>{{ _('Member count') }}</th>
                             <th>{{ _('Decision') }}</th>
@@ -69,8 +72,11 @@
                                         {{ cert.certificate_code }}
                                     </a>
                                 </td>
+                                {% if only_farmer == False %}
                                 <td><b>{{ cert.owner_group.name }}</b></td>
-                                <td>{{ cert.owner_farmer.name }}</td>
+                                {% else %}
+                                <td><b>{{ cert.owner_farmer.name }}</b></td>
+                                {% endif %}
                                 <td>{{ cert.group_area }}</td>
                                 <td>{{ cert.member_count }}</td>
                                 <td>{{ cert.gov_certificate_id }}</td>

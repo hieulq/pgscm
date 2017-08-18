@@ -185,12 +185,27 @@
             </a>
         </li>
         {% if current_user.is_authenticated %}
-            <li class="{{ is_active_in_tree(request, 'certificate.index') }}">
+            <li class="treeview {{ is_active_in_tree(request, 'certificate', True) }}">
                 <a href="{{ lurl_for('certificate.index') }}">
-                    <i class="fa fa-balance-scale"></i> <span>{{ _('Certificate') }}</span>
+                    <i class="fa fa-balance-scale"></i>
+                    <span>{{ _('Certificate') }}</span>
+                    <i class="fa fa-angle-left pull-right"></i>
                 </a>
+                <ul class="treeview-menu">
+                    <li class="{{ is_active_in_tree(request, 'certificate.groups', True) }}">
+                        <a href="{{ lurl_for('certificate.groups') }}">
+                            <i class="fa fa-group"></i>
+                            {{ _('Certificate Group') }}
+                        </a>
+                    </li>
+                    <li class="{{ is_active_in_tree(request, 'certificate.farmers', True) }}">
+                        <a href="{{ lurl_for('certificate.farmers') }}">
+                            <i class="fa fa-child"></i>
+                            {{ _('Certificate Farmer') }}
+                        </a>
+                    </li>
+                </ul>
             </li>
-
             <li class="{{ is_active_in_tree(request, 'farmer.index') }}">
                 <a href="{{ lurl_for('farmer.index') }}">
                     <i class="fa fa-child"></i> <span>{{ _('Farmer') }}</span>
@@ -209,20 +224,20 @@
             </li>
             {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN]) %}
                 <li class="header">{{ _('DMZ') }}</li>
-                <li class="{{ is_active_in_tree(request, 'admin') }}">
+                <li class="treeview {{ is_active_in_tree(request, 'admin', True) }}">
                     <a href="{{ lurl_for('admin.index') }}">
                         <i class="fa fa-key"></i>
                         <span>{{ _('Administrator') }}</span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="{{ is_active_in_tree(request, 'admin.users', False) }}">
+                        <li class="{{ is_active_in_tree(request, 'admin.users', True) }}">
                             <a href="{{ lurl_for('admin.users') }}">
                                 <i class="fa fa-user"></i>
                                 {{ _('Users Management') }}
                             </a>
                         </li>
-                        <li class="{{ is_active_in_tree(request, 'admin.regions', False) }}">
+                        <li class="{{ is_active_in_tree(request, 'admin.regions', True) }}">
                             <a href="{{ lurl_for('admin.regions') }}">
                                 <i class="fa fa-map"></i>
                                 {{ _('PGS Regions Management') }}
