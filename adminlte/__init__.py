@@ -409,9 +409,35 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     "autoWidth": true,
                     "drawCallback": function( settings ) {{
                         $('.{4}').on('click', function (event) {{
+                            
                             var data = $(this).data()
-                            console.log(data)
                             var modal = $('#{5}')
+                            
+                            function call_ajax(url, resource, id_resource, element_id, default_value){{
+                                $.ajax({{
+                                    type: "get",
+                                    url: url,
+                                    data: 'where={{"' + resource + '": ' +
+                                        '{{"$ref": "/' + resource + '/' + id_resource + '"}} }}',
+                                    success: function (data, text) {{
+                                        var select2_data = [];
+                                        for (var i = 0; i < data.length; i++) {{
+                                            select2_data[i] = {{
+                                                id: data[i]['$id'],
+                                                text: data[i].type + " " + data[i].name
+                                            }}
+                                        }}
+                                        modal.find('#'+element_id).select2({{ width: '100%', data: select2_data}})
+                                            .val(default_value).trigger('change.select2');
+                                    }},
+                                    error: function (request, status, error) {{
+                                        console.log(request);
+                                        console.log(error);
+                                        alert(request.responseText);
+                                    }}
+                                }});
+                            }}
+                            
                             var s2 = $('.{12}')
                             var multi_select_data = []
                             for (var key in data) {{
@@ -442,6 +468,18 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                                 modal.find('#password').parent().removeClass('required')
                                 modal.find('#confirm').prop('required',false)
                                 modal.find('#confirm').parent().removeClass('required')
+                            }}
+                            
+                            if(data['province_id'] && data['district_id']){{
+                                modal.find('#district_id').empty();
+                                call_ajax('/district', 'province', data['province_id'],
+                                    'district_id', data['district_id']);
+                            }}
+                            
+                            if(data['district_id'] && data['ward_id']){{
+                                modal.find('#ward_id').empty();
+                                call_ajax('/ward', 'district', data['district_id'],
+                                    'ward_id', data['ward_id']);
                             }}
 
 
