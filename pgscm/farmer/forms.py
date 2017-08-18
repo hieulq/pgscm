@@ -17,6 +17,6 @@ class FarmerForm(FlaskForm):
     type = SelectField(__('Type'), validators=[data_required],
                        coerce=int, widget=Select())
     group_id = SelectField(__('Group'), validators=[data_required],
-                           coerce=str, widget=Select())
-    id = HiddenField(__('Id'))
+                           coerce=str, widget=Select(), id='load_now-group')
+    id = HiddenField(__('Id'), validators=[data_required])
     submit = SubmitField(__('Submit'), widget=Submit())

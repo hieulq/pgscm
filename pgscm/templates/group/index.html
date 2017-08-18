@@ -19,55 +19,50 @@
 
     <script>
         $(document).ready(function () {
-            $('#province_id').on("select2:select", function (e) {
-                $('#district_id').empty();
-                var value = e.target.value;
-                $.ajax({
-                    type: "get",
-                    url: '/district',
-                    data: 'where={"province": {"$ref": "/province/' + value + '"}}',
-                    success: function (data, text) {
-                        var districts = [];
-                        for (var i = 0; i < data.length; i++) {
-                            districts[i] = {
-                                id: data[i]['$id'],
-                                text: data[i].type + " " + data[i].name
-                            }
-                        }
-                        $('#district_id').select2({data: districts});
-                    },
-                    error: function (request, status, error) {
-                        console.log(request);
-                        console.log(error);
-                        alert(request.responseText);
-                    }
-                });
-            });
 
-            $('#district_id').on("select2:select", function (e) {
-                $('#ward_id').empty();
-                var value = e.target.value;
-                $.ajax({
-                    type: "get",
-                    url: '/ward',
-                    data: 'where={"district": {"$ref": "/district/' + value + '"}}',
-                    success: function (data, text) {
-                        var wards = [];
-                        for (var i = 0; i < data.length; i++) {
-                            wards[i] = {
-                                id: data[i]['$id'],
-                                text: data[i].type + " " + data[i].name
-                            }
-                        }
-                        $('#ward_id').select2({data: wards});
-                    },
-                    error: function (request, status, error) {
-                        console.log(request);
-                        console.log(error);
-                        alert(request.responseText);
+            var elements_select2 = $('select');
+
+            function catch_select2_select_event(source_element, url, resource, des1_element, des2_element) {
+                $(source_element).on("select2:select", function (e) {
+                    $(des1_element).empty();
+                    if (des2_element) {
+                        $(des2_element).empty();
                     }
+                    var value = e.target.value;
+                    $.ajax({
+                        type: "get",
+                        url: url,
+                        data: 'where={"' + resource + '": {"$ref": "/' + resource + '/' + value + '"}}',
+                        success: function (data, text) {
+                            var select2_data = [];
+                            for (var i = 0; i < data.length; i++) {
+                                select2_data[i] = {
+                                    id: data[i]['$id'],
+                                    text: data[i].type + " " + data[i].name
+                                }
+                            }
+                            $(des1_element).select2({data: select2_data});
+                        },
+                        error: function (request, status, error) {
+                            console.log(request);
+                            console.log(error);
+                            alert(request.responseText);
+                        }
+                    });
                 });
-            })
+            }
+
+            catch_select2_select_event(elements_select2[0], '/district', 'province',
+                elements_select2[1], elements_select2[2]);
+
+            catch_select2_select_event(elements_select2[4], '/district', 'province',
+                elements_select2[5], elements_select2[6]);
+
+            catch_select2_select_event(elements_select2[1], '/ward', 'district',
+                elements_select2[2], NaN);
+
+            catch_select2_select_event(elements_select2[5], '/ward', 'district',
+                elements_select2[6], NaN);
         });
     </script>
 

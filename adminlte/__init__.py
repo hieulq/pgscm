@@ -7,6 +7,7 @@ import re
 
 from jinja2 import Markup
 from flask import Blueprint, current_app, url_for, g
+from flask_security import current_user
 from pgscm.utils import _
 
 
@@ -189,6 +190,66 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                 .attr('multiple', 'multiple');
                 $('.select2-search__field').css('border', 'none');
                 """.format(multi_select2_class)
+
+            if current_user.province_id:
+                has_province_id = 1
+            else:
+                has_province_id = 0
+
+            select2_script += """
+                    var select2_elements = $('select')
+                    
+                    function select2_ajax(i, h, resource){{
+                        $.ajax({{
+                            type: "get",
+                            url: "/" + resource + "/select2",
+                            success: function (data) {{
+                                var temp_arr = []
+                                    for(var j in data){{
+                                        temp_arr[j] = {{
+                                            id: data[j]['$id']
+                                        }}
+                                        if(resource == 'province'){{
+                                            temp_arr[j]['text'] = data[j].type + " " + data[j].name
+                                        }} else {{
+                                            temp_arr[j]['text'] = data[j].name
+                                        }}
+                                    }}
+                                    $(select2_elements[i]).select2({{
+                                        width: '100%',
+                                        data: temp_arr
+                                    }});
+                                    $(select2_elements[i + h]).select2({{
+                                        width: '100%',
+                                        data: temp_arr
+                                    }});
+                                }},
+                                error: function (request, status, error) {{
+                                    console.log(request);
+                                    console.log(error);
+                                    alert(request.responseText);
+                                }}
+                        }});
+                    }}
+                    
+                    if(select2_elements.length){{
+                        var h = select2_elements.length / 2;
+                        for(var i = 0; i < h;i++){{
+                            var element_id = select2_elements[i].getAttribute('id');
+                            if(element_id.startsWith('load_now')){{
+                                var resource = element_id.split('-')[1]
+                                if(resource == 'province'){{
+                                    if(!{0}){{
+                                        select2_ajax(i, h, resource);
+                                    }}
+                                }} else {{
+                                    select2_ajax(i, h, resource);
+                                }}
+                            }}
+                        }}
+                    }}
+                        
+            """.format(has_province_id)
 
         if current_app.config['AJAX_CALL_ENABLED']:
             mapping = ""
