@@ -7,6 +7,22 @@ from flask_potion.instances import Instances
 from pgscm.db import models
 
 
+def _check_user_province(manager, kwargs, is_delete=True, is_province=True):
+    if len(kwargs['where']) == 0:
+        func = manager.paginated_instances
+    else:
+        func = manager.paginated_instances_or
+    province_id = current_user.province_id
+    if province_id and is_province:
+        kwargs['where'] += \
+            (manager.filters['province_id'][None].convert(
+                province_id),)
+    if is_delete:
+        kwargs['where'] += \
+            (manager.filters['_deleted_at'][None].convert(None),)
+    return func
+
+
 class RoleResource(ModelResource):
     class Meta:
         model = models.Role
@@ -31,12 +47,8 @@ class UserResource(ModelResource):
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        province_id = current_user.province_id
-        if province_id:
-            kwargs['where'] += \
-                (self.manager.filters['province_id'][None].convert(
-                    province_id),)
-        return self.manager.paginated_instances_or(**kwargs)
+        func = _check_user_province(self.manager, kwargs, is_delete=False)
+        return func(**kwargs)
 
 
 class CertResource(ModelResource):
@@ -54,14 +66,8 @@ class CertResource(ModelResource):
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        province_id = current_user.province_id
-        if province_id:
-            kwargs['where'] += \
-                (self.manager.filters['province_id'][None].convert(
-                    province_id),)
-        kwargs['where'] += \
-            (self.manager.filters['_deleted_at'][None].convert(None),)
-        return self.manager.paginated_instances_or(**kwargs)
+        func = _check_user_province(self.manager, kwargs, is_province=False)
+        return func(**kwargs)
 
 
 class FarmerResource(ModelResource):
@@ -76,14 +82,8 @@ class FarmerResource(ModelResource):
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        province_id = current_user.province_id
-        if province_id:
-            kwargs['where'] += \
-                (self.manager.filters['province_id'][None].convert(
-                    province_id),)
-        kwargs['where'] += \
-            (self.manager.filters['_deleted_at'][None].convert(None),)
-        return self.manager.paginated_instances_or(**kwargs)
+        func = _check_user_province(self.manager, kwargs, is_province=False)
+        return func(**kwargs)
 
     @Route.GET('/select2', schema=Instances(),
                response_schema=Instances())
@@ -111,14 +111,8 @@ class GroupResource(ModelResource):
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        province_id = current_user.province_id
-        if province_id:
-            kwargs['where'] += \
-                (self.manager.filters['province_id'][None].convert(
-                    province_id),)
-        kwargs['where'] += \
-            (self.manager.filters['_deleted_at'][None].convert(None),)
-        return self.manager.paginated_instances_or(**kwargs)
+        func = _check_user_province(self.manager, kwargs)
+        return func(**kwargs)
 
     @Route.GET('/select2', schema=Instances(),
                response_schema=Instances())
@@ -143,15 +137,8 @@ class AssociateGroupResource(ModelResource):
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        province_id = current_user.province_id
-        if province_id:
-            self.manager.filters['province'] = {None: None}
-            kwargs['where'] += \
-                (self.manager.filters['province_id'][None].convert(
-                    province_id),)
-        kwargs['where'] += \
-            (self.manager.filters['_deleted_at'][None].convert(None),)
-        return self.manager.paginated_instances_or(**kwargs)
+        func = _check_user_province(self.manager, kwargs)
+        return func(**kwargs)
 
     @Route.GET('/select2', schema=Instances(),
                response_schema=Instances())

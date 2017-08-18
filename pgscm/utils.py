@@ -89,8 +89,21 @@ class PgsPotionManager(SQLAlchemyManager):
             return []
 
         if where:
-            expressions = [self._expression_for_condition(condition)
-                           for condition in where]
-            query = self._query_filter(query, self._or_expression(expressions))
+            and_where = ()
+            or_where = ()
+            for cond in where:
+                if cond.attribute == 'province_id' or cond.attribute == \
+                        '_deleted_at':
+                    and_where += (cond, )
+                else:
+                    or_where += (cond, )
+            or_expressions = [self._expression_for_condition(condition)
+                              for condition in or_where]
+            and_expressions = [self._expression_for_condition(condition)
+                               for condition in and_where]
+            exp = self._or_expression(or_expressions)
+            and_expressions.append(exp)
+            query = self._query_filter(query, self._and_expression(
+                and_expressions))
 
         return self._query_order_by(query, sort)
