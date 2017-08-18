@@ -410,11 +410,16 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     "drawCallback": function( settings ) {{
                         $('.{4}').on('click', function (event) {{
                             var data = $(this).data()
+                            console.log(data)
                             var modal = $('#{5}')
                             var s2 = $('.{12}')
                             var multi_select_data = []
                             for (var key in data) {{
                                 var target = modal.find('#' + key)
+                                var get_resource = key.split('_id');
+                                if(!target.length && get_resource.length > 1){{
+                                    target = modal.find('#load_now-'+ get_resource[0]);
+                                }}
                                 value = ''
                                 if (data[key]!='None'){{value = data[key]}}
                                 if (target.is('select')){{
