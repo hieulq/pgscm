@@ -45,26 +45,19 @@ def farmers():
         today = datetime.datetime.today().strftime('%Y-%m-%d')
         if province_id:
             cs = models.Certificate.query.join(models.Group).filter(
-                models.Group.province_id == province_id,
                 models.Group._deleted_at == None,
                 models.Certificate.owner_farmer_id != None,
                 models.Certificate._deleted_at == None,
                 or_(models.Certificate.certificate_expiry_date >= today,
                     models.Certificate.certificate_expiry_date == None)
             ).all()
+            del form.owner_group_id
             form.owner_farmer_id.choices = [
                 (f.id, f.name) for f in
                 models.Farmer.query.join(models.Group).filter(
-                    models.Group.province_id == province_id,
                     models.Group._deleted_at == None,
                     models.Farmer._deleted_at == None).order_by(
                     models.Farmer.name.asc()).all()]
-            form.owner_group_id.choices = [
-                (g.id, g.name) for g in
-                models.Group.query.filter_by(
-                    province_id=province_id,
-                    _deleted_at=None).order_by(
-                    models.Group.name.asc()).all()]
         else:
             cs = models.Certificate.query.filter(
                 models.Certificate.owner_farmer_id != None,
@@ -73,7 +66,7 @@ def farmers():
                     models.Certificate.certificate_expiry_date == None)
             ).all()
             form.owner_farmer_id.choices = []
-            form.owner_group_id.choices = []
+            del form.owner_group_id
 
             # form create or edit submit
         if request.method == 'POST' and form.data['submit']:
@@ -196,21 +189,13 @@ def groups():
         today = datetime.datetime.today().strftime('%Y-%m-%d')
         if province_id:
             cs = models.Certificate.query.join(models.Group).filter(
-                models.Group.province_id == province_id,
                 models.Group._deleted_at == None,
-                models.Certificate.owner_group_id != None,
+                models.Certificate.owner_group != None,
                 models.Certificate._deleted_at == None,
                 or_(models.Certificate.certificate_expiry_date >= today,
                     models.Certificate.certificate_expiry_date == None)
             ).all()
-            form.owner_farmer_id.choices = [
-                (f.id, f.name) for f in
-                models.Farmer.query.join(models.Group).filter(
-                    models.Group.province_id == province_id,
-                    models.Group._deleted_at == None,
-                    models.Certificate.owner_group_id != None,
-                    models.Farmer._deleted_at == None).order_by(
-                    models.Farmer.name.asc()).all()]
+            del form.owner_farmer_id
             form.owner_group_id.choices = [
                 (g.id, g.name) for g in
                 models.Group.query.filter_by(
@@ -220,11 +205,11 @@ def groups():
         else:
             cs = models.Certificate.query.filter(
                 models.Certificate._deleted_at == None,
-                models.Certificate.owner_group_id != None,
+                models.Certificate.owner_group != None,
                 or_(models.Certificate.certificate_expiry_date >= today,
                     models.Certificate.certificate_expiry_date == None)
             ).all()
-            form.owner_farmer_id.choices = []
+            del form.owner_farmer_id
             form.owner_group_id.choices = []
 
             # form create or edit submit

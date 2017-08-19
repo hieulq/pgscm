@@ -171,6 +171,8 @@ class Ward(sqla.Model):
                               nullable=False, index=True)
     district = sqla.relationship('District', back_populates='wards')
     groups = sqla.relationship('Group', back_populates='ward')
+    __table_args__ = (
+        sqla.Index('ward_index', 'name'),)
 
 
 class District(sqla.Model):
@@ -186,6 +188,8 @@ class District(sqla.Model):
     province = sqla.relationship('Province', back_populates='districts')
     wards = sqla.relationship('Ward', back_populates='district')
     groups = sqla.relationship('Group', back_populates='district')
+    __table_args__ = (
+        sqla.Index('district_index', 'name'),)
 
 
 class Province(sqla.Model):
@@ -199,3 +203,5 @@ class Province(sqla.Model):
     associate_groups = sqla.relationship('AssociateGroup',
                                          back_populates='province')
     users = sqla.relationship('User', back_populates='province')
+    __table_args__ = (
+        sqla.Index('province_index', 'name'),)
