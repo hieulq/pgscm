@@ -60,8 +60,54 @@
             catch_select2_select_event(elements_select2[1], '/ward', 'district',
                 elements_select2[2], NaN);
 
+            var certificate_status_type = {
+                1: "{{ g.c.CertificateStatusType(1).name }}",
+                2: "{{ g.c.CertificateStatusType(2).name }}",
+                3: "{{ g.c.CertificateStatusType(3).name }}",
+                4: "{{ g.c.CertificateStatusType(4).name }}"
+            };
+
+            var certificate_re_verify_status_type = {
+                1: "{{ g.c.CertificateReVerifyStatusType(1).name }}",
+                2: "{{ g.c.CertificateReVerifyStatusType(2).name }}",
+                3: "{{ g.c.CertificateReVerifyStatusType(3).name }}",
+                4: "{{ g.c.CertificateReVerifyStatusType(4).name }}",
+                5: "{{ g.c.CertificateReVerifyStatusType(5).name }}"
+            };
+
             catch_select2_select_event(elements_select2[5], '/ward', 'district',
                 elements_select2[6], NaN);
+
+            $('.view_gr_history').on('click', function () {
+                var owner_group_id = $(this).data()['owner_group_id'];
+                $.ajax({
+                    type: "get",
+                    url: '/certificate',
+                    data: 'where={"owner_group_id": "' + owner_group_id + '"}',
+                    success: function (data, text) {
+                        $('#{{ g.c.MODAL_HISTORY_ID }}').find("tr:gt(0)").remove();
+                        if (data.length) {
+                            var table_body = $('#{{ g.c.MODAL_HISTORY_ID }} tbody');
+                                for (var i in data) {
+                                var new_row = '<tr>' +
+                                    '<th scope="row">' + (parseInt(i) + 1) + '</th>' +
+                                    '<td>'+ data[i]['certificate_code'] + '</td>' +
+                                    '<td>'+ certificate_status_type[data[i]['status']] + '</td>' +
+                                    '<td>'+ certificate_re_verify_status_type[data[i]['re_verify_status']] + '</td>' +
+                                    '<td>'+ data[i]['certificate_start_date'] + '</td>' +
+                                    '<td>'+ data[i]['certificate_expiry_date'] + '</td>' +
+                                    '</tr>';
+                                table_body.append(new_row);
+                            }
+                        }
+                    },
+                    error: function (request, status, error) {
+                        console.log(request);
+                        console.log(error);
+                        alert(request.responseText);
+                    }
+                });
+            })
         });
     </script>
 
@@ -110,11 +156,14 @@
                         {% for gr in gs %}
                             <tr>
                                 <td>
-                                    <a href="{{ lurl_for('group.index', gs_id=gr.id) }}">
-                                        {{ gr.group_code }}
+                                    {{ gr.group_code }}
+                                </td>
+                                <td>
+                                    <a href="#" data-toggle="modal" data-target="#{{ g.c.MODAL_HISTORY_ID }}"
+                                       class="view_gr_history" data-owner_group_id="{{ gr.id }}">
+                                        <b>{{ gr.name }}</b>
                                     </a>
                                 </td>
-                                <td><b>{{ gr.name }}</b></td>
                                 <td>{{ gr.village }}</td>
                                 <td>{{ gr.ward.name }}</td>
                                 <td>{{ gr.district.name }}</td>
@@ -140,4 +189,5 @@
     {{ render_modal(g.c.MODAL_ADD_ID, 'modal', _('Create New')) }}
     {{ render_modal(g.c.MODAL_EDIT_ID, 'modal', _('Update Data')) }}
     {{ render_modal(g.c.MODAL_DEL_ID, 'modal-danger', _('Confirm to delete') ) }}
+    {{ render_modal(g.c.MODAL_HISTORY_ID, 'modal', _('Certificate history') ) }}
 {%- endblock content %}

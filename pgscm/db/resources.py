@@ -62,6 +62,7 @@ class CertResource(ModelResource):
         owner_farmer = fields.Inline('farmer')
         certificate_start_date = fields.DateString()
         certificate_expiry_date = fields.DateString()
+        owner_group_id = fields.String()
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
