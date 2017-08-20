@@ -195,13 +195,13 @@
                     <li class="{{ is_active_in_tree(request, 'certificate.groups', True) }}">
                         <a href="{{ lurl_for('certificate.groups') }}">
                             <i class="fa fa-group"></i>
-                            {{ _('Certificate Group') }}
+                            {{ _('Certified Group') }}
                         </a>
                     </li>
                     <li class="{{ is_active_in_tree(request, 'certificate.farmers', True) }}">
                         <a href="{{ lurl_for('certificate.farmers') }}">
                             <i class="fa fa-child"></i>
-                            {{ _('Certificate Farmer') }}
+                            {{ _('Certified Farmer') }}
                         </a>
                     </li>
                 </ul>
@@ -222,6 +222,14 @@
                     <i class="fa fa-home"></i> <span>{{ _('Associated Group') }}</span>
                 </a>
             </li>
+            {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN, g.c.N_MOD, g.c.R_MOD]) %}
+            <li class="{{ is_active_in_tree(request, 'admin.alarms') }}">
+                <a href="{{ lurl_for('admin.alarms') }}">
+                    <i class="fa fa-warning"></i>
+                    {{ _('Alarms') }}
+                </a>
+            </li>
+            {% endif %}
             {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN]) %}
                 <li class="header">{{ _('DMZ') }}</li>
                 <li class="treeview {{ is_active_in_tree(request, 'admin', True) }}">
@@ -241,12 +249,6 @@
                             <a href="{{ lurl_for('admin.regions') }}">
                                 <i class="fa fa-map"></i>
                                 {{ _('PGS Regions Management') }}
-                            </a>
-                        </li>
-                        <li class="{{ is_active_in_tree(request, 'admin.configs', False) }}">
-                            <a href="{{ lurl_for('admin.configs') }}">
-                                <i class="fa fa-cogs"></i>
-                                {{ _('Configurations') }}
                             </a>
                         </li>
                     </ul>

@@ -30,10 +30,10 @@ class CertificateForm(FlaskForm):
         render_kw={"placeholder": __('Certificate expiry date')})
     status = SelectField(
         __('Status'), validators=[data_required], coerce=int, widget=Select(),
-        choices=[(c.CertificateStatusType.approve.value, __('Approve')),
-                 (c.CertificateStatusType.reject.value, __('Reject')),
-                 (c.CertificateStatusType.approve_no_cert.value,
-                  __('Approve no cert')),
+        choices=[(c.CertificateStatusType.approved.value, __('Approved')),
+                 (c.CertificateStatusType.rejected.value, __('Rejected')),
+                 (c.CertificateStatusType.approved_no_cert.value,
+                  __('Approved no cert')),
                  (c.CertificateStatusType.in_conversion.value,
                   __('In conversion'))])
     re_verify_status = SelectField(

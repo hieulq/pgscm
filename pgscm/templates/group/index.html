@@ -95,7 +95,7 @@
                             for (var i in data) {
                                 var new_row = '<tr>' +
                                     '<th scope="row">' + (parseInt(i) + 1) + '</th>' +
-                                    '<td>' + data[i]['certificate_code'] + '</td>' +
+                                    '<td><b>' + data[i]['certificate_code'] + '</b></td>' +
                                     '<td>' + data[i]['gov_certificate_id'] + '</td>' +
                                     '<td>' + certificate_status_type[data[i]['status']] + '</td>' +
                                     '<td>' + certificate_re_verify_status_type[data[i]['re_verify_status']] + '</td>' +
@@ -161,9 +161,7 @@
                         <tbody>
                         {% for gr in gs %}
                             <tr>
-                                <td>
-                                    {{ gr.group_code }}
-                                </td>
+                                <td><b>{{ gr.group_code }}</b></td>
                                 <td>
                                     <a href="#" data-toggle="modal" data-target="#{{ g.c.MODAL_HISTORY_ID }}"
                                        class="view_gr_history" data-owner_group_id="{{ gr.id }}">
