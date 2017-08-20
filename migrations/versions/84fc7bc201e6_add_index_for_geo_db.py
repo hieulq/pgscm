@@ -1,4 +1,4 @@
-"""empty message
+"""add index for geo DB
 
 Revision ID: 84fc7bc201e6
 Revises: 2159f60b94ab
