@@ -4,11 +4,14 @@ from flask_potion.routes import Route
 from flask_potion import fields
 from flask_potion.instances import Instances
 
+import datetime
+
 from pgscm.db import models
 
 
-def _check_user_province(manager, kwargs, is_delete=True, is_province=True):
-    if len(kwargs['where']) == 0:
+def _check_user_province(manager, kwargs, is_and=False, is_delete=True,
+                         is_province=True):
+    if len(kwargs['where']) == 0 or is_and:
         func = manager.paginated_instances
     else:
         func = manager.paginated_instances_or
@@ -63,6 +66,21 @@ class CertResource(ModelResource):
         certificate_start_date = fields.DateString()
         certificate_expiry_date = fields.DateString()
         owner_group_id = fields.String()
+
+    @Route.GET('/nearly_expired', rel="", schema=Instances(),
+               response_schema=Instances())
+    def nearly_expired(self, **kwargs):
+        today = datetime.datetime.today().strftime('%Y-%m-%d')
+        day = (datetime.datetime.today() + datetime.timedelta(days=30)) \
+            .strftime('%Y-%m-%d')
+        func = _check_user_province(self.manager, kwargs, is_province=False,
+                                    is_delete=True, is_and=True)
+        kwargs['where'] += \
+            (self.manager.filters['certificate_expiry_date']['lte'].
+             convert({'$lte': day}),
+             self.manager.filters['certificate_expiry_date']['gte'].
+             convert({'$gte': today}))
+        return func(**kwargs)
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
