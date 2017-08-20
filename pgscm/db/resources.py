@@ -67,7 +67,8 @@ class CertResource(ModelResource):
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        func = _check_user_province(self.manager, kwargs, is_province=False)
+        func = _check_user_province(self.manager, kwargs, is_province=False,
+                                    is_delete=False)
         return func(**kwargs)
 
 
