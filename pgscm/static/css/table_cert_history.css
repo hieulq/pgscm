@@ -1,0 +1,15 @@
+table.modal-cert-history tbody {
+    display: block;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+table.modal-cert-history thead, table.modal-cert-history tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+table.modal-cert-history th:first-child, table.modal-cert-history td:first-child {
+    width: 5%;
+}
