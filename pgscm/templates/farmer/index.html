@@ -64,8 +64,8 @@
                                     </a>
                                 </td>
                                 <td><b>{{ farmer.name }}</b></td>
-                                <td>{{ g.c.GenderType(farmer.gender).name }}</td>
-                                <td>{{ g.c.FarmerType(farmer.type).name }}</td>
+                                <td>{{ _(g.c.GenderType(farmer.gender).name) }}</td>
+                                <td>{{ _(g.c.FarmerType(farmer.type).name) }}</td>
                                 <td>{{ farmer.group.name }}</td>
                                 {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
                                 <td class="actions_column">
