@@ -332,7 +332,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     "ajax": function(data, callback, settings) {{
                         var sort_column_name = data.columns[data.order[0].column].data;
                         var direction = data.order[0].dir == 'asc' ? true : false
-                        var where_params = {{}}
+                        var where_params = {{"_deleted_at":null}}
                         var sort_params = {{}}
                         sort_params[sort_column_name] = direction; 
                         if (data.search.value) {{

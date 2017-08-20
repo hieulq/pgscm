@@ -39,7 +39,7 @@ def farmers():
         form.owner_farmer_id.choices = []
         form.owner_group_id.choices = []
         return render_template('certificate/index.html', form=form,
-                               dform=dform)
+                               dform=dform, only_farmer=True)
     else:
         province_id = current_user.province_id
         today = datetime.datetime.today().strftime('%Y-%m-%d')
@@ -183,7 +183,7 @@ def groups():
         form.owner_farmer_id.choices = []
         form.owner_group_id.choices = []
         return render_template('certificate/index.html', form=form,
-                               dform=dform)
+                               dform=dform, only_farmer=False)
     else:
         province_id = current_user.province_id
         today = datetime.datetime.today().strftime('%Y-%m-%d')
