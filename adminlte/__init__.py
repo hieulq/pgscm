@@ -546,11 +546,11 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
 def load_group_script():
     certificate_status_type = {}
     for key in g.c.CertificateStatusType:
-        certificate_status_type[key.value] = key.name
+        certificate_status_type[key.value] = _(key.name)
     certificate_re_verify_status_type = {}
 
     for key in g.c.CertificateReVerifyStatusType:
-        certificate_re_verify_status_type[key.value] = key.name
+        certificate_re_verify_status_type[key.value] = _(key.name)
 
     group_script = """
     <script>
