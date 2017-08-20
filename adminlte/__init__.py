@@ -127,7 +127,7 @@ def _render_btn(id, size='btn-xs', type='btn-default', modal_target='modal', tit
 
 
 def is_active_in_tree(request, endpoint, tree=False):
-    if endpoint == request.endpoint[:-3]:
+    if not tree and endpoint == request.endpoint[:-3]:
         return 'active'
     elif tree and endpoint == request.endpoint.split('.')[0]:
         return 'active'
@@ -294,11 +294,11 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     if column[2] == g.c.FarmerType:
                         render_func = render_tmpl.format(
                             "", "",
-                            "(data == 1 ? \"" + _('Member') + "\" : \"" + _('Reviewer') + "\")")
+                            "(data == 1 ? \"" + _('member') + "\" : \"" + _('reviewer') + "\")")
                     if column[2] == g.c.GenderType:
                         render_func = render_tmpl.format(
                             "", "",
-                            "(data == 1 ? \"" + _('Male') + "\" : \"" + _('Female') + "\")")
+                            "(data == 1 ? \"" + _('male') + "\" : \"" + _('female') + "\")")
                     if column[2] == g.c.CertificateStatusType:
                         render_func = render_tmpl.format(
                             "", "",
@@ -309,7 +309,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                             "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
                                 'in_conversion') + "</label></div>" +
                             "\":\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i>""" + _(
-                                'Approved no cert') + "</label></div>\")")
+                                'approved_no_cert') + "</label></div>\")")
                     if column[2] == g.c.CertificateReVerifyStatusType:
                         render_func = render_tmpl.format(
                             "", "",

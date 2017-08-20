@@ -61,18 +61,18 @@
                 elements_select2[2], NaN);
 
             var certificate_status_type = {
-                1: "{{ g.c.CertificateStatusType(1).name }}",
-                2: "{{ g.c.CertificateStatusType(2).name }}",
-                3: "{{ g.c.CertificateStatusType(3).name }}",
-                4: "{{ g.c.CertificateStatusType(4).name }}"
+                1: "{{ _(g.c.CertificateStatusType(1).name) }}",
+                2: "{{ _(g.c.CertificateStatusType(2).name) }}",
+                3: "{{ _(g.c.CertificateStatusType(3).name) }}",
+                4: "{{ _(g.c.CertificateStatusType(4).name) }}"
             };
 
             var certificate_re_verify_status_type = {
-                1: "{{ g.c.CertificateReVerifyStatusType(1).name }}",
-                2: "{{ g.c.CertificateReVerifyStatusType(2).name }}",
-                3: "{{ g.c.CertificateReVerifyStatusType(3).name }}",
-                4: "{{ g.c.CertificateReVerifyStatusType(4).name }}",
-                5: "{{ g.c.CertificateReVerifyStatusType(5).name }}"
+                1: "{{ _(g.c.CertificateReVerifyStatusType(1).name) }}",
+                2: "{{ _(g.c.CertificateReVerifyStatusType(2).name) }}",
+                3: "{{ _(g.c.CertificateReVerifyStatusType(3).name) }}",
+                4: "{{ _(g.c.CertificateReVerifyStatusType(4).name) }}",
+                5: "{{ _(g.c.CertificateReVerifyStatusType(5).name) }}"
             };
 
             catch_select2_select_event(elements_select2[5], '/ward', 'district',
