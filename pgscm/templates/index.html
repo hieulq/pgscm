@@ -22,7 +22,7 @@
         <ul class="nav navbar-nav">
             {% if current_user.is_authenticated and check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
                 <!-- Notifications: style can be found in dropdown.less -->
-                <li class="dropdown notifications-menu">
+                <li class="warning dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-warning"></i>
                         <span class="label label-warning">0</span>
@@ -183,7 +183,7 @@
                 </a>
             </li>
             {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN, g.c.N_MOD, g.c.R_MOD]) %}
-            <li class="{{ is_active_in_tree(request, 'report.alarms', False) }}">
+            <li class="alarm {{ is_active_in_tree(request, 'report.alarms', False) }}">
                 <a href="{{ lurl_for('report.alarms') }}">
                     <i class="fa fa-warning"></i>
                     {{ _('Alarms') }}
@@ -247,6 +247,20 @@
     </ol>
 {%- endblock content_header %}
 
+{% block scripts -%}
+    {{ super() }}
+    <script>
+    $.get('/certificate/nearly_expired', function(res, status, req) {
+    if (req.getResponseHeader('Content-Type') == 'application/json') {
+        count = req.getResponseHeader('X-Total-Count');
+        $("li.warning").find('span.label-warning').html(count);
+        $("li.warning").find('b').html(count);
+        $("li.alarm").find('small.label').html(count);
+    }
+    })
+    </script>
+{%- endblock scripts  %}
+
 {% block content -%}
     <h4 class="page-header">
         {{ _('PGS Status') }}
@@ -291,6 +305,15 @@
             body=_("PGS Associate Groups"),
             iconclass="fa fa-home",
             footerlink="agroup.index"
+          ) }}
+        {{ widgets.small_box(
+            id="pgs-ecert-wg",
+            url="/certificate/nearly_expired",
+            bgcolor="bg-yellow",
+            header=0,
+            body=_("Nearly Expired PGS Certs"),
+            iconclass="fa fa-warning",
+            footerlink="report.alarms"
           ) }}
 
     </div><!-- /.row -->

@@ -26,7 +26,8 @@ percentage=False, body="User Registrations", iconclass="ion ion-person-add", foo
                 if (req.getResponseHeader('Content-Type') !== 'application/json') {
                     $("#{{ id }}").find('h3').html(0);
                 } else {
-                    $("#{{ id }}").find('h3').html(req.getResponseHeader('X-Total-Count'));
+                    count = req.getResponseHeader('X-Total-Count');
+                    $("#{{ id }}").find('h3').html(count);
                 }
             })
         })

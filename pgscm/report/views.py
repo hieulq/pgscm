@@ -32,14 +32,14 @@ def alarms():
     else:
         province_id = current_user.province_id
         today = datetime.datetime.today().strftime('%Y-%m-%d')
-        day = (datetime.datetime.today() + datetime.timedelta(days=30))\
+        day = (datetime.datetime.today() + datetime.timedelta(days=60))\
             .strftime('%Y-%m-%d')
         if province_id:
             cs = models.Certificate.query.join(models.Group).filter(
                 models.Group._deleted_at == None,
                 models.Certificate._deleted_at == None,
-                models.Certificate.certificate_expiry_date > today,
-                models.Certificate.certificate_expiry_date < day
+                models.Certificate.certificate_expiry_date >= today,
+                models.Certificate.certificate_expiry_date <= day
             ).all()
             del form.owner_group_id
             form.owner_farmer_id.choices = [
@@ -51,8 +51,8 @@ def alarms():
         else:
             cs = models.Certificate.query.filter(
                 models.Certificate._deleted_at == None,
-                models.Certificate.certificate_expiry_date > today,
-                models.Certificate.certificate_expiry_date < day
+                models.Certificate.certificate_expiry_date >= today,
+                models.Certificate.certificate_expiry_date <= day
             ).all()
             form.owner_farmer_id.choices = []
             del form.owner_group_id

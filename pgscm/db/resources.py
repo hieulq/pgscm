@@ -71,7 +71,7 @@ class CertResource(ModelResource):
                response_schema=Instances())
     def nearly_expired(self, **kwargs):
         today = datetime.datetime.today().strftime('%Y-%m-%d')
-        day = (datetime.datetime.today() + datetime.timedelta(days=30)) \
+        day = (datetime.datetime.today() + datetime.timedelta(days=60)) \
             .strftime('%Y-%m-%d')
         func = _check_user_province(self.manager, kwargs, is_province=False,
                                     is_delete=True, is_and=True)
