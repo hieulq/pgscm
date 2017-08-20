@@ -304,26 +304,26 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                         render_func = render_tmpl.format(
                             "", "",
                             "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                                'Approved') + "</label></div>" +
+                                'approved') + "</label></div>" +
                             "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                                'Rejected') + "</label></div>" +
+                                'rejected') + "</label></div>" +
                             "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
-                                'In conversion') + "</label></div>" +
+                                'in_conversion') + "</label></div>" +
                             "\":\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i>""" + _(
                                 'Approved no cert') + "</label></div>\")")
                     if column[2] == g.c.CertificateReVerifyStatusType:
                         render_func = render_tmpl.format(
                             "", "",
                             "(data==1?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
-                                'Not check') + "</label></div>" +
+                                'not_check') + "</label></div>" +
                             "\":data==2?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                                'Valid') + "</label></div>" +
+                                'valid') + "</label></div>" +
                             "\":data==3?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                                'Decline') + "</label></div>" +
+                                'decline') + "</label></div>" +
                             "\":data==4?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
-                                'Warning') + "</label></div>" +
+                                'warning') + "</label></div>" +
                             "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                                'Punish') + "</label></div>" + "\")")
+                                'punish') + "</label></div>" + "\")")
                     mapping += """
                         {{"data": "{1}", "orderable": {2}, "searchable": {2},
                          {0}}},""" \
