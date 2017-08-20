@@ -6,12 +6,11 @@ Create Date: 2017-08-20 12:42:40.461404
 
 """
 
+from alembic import op
+
 # revision identifiers, used by Alembic.
 revision = '84fc7bc201e6'
 down_revision = '2159f60b94ab'
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():
@@ -19,7 +18,8 @@ def upgrade():
     op.create_index('district_index', 'district', ['name'], unique=False)
     op.create_index('province_index', 'province', ['name'], unique=False)
     op.drop_index('ix_user_fullname', table_name='user')
-    op.create_index(op.f('ix_user_fullname'), 'user', ['fullname'], unique=True)
+    op.create_index(op.f('ix_user_fullname'), 'user',
+                    ['fullname'], unique=True)
     op.create_index('ward_index', 'ward', ['name'], unique=False)
     # ### end Alembic commands ###
 

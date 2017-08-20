@@ -246,7 +246,7 @@ def alarms():
                                 form.owner_farmer_id.data:
                             edit_certificate.owner_farmer = models.Farmer \
                                 .query.filter_by(
-                                id=form.owner_farmer_id.data).one()
+                                    id=form.owner_farmer_id.data).one()
                         if edit_certificate.owner_group_id != \
                                 form.owner_group_id.data:
                             edit_certificate.owner_group = models.Group.query \
