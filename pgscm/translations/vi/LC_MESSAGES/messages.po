@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-08-20 23:56+0700\n"
+"POT-Creation-Date: 2017-08-21 01:03+0700\n"
 "PO-Revision-Date: 2017-07-08 21:17+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: vi\n"
@@ -212,8 +212,8 @@ msgid "Member count"
 msgstr "Tổng thành viên"
 
 #: pgscm/certificate/forms.py:22 pgscm/certificate/forms.py:23
-msgid "Certificate start date"
-msgstr "Ngày cấp chứng chỉ"
+msgid "Certificate verify date"
+msgstr "Ngày thanh tra"
 
 #: pgscm/certificate/forms.py:25 pgscm/certificate/forms.py:27
 msgid "Decision code"
@@ -549,8 +549,8 @@ msgstr "Thanh tra"
 
 #: pgscm/templates/certificate/index.html:71 pgscm/templates/macro.html:29
 #: pgscm/templates/report/alarm.html:54
-msgid "Start date"
-msgstr "Ngày cấp"
+msgid "Verify date"
+msgstr "Ngày thanh tra"
 
 #: pgscm/templates/certificate/index.html:72 pgscm/templates/macro.html:30
 #: pgscm/templates/report/alarm.html:55
@@ -771,4 +771,10 @@ msgstr "Hãy đăng ký tài khoản PGS mới!"
 
 #~ msgid "Configurations"
 #~ msgstr "Quản lý cấu hình"
+
+#~ msgid "Certificate start date"
+#~ msgstr "Ngày cấp chứng chỉ"
+
+#~ msgid "Start date"
+#~ msgstr "Ngày cấp"
 

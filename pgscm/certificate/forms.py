@@ -19,8 +19,8 @@ class CertificateForm(FlaskForm):
         __('Member count'), validators=[data_required],
         render_kw={"placeholder": __('Member count')})
     certificate_start_date = DateField(
-        __('Certificate start date'), widget=Date(),
-        render_kw={"placeholder": __('Certificate start date')})
+        __('Certificate verify date'), widget=Date(),
+        render_kw={"placeholder": __('Certificate verify date')})
     gov_certificate_id = StringField(
         __('Decision code'),
         validators=[data_required],
