@@ -303,13 +303,13 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                         render_func = render_tmpl.format(
                             "", "",
                             "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                                'Approve') + "</label></div>" +
+                                'Approved') + "</label></div>" +
                             "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                                'Reject') + "</label></div>" +
+                                'Rejected') + "</label></div>" +
                             "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
                                 'In conversion') + "</label></div>" +
                             "\":\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i>""" + _(
-                                'Approve no cert') + "</label></div>\")")
+                                'Approved no cert') + "</label></div>\")")
                     if column[2] == g.c.CertificateReVerifyStatusType:
                         render_func = render_tmpl.format(
                             "", "",
