@@ -19,7 +19,9 @@
             ("ward.name", False, None), ("district.name", False, None), ("province.name", False, None),
             ("associate_group.name", False, None), ("action", False, None)],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
+
     {{ load_group_script() }}
+
 
 {%- endblock scripts %}
 {% block content_header -%}

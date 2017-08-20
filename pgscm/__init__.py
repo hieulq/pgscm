@@ -76,6 +76,7 @@ def register_blueprint(app):
     from pgscm.group import group as group_blueprint
     from pgscm.farmer import farmer as farmer_blueprint
     from pgscm.associate_group import agroup as agroup_blueprint
+    from pgscm.report import report as report_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(admin_blueprint)
@@ -83,6 +84,7 @@ def register_blueprint(app):
     app.register_blueprint(group_blueprint)
     app.register_blueprint(agroup_blueprint)
     app.register_blueprint(farmer_blueprint)
+    app.register_blueprint(report_blueprint)
 
 
 def create_app(config_name):
