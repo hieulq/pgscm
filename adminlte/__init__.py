@@ -4,6 +4,7 @@
 __version__ = '2.3.3'
 
 import re
+import json
 
 from jinja2 import Markup
 from flask import Blueprint, current_app, url_for, g
@@ -542,6 +543,106 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
         return Markup(css_script)
 
 
+def load_group_script():
+    certificate_status_type = {}
+    for key in g.c.CertificateStatusType:
+        certificate_status_type[key.value] = key.name
+    certificate_re_verify_status_type = {}
+
+    for key in g.c.CertificateReVerifyStatusType:
+        certificate_re_verify_status_type[key.value] = key.name
+
+    group_script = """
+    <script>
+        $(document).ready(function () {
+            var elements_select2 = $('select');
+
+            function catch_select2_select_event(source_element, url, resource, des1_element, des2_element) {
+                $(source_element).on("select2:select", function (e) {
+                    $(des1_element).empty();
+                    if (des2_element) {
+                        $(des2_element).empty();
+                    }
+                    var value = e.target.value;
+                    $.ajax({
+                        type: "get",
+                        url: url,
+                        data: 'where={"' + resource + '": {"$ref": "/' + resource + '/' + value + '"} }',
+                        success: function (data, text) {
+                            var select2_data = [];
+                            for (var i = 0; i < data.length; i++) {
+                                select2_data[i] = {
+                                    id: data[i]['$id'],
+                                    text: data[i].type + " " + data[i].name
+                                }
+                            }
+                            $(des1_element).select2({data: select2_data});
+                        },
+                        error: function (request, status, error) {
+                            console.log(request);
+                            console.log(error);
+                            alert(request.responseText);
+                        }
+                    });
+                });
+            }
+
+            catch_select2_select_event(elements_select2[0], '/district', 'province', 
+                elements_select2[1], elements_select2[2]);
+
+            catch_select2_select_event(elements_select2[4], '/district', 'province', 
+                elements_select2[5], elements_select2[6]);
+
+            catch_select2_select_event(elements_select2[1], '/ward', 'district', 
+                elements_select2[2], NaN);
+            
+            catch_select2_select_event(elements_select2[5], '/ward', 'district',
+                elements_select2[6], NaN);
+                
+            var certificate_status_type =  """ + json.dumps(certificate_status_type) + """ 
+        
+            var certificate_re_verify_status_type = """ + json.dumps(certificate_re_verify_status_type) + """
+            
+            $('.view_gr_history').on('click', function () {{
+                var owner_group_id = $(this).data()['owner_group_id'];
+                $.ajax({{
+                    type: "get",
+                    url: '/certificate',
+                    data: 'where={{"owner_group_id": "' + owner_group_id + '"}}',
+                    success: function (data, text) {{
+                        console.log(data);
+                        $('#{0}').find("tr:gt(0)").remove();
+                        if (data.length) {{
+                            var table_body = $('#{0} tbody');
+                            for (var i in data) {{
+                                var new_row = '<tr>' +
+                                    '<th scope="row">' + (parseInt(i) + 1) + '</th>' +
+                                    '<td><b>' + data[i]['certificate_code'] + '</b></td>' +
+                                    '<td>' + data[i]['gov_certificate_id'] + '</td>' +
+                                    '<td>' + certificate_status_type[data[i]['status']] + '</td>' +
+                                    '<td>' + certificate_re_verify_status_type[data[i]['re_verify_status']] + '</td>' +
+                                    '<td>' + data[i]['certificate_start_date'] + '</td>' +
+                                    '<td>' + data[i]['certificate_expiry_date'] + '</td>' +
+                                    '<td>' + data[i]['_modify_info'] + '</td>' +
+                                    '</tr>';
+                                table_body.append(new_row);
+                            }}
+                        }}
+                    }},
+                    error: function (request, status, error) {{
+                        console.log(request);
+                        console.log(error);
+                        alert(request.responseText);
+                    }}
+                }});
+            }})
+            
+        }});
+    </script>
+    """.format(g.c.MODAL_HISTORY_ID)
+    return Markup(group_script)
+
+
 def check_role(current, target):
     for role in current:
         if role in target:
@@ -587,6 +688,8 @@ class AdminLTE(object):
             check_role
         app.jinja_env.globals['load_datatables_script'] = \
             load_datatables_script
+        app.jinja_env.globals['load_group_script'] = \
+            load_group_script
 
         if not hasattr(app, 'extensions'):
             app.extensions = {}

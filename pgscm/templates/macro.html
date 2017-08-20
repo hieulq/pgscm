@@ -1,9 +1,9 @@
 {% import "bootstrap/wtf.html" as wtf %}
-{% macro render_modal(id, type, title) -%}
+{% macro render_modal(id, type, title, size='') -%}
     <div class="modal {{ type }} fade" id="{{ id }}"
          style="display: none">
         <!-- .modal -->
-        <div class="modal-dialog">
+        <div class="modal-dialog {{ size }}">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"
@@ -18,38 +18,31 @@
                         {{ _('Do you really want to delete data?') }}
                         {{ wtf.quick_form(dform) }}
                     {% elif id == g.c.MODAL_HISTORY_ID %}
-                        <table class="table table-hover">
+                        <table class="table table-hover {{ g.c.MODAL_HISTORY_ID }}">
                             <thead>
                             <tr>
                                 <th>#</th>
                                 <th>{{ _('Certificate code') }}</th>
+                                <th>{{ _('Decision') }}</th>
                                 <th>{{ _('Status') }}</th>
                                 <th>{{ _('Verify status') }}</th>
                                 <th>{{ _('Start date') }}</th>
                                 <th>{{ _('Expiry date') }}</th>
+                                <th>{{ _('Modify info') }}</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>2016-12-04</td>
-                                <td>2016-12-04</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>2016-12-04</td>
-                                <td>2016-12-04</td>
-                            </tr>
                             </tbody>
                         </table>
                     {% endif %}
                 </div>
+            {% if id == g.c.MODAL_HISTORY_ID %}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">
+                        {{ _('Close') }}
+                    </button>
+                </div>
+            {% endif %}
             </div>
             <!-- /.modal-content -->
         </div>
