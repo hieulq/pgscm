@@ -17,6 +17,37 @@
                     {% elif id == g.c.MODAL_DEL_ID %}
                         {{ _('Do you really want to delete data?') }}
                         {{ wtf.quick_form(dform) }}
+                    {% elif id == g.c.MODAL_HISTORY_ID %}
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>{{ _('Certificate code') }}</th>
+                                <th>{{ _('Status') }}</th>
+                                <th>{{ _('Verify status') }}</th>
+                                <th>{{ _('Start date') }}</th>
+                                <th>{{ _('Expiry date') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>@mdo</td>
+                                <td>2016-12-04</td>
+                                <td>2016-12-04</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>@mdo</td>
+                                <td>2016-12-04</td>
+                                <td>2016-12-04</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     {% endif %}
                 </div>
             </div>
@@ -35,9 +66,9 @@
                 {% for col in data.__table__.c._data %}
                     {% if not col.startswith('_') and not col.startswith('pass') %}
                         {% if data.__getattribute__(col).value is defined %}
-                            data-{{ col }}="{{ data.__getattribute__(col).value }}"
+            data-{{ col }}="{{ data.__getattribute__(col).value }}"
                         {% else %}
-                            data-{{ col }}="{{ data.__getattribute__(col) }}"
+            data-{{ col }}="{{ data.__getattribute__(col) }}"
                         {% endif %}
                     {% endif %}
                 {% endfor %}
