@@ -2,7 +2,6 @@ from flask import Flask, request, g, url_for
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, login_required
 from flask_mail import Mail
-from flask_moment import Moment
 from flask_potion import Api
 from flask_potion.contrib.principals import principals
 from flask_security import Security, SQLAlchemyUserDatastore, \
@@ -21,7 +20,6 @@ from pgscm.utils import PgsPotionManager
 
 bootstrap = Bootstrap()
 mail = Mail()
-moment = Moment()
 sqla = SQLAlchemy()
 babel = Babel()
 
@@ -51,7 +49,6 @@ def register_extensions(app):
     bootstrap.init_app(app)
     AdminLTE(app)
     mail.init_app(app)
-    moment.init_app(app)
     sqla.init_app(app)
     login_manager.init_app(app)
 

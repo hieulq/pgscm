@@ -6,7 +6,7 @@ from flask import flash
 from flask_wtf import FlaskForm
 from flask_security import current_user
 from flask_potion.contrib.alchemy import SQLAlchemyManager
-from flask_potion.instances import Pagination
+from flask_potion.instances import Pagination, Instances as BaseInst
 
 from wtforms.widgets.core import Select as BaseSelectWidget
 from wtforms.widgets.core import Input
@@ -75,14 +75,57 @@ def check_role(roles):
     return False
 
 
+def convert_filters(value, field_filters):
+    if isinstance(value, dict) and len(value) == 1:
+        filter_name = next(iter(value))
+
+        # search for filters in the format {"$filter": condition}
+        if len(filter_name) > 1 and filter_name.startswith('$'):
+            filter_name = filter_name[1:]
+
+            for filter in field_filters.values():
+                if filter_name == filter.name:
+                    return filter.convert(value)
+
+    filter = field_filters[None]
+    return filter.convert(value)
+
+
+class Instances(BaseInst):
+
+    def _field_filters_schema(self, filters):
+        if len(filters) == 1:
+            return next(iter(filters.values())).request
+        else:
+            filt = [{
+                "type": "array",
+                "items": {
+                    "anyOf": [filter.request for filter in
+                              filters.values()]
+                },
+                "additionalItems": True}]
+            return {"anyOf": filt + [filter.request for filter in
+                                     filters.values()]}
+
+    def _convert_filters(self, where):
+        for name, value in where.items():
+            if isinstance(value, list):
+                for val in value:
+                    yield convert_filters(val, self._filters[name])
+            else:
+                yield convert_filters(value, self._filters[name])
+
+
 class PgsPotionManager(SQLAlchemyManager):
-    def paginated_instances_or(self, page, per_page, where=None, sort=None):
-        instances = self.instances_or(where=where, sort=sort)
+    def paginated_instances_or(self, page, per_page, where=None, sort=None,
+                               filter_or_cols=[]):
+        instances = self.instances_or(where=where, sort=sort,
+                                      filter_or_cols=filter_or_cols)
         if isinstance(instances, list):
             return Pagination.from_list(instances, page, per_page)
         return self._query_get_paginated_items(instances, page, per_page)
 
-    def instances_or(self, where=None, sort=None):
+    def instances_or(self, where=None, sort=None, filter_or_cols=[]):
         query = self._query()
 
         if query is None:
@@ -91,18 +134,26 @@ class PgsPotionManager(SQLAlchemyManager):
         if where:
             and_where = ()
             or_where = ()
+            or_filter = ()
             for cond in where:
-                if cond.attribute == 'province_id' or cond.attribute == \
-                        '_deleted_at':
+                if cond.attribute == 'province_id' \
+                        or cond.attribute == '_deleted_at':
                     and_where += (cond, )
+                elif cond.attribute in filter_or_cols:
+                    or_filter += (cond, )
                 else:
                     or_where += (cond, )
+            or_filter_expressions = [self._expression_for_condition(condition)
+                                     for condition in or_filter]
             or_expressions = [self._expression_for_condition(condition)
                               for condition in or_where]
             and_expressions = [self._expression_for_condition(condition)
                                for condition in and_where]
-            exp = self._or_expression(or_expressions)
-            and_expressions.append(exp)
+            or_exp = self._or_expression(or_expressions)
+            and_expressions.append(or_exp)
+            if or_filter_expressions:
+                filter_exp = self._or_expression(or_filter_expressions)
+                and_expressions.append(filter_exp)
             query = self._query_filter(query, self._and_expression(
                 and_expressions))
 

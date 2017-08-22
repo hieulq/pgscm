@@ -29,6 +29,17 @@ DEL_SUBMIT_ID = 'pgs_del_submit'
 BOLD_DISP = 'bold'
 LINK_DISP = 'link'
 
+DATETIME_SCHEMA = {
+    "anyOf": [
+        {"type": ["string", "null"], "format": "date"},
+        {"type": "array",
+         "items": {
+             "anyOf": [
+                 {"type": ["string", "null"], "format": "date"}
+             ]
+         }}
+    ]}
+
 
 class GenderType(IntEnum):
     male = 1  # nam
