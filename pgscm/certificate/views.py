@@ -318,12 +318,3 @@ def groups():
 
         return render_template('certificate/index.html', cs=cs, form=form,
                                dform=dform, only_farmer=False)
-
-
-@certificate.route('/vi/chung-chi/chi-tiet/<string:certificate_id>',
-                   endpoint='detail_vi')
-@certificate.route('/en/certificates/detail/<string:certificate_id>',
-                   endpoint='detail_en')
-@roles_accepted(*c.ALL_ROLES)
-def detail(certificate_id):
-    return render_template('certificate/detail.html')
