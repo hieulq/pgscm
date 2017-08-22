@@ -44,13 +44,18 @@ def farmers():
         province_id = current_user.province_id
         today = datetime.datetime.today().strftime('%Y-%m-%d')
         if province_id:
-            cs = models.Certificate.query.join(models.Group).filter(
-                models.Group._deleted_at == None,
+            cs = []
+            tmp_cs = models.Certificate.query.join(models.Farmer).filter(
+                models.Farmer._deleted_at == None,
                 models.Certificate.owner_farmer_id != None,
                 models.Certificate._deleted_at == None,
                 or_(models.Certificate.certificate_expiry_date >= today,
                     models.Certificate.certificate_expiry_date == None)
             ).all()
+            for cert in tmp_cs:
+                if cert.owner_farmer.group.province_id == province_id:
+                    cs.append(cert)
+
             del form.owner_group_id
             form.owner_farmer_id.choices = [
                 (f.id, f.name) for f in
@@ -190,6 +195,7 @@ def groups():
         if province_id:
             cs = models.Certificate.query.join(models.Group).filter(
                 models.Group._deleted_at == None,
+                models.Group.province_id == province_id,
                 models.Certificate.owner_group != None,
                 models.Certificate._deleted_at == None,
                 or_(models.Certificate.certificate_expiry_date >= today,
