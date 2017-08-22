@@ -10,7 +10,7 @@ from pgscm import sqla
 from . import report
 from pgscm.db import models
 from pgscm import const as c
-from pgscm.utils import __, DeleteForm, check_role
+from pgscm.utils import __, DeleteForm, check_role, is_region_role
 from pgscm.certificate.forms import CertificateForm
 
 
@@ -34,7 +34,7 @@ def alarms():
         today = datetime.datetime.today().strftime('%Y-%m-%d')
         day = (datetime.datetime.today() + datetime.timedelta(days=60))\
             .strftime('%Y-%m-%d')
-        if province_id:
+        if province_id and is_region_role():
             cs = models.Certificate.query.join(models.Group).filter(
                 models.Group._deleted_at == None,
                 models.Certificate._deleted_at == None,
