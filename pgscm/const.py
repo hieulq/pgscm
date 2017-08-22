@@ -15,9 +15,11 @@ MODAL_ADD_ID = 'modal-add'
 MODAL_DEL_ID = 'modal-delete'
 MODAL_EDIT_ID = 'modal-edit'
 MODAL_HISTORY_ID = 'modal-cert-history'
+MODAL_DETAIL_ID = 'modal-detail'
 BTNADD_ID = 'addBtn'
 BTNEDIT_ID = 'editBtn'
 BTNDEL_ID = 'delBtn'
+BTNVIEW_ID = 'viewBtn'
 
 SELECT_DEFAULT_ID = 'pgs_select'
 
