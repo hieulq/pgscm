@@ -150,6 +150,7 @@ class FarmerResource(ModelResource):
 
     class Schema:
         group = fields.Inline('group')
+        group_id = fields.String()
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
@@ -159,12 +160,8 @@ class FarmerResource(ModelResource):
         if province_id:
             gs = [g.id for g in models.Group.query.filter_by(
                 province_id=province_id, _deleted_at=None).all()]
-            fs = [f.id for f in models.Farmer.query.join(models.Group).filter(
-                models.Group.province_id == province_id,
-                models.Group._deleted_at == None,
-                models.Farmer._deleted_at == None).all()]
             for cond in kwargs['where']:
-                if cond.attribute == 'owner_group_id' and isinstance(
+                if cond.attribute == 'group_id' and isinstance(
                         cond.filter, filters.InFilter):
                     value = []
                     for val in cond.value:
@@ -173,27 +170,12 @@ class FarmerResource(ModelResource):
                     cond.value = value
                 else:
                     kwargs['where'] += \
-                        (self.manager.filters['owner_group_id']['in'].convert(
+                        (self.manager.filters['group_id']['in'].convert(
                             {'$in': gs}),)
-
-                if cond.attribute == 'owner_farmer_id' and isinstance(
-                    cond.filter, filters.InFilter):
-                    value = []
-                    for val in cond.value:
-                        if val in fs:
-                            value.append(val)
-                    cond.value = value
-                else:
-                    kwargs['where'] += \
-                        (self.manager.filters['owner_farmer_id']['in'].convert(
-                            {'$in': fs}),)
         if len(kwargs['where']) == 0:
             kwargs['where'] += \
-                (self.manager.filters['owner_group_id']['in'].convert(
+                (self.manager.filters['group_id']['in'].convert(
                     {'$in': gs}),)
-            kwargs['where'] += \
-                (self.manager.filters['owner_farmer_id']['in'].convert(
-                    {'$in': fs}),)
         return func(**kwargs)
 
     @Route.GET('/select2', schema=Instances(),

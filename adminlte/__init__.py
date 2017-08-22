@@ -610,7 +610,6 @@ def load_group_script():
                     url: '/certificate',
                     data: 'where={{"owner_group_id": "' + owner_group_id + '"}}',
                     success: function (data, text) {{
-                        console.log(data);
                         $('#{0}').find("tr:gt(0)").remove();
                         if (data.length) {{
                             var table_body = $('#{0} tbody');
