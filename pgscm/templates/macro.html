@@ -35,37 +35,61 @@
                             </tbody>
                         </table>
                     {% elif id == g.c.MODAL_DETAIL_ID %}
-                        <div class="form-group">
-                            <label class="col-md-7 col-sm-7 col-xs-8 control-label">
-                                {{ _('Total of certificates') }}
-                            </label>
-                            <label id="total_certs" class="col-md-5 col-sm-5 col-xs-4 control-label">
-                                12
-                            </label>
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs pull-right">
+                                <li class="active"><a href="#tab_summary" data-toggle="tab" aria-expanded="true">{{ _('Summary') }}</a></li>
+                                <li class=""><a href="#tab_history" data-toggle="tab" aria-expanded="false">{{ _('History') }}</a></li>
+                                <li class="pull-left header"><i class="fa fa-th"></i> {{ _('Detail information') }}</li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_summary">
+                                    <div class="form-group">
+                                        <label class="col-md-7 col-sm-7 col-xs-8 control-label">
+                                            {{ _('Total of certificates') }}
+                                        </label>
+                                        <label id="total_certs"
+                                               class="col-md-5 col-sm-5 col-xs-4 control-label">
+                                            12
+                                        </label>
+                                    </div>
+                                    <br/>
+                                    <div class="form-group">
+                                        <label class="col-md-7 col-sm-7 col-xs-8 control-label">
+                                            {{ _('Total of farmers') }}
+                                        </label>
+                                        <label id="total_farmers"
+                                               class="col-md-5 col-sm-5 col-xs-4 control-label">
+                                            123
+                                        </label>
+                                    </div>
+                                    <br/>
+                                    <div class="form-group">
+                                        <label class="col-md-7 col-sm-7 col-xs-8 control-label">
+                                            {{ _('Total of approved area') }}
+                                        </label>
+                                        <label id="total_area"
+                                               class="col-md-5 col-sm-5 col-xs-4 control-label">
+                                            122343
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_history">
+                                    Here is the history of group which show all farmers are added/deleted from this group.
+                                    And also the history of associate group which show all groups are added/deleted from it.
+                                </div>
+                                <!-- /.tab-pane -->
+                            </div>
+                            <!-- /.tab-content -->
                         </div>
-                        <br/>
-                        <div class="form-group">
-                            <label class="col-md-7 col-sm-7 col-xs-8 control-label">
-                                {{ _('Total of farmers') }}
-                            </label>
-                            <label id="total_farmers" class="col-md-5 col-sm-5 col-xs-4 control-label">
-                                123
-                            </label>
-                        </div>
-                        <br/>
-                        <div class="form-group">
-                            <label class="col-md-7 col-sm-7 col-xs-8 control-label">
-                                {{ _('Total of approved area') }}
-                            </label>
-                            <label id="total_area" class="col-md-5 col-sm-5 col-xs-4 control-label">
-                                122343
-                            </label>
-                        </div>
+
                     {% endif %}
                 </div>
                 {% if id == g.c.MODAL_HISTORY_ID or id == g.c.MODAL_DETAIL_ID %}
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">
+                        <button type="button"
+                                class="btn btn-default pull-right"
+                                data-dismiss="modal">
                             {{ _('Close') }}
                         </button>
                     </div>
