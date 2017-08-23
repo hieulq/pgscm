@@ -11,7 +11,7 @@ from .forms import FarmerForm
 from pgscm import sqla
 from pgscm.db import models
 from pgscm import const as c
-from pgscm.utils import __, DeleteForm, check_role
+from pgscm.utils import __, DeleteForm, check_role, is_region_role
 
 crud_role = c.ADMIN_MOD_ROLE
 
@@ -31,7 +31,7 @@ def index():
         return render_template('farmer/index.html', form=form, dform=dform)
     else:
         province_id = current_user.province_id
-        if province_id:
+        if province_id and is_region_role():
             farmers = models.Farmer.query.join(models.Group).filter(
                 models.Group.province_id == province_id,
                 models.Group._deleted_at == None,

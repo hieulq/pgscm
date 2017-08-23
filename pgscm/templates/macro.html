@@ -34,15 +34,42 @@
                             <tbody>
                             </tbody>
                         </table>
+                    {% elif id == g.c.MODAL_DETAIL_ID %}
+                        <div class="form-group">
+                            <label class="col-md-7 col-sm-7 col-xs-8 control-label">
+                                {{ _('Total of certificates') }}
+                            </label>
+                            <label id="total_certs" class="col-md-5 col-sm-5 col-xs-4 control-label">
+                                12
+                            </label>
+                        </div>
+                        <br/>
+                        <div class="form-group">
+                            <label class="col-md-7 col-sm-7 col-xs-8 control-label">
+                                {{ _('Total of farmers') }}
+                            </label>
+                            <label id="total_farmers" class="col-md-5 col-sm-5 col-xs-4 control-label">
+                                123
+                            </label>
+                        </div>
+                        <br/>
+                        <div class="form-group">
+                            <label class="col-md-7 col-sm-7 col-xs-8 control-label">
+                                {{ _('Total of approved area') }}
+                            </label>
+                            <label id="total_area" class="col-md-5 col-sm-5 col-xs-4 control-label">
+                                122343
+                            </label>
+                        </div>
                     {% endif %}
                 </div>
-            {% if id == g.c.MODAL_HISTORY_ID %}
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">
-                        {{ _('Close') }}
-                    </button>
-                </div>
-            {% endif %}
+                {% if id == g.c.MODAL_HISTORY_ID or id == g.c.MODAL_DETAIL_ID %}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">
+                            {{ _('Close') }}
+                        </button>
+                    </div>
+                {% endif %}
             </div>
             <!-- /.modal-content -->
         </div>

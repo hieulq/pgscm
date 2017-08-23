@@ -12,6 +12,8 @@ from wtforms.widgets.core import Select as BaseSelectWidget
 from wtforms.widgets.core import Input
 from wtforms import TextAreaField, SubmitField, HiddenField
 
+from pgscm import const as c
+
 
 from pgscm import const
 
@@ -73,6 +75,14 @@ def check_role(roles):
                 return True
     flash(str(__('You have no permission!')), 'warning')
     return False
+
+
+def is_region_role():
+    nation_role = c.NATION_ROLE
+    for user_role in current_user.roles:
+        if user_role in nation_role:
+            return False
+    return True
 
 
 def convert_filters(value, field_filters):

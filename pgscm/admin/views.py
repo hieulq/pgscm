@@ -11,7 +11,7 @@ from .forms import data_required, match_pass
 from pgscm import sqla, user_datastore
 from pgscm.db import models
 from pgscm import const as c
-from pgscm.utils import __, DeleteForm, check_role
+from pgscm.utils import __, DeleteForm, check_role, is_region_role
 
 crud_role = c.ONLY_ADMIN_ROLE
 
@@ -31,7 +31,7 @@ def users():
     form = UserForm()
     dform = DeleteForm()
     province_id = current_user.province_id
-    if province_id:
+    if province_id and is_region_role():
         us = models.User.query.filter_by(
             province_id=province_id).all()
         form.province_id.choices = [
@@ -40,10 +40,6 @@ def users():
     else:
         us = models.User.query.all()
         form.province_id.choices = []
-        # form.province_id.choices = [
-        #     (p.province_id, p.type + " " + p.name) for p in
-        #     models.Province.query.order_by(
-        #         models.Province.name.asc()).all()]
     form.roles.choices = [
         (r.name, r.description) for r in
         models.Role.query.order_by(

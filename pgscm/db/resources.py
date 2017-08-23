@@ -2,7 +2,7 @@ from flask_potion import ModelResource
 from flask_security import current_user
 from flask_potion.routes import Route
 from flask_potion import fields, filters
-from pgscm.utils import Instances
+from pgscm.utils import Instances, is_region_role
 from pgscm import const as c
 
 
@@ -18,7 +18,7 @@ def _check_user_province(manager, kwargs, is_and=False, is_delete=True,
     else:
         func = manager.paginated_instances_or
     province_id = current_user.province_id
-    if province_id and is_province:
+    if is_region_role() and province_id and is_province:
         kwargs['where'] += \
             (manager.filters['province_id'][None].convert(
                 province_id),)
@@ -75,7 +75,7 @@ class CertResource(ModelResource):
 
     def _filter_group_farmer_on_province(self, kwargs):
         province_id = current_user.province_id
-        if province_id:
+        if province_id and is_region_role():
             gs = [g.id for g in models.Group.query.filter_by(
                 province_id=province_id, _deleted_at=None).all()]
             fs = [f.id for f in models.Farmer.query.join(models.Group).filter(
@@ -157,7 +157,7 @@ class FarmerResource(ModelResource):
     def instances(self, **kwargs):
         province_id = current_user.province_id
         func = _check_user_province(self.manager, kwargs, is_province=False)
-        if province_id:
+        if province_id and is_region_role():
             gs = [g.id for g in models.Group.query.filter_by(
                 province_id=province_id, _deleted_at=None).all()]
             for cond in kwargs['where']:

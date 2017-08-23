@@ -11,7 +11,7 @@ from . import certificate
 from .forms import CertificateForm
 from pgscm import sqla
 from pgscm.db import models
-from pgscm.utils import __, DeleteForm, check_role
+from pgscm.utils import __, DeleteForm, check_role, is_region_role
 from pgscm import const as c
 
 crud_role = c.ADMIN_MOD_ROLE
@@ -43,7 +43,7 @@ def farmers():
     else:
         province_id = current_user.province_id
         today = datetime.datetime.today().strftime('%Y-%m-%d')
-        if province_id:
+        if province_id and is_region_role():
             cs = []
             tmp_cs = models.Certificate.query.join(models.Farmer).filter(
                 models.Farmer._deleted_at == None,
@@ -192,7 +192,7 @@ def groups():
     else:
         province_id = current_user.province_id
         today = datetime.datetime.today().strftime('%Y-%m-%d')
-        if province_id:
+        if province_id and is_region_role():
             cs = models.Certificate.query.join(models.Group).filter(
                 models.Group._deleted_at == None,
                 models.Group.province_id == province_id,

@@ -10,7 +10,7 @@ from .forms import AssociateGroupForm
 
 from pgscm import sqla
 from pgscm.db import models
-from pgscm.utils import __, DeleteForm, check_role
+from pgscm.utils import __, DeleteForm, check_role, is_region_role
 from pgscm import const as c
 
 crud_role = c.ADMIN_MOD_ROLE
@@ -29,7 +29,7 @@ def index():
         return render_template('agroup/index.html', form=form, dform=dform)
     else:
         province_id = current_user.province_id
-        if province_id:
+        if province_id and is_region_role():
             ags = models.AssociateGroup.query.filter_by(
                 province_id=province_id, _deleted_at=None).order_by(
                                 models.AssociateGroup.name.asc()).all()
