@@ -2,7 +2,6 @@ from flask_potion import ModelResource
 from flask_security import current_user
 from flask_potion.routes import Route
 from flask_potion import fields, filters
-from flask import Response
 
 from pgscm.utils import Instances, is_region_role
 from pgscm import const as c
@@ -273,8 +272,8 @@ class AssociateGroupResource(ModelResource):
             for cert in cs:
                 if cert.status != c.CertificateStatusType.in_conversion:
                     response['total_of_area'] += cert.group_area
-                if cert.status == c.CertificateStatusType.approved or \
-                                cert.status == c.CertificateStatusType.approved_no_cert:
+                if cert.status == c.CertificateStatusType.approved \
+                    or cert.status == c.CertificateStatusType.approved_no_cert:
                     response['total_of_approved_area'] += cert.group_area
         r = json.dumps(response)
         type(r)
