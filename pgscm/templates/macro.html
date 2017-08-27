@@ -18,30 +18,34 @@
                         {{ _('Do you really want to delete data?') }}
                         {{ wtf.quick_form(dform) }}
                     {% elif id == g.c.MODAL_HISTORY_ID %}
-                        <table class="table table-hover {{ g.c.MODAL_HISTORY_ID }}">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>{{ _('Certificate code') }}</th>
-                                <th>{{ _('Decision') }}</th>
-                                <th>{{ _('Status') }}</th>
-                                <th>{{ _('Verify status') }}</th>
-                                <th>{{ _('Verify date') }}</th>
-                                <th>{{ _('Expiry date') }}</th>
-                                <th>{{ _('Modify info') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered {{ g.c.MODAL_HISTORY_ID }}">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>{{ _('Certificate code') }}</th>
+                                    <th>{{ _('Decision') }}</th>
+                                    <th>{{ _('Status') }}</th>
+                                    <th>{{ _('Verify status') }}</th>
+                                    <th>{{ _('Verify date') }}</th>
+                                    <th>{{ _('Expiry date') }}</th>
+                                    <th>{{ _('Modify info') }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     {% elif id == g.c.MODAL_DETAIL_ID %}
-                        <div class="nav-tabs-custom">
+                        <div class="nav-tabs-custom" style="margin-bottom: 0px !important;">
                             <ul class="nav nav-tabs pull-right">
-                                <li class="active"><a href="#tab_summary" data-toggle="tab" aria-expanded="true">{{ _('Summary') }}</a></li>
-                                <li class=""><a href="#tab_history" data-toggle="tab" aria-expanded="false">{{ _('History') }}</a></li>
+                                <li class="active"><a href="#tab_summary" data-toggle="tab"
+                                                      aria-expanded="true">{{ _('Summary') }}</a></li>
+                                <li class=""><a href="#tab_history" data-toggle="tab"
+                                                aria-expanded="false">{{ _('History') }}</a></li>
                                 <li class="pull-left header"><i class="fa fa-th"></i> {{ _('Detail info') }}</li>
                             </ul>
-                            <div class="tab-content">
+                            <div class="tab-content" style="display: grid;">
                                 <div class="tab-pane active" id="tab_summary">
                                     <div class="form-group">
                                         <label class="col-md-7 col-sm-7 col-xs-7 control-label">
@@ -74,8 +78,10 @@
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_history">
-                                    Here is the history of group which show all farmers are added/deleted from this group.
-                                    And also the history of associate group which show all groups are added/deleted from it.
+                                    Here is the history of group which show all farmers are added/deleted from this
+                                    group.
+                                    And also the history of associate group which show all groups are added/deleted from
+                                    it.
                                 </div>
                                 <!-- /.tab-pane -->
                             </div>
