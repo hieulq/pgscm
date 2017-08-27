@@ -1,5 +1,5 @@
 {% import "bootstrap/wtf.html" as wtf %}
-{% macro render_modal(id, type, title, size='') -%}
+{% macro render_modal(id, type, title, size='', label_sum1='', label_sum2='', label_sum3='') -%}
     <div class="modal {{ type }} fade" id="{{ id }}"
          style="display: none">
         <!-- .modal -->
@@ -44,32 +44,31 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab_summary">
                                     <div class="form-group">
-                                        <label class="col-md-7 col-sm-7 col-xs-8 control-label">
-                                            {{ _('Total of certificates') }}
+                                        <label class="col-md-7 col-sm-7 col-xs-7 control-label">
+                                            {{ _('Total of ') + label_sum1 }}
                                         </label>
-                                        <label id="total_certs"
-                                               class="col-md-5 col-sm-5 col-xs-4 control-label">
-                                            12
-                                        </label>
-                                    </div>
-                                    <br/>
-                                    <div class="form-group">
-                                        <label class="col-md-7 col-sm-7 col-xs-8 control-label">
-                                            {{ _('Total of farmers') }}
-                                        </label>
-                                        <label id="total_farmers"
-                                               class="col-md-5 col-sm-5 col-xs-4 control-label">
-                                            123
+                                        <label id="label_sum1"
+                                               class="col-md-5 col-sm-5 col-xs-5 control-label">
+                                            0
                                         </label>
                                     </div>
                                     <br/>
                                     <div class="form-group">
-                                        <label class="col-md-7 col-sm-7 col-xs-8 control-label">
-                                            {{ _('Total of approved area') }}
+                                        <label class="col-md-7 col-sm-7 col-xs-7 control-label">
+                                            {{ _('Total of ') + label_sum2 }}
                                         </label>
-                                        <label id="total_area"
-                                               class="col-md-5 col-sm-5 col-xs-4 control-label">
-                                            122343
+                                        <label id="label_sum2"
+                                               class="col-md-5 col-sm-5 col-xs-5 control-label">
+                                            0
+                                        </label>
+                                    </div>
+                                    <br/>
+                                    <div class="form-group">
+                                        <label class="col-md-7 col-sm-7 col-xs-7 control-label">
+                                            {{ _('Total of ') + label_sum3 }}
+                                        </label>
+                                        <label class="col-md-5 col-sm-5 col-xs-5 control-label">
+                                            <span id="label_sum3">0/0</span> (m<sup>2</sup>)
                                         </label>
                                     </div>
                                 </div>

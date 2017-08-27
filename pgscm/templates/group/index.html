@@ -22,7 +22,6 @@
 
     {{ load_group_script() }}
 
-
 {%- endblock scripts %}
 {% block content_header -%}
     <h1>
@@ -82,8 +81,8 @@
                                 {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
                                     <td class="actions_column">
                                         {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', gr) }}
-                                        {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', gr) }}
                                         {{ render_btn(g.c.BTNVIEW_ID, 'btn-xs', 'btn-warning', g.c.MODAL_DETAIL_ID, '', 'search', gr) }}
+                                        {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', gr) }}
                                     </td>
                                 {% endif %}
                             </tr>
@@ -101,5 +100,5 @@
     {{ render_modal(g.c.MODAL_EDIT_ID, 'modal', _('Update Data')) }}
     {{ render_modal(g.c.MODAL_DEL_ID, 'modal-danger', _('Confirm to delete') ) }}
     {{ render_modal(g.c.MODAL_HISTORY_ID, 'modal', _('Certificate history'),  'modal-lg') }}
-    {{ render_modal(g.c.MODAL_DETAIL_ID, 'modal', _('Group info')) }}
+    {{ render_modal(g.c.MODAL_DETAIL_ID, 'modal', _('Group info'), '', _('certificates'), _('farmers'), _('approved area')) }}
 {%- endblock content %}
