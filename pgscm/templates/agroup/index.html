@@ -15,6 +15,9 @@
             column_names=[("associate_group_code", True, g.c.LINK_DISP), ("name", True, g.c.BOLD_DISP),
             ("email", True, None), ("province.name", False, None), ("action", False, None)],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
+
+    {{ load_agroup_script() }}
+
 {%- endblock scripts %}
 {% block content_header -%}
     <h1>
@@ -67,6 +70,7 @@
                                 {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
                                     <td class="actions_column">
                                         {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', ag) }}
+                                        {{ render_btn(g.c.BTNVIEW_ID, 'btn-xs', 'btn-warning', g.c.MODAL_DETAIL_ID, '', 'search', ag) }}
                                         {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', ag) }}
                                     </td>
                                 {% endif %}
@@ -84,4 +88,5 @@
     {{ render_modal(g.c.MODAL_ADD_ID, 'modal', _('Create New')) }}
     {{ render_modal(g.c.MODAL_EDIT_ID, 'modal', _('Update Data')) }}
     {{ render_modal(g.c.MODAL_DEL_ID, 'modal-danger', _('Confirm to delete') ) }}
+    {{ render_modal(g.c.MODAL_DETAIL_ID, 'modal', _('Associate group info'), '', _('certificates'), _('groups'), _('approved area')) }}
 {%- endblock content %}

@@ -1,11 +1,12 @@
-table.modal-cert-history tbody {
+table.modal-cert-history {
     display: block;
     max-height: 300px;
     overflow-y: scroll;
+    max-width: none !important;
 }
 
 table.modal-cert-history thead, table.modal-cert-history tbody tr {
-    display: table;
+    /*display: table;*/
     width: 100%;
     table-layout: fixed;
 }

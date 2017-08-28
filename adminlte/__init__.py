@@ -554,38 +554,38 @@ def load_group_script():
 
     group_script = """
     <script>
-        $(document).ready(function () {
+        $(document).ready(function () {{
             var elements_select2 = $('select');
 
-            function catch_select2_select_event(source_element, url, resource, des1_element, des2_element) {
-                $(source_element).on("select2:select", function (e) {
+            function catch_select2_select_event(source_element, url, resource, des1_element, des2_element) {{
+                $(source_element).on("select2:select", function (e) {{
                     $(des1_element).empty();
-                    if (des2_element) {
+                    if (des2_element) {{
                         $(des2_element).empty();
-                    }
+                    }}
                     var value = e.target.value;
-                    $.ajax({
+                    $.ajax({{
                         type: "get",
                         url: url,
-                        data: 'where={"' + resource + '": {"$ref": "/' + resource + '/' + value + '"} }',
-                        success: function (data, text) {
+                        data: 'where={{"' + resource + '": {{"$ref": "/' + resource + '/' + value + '"}} }}',
+                        success: function (data, text) {{
                             var select2_data = [];
-                            for (var i = 0; i < data.length; i++) {
-                                select2_data[i] = {
+                            for (var i = 0; i < data.length; i++) {{
+                                select2_data[i] = {{
                                     id: data[i]['$id'],
                                     text: data[i].type + " " + data[i].name
-                                }
-                            }
-                            $(des1_element).select2({data: select2_data});
-                        },
-                        error: function (request, status, error) {
+                                }}
+                            }}
+                            $(des1_element).select2({{data: select2_data}});
+                        }},
+                        error: function (request, status, error) {{
                             console.log(request);
                             console.log(error);
                             alert(request.responseText);
-                        }
-                    });
-                });
-            }
+                        }}
+                    }});
+                }});
+            }}
 
             catch_select2_select_event(elements_select2[0], '/district', 'province', 
                 elements_select2[1], elements_select2[2]);
@@ -599,11 +599,11 @@ def load_group_script():
             catch_select2_select_event(elements_select2[5], '/ward', 'district',
                 elements_select2[6], NaN);
                 
-            var certificate_status_type =  """ + json.dumps(certificate_status_type) + """ 
+            var certificate_status_type = {5};
         
-            var certificate_re_verify_status_type = """ + json.dumps(certificate_re_verify_status_type) + """
+            var certificate_re_verify_status_type = {6};
             
-            $('.view_gr_history').on('click', function () {{
+            $('.{2}').on('click', function () {{
                 var owner_group_id = $(this).data()['owner_group_id'];
                 $.ajax({{
                     type: "get",
@@ -636,10 +636,79 @@ def load_group_script():
                 }});
             }})
             
+            function get_info_of_group(url, group_attribute_name, group_id, des_id_element) {{
+                $.ajax({{
+                    url: url,
+                    data: 'where={{"' + group_attribute_name + '": "' + group_id + '"}}',
+                    success: function (data, status, req) {{
+                        var count = req.getResponseHeader('X-Total-Count');
+                        if(!count){{
+                            count = data.length;
+                            var total_area_approved = 0;
+                            var total_area = 0;
+                            for(var i in data){{
+                                total_area += data[i]['group_area'];
+                                if(data[i]['status'] == {3} || 
+                                   data[i]['status'] == {4} ){{
+                                   total_area_approved += data[i]['group_area'];
+                                }}
+                            }}
+                            $('#label_sum3').html(total_area_approved + ' / ' + total_area);
+                        }}
+                        $('#'+des_id_element).html(count);
+                    }},
+                    error: function (request, status, error) {{
+                        console.log(request);
+                        console.log(error);
+                        alert(request.responseText);
+                    }}
+                }})
+            }}
+            $('.{1}').on('click', function (event) {{
+                var group_id = $(this).data()['id'];
+                get_info_of_group('/farmer', 'group_id', group_id, 'label_sum2');
+                get_info_of_group('/certificate/total', 'owner_group_id', group_id, 'label_sum1');
+
+            }});
+            
         }});
     </script>
-    """.format(g.c.MODAL_HISTORY_ID)
+    """.format(g.c.MODAL_HISTORY_ID, g.c.BTNVIEW_ID, 'view_gr_history',
+               g.c.CertificateStatusType['approved'].value,
+               g.c.CertificateStatusType['approved_no_cert'].value,
+               json.dumps(certificate_status_type), json.dumps(certificate_re_verify_status_type))
     return Markup(group_script)
+
+
+def load_agroup_script():
+    agroup_script = """
+        <script>
+            $(document).ready(function () {{
+                $('.{0}').on('click', function (event) {{
+                    var agroup_id = $(this).data()['id'];
+                    $.ajax({{
+                        method: 'GET',
+                        url: '/associate_group/agroup_summary',
+                        data: 'id="' + agroup_id + '"',
+                        success: function (data, status, req) {{
+                            data = JSON.parse(data)
+                            $('#label_sum1').html(data['total_of_cert']);
+                            $('#label_sum2').html(data['total_of_gr']);
+                            $('#label_sum3').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
+                        }},
+                        error: function (request, status, error) {{
+                            console.log(request);
+                            console.log(error);
+                            alert(request.responseText);
+                        }}
+                    }})
+                }});
+            }});
+        </script>
+    
+    """.format(g.c.BTNVIEW_ID, g.c.CertificateStatusType['approved'].value,
+               g.c.CertificateStatusType['approved_no_cert'].value,)
+    return Markup(agroup_script)
 
 
 def check_role(current, target):
@@ -689,6 +758,8 @@ class AdminLTE(object):
             load_datatables_script
         app.jinja_env.globals['load_group_script'] = \
             load_group_script
+        app.jinja_env.globals['load_agroup_script'] = \
+            load_agroup_script
 
         if not hasattr(app, 'extensions'):
             app.extensions = {}

@@ -2,18 +2,22 @@ from flask_potion import ModelResource
 from flask_security import current_user
 from flask_potion.routes import Route
 from flask_potion import fields, filters
+
 from pgscm.utils import Instances, is_region_role
 from pgscm import const as c
 
 
 import datetime
+import json
 
 from pgscm.db import models
 
 
 def _check_user_province(manager, kwargs, is_and=False, is_delete=True,
-                         is_province=True):
-    if len(kwargs['where']) == 0 or is_and:
+                         is_province=True, is_get_all=False):
+    if is_get_all:
+        func = manager.instances
+    elif len(kwargs['where']) == 0 or is_and:
         func = manager.paginated_instances
     else:
         func = manager.paginated_instances_or
@@ -134,6 +138,15 @@ class CertResource(ModelResource):
         self._filter_group_farmer_on_province(kwargs)
         return func(**kwargs)
 
+    @Route.GET('/total', rel="", schema=Instances(),
+               response_schema=Instances())
+    def total(self, **kwargs):
+        func = _check_user_province(self.manager, kwargs, is_delete=True,
+                                    is_get_all=True)
+        del kwargs['per_page']
+        del kwargs['page']
+        return func(**kwargs)
+
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
@@ -200,6 +213,7 @@ class GroupResource(ModelResource):
         district = fields.Inline('district')
         associate_group = fields.Inline('associate_group')
         province_id = fields.String()
+        associate_group_id = fields.String()
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
@@ -225,6 +239,7 @@ class AssociateGroupResource(ModelResource):
 
     class Schema:
         province = fields.Inline('province')
+        id = fields.String()
         province_id = fields.String()
 
     @Route.GET('', rel="instances", schema=Instances(),
@@ -232,6 +247,37 @@ class AssociateGroupResource(ModelResource):
     def instances(self, **kwargs):
         func = _check_user_province(self.manager, kwargs)
         return func(**kwargs)
+
+    @Route.GET('/agroup_summary')
+    def agroup_summary(self, id: fields.String()) -> fields.String():
+        agroup_id = id
+        province_id = current_user.province_id
+        if province_id and is_region_role():
+            gs = [g.id for g in models.Group.query.filter_by(
+                province_id=province_id, _deleted_at=None,
+                associate_group_id=agroup_id).all()]
+        else:
+            gs = [g.id for g in models.Group.query.filter_by(
+                _deleted_at=None, associate_group_id=agroup_id).all()]
+        response = {
+            'total_of_gr': len(gs),
+            'total_of_cert': 0,
+            'total_of_area': 0,
+            'total_of_approved_area': 0
+        }
+        for g in gs:
+            cs = models.Certificate.query.filter_by(
+                    owner_group_id=g, _deleted_at=None).all()
+            response['total_of_cert'] += len(cs)
+            for cert in cs:
+                if cert.status != c.CertificateStatusType.in_conversion:
+                    response['total_of_area'] += cert.group_area
+                if cert.status == c.CertificateStatusType.approved \
+                    or cert.status == c.CertificateStatusType.approved_no_cert:
+                    response['total_of_approved_area'] += cert.group_area
+        r = json.dumps(response)
+        type(r)
+        return json.dumps(response)
 
     @Route.GET('/select2', schema=Instances(),
                response_schema=Instances())
