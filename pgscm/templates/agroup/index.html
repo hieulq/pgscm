@@ -88,5 +88,5 @@
     {{ render_modal(g.c.MODAL_ADD_ID, 'modal', _('Create New')) }}
     {{ render_modal(g.c.MODAL_EDIT_ID, 'modal', _('Update Data')) }}
     {{ render_modal(g.c.MODAL_DEL_ID, 'modal-danger', _('Confirm to delete') ) }}
-    {{ render_modal(g.c.MODAL_DETAIL_ID, 'modal', _('Associate group info'), '', _('certificates'), _('groups'), _('approved area')) }}
+    {{ render_modal(g.c.MODAL_DETAIL_ID, 'modal', _('Associate group info'), '', [(_('certificates'), False), (_('groups'), False), (_('farmers'), False), (_('approved area'), True)]) }}
 {%- endblock content %}

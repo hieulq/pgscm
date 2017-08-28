@@ -262,6 +262,7 @@ class AssociateGroupResource(ModelResource):
                 _deleted_at=None, associate_group_id=agroup_id).all()]
         response = {
             'total_of_gr': len(gs),
+            'total_of_farmer': 0,
             'total_of_cert': 0,
             'total_of_area': 0,
             'total_of_approved_area': 0
@@ -276,6 +277,10 @@ class AssociateGroupResource(ModelResource):
                 if cert.status == c.CertificateStatusType.approved \
                     or cert.status == c.CertificateStatusType.approved_no_cert:
                     response['total_of_approved_area'] += cert.group_area
+
+            fs = models.Farmer.query.filter_by(
+                group_id=g, _deleted_at=None).all()
+            response['total_of_farmer'] += len(fs)
         r = json.dumps(response)
         type(r)
         return json.dumps(response)

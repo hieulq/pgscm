@@ -1,5 +1,5 @@
 {% import "bootstrap/wtf.html" as wtf %}
-{% macro render_modal(id, type, title, size='', label_sum1='', label_sum2='', label_sum3='') -%}
+{% macro render_modal(id, type, title, size='', label_sum=[]) -%}
     <div class="modal {{ type }} fade" id="{{ id }}"
          style="display: none">
         <!-- .modal -->
@@ -47,34 +47,23 @@
                             </ul>
                             <div class="tab-content" style="display: grid;">
                                 <div class="tab-pane active" id="tab_summary">
+                                    {% for lbl in label_sum %}
                                     <div class="form-group">
                                         <label class="col-md-7 col-sm-7 col-xs-7 control-label">
-                                            {{ _('Total of ') + label_sum1 }}
+                                            {{ _('Total of ') + lbl[0] }}
                                         </label>
-                                        <label id="label_sum1"
-                                               class="col-md-5 col-sm-5 col-xs-5 control-label">
-                                            0
-                                        </label>
-                                    </div>
-                                    <br/>
-                                    <div class="form-group">
-                                        <label class="col-md-7 col-sm-7 col-xs-7 control-label">
-                                            {{ _('Total of ') + label_sum2 }}
-                                        </label>
-                                        <label id="label_sum2"
-                                               class="col-md-5 col-sm-5 col-xs-5 control-label">
-                                            0
-                                        </label>
-                                    </div>
-                                    <br/>
-                                    <div class="form-group">
-                                        <label class="col-md-7 col-sm-7 col-xs-7 control-label">
-                                            {{ _('Total of ') + label_sum3 }}
-                                        </label>
+                                        {% if lbl[1] %}
                                         <label class="col-md-5 col-sm-5 col-xs-5 control-label">
-                                            <span id="label_sum3">0/0</span> (m<sup>2</sup>)
+                                            <span id="label_sum{{ label_sum.index(lbl)+1 }}">0/0</span>(m<sup>2</sup>)
                                         </label>
+                                        {% else %}
+                                        <label id="label_sum{{ label_sum.index(lbl)+1 }}"
+                                               class="col-md-5 col-sm-5 col-xs-5 control-label">0
+                                        </label>
+                                        {% endif %}
                                     </div>
+                                    <br/>
+                                    {% endfor %}
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_history">

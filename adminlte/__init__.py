@@ -694,7 +694,8 @@ def load_agroup_script():
                             data = JSON.parse(data)
                             $('#label_sum1').html(data['total_of_cert']);
                             $('#label_sum2').html(data['total_of_gr']);
-                            $('#label_sum3').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
+                            $('#label_sum3').html(data['total_of_farmer']);
+                            $('#label_sum4').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
                         }},
                         error: function (request, status, error) {{
                             console.log(request);
