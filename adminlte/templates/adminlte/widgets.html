@@ -1,5 +1,6 @@
 {% macro small_box(id = "wg", url="", bgcolor="bg-yellow", header="44", data="",
-percentage=False, body="User Registrations", iconclass="ion ion-person-add", footerlink="#") %}
+percentage=False, body="User Registrations", iconclass="fa fa-home",
+footerlink="#", is_header=True, unit="") %}
     <div class="col-lg-3 col-xs-6">
         <!-- small box -->
         <div class="small-box {{ bgcolor }}" id="{{ id }}">
@@ -26,8 +27,12 @@ percentage=False, body="User Registrations", iconclass="ion ion-person-add", foo
                 if (req.getResponseHeader('Content-Type') !== 'application/json') {
                     $("#{{ id }}").find('h3').html(0);
                 } else {
+                    {% if is_header %}
                     count = req.getResponseHeader('X-Total-Count');
-                    $("#{{ id }}").find('h3').html(count);
+                    {% else %}
+                    count = res
+                    {% endif %}
+                    $("#{{ id }}").find('h3').html(count + ' {{ unit }}');
                 }
             })
         })

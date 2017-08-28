@@ -316,6 +316,27 @@
             iconclass="fa fa-warning",
             footerlink="report.alarms"
           ) }}
-
+        {{ widgets.small_box(
+            id="pgs-tapproved-area-wg",
+            url="/associate_group/area?approved=True",
+            bgcolor="bg-green",
+            header=0,
+            body=_("Total approved area"),
+            iconclass="fa fa-check-circle-o",
+            footerlink="certificate.index",
+            is_header=False,
+            unit="m2"
+          ) }}
+        {{ widgets.small_box(
+            id="pgs-total-area-wg",
+            url="/associate_group/area?approved=False",
+            bgcolor="bg-orange",
+            header=0,
+            body=_("Total requested area"),
+            iconclass="fa fa-question-circle",
+            footerlink="certificate.index",
+            is_header=False,
+            unit="m2"
+          ) }}
     </div><!-- /.row -->
 {%- endblock content %}

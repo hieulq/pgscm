@@ -2,6 +2,7 @@ from flask_potion import ModelResource
 from flask_security import current_user
 from flask_potion.routes import Route
 from flask_potion import fields, filters
+from flask import request
 
 from pgscm.utils import Instances, is_region_role
 from pgscm import const as c
@@ -278,6 +279,32 @@ class AssociateGroupResource(ModelResource):
         r = json.dumps(response)
         type(r)
         return json.dumps(response)
+
+    @Route.GET('/area')
+    def area(self) -> fields.String():
+        approved = request.args.get('approved')
+        if approved == 'True' or approved == 'true':
+            approved = True
+        else:
+            approved = False
+        province_id = current_user.province_id
+        if province_id and is_region_role():
+            gs = [g.id for g in models.Group.query.filter_by(
+                province_id=province_id, _deleted_at=None).all()]
+        else:
+            gs = [g.id for g in models.Group.query.filter_by(
+                _deleted_at=None).all()]
+        sum = 0
+        for g in gs:
+            cs = models.Certificate.query.filter_by(
+                owner_group_id=g, _deleted_at=None).all()
+            for cert in cs:
+                if not approved:
+                    sum += cert.group_area
+                elif cert.status == c.CertificateStatusType.approved or cert.\
+                        status == c.CertificateStatusType.approved_no_cert:
+                    sum += cert.group_area
+        return sum
 
     @Route.GET('/select2', schema=Instances(),
                response_schema=Instances())
