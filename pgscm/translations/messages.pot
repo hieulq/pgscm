@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PGSCM 1.0.0\n"
 "Report-Msgid-Bugs-To: hieulq19@gmail.com\n"
-"POT-Creation-Date: 2017-08-28 08:08+0700\n"
+"POT-Creation-Date: 2017-08-28 11:33+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,7 +69,7 @@ msgstr ""
 msgid "punish"
 msgstr ""
 
-#: adminlte/templates/adminlte/widgets.html:18
+#: adminlte/templates/adminlte/widgets.html:19
 msgid "More info"
 msgstr ""
 
@@ -531,6 +531,14 @@ msgstr ""
 msgid "Nearly Expired PGS Certs"
 msgstr ""
 
+#: pgscm/templates/index.html:324
+msgid "Total approved area"
+msgstr ""
+
+#: pgscm/templates/index.html:335
+msgid "Total requested area"
+msgstr ""
+
 #: pgscm/templates/macro.html:18
 msgid "Do you really want to delete data?"
 msgstr ""
@@ -571,12 +579,11 @@ msgstr ""
 msgid "Detail info"
 msgstr ""
 
-#: pgscm/templates/macro.html:52 pgscm/templates/macro.html:62
-#: pgscm/templates/macro.html:72
+#: pgscm/templates/macro.html:53
 msgid "Total of "
 msgstr ""
 
-#: pgscm/templates/macro.html:98
+#: pgscm/templates/macro.html:87
 msgid "Close"
 msgstr ""
 
@@ -669,6 +676,10 @@ msgid "groups"
 msgstr ""
 
 #: pgscm/templates/agroup/index.html:91 pgscm/templates/group/index.html:103
+msgid "farmers"
+msgstr ""
+
+#: pgscm/templates/agroup/index.html:91 pgscm/templates/group/index.html:103
 msgid "approved area"
 msgstr ""
 
@@ -722,10 +733,6 @@ msgstr ""
 
 #: pgscm/templates/group/index.html:103
 msgid "Group info"
-msgstr ""
-
-#: pgscm/templates/group/index.html:103
-msgid "farmers"
 msgstr ""
 
 #: pgscm/templates/report/alarm.html:23 pgscm/templates/report/alarm.html:38

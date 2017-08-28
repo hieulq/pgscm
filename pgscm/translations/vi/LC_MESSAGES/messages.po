@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-08-28 08:08+0700\n"
+"POT-Creation-Date: 2017-08-28 11:33+0700\n"
 "PO-Revision-Date: 2017-07-08 21:17+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: vi\n"
@@ -71,7 +71,7 @@ msgstr "Cảnh cáo"
 msgid "punish"
 msgstr "Phạt"
 
-#: adminlte/templates/adminlte/widgets.html:18
+#: adminlte/templates/adminlte/widgets.html:19
 msgid "More info"
 msgstr "Thông tin chi tiết"
 
@@ -533,6 +533,14 @@ msgstr "Liên nhóm PGS"
 msgid "Nearly Expired PGS Certs"
 msgstr "Chứng chỉ PGS sắp hết hạn"
 
+#: pgscm/templates/index.html:324
+msgid "Total approved area"
+msgstr "Tổng diện tích chứng nhận"
+
+#: pgscm/templates/index.html:335
+msgid "Total requested area"
+msgstr "Tổng diện tích yêu cầu"
+
 #: pgscm/templates/macro.html:18
 msgid "Do you really want to delete data?"
 msgstr "Bạn có thực sự muốn xoá dữ liệu này không?"
@@ -573,12 +581,11 @@ msgstr "Lịch sử"
 msgid "Detail info"
 msgstr "Chi tiết"
 
-#: pgscm/templates/macro.html:52 pgscm/templates/macro.html:62
-#: pgscm/templates/macro.html:72
+#: pgscm/templates/macro.html:53
 msgid "Total of "
 msgstr "Tổng "
 
-#: pgscm/templates/macro.html:98
+#: pgscm/templates/macro.html:87
 msgid "Close"
 msgstr "Đóng"
 
@@ -671,6 +678,10 @@ msgid "groups"
 msgstr "nhóm"
 
 #: pgscm/templates/agroup/index.html:91 pgscm/templates/group/index.html:103
+msgid "farmers"
+msgstr "nông dân"
+
+#: pgscm/templates/agroup/index.html:91 pgscm/templates/group/index.html:103
 msgid "approved area"
 msgstr "diện tích chứng nhận"
 
@@ -725,10 +736,6 @@ msgstr "Lịch sử cấp chứng chỉ PGS"
 #: pgscm/templates/group/index.html:103
 msgid "Group info"
 msgstr "Thông tin nhóm"
-
-#: pgscm/templates/group/index.html:103
-msgid "farmers"
-msgstr "nông dân"
 
 #: pgscm/templates/report/alarm.html:23 pgscm/templates/report/alarm.html:38
 msgid "Alarmed PGS Certificates"
