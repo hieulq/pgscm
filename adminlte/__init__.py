@@ -547,10 +547,18 @@ def load_group_script():
     certificate_status_type = {}
     for key in g.c.CertificateStatusType:
         certificate_status_type[key.value] = _(key.name)
-    certificate_re_verify_status_type = {}
 
+    certificate_re_verify_status_type = {}
     for key in g.c.CertificateReVerifyStatusType:
         certificate_re_verify_status_type[key.value] = _(key.name)
+
+    gender_type = {}
+    for key in g.c.GenderType:
+        gender_type[key.value] = _(key.name)
+
+    farmer_type = {}
+    for key in g.c.FarmerType:
+        farmer_type[key.value] = _(key.name)
 
     group_script = """
     <script>
@@ -600,8 +608,10 @@ def load_group_script():
                 elements_select2[6], NaN);
                 
             var certificate_status_type = {5};
-        
             var certificate_re_verify_status_type = {6};
+            
+            var gender_type = {7};
+            var farmer_type = {8};
             
             $('.{2}').on('click', function () {{
                 var owner_group_id = $(this).data()['owner_group_id'];
@@ -668,7 +678,42 @@ def load_group_script():
                 var group_id = $(this).data()['id'];
                 get_info_of_group('/farmer', 'group_id', group_id, 'label_sum2');
                 get_info_of_group('/certificate/total', 'owner_group_id', group_id, 'label_sum1');
-
+                
+                $.ajax({{
+                    method: 'GET',
+                    url: '/farmer/deleted',
+                    data: 'where={{"group_id": "' + group_id + '"}}',
+                    success: function (data, status, req) {{
+                        console.log(data)
+                        $('#{9}').find('tr:gt(0)').remove()
+                        if(data.length){{
+                            $('#{10}').addClass('hidden');
+                            $('#{9} div').removeClass('hidden');
+                            var table_body = $('#{9} table tbody');
+                            for (var i in data) {{
+                                var new_row = '<tr>' +
+                                    '<th scope="row">' + (parseInt(i) + 1) + '</th>' +
+                                    '<td><b>' + data[i]['farmer_code'] + '</b></td>' +
+                                    '<td>' + data[i]['name'] + '</td>' +
+                                    '<td>' + gender_type[data[i]['gender']] + '</td>' +
+                                    '<td>' + farmer_type[data[i]['type']] + '</td>' +
+                                    '<td>' + data[i]['_deleted_at'] + '</td>' +
+                                    '<td>' + data[i]['_modify_info'] + '</td>' +
+                                    '</tr>';
+                                table_body.append(new_row);
+                            }}
+                        }} else {{
+                            $('#{10}').removeClass('hidden');
+                            $('#{9} div').addClass('hidden');
+                        }}
+                    }},
+                    error: function (request, status, error) {{
+                        console.log(request);
+                        console.log(error);
+                        alert(request.responseText);
+                    }}
+                }})
+                
             }});
             
         }});
@@ -676,7 +721,9 @@ def load_group_script():
     """.format(g.c.MODAL_HISTORY_ID, g.c.BTNVIEW_ID, 'view_gr_history',
                g.c.CertificateStatusType['approved'].value,
                g.c.CertificateStatusType['approved_no_cert'].value,
-               json.dumps(certificate_status_type), json.dumps(certificate_re_verify_status_type))
+               json.dumps(certificate_status_type), json.dumps(certificate_re_verify_status_type),
+               json.dumps(gender_type), json.dumps(farmer_type),
+               'tab_history', 'no_data')
     return Markup(group_script)
 
 
@@ -703,12 +750,48 @@ def load_agroup_script():
                             alert(request.responseText);
                         }}
                     }})
+                    
+                    $.ajax({{
+                        method: 'GET',
+                        url: '/group/deleted',
+                        data: 'where={{"associate_group_id": "' + agroup_id + '"}}',
+                        success: function (data, status, req) {{
+                            $('#{1}').find('tr:gt(0)').remove()
+                            if(data.length){{
+                                $('#{2}').addClass('hidden');
+                                $('#{1} div').removeClass('hidden');
+                                var table_body = $('#{1} table tbody');
+                                for (var i in data) {{
+                                    var new_row = '<tr>' +
+                                        '<th scope="row">' + (parseInt(i) + 1) + '</th>' +
+                                        '<td><b>' + data[i]['group_code'] + '</b></td>' +
+                                        '<td>' + data[i]['name'] + '</td>' +
+                                        '<td>' + data[i]['village'] + '</td>' +
+                                        '<td>' + data[i]['ward']['name'] + '</td>' +
+                                        '<td>' + data[i]['district']['name'] + '</td>' +
+                                        '<td>' + data[i]['province']['name'] + '</td>' +
+                                        '<td>' + data[i]['_deleted_at'] + '</td>' +
+                                        '<td>' + data[i]['_modify_info'] + '</td>' +
+                                        '</tr>';
+                                    table_body.append(new_row);
+                                }}
+                            }} else {{
+                                $('#{1} div').addClass('hidden');
+                                $('#{2}').removeClass('hidden');
+                            }}
+                        }},
+                        error: function (request, status, error) {{
+                            console.log(request);
+                            console.log(error);
+                            alert(request.responseText);
+                        }}
+                    }})
+                        
                 }});
             }});
         </script>
     
-    """.format(g.c.BTNVIEW_ID, g.c.CertificateStatusType['approved'].value,
-               g.c.CertificateStatusType['approved_no_cert'].value,)
+    """.format(g.c.BTNVIEW_ID, 'tab_history', 'no_data')
     return Markup(agroup_script)
 
 

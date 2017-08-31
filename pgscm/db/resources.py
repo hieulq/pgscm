@@ -165,6 +165,8 @@ class FarmerResource(ModelResource):
     class Schema:
         group = fields.Inline('group')
         group_id = fields.String()
+        _deleted_at = fields.DateString()
+        _deleted_at._schema = c.DATETIME_SCHEMA
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
@@ -201,6 +203,15 @@ class FarmerResource(ModelResource):
         del kwargs['page']
         return self.manager.instances(**kwargs)
 
+    @Route.GET('/deleted', schema=Instances(),
+               response_schema=Instances())
+    def get_farmers_deleted(self, **kwargs):
+        kwargs['where'] += \
+            (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
+        del kwargs['per_page']
+        del kwargs['page']
+        return self.manager.instances(**kwargs)
+
 
 class GroupResource(ModelResource):
     class Meta:
@@ -215,6 +226,8 @@ class GroupResource(ModelResource):
         associate_group = fields.Inline('associate_group')
         province_id = fields.String()
         associate_group_id = fields.String()
+        _deleted_at = fields.DateString()
+        _deleted_at._schema = c.DATETIME_SCHEMA
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
@@ -227,6 +240,15 @@ class GroupResource(ModelResource):
     def select2_api(self, **kwargs):
         kwargs['where'] += \
             (self.manager.filters['_deleted_at'][None].convert(None),)
+        del kwargs['per_page']
+        del kwargs['page']
+        return self.manager.instances(**kwargs)
+
+    @Route.GET('/deleted', schema=Instances(),
+               response_schema=Instances())
+    def get_groups_deleted(self, **kwargs):
+        kwargs['where'] += \
+            (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         del kwargs['per_page']
         del kwargs['page']
         return self.manager.instances(**kwargs)

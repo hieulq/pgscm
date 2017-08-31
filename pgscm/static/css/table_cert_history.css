@@ -1,6 +1,6 @@
 table.modal-cert-history {
     display: block;
-    max-height: 300px;
+    max-height: 250px;
     overflow-y: scroll;
     max-width: none !important;
 }
