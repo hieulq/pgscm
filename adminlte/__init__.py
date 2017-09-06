@@ -732,7 +732,7 @@ def load_group_script():
                                    total_area_approved += data[i]['group_area'];
                                 }}
                             }}
-                            $('#label_sum3').html(total_area_approved + ' / ' + total_area);
+                            $('#label_sum2').html(total_area_approved + ' / ' + total_area);
                         }}
                         $('#'+des_id_element).html(count);
                     }},
@@ -745,8 +745,8 @@ def load_group_script():
             }}
             $('.{1}').on('click', function (event) {{
                 var group_id = $(this).data()['id'];
-                get_info_of_group('/farmer', 'group_id', group_id, 'label_sum2');
-                get_info_of_group('/certificate/total', 'owner_group_id', group_id, 'label_sum1');
+                get_info_of_group('/farmer', 'group_id', group_id, 'label_sum1');
+                get_info_of_group('/certificate/total', 'owner_group_id', group_id, 'label_sum0');
                 
                 $.ajax({{
                     method: 'GET',
@@ -808,10 +808,10 @@ def load_agroup_script():
                         data: 'id="' + agroup_id + '"',
                         success: function (data, status, req) {{
                             data = JSON.parse(data)
-                            $('#label_sum1').html(data['total_of_cert']);
-                            $('#label_sum2').html(data['total_of_gr']);
-                            $('#label_sum3').html(data['total_of_farmer']);
-                            $('#label_sum4').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
+                            $('#label_sum0').html(data['total_of_cert']);
+                            $('#label_sum1').html(data['total_of_gr']);
+                            $('#label_sum2').html(data['total_of_farmer']);
+                            $('#label_sum3').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
                         }},
                         error: function (request, status, error) {{
                             console.log(request);
