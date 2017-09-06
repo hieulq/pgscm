@@ -252,6 +252,49 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                         
             """.format(has_province_id)
 
+        def convert_column_display(column_type):
+            render_result = ""
+            render_tmpl = """"render": function (data, type, row) {{
+                                        return "{0}" + {2} + "{1}"
+                                    }}"""
+            if column_type == g.c.LINK_DISP:
+                render_result = render_tmpl.format("<a>", "</a>", "(data ? data : '')")
+            if column_type == g.c.BOLD_DISP:
+                render_result = render_tmpl.format("<b>", "</b>", "(data ? data : '')")
+            if column_type == g.c.FarmerType:
+                render_result = render_tmpl.format(
+                    "", "",
+                    "(data == 1 ? \"" + _('member') + "\" : \"" + _('reviewer') + "\")")
+            if column_type == g.c.GenderType:
+                render_result = render_tmpl.format(
+                    "", "",
+                    "(data == 1 ? \"" + _('male') + "\" : \"" + _('female') + "\")")
+            if column_type == g.c.CertificateStatusType:
+                render_result = render_tmpl.format(
+                    "", "",
+                    "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
+                        'approved') + "</label></div>" +
+                    "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
+                        'rejected') + "</label></div>" +
+                    "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
+                        'in_conversion') + "</label></div>" +
+                    "\":\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i>""" + _(
+                        'approved_no_cert') + "</label></div>\")")
+            if column_type == g.c.CertificateReVerifyStatusType:
+                render_result = render_tmpl.format(
+                    "", "",
+                    "(data==1?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
+                        'not_check') + "</label></div>" +
+                    "\":data==2?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
+                        'valid') + "</label></div>" +
+                    "\":data==3?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
+                        'decline') + "</label></div>" +
+                    "\":data==4?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
+                        'warning') + "</label></div>" +
+                    "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
+                        'punish') + "</label></div>" + "\")")
+            return render_result
+
         if current_app.config['AJAX_CALL_ENABLED']:
             mapping = ""
             for column in column_names:
@@ -285,45 +328,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                          {0}}},""" \
                         .format(render_func, str(column[1]).lower())
                 else:
-                    render_tmpl = """"render": function (data, type, row) {{
-                            return "{0}" + {2} + "{1}"
-                        }}"""
-                    if column[2] == g.c.LINK_DISP:
-                        render_func = render_tmpl.format("<a>", "</a>", "(data ? data : '')")
-                    if column[2] == g.c.BOLD_DISP:
-                        render_func = render_tmpl.format("<b>", "</b>", "(data ? data : '')")
-                    if column[2] == g.c.FarmerType:
-                        render_func = render_tmpl.format(
-                            "", "",
-                            "(data == 1 ? \"" + _('member') + "\" : \"" + _('reviewer') + "\")")
-                    if column[2] == g.c.GenderType:
-                        render_func = render_tmpl.format(
-                            "", "",
-                            "(data == 1 ? \"" + _('male') + "\" : \"" + _('female') + "\")")
-                    if column[2] == g.c.CertificateStatusType:
-                        render_func = render_tmpl.format(
-                            "", "",
-                            "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                                'approved') + "</label></div>" +
-                            "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                                'rejected') + "</label></div>" +
-                            "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
-                                'in_conversion') + "</label></div>" +
-                            "\":\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i>""" + _(
-                                'approved_no_cert') + "</label></div>\")")
-                    if column[2] == g.c.CertificateReVerifyStatusType:
-                        render_func = render_tmpl.format(
-                            "", "",
-                            "(data==1?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
-                                'not_check') + "</label></div>" +
-                            "\":data==2?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                                'valid') + "</label></div>" +
-                            "\":data==3?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                                'decline') + "</label></div>" +
-                            "\":data==4?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
-                                'warning') + "</label></div>" +
-                            "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                                'punish') + "</label></div>" + "\")")
+                    render_func = convert_column_display(column[2])
                     mapping += """
                         {{"data": "{1}", "orderable": {2}, "searchable": {2},
                          {0}}},""" \
@@ -364,55 +369,86 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
             server_script = """
             "serverSide": false,
             """
+        datatable_config = """
+            "language": {{
+                "url": "/static/{0}.json"
+            }},
+            buttons: [
+                {{
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel',
+                    exportOptions: {{
+                        columns: [{1}]
+                    }}
+                }},
+                {{
+                    extend: 'pdfHtml5',
+                    text: '<i class="fa fa-file-pdf-o"></i>',
+                    titleAttr: 'PDF',
+                    exportOptions: {{
+                        columns: [{1}]
+                    }}
+                }},
+                {{
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i>',
+                    titleAttr: 'Print',
+                    exportOptions: {{
+                        columns: [{1}]
+                    }}
+                }}
+            ],
+            "processing": true,
+            {2}
+            "paging": true,
+            "pagingType": "full_numbers",
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+        """.format(g.language, export_columns, server_script)
+
+        column_of_deleted_data = ""
+        init_complete_config = """
+            table.buttons().container().appendTo('#pgs_data_filter');
+            $('.dt-buttons').css("margin-left", "5px")
+        """
+
+        if ajax_endpoint in g.c.PAGE_HAVE_SOFT_DELETE:
+            for column in column_names:
+                if column[0] != 'action':
+                    render_func = convert_column_display(column[2])
+                    column_of_deleted_data += """
+                        {{"data": "{1}", "orderable": {2}, "searchable": {2}, "title": "{3}", {0} }},
+                    """.format(render_func, column[0], str(column[1]).lower(), str(column[3]))
+            column_of_deleted_data += """
+                {{ "data": "_deleted_at", "title": "{0}", "searchable": "true" }},
+                {{ "data": "_modify_info", "title": "{1}", "searchable": "true" }},    
+            """.format(str(_('Deleted at')), str(_('Reason')))
+
+            init_complete_config += """
+                $('#pgs_data_filter label').append('<select class="form-control input-sm" id="{0}"' +
+                    'style="display: inline-block; width: auto;">' +
+                        '<option value="none_delete">{2}</option>' +
+                        '<option value="deleted">{1}</option>' +
+                    '</select>'
+                )
+            """.format('search_type', _('Deleted'), _('None delete'))
+
         script = Markup("""
         {0}
         <!-- page script -->
         <script>
             $(function () {{
                 var table = $('#pgs_data').DataTable({{
-                    "language": {{
-                        "url": "/static/{1}.json"
-                    }},
-                    buttons: [
-                        {{
-                            extend: 'excelHtml5',
-                            text: '<i class="fa fa-file-excel-o"></i>',
-                            titleAttr: 'Excel',
-                            exportOptions: {{
-                                columns: [{2}]
-                            }}
-                        }},
-                        {{
-                            extend: 'pdfHtml5',
-                            text: '<i class="fa fa-file-pdf-o"></i>',
-                            titleAttr: 'PDF',
-                            exportOptions: {{
-                                columns: [{2}]
-                            }}
-                        }},
-                        {{
-                            extend: 'print',
-                            text: '<i class="fa fa-print"></i>',
-                            titleAttr: 'Print',
-                            exportOptions: {{
-                                columns: [{2}]
-                            }}
-                        }}
-                    ],
-                    "processing": true,
-                    {3}
-                    "paging": true,
-                    "pagingType": "full_numbers",
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": true,
+                    {1}
                     "drawCallback": function( settings ) {{
-                        $('.{4}').on('click', function (event) {{
+                        $('.{2}').on('click', function (event) {{
                             
                             var data = $(this).data()
-                            var modal = $('#{5}')
+                            var modal = $('#{3}')
                             
                             function call_ajax(url, resource, id_resource, element_id, default_value){{
                                 $.ajax({{
@@ -439,7 +475,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                                 }});
                             }}
                             
-                            var s2 = $('.{12}')
+                            var s2 = $('.{10}')
                             var multi_select_data = []
                             for (var key in data) {{
                                 var target = modal.find('#' + key)
@@ -462,7 +498,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                                 s2.val(multi_select_data).trigger("change")
                             }}
 
-                            var op = modal.find('#{14}')
+                            var op = modal.find('#{12}')
                             if(op.length > 0 ){{
                                 op.parent().removeClass('hidden')
                                 modal.find('#password').prop('required',false)
@@ -485,10 +521,10 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
 
 
                         }})
-                        $('.{7}').on('click', function (event) {{
-                            var modal_add = $('#{13}')
+                        $('.{5}').on('click', function (event) {{
+                            var modal_add = $('#{11}')
                             modal_add.find('#id').val('')
-                            var op = modal_add.find('#{14}')
+                            var op = modal_add.find('#{12}')
                             if(op.length > 0 ){{
                                 op.parent().addClass('hidden')
                                 modal_add.find('#password').prop('required',true)
@@ -497,36 +533,69 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                                 modal_add.find('#confirm').parent().addClass('required')
                             }}
                         }})
-                        $('.{8}').on('click', function (event) {{
+                        $('.{6}').on('click', function (event) {{
                             var data = $(this).data()
-                            var modal_del = $('#{9}')
+                            var modal_del = $('#{7}')
                             modal_del.find('#id').val(data['id'])
                         }})
-                        $('#{11}').removeClass('btn-primary')
+                        $('#{9}').removeClass('btn-primary')
                         .addClass('btn-warning')
                     }},
                     "initComplete": function (settings, json) {{
-                        $('.{7}').appendTo('#pgs_data_filter');
-                        table.buttons().container().appendTo('#pgs_data_filter');
-                        $('.dt-buttons').css("margin-left", "5px")
-                        $('.{7}').css("margin-left", "5px");
+                        $('.{5}').appendTo('#pgs_data_filter');
+                        $('.{5}').css("margin-left", "5px");
+                        {16}
+                        $('#{13}').change(function () {{
+                            var search_type = $('#{13}').val();
+                            if(search_type == "deleted"){{
+                                $.ajax({{
+                                    type: "get",
+                                    url: '/{14}/deleted',
+                                    success: function (data, text) {{
+                                        table.destroy();
+                                        $('#pgs_data').empty();     
+                                        var columns = [{15}];      
+                                        table = $('#pgs_data').DataTable({{
+                                            {1}
+                                            data: data,
+                                            columns : columns,
+                                            "initComplete": function (settings, json) {{
+                                                {16}
+                                                var search_type_element = $("#{13}");
+                                                search_type_element.val('deleted');
+                                                search_type_element.change(function () {{
+                                                    var search_type = search_type_element.val();
+                                                    if(search_type == "none_delete"){{
+                                                        location.reload();
+                                                    }}
+                                                }});
+                                            }}
+                                        }}) 
+                                    }},
+                                    error: function (request, status, error) {{
+                                        console.log(request);
+                                        console.log(error);
+                                    }}
+                                }});
+                            }}
+                        }});
                     }},
                 }})
-                {6}
-                $('.{10}').removeClass('btn-default')
+                {4}
+                $('.{8}').removeClass('btn-default')
                     .addClass('btn-primary pull-right')
                     .before("<hr />" )
-                $('.{10}').parent()
+                $('.{8}').parent()
                     .append('<button type="button" class="btn btn-default"'+
                     'data-dismiss="modal">Cancel</button>')
             }});
         </script>
-        """.format(datatables_script, g.language,
-                   export_columns, server_script, g.c.BTNEDIT_ID,
+        """.format(datatables_script, datatable_config, g.c.BTNEDIT_ID,
                    g.c.MODAL_EDIT_ID, select2_script, g.c.BTNADD_ID,
                    g.c.BTNDEL_ID, g.c.MODAL_DEL_ID, g.c.SUBMIT_DEFAULT_CLASS,
                    g.c.DEL_SUBMIT_ID, g.c.MULTI_SELECT_DEFAULT_CLASS,
-                   g.c.MODAL_ADD_ID, 'old_pass'))
+                   g.c.MODAL_ADD_ID, 'old_pass', 'search_type',
+                   ajax_endpoint, column_of_deleted_data, init_complete_config))
         return script
     else:
         css_script = """

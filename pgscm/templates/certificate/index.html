@@ -11,22 +11,26 @@
     <!-- DataTables with select2 enabled -->
     {% if only_farmer == False %}
     {{ load_datatables_script(
-            ajax_endpoint='certificate',
+            ajax_endpoint='certificate/groups',
             export_columns='0,1,2,3,4,5,6,7,8,9',
-            column_names=[("certificate_code", True, g.c.LINK_DISP), ("owner_group.name", False, g.c.BOLD_DISP),
-            ("group_area", True, g.c.BOLD_DISP), ("member_count", True, None), ("gov_certificate_id", True, None), ("status", True, g.c.CertificateStatusType),
-            ("re_verify_status", True, g.c.CertificateReVerifyStatusType), ("certificate_start_date", True, None), ("certificate_expiry_date", True, None),
-            ("action", False, None)],
-            select2_class=g.c.SELECT_DEFAULT_ID) }}
+            column_names=[("certificate_code", True, g.c.LINK_DISP, _('Code')),
+            ("owner_group.name", False, g.c.BOLD_DISP, _('Certified group')),
+            ("group_area", True, g.c.BOLD_DISP, _('Area/Count')), ("member_count", True, None, _('Member count')),
+            ("gov_certificate_id", True, None, _('Decision')), ("status", True, g.c.CertificateStatusType, _('Status')),
+            ("re_verify_status", True, g.c.CertificateReVerifyStatusType, _('Verify status')),
+            ("certificate_start_date", True, None, _('Verify date')), ("certificate_expiry_date", True, None, _('Expiry date')),
+            ("action", False, None, _('Actions'))], select2_class=g.c.SELECT_DEFAULT_ID) }}
     {% else %}
     {{ load_datatables_script(
-            ajax_endpoint='certificate',
+            ajax_endpoint='certificate/farmers',
             export_columns='0,1,2,3,4,5,6,7,8,9',
-            column_names=[("certificate_code", True, g.c.LINK_DISP), ("owner_farmer.name", False, g.c.BOLD_DISP),
-            ("group_area", True, g.c.BOLD_DISP), ("member_count", True, None), ("gov_certificate_id", True, None), ("status", True, g.c.CertificateStatusType),
-            ("re_verify_status", True, g.c.CertificateReVerifyStatusType), ("certificate_start_date", True, None), ("certificate_expiry_date", True, None),
-            ("action", False, None)],
-            select2_class=g.c.SELECT_DEFAULT_ID) }}
+            column_names=[("certificate_code", True, g.c.LINK_DISP, _('Code')),
+            ("owner_farmer.name", False, g.c.BOLD_DISP, _('Certified farmer')),
+            ("group_area", True, g.c.BOLD_DISP, _('Area/Count')), ("member_count", True, None, _('Member count')),
+            ("gov_certificate_id", True, None, _('Decision')), ("status", True, g.c.CertificateStatusType, _('Status')),
+            ("re_verify_status", True, g.c.CertificateReVerifyStatusType, _('Verify status')),
+            ("certificate_start_date", True, None, _('Verify date')), ("certificate_expiry_date", True, None, _('Expiry date')),
+            ("action", False, None, _('Actions'))], select2_class=g.c.SELECT_DEFAULT_ID) }}
     {% endif %}
 {%- endblock scripts %}
 {% block content_header -%}
