@@ -12,8 +12,9 @@
     {{ load_datatables_script(
             ajax_endpoint='farmer',
             export_columns='0,1,2,3,4',
-            column_names=[("farmer_code", True, g.c.LINK_DISP), ("name", True, g.c.BOLD_DISP),
-            ("gender", True, g.c.GenderType), ("type", True, g.c.FarmerType), ("group.name", False, None), ("action", False, None)],
+            column_names=[("farmer_code", True, g.c.LINK_DISP, _('Code')), ("name", True, g.c.BOLD_DISP, _('Name')),
+            ("gender", True, g.c.GenderType, _('Gender')), ("type", True, g.c.FarmerType, _('Type')),
+            ("group.name", False, None, _('Group')), ("action", False, None, _('Actions'))],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
 {%- endblock scripts %}
 {% block content_header -%}

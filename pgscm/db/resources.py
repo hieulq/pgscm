@@ -77,6 +77,8 @@ class CertResource(ModelResource):
         certificate_start_date._schema = c.DATETIME_SCHEMA
         owner_group_id = fields.String()
         owner_farmer_id = fields.String()
+        _deleted_at = fields.DateString()
+        _deleted_at._schema = c.DATETIME_SCHEMA
 
     def _filter_group_farmer_on_province(self, kwargs):
         province_id = current_user.province_id
@@ -155,6 +157,32 @@ class CertResource(ModelResource):
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
         return self.manager.paginated_instances_or(**kwargs)
 
+    @Route.GET('/groups/deleted', schema=Instances(),
+               response_schema=Instances())
+    def get_cer_for_groups_deleted(self, **kwargs):
+        func = _check_user_province(self.manager, kwargs, is_delete=False,
+                                    is_get_all=True)
+        kwargs['where'] += \
+            (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
+        kwargs['where'] += (self.manager.filters['owner_group_id']['ne']
+                            .convert({'$ne': ''}),)
+        del kwargs['per_page']
+        del kwargs['page']
+        return func(**kwargs)
+
+    @Route.GET('/farmers/deleted', schema=Instances(),
+               response_schema=Instances())
+    def get_cer_for_farmers_deleted(self, **kwargs):
+        func = _check_user_province(self.manager, kwargs, is_delete=False,
+                                    is_get_all=True)
+        kwargs['where'] += \
+            (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
+        kwargs['where'] += (self.manager.filters['owner_farmer_id']['ne']
+                            .convert({'$ne': ''}),)
+        del kwargs['per_page']
+        del kwargs['page']
+        return func(**kwargs)
+
 
 class FarmerResource(ModelResource):
     class Meta:
@@ -206,11 +234,13 @@ class FarmerResource(ModelResource):
     @Route.GET('/deleted', schema=Instances(),
                response_schema=Instances())
     def get_farmers_deleted(self, **kwargs):
+        func = _check_user_province(self.manager, kwargs, is_delete=False,
+                                    is_get_all=True)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         del kwargs['per_page']
         del kwargs['page']
-        return self.manager.instances(**kwargs)
+        return func(**kwargs)
 
 
 class GroupResource(ModelResource):
@@ -247,11 +277,13 @@ class GroupResource(ModelResource):
     @Route.GET('/deleted', schema=Instances(),
                response_schema=Instances())
     def get_groups_deleted(self, **kwargs):
+        func = _check_user_province(self.manager, kwargs, is_delete=False,
+                                    is_get_all=True)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         del kwargs['per_page']
         del kwargs['page']
-        return self.manager.instances(**kwargs)
+        return func(**kwargs)
 
 
 class AssociateGroupResource(ModelResource):
@@ -264,6 +296,8 @@ class AssociateGroupResource(ModelResource):
         province = fields.Inline('province')
         id = fields.String()
         province_id = fields.String()
+        _deleted_at = fields.DateString()
+        _deleted_at._schema = c.DATETIME_SCHEMA
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
@@ -341,6 +375,17 @@ class AssociateGroupResource(ModelResource):
         del kwargs['per_page']
         del kwargs['page']
         return self.manager.instances(**kwargs)
+
+    @Route.GET('/deleted', schema=Instances(),
+               response_schema=Instances())
+    def get_agroups_deleted(self, **kwargs):
+        func = _check_user_province(self.manager, kwargs, is_delete=False,
+                                    is_get_all=True)
+        kwargs['where'] += \
+            (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
+        del kwargs['per_page']
+        del kwargs['page']
+        return func(**kwargs)
 
 
 class WardResource(ModelResource):

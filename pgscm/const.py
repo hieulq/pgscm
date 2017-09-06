@@ -11,6 +11,9 @@ ONLY_ADMIN_ROLE = [N_ADMIN, R_ADMIN]
 ADMIN_MOD_ROLE = [N_ADMIN, R_ADMIN, N_MOD, R_MOD]
 NATION_ROLE = [N_ADMIN, N_MOD, N_USER]
 
+PAGE_HAVE_SOFT_DELETE = ['associate_group', 'group', 'farmer',
+                         'certificate/farmers', 'certificate/groups']
+
 MODAL_ADD_ID = 'modal-add'
 MODAL_DEL_ID = 'modal-delete'
 MODAL_EDIT_ID = 'modal-edit'
