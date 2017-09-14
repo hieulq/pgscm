@@ -136,7 +136,11 @@ def is_active_in_tree(request, endpoint, tree=False):
         return 'node'
 
 
-def load_datatables_script(ajax_endpoint="", export_columns="",
+def lurl_for(endpoint):
+    return url_for(endpoint + '_' + g.language)
+
+
+def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns="",
                            column_names=[], js=True, select2_class=None, multi_select2_class=None):
     if js:
         select2_script = ""
@@ -586,8 +590,42 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                     .addClass('btn-primary pull-right')
                     .before("<hr />" )
                 $('.{8}').parent()
-                    .append('<button type="button" class="btn btn-default"'+
-                    'data-dismiss="modal">Cancel</button>')
+                    .append('<button type="button" class="pgs_dismiss_modal btn btn-default"'+
+                    'data-dismiss="modal">Cancel</button>');
+                $('form:eq(1)').submit(function(e){{
+                    // form add object
+                    $.ajax({{
+                        type: "POST",
+                        url: "{17}",
+                        data: $('form:eq(1)').serialize(),
+                        success: function (data) {{
+                            if(data.is_success){{
+                                toastr.success(data.message);
+                            }} else {{
+                                toastr.error(data.message);
+                            }}
+                        }}
+                    }});
+                    e.preventDefault();
+                    $('.pgs_dismiss_modal').click();
+                }});
+                $('form:eq(2)').submit(function(e){{
+                    // form edit
+                    e.preventDefault();
+                }});
+                $('form:eq(3)').submit(function(e){{
+                    // form delete
+                    $.ajax({{
+                        type: "POST",
+                        url: "{17}",
+                        data: $('form:eq(3)').serialize(),
+                        success: function (data) {{
+                            console.log(data)  // display the returned data in the console.
+                        }}
+                    }});
+                    e.preventDefault();
+                    $('.pgs_dismiss_modal').click();
+                }});
             }});
         </script>
         """.format(datatables_script, datatable_config, g.c.BTNEDIT_ID,
@@ -595,7 +633,8 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                    g.c.BTNDEL_ID, g.c.MODAL_DEL_ID, g.c.SUBMIT_DEFAULT_CLASS,
                    g.c.DEL_SUBMIT_ID, g.c.MULTI_SELECT_DEFAULT_CLASS,
                    g.c.MODAL_ADD_ID, 'old_pass', 'search_type',
-                   ajax_endpoint, column_of_deleted_data, init_complete_config))
+                   ajax_endpoint, column_of_deleted_data, init_complete_config,
+                   lurl_for(crud_endpoint[0])))
         return script
     else:
         css_script = """

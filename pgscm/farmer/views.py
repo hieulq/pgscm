@@ -1,7 +1,7 @@
 import uuid
 
 from flask import render_template, current_app, request, \
-    flash, redirect, url_for
+    flash, redirect, url_for, jsonify
 from flask_security import roles_accepted, current_user
 from sqlalchemy import func
 
@@ -109,3 +109,27 @@ def index():
 
         return render_template('farmer/index.html', farmers=farmers,
                                form=form, dform=dform)
+
+
+@farmer.route('/vi/them-nong-dan', endpoint='add_farmer_vi', methods=['POST'])
+@farmer.route('/en/add-farmer', endpoint='add_farmer_en', methods=['POST'])
+@roles_accepted(*c.ADMIN_MOD_ROLE)
+def add_farmer():
+    form = FarmerForm()
+    form.group_id.choices = [(form.group_id.data,
+                              form.group_id.label.text)]
+    form.id.data = str(uuid.uuid4())
+    if form.validate_on_submit():
+        group_farmer = models.Group.query.filter_by(
+            id=form.group_id.data).one()
+        new_farmer = models.Farmer(
+            id=form.id.data, type=form.type.data,
+            farmer_code=form.farmer_code.data,
+            name=form.name.data, group=group_farmer,
+            gender=form.gender.data)
+        sqla.session.add(new_farmer)
+        sqla.session.commit()
+        return jsonify(is_success=True, message=str(__('Add farmer success!')))
+    else:
+        return jsonify(is_success=False,
+                       message=str(__('The form is not validate!')))
