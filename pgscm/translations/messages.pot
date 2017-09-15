@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PGSCM 1.0.0\n"
 "Report-Msgid-Bugs-To: hieulq19@gmail.com\n"
-"POT-Creation-Date: 2017-08-28 11:33+0700\n"
+"POT-Creation-Date: 2017-09-15 14:31+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,56 +17,74 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: adminlte/__init__.py:298
+#: adminlte/__init__.py:267
 msgid "member"
 msgstr ""
 
-#: adminlte/__init__.py:298
+#: adminlte/__init__.py:267
 msgid "reviewer"
 msgstr ""
 
-#: adminlte/__init__.py:302
+#: adminlte/__init__.py:271
 msgid "male"
 msgstr ""
 
-#: adminlte/__init__.py:302
+#: adminlte/__init__.py:271
 msgid "female"
 msgstr ""
 
-#: adminlte/__init__.py:306
+#: adminlte/__init__.py:275
 msgid "approved"
 msgstr ""
 
-#: adminlte/__init__.py:308
+#: adminlte/__init__.py:277
 msgid "rejected"
 msgstr ""
 
-#: adminlte/__init__.py:310
+#: adminlte/__init__.py:279
 msgid "in_conversion"
 msgstr ""
 
-#: adminlte/__init__.py:312
+#: adminlte/__init__.py:281
 msgid "approved_no_cert"
 msgstr ""
 
-#: adminlte/__init__.py:317
+#: adminlte/__init__.py:286
 msgid "not_check"
 msgstr ""
 
-#: adminlte/__init__.py:319
+#: adminlte/__init__.py:288
 msgid "valid"
 msgstr ""
 
-#: adminlte/__init__.py:321
+#: adminlte/__init__.py:290
 msgid "decline"
 msgstr ""
 
-#: adminlte/__init__.py:323
+#: adminlte/__init__.py:292
 msgid "warning"
 msgstr ""
 
-#: adminlte/__init__.py:325
+#: adminlte/__init__.py:294
 msgid "punish"
+msgstr ""
+
+#: adminlte/__init__.py:429 pgscm/templates/agroup/index.html:97
+#: pgscm/templates/group/index.html:106
+msgid "Deleted at"
+msgstr ""
+
+#: adminlte/__init__.py:429 pgscm/templates/agroup/index.html:97
+#: pgscm/templates/group/index.html:106 pgscm/utils.py:64
+msgid "Reason"
+msgstr ""
+
+#: adminlte/__init__.py:438
+msgid "Deleted"
+msgstr ""
+
+#: adminlte/__init__.py:438
+msgid "Current"
 msgstr ""
 
 #: adminlte/templates/adminlte/widgets.html:19
@@ -77,10 +95,6 @@ msgstr ""
 #: pgscm/certificate/forms.py:54 pgscm/farmer/forms.py:21
 #: pgscm/group/forms.py:31 pgscm/utils.py:62
 msgid "Id"
-msgstr ""
-
-#: pgscm/utils.py:64
-msgid "Reason"
 msgstr ""
 
 #: pgscm/utils.py:66
@@ -108,14 +122,18 @@ msgstr ""
 #: pgscm/admin/forms.py:13 pgscm/admin/forms.py:14
 #: pgscm/associate_group/forms.py:16 pgscm/associate_group/forms.py:17
 #: pgscm/farmer/forms.py:13 pgscm/farmer/forms.py:14 pgscm/group/forms.py:16
-#: pgscm/group/forms.py:17 pgscm/templates/agroup/index.html:51
-#: pgscm/templates/farmer/index.html:49 pgscm/templates/group/index.html:55
+#: pgscm/group/forms.py:17 pgscm/templates/agroup/index.html:18
+#: pgscm/templates/agroup/index.html:55 pgscm/templates/agroup/index.html:97
+#: pgscm/templates/farmer/index.html:15 pgscm/templates/farmer/index.html:50
+#: pgscm/templates/group/index.html:18 pgscm/templates/group/index.html:56
+#: pgscm/templates/group/index.html:106
 msgid "Name"
 msgstr ""
 
 #: pgscm/admin/forms.py:15 pgscm/admin/forms.py:17
 #: pgscm/associate_group/forms.py:18 pgscm/associate_group/forms.py:19
-#: pgscm/templates/admin/user.html:49 pgscm/templates/agroup/index.html:52
+#: pgscm/templates/admin/user.html:49 pgscm/templates/agroup/index.html:19
+#: pgscm/templates/agroup/index.html:56
 msgid "Email"
 msgstr ""
 
@@ -137,8 +155,9 @@ msgstr ""
 
 #: pgscm/admin/forms.py:24 pgscm/associate_group/forms.py:20
 #: pgscm/group/forms.py:18 pgscm/security/forms.py:12
-#: pgscm/templates/admin/user.html:50 pgscm/templates/agroup/index.html:53
-#: pgscm/templates/group/index.html:59
+#: pgscm/templates/admin/user.html:50 pgscm/templates/agroup/index.html:19
+#: pgscm/templates/agroup/index.html:57 pgscm/templates/agroup/index.html:97
+#: pgscm/templates/group/index.html:20 pgscm/templates/group/index.html:60
 msgid "Province"
 msgstr ""
 
@@ -204,7 +223,9 @@ msgid "Group area"
 msgstr ""
 
 #: pgscm/certificate/forms.py:19 pgscm/certificate/forms.py:20
-#: pgscm/templates/certificate/index.html:67
+#: pgscm/templates/certificate/index.html:18
+#: pgscm/templates/certificate/index.html:29
+#: pgscm/templates/certificate/index.html:71
 #: pgscm/templates/report/alarm.html:50
 msgid "Member count"
 msgstr ""
@@ -221,8 +242,10 @@ msgstr ""
 msgid "Certificate expiry date"
 msgstr ""
 
-#: pgscm/certificate/forms.py:32 pgscm/templates/certificate/index.html:69
-#: pgscm/templates/macro.html:28 pgscm/templates/report/alarm.html:52
+#: pgscm/certificate/forms.py:32 pgscm/templates/certificate/index.html:19
+#: pgscm/templates/certificate/index.html:30
+#: pgscm/templates/certificate/index.html:73 pgscm/templates/macro.html:28
+#: pgscm/templates/report/alarm.html:52
 msgid "Status"
 msgstr ""
 
@@ -302,19 +325,23 @@ msgid "Delete certificate success!"
 msgstr ""
 
 #: pgscm/farmer/forms.py:11 pgscm/farmer/forms.py:12
+#: pgscm/templates/group/index.html:106
 msgid "Farmer code"
 msgstr ""
 
-#: pgscm/farmer/forms.py:15 pgscm/templates/farmer/index.html:50
+#: pgscm/farmer/forms.py:15 pgscm/templates/farmer/index.html:16
+#: pgscm/templates/farmer/index.html:51 pgscm/templates/group/index.html:106
 msgid "Gender"
 msgstr ""
 
-#: pgscm/farmer/forms.py:17 pgscm/templates/farmer/index.html:51
+#: pgscm/farmer/forms.py:17 pgscm/templates/farmer/index.html:16
+#: pgscm/templates/farmer/index.html:52 pgscm/templates/group/index.html:106
 msgid "Type"
 msgstr ""
 
-#: pgscm/farmer/forms.py:19 pgscm/templates/farmer/index.html:52
-#: pgscm/templates/group/index.html:35 pgscm/templates/index.html:176
+#: pgscm/farmer/forms.py:19 pgscm/templates/farmer/index.html:17
+#: pgscm/templates/farmer/index.html:53 pgscm/templates/group/index.html:36
+#: pgscm/templates/index.html:176
 msgid "Group"
 msgstr ""
 
@@ -347,24 +374,29 @@ msgid "Delete farmer success!"
 msgstr ""
 
 #: pgscm/group/forms.py:11 pgscm/group/forms.py:14
+#: pgscm/templates/agroup/index.html:97
 msgid "Group code"
 msgstr ""
 
-#: pgscm/group/forms.py:21 pgscm/templates/group/index.html:58
+#: pgscm/group/forms.py:21 pgscm/templates/agroup/index.html:97
+#: pgscm/templates/group/index.html:20 pgscm/templates/group/index.html:59
 msgid "District"
 msgstr ""
 
-#: pgscm/group/forms.py:23 pgscm/templates/group/index.html:57
+#: pgscm/group/forms.py:23 pgscm/templates/agroup/index.html:97
+#: pgscm/templates/group/index.html:19 pgscm/templates/group/index.html:58
 msgid "Ward"
 msgstr ""
 
 #: pgscm/group/forms.py:25 pgscm/group/forms.py:26
-#: pgscm/templates/group/index.html:56
+#: pgscm/templates/agroup/index.html:97 pgscm/templates/group/index.html:19
+#: pgscm/templates/group/index.html:57
 msgid "Village"
 msgstr ""
 
-#: pgscm/group/forms.py:27 pgscm/templates/agroup/index.html:31
-#: pgscm/templates/group/index.html:60 pgscm/templates/index.html:182
+#: pgscm/group/forms.py:27 pgscm/templates/agroup/index.html:35
+#: pgscm/templates/group/index.html:21 pgscm/templates/group/index.html:61
+#: pgscm/templates/index.html:182
 msgid "Associated Group"
 msgstr ""
 
@@ -446,7 +478,7 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
-#: pgscm/templates/certificate/index.html:41 pgscm/templates/index.html:151
+#: pgscm/templates/certificate/index.html:45 pgscm/templates/index.html:151
 msgid "Certificate"
 msgstr ""
 
@@ -458,7 +490,7 @@ msgstr ""
 msgid "Certified Farmer"
 msgstr ""
 
-#: pgscm/templates/farmer/index.html:28 pgscm/templates/index.html:171
+#: pgscm/templates/farmer/index.html:29 pgscm/templates/index.html:171
 msgid "Farmer"
 msgstr ""
 
@@ -522,7 +554,7 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:24 pgscm/templates/agroup/index.html:42
+#: pgscm/templates/agroup/index.html:28 pgscm/templates/agroup/index.html:46
 #: pgscm/templates/index.html:306
 msgid "PGS Associate Groups"
 msgstr ""
@@ -543,22 +575,30 @@ msgstr ""
 msgid "Do you really want to delete data?"
 msgstr ""
 
-#: pgscm/templates/certificate/index.html:68 pgscm/templates/macro.html:27
+#: pgscm/templates/certificate/index.html:19
+#: pgscm/templates/certificate/index.html:30
+#: pgscm/templates/certificate/index.html:72 pgscm/templates/macro.html:27
 #: pgscm/templates/report/alarm.html:51
 msgid "Decision"
 msgstr ""
 
-#: pgscm/templates/certificate/index.html:70 pgscm/templates/macro.html:29
+#: pgscm/templates/certificate/index.html:20
+#: pgscm/templates/certificate/index.html:31
+#: pgscm/templates/certificate/index.html:74 pgscm/templates/macro.html:29
 #: pgscm/templates/report/alarm.html:53
 msgid "Verify status"
 msgstr ""
 
-#: pgscm/templates/certificate/index.html:71 pgscm/templates/macro.html:30
+#: pgscm/templates/certificate/index.html:21
+#: pgscm/templates/certificate/index.html:32
+#: pgscm/templates/certificate/index.html:75 pgscm/templates/macro.html:30
 #: pgscm/templates/report/alarm.html:54
 msgid "Verify date"
 msgstr ""
 
-#: pgscm/templates/certificate/index.html:72 pgscm/templates/macro.html:31
+#: pgscm/templates/certificate/index.html:21
+#: pgscm/templates/certificate/index.html:32
+#: pgscm/templates/certificate/index.html:76 pgscm/templates/macro.html:31
 #: pgscm/templates/report/alarm.html:55
 msgid "Expiry date"
 msgstr ""
@@ -583,7 +623,11 @@ msgstr ""
 msgid "Total of "
 msgstr ""
 
-#: pgscm/templates/macro.html:87
+#: pgscm/templates/macro.html:84
+msgid "No data"
+msgstr ""
+
+#: pgscm/templates/macro.html:98
 msgid "Close"
 msgstr ""
 
@@ -595,19 +639,19 @@ msgstr ""
 msgid "Managing roles and permissions in PGS system"
 msgstr ""
 
-#: pgscm/templates/admin/user.html:28 pgscm/templates/agroup/index.html:29
-#: pgscm/templates/certificate/index.html:39
-#: pgscm/templates/farmer/index.html:26 pgscm/templates/group/index.html:33
+#: pgscm/templates/admin/user.html:28 pgscm/templates/agroup/index.html:33
+#: pgscm/templates/certificate/index.html:43
+#: pgscm/templates/farmer/index.html:27 pgscm/templates/group/index.html:34
 #: pgscm/templates/report/alarm.html:28
 msgid "Home"
 msgstr ""
 
 #: pgscm/templates/admin/user.html:35 pgscm/templates/admin/user.html:87
-#: pgscm/templates/agroup/index.html:36 pgscm/templates/agroup/index.html:88
-#: pgscm/templates/certificate/index.html:46
-#: pgscm/templates/certificate/index.html:115
-#: pgscm/templates/farmer/index.html:34 pgscm/templates/farmer/index.html:87
-#: pgscm/templates/group/index.html:40 pgscm/templates/group/index.html:99
+#: pgscm/templates/agroup/index.html:40 pgscm/templates/agroup/index.html:92
+#: pgscm/templates/certificate/index.html:50
+#: pgscm/templates/certificate/index.html:119
+#: pgscm/templates/farmer/index.html:35 pgscm/templates/farmer/index.html:88
+#: pgscm/templates/group/index.html:41 pgscm/templates/group/index.html:100
 msgid "Create New"
 msgstr ""
 
@@ -631,107 +675,118 @@ msgstr ""
 msgid "Last login at"
 msgstr ""
 
-#: pgscm/templates/admin/user.html:55 pgscm/templates/agroup/index.html:55
-#: pgscm/templates/certificate/index.html:74
-#: pgscm/templates/farmer/index.html:54 pgscm/templates/group/index.html:62
+#: pgscm/templates/admin/user.html:55 pgscm/templates/agroup/index.html:20
+#: pgscm/templates/agroup/index.html:59
+#: pgscm/templates/certificate/index.html:22
+#: pgscm/templates/certificate/index.html:33
+#: pgscm/templates/certificate/index.html:78
+#: pgscm/templates/farmer/index.html:17 pgscm/templates/farmer/index.html:55
+#: pgscm/templates/group/index.html:21 pgscm/templates/group/index.html:63
 #: pgscm/templates/report/alarm.html:57
 msgid "Actions"
 msgstr ""
 
-#: pgscm/templates/admin/user.html:88 pgscm/templates/agroup/index.html:89
-#: pgscm/templates/certificate/index.html:116
-#: pgscm/templates/farmer/index.html:88 pgscm/templates/group/index.html:100
+#: pgscm/templates/admin/user.html:88 pgscm/templates/agroup/index.html:93
+#: pgscm/templates/certificate/index.html:120
+#: pgscm/templates/farmer/index.html:89 pgscm/templates/group/index.html:101
 #: pgscm/templates/report/alarm.html:95
 msgid "Update Data"
 msgstr ""
 
-#: pgscm/templates/admin/user.html:89 pgscm/templates/agroup/index.html:90
-#: pgscm/templates/certificate/index.html:117
-#: pgscm/templates/farmer/index.html:89 pgscm/templates/group/index.html:101
+#: pgscm/templates/admin/user.html:89 pgscm/templates/agroup/index.html:94
+#: pgscm/templates/certificate/index.html:121
+#: pgscm/templates/farmer/index.html:90 pgscm/templates/group/index.html:102
 #: pgscm/templates/report/alarm.html:96
 msgid "Confirm to delete"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:25
-msgid "Managing regional associate groups in PGS system"
-msgstr ""
-
-#: pgscm/templates/agroup/index.html:50
-#: pgscm/templates/certificate/index.html:60
-#: pgscm/templates/farmer/index.html:48 pgscm/templates/group/index.html:54
+#: pgscm/templates/agroup/index.html:17 pgscm/templates/agroup/index.html:54
+#: pgscm/templates/certificate/index.html:16
+#: pgscm/templates/certificate/index.html:27
+#: pgscm/templates/certificate/index.html:64
+#: pgscm/templates/farmer/index.html:15 pgscm/templates/farmer/index.html:49
+#: pgscm/templates/group/index.html:18 pgscm/templates/group/index.html:55
 #: pgscm/templates/report/alarm.html:46
 msgid "Code"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:91
+#: pgscm/templates/agroup/index.html:29
+msgid "Managing regional associate groups in PGS system"
+msgstr ""
+
+#: pgscm/templates/agroup/index.html:95
 msgid "Associate group info"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:91 pgscm/templates/group/index.html:103
+#: pgscm/templates/agroup/index.html:96 pgscm/templates/group/index.html:105
 msgid "certificates"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:91
+#: pgscm/templates/agroup/index.html:96
 msgid "groups"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:91 pgscm/templates/group/index.html:103
+#: pgscm/templates/agroup/index.html:96 pgscm/templates/group/index.html:105
 msgid "farmers"
 msgstr ""
 
-#: pgscm/templates/agroup/index.html:91 pgscm/templates/group/index.html:103
+#: pgscm/templates/agroup/index.html:96 pgscm/templates/group/index.html:105
 msgid "approved area"
 msgstr ""
 
-#: pgscm/templates/certificate/index.html:34
-#: pgscm/templates/certificate/index.html:52
-msgid "PGS Certificates"
-msgstr ""
-
-#: pgscm/templates/certificate/index.html:35
-msgid "Managing PGS certificates"
-msgstr ""
-
-#: pgscm/templates/certificate/index.html:62
+#: pgscm/templates/certificate/index.html:17
+#: pgscm/templates/certificate/index.html:66
 #: pgscm/templates/report/alarm.html:47
 msgid "Certified group"
 msgstr ""
 
-#: pgscm/templates/certificate/index.html:64
-#: pgscm/templates/report/alarm.html:48
-msgid "Certified farmer"
-msgstr ""
-
-#: pgscm/templates/certificate/index.html:66
+#: pgscm/templates/certificate/index.html:18
+#: pgscm/templates/certificate/index.html:29
+#: pgscm/templates/certificate/index.html:70
 #: pgscm/templates/report/alarm.html:49
 msgid "Area/Count"
 msgstr ""
 
-#: pgscm/templates/farmer/index.html:21
-msgid "PGS Farmer"
+#: pgscm/templates/certificate/index.html:28
+#: pgscm/templates/certificate/index.html:68
+#: pgscm/templates/report/alarm.html:48
+msgid "Certified farmer"
+msgstr ""
+
+#: pgscm/templates/certificate/index.html:38
+#: pgscm/templates/certificate/index.html:56
+msgid "PGS Certificates"
+msgstr ""
+
+#: pgscm/templates/certificate/index.html:39
+msgid "Managing PGS certificates"
 msgstr ""
 
 #: pgscm/templates/farmer/index.html:22
+msgid "PGS Farmer"
+msgstr ""
+
+#: pgscm/templates/farmer/index.html:23
 msgid "Managing farmers in PGS system"
 msgstr ""
 
-#: pgscm/templates/farmer/index.html:40
+#: pgscm/templates/farmer/index.html:41
 msgid "PGS Farmers"
 msgstr ""
 
-#: pgscm/templates/group/index.html:28 pgscm/templates/group/index.html:46
+#: pgscm/templates/group/index.html:29 pgscm/templates/group/index.html:47
 msgid "PGS Groups"
 msgstr ""
 
-#: pgscm/templates/group/index.html:29
+#: pgscm/templates/group/index.html:30
 msgid "Managing regional groups in PGS system"
 msgstr ""
 
-#: pgscm/templates/group/index.html:102
+#: pgscm/templates/group/index.html:103
 msgid "Certificate history"
 msgstr ""
 
-#: pgscm/templates/group/index.html:103
+#: pgscm/templates/group/index.html:104
 msgid "Group info"
 msgstr ""
 

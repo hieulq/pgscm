@@ -435,7 +435,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                         '<option value="deleted">{1}</option>' +
                     '</select>'
                 )
-            """.format('search_type', _('Deleted'), _('None delete'))
+            """.format('search_type', _('Deleted'), _('Current'))
 
         script = Markup("""
         {0}
