@@ -441,7 +441,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 )
             """.format('search_type', _('Deleted'), _('None delete'))
 
-        script = Markup("""
+        script = """
         {0}
         <!-- page script -->
         <script>
@@ -592,50 +592,54 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 $('.{8}').parent()
                     .append('<button type="button" class="pgs_dismiss_modal btn btn-default"'+
                     'data-dismiss="modal">Cancel</button>');
-                $('form:eq(1)').submit(function(e){{
-                    // form add object
-                    $.ajax({{
-                        type: "POST",
-                        url: "{17}",
-                        data: $('form:eq(1)').serialize(),
-                        success: function (data) {{
-                            if(data.is_success){{
-                                toastr.success(data.message);
-                            }} else {{
-                                toastr.error(data.message);
-                            }}
-                        }}
-                    }});
-                    e.preventDefault();
-                    $('.pgs_dismiss_modal').click();
-                }});
-                $('form:eq(2)').submit(function(e){{
-                    // form edit
-                    e.preventDefault();
-                }});
-                $('form:eq(3)').submit(function(e){{
-                    // form delete
-                    $.ajax({{
-                        type: "POST",
-                        url: "{17}",
-                        data: $('form:eq(3)').serialize(),
-                        success: function (data) {{
-                            console.log(data)  // display the returned data in the console.
-                        }}
-                    }});
-                    e.preventDefault();
-                    $('.pgs_dismiss_modal').click();
-                }});
-            }});
-        </script>
         """.format(datatables_script, datatable_config, g.c.BTNEDIT_ID,
                    g.c.MODAL_EDIT_ID, select2_script, g.c.BTNADD_ID,
                    g.c.BTNDEL_ID, g.c.MODAL_DEL_ID, g.c.SUBMIT_DEFAULT_CLASS,
                    g.c.DEL_SUBMIT_ID, g.c.MULTI_SELECT_DEFAULT_CLASS,
                    g.c.MODAL_ADD_ID, 'old_pass', 'search_type',
-                   ajax_endpoint, column_of_deleted_data, init_complete_config,
-                   lurl_for(crud_endpoint[0])))
-        return script
+                   ajax_endpoint, column_of_deleted_data, init_complete_config,)
+
+        if len(crud_endpoint) == 3:
+            script += """
+                function form_submit(endpoint, form_index, method){{
+                    $('form:eq(' + form_index + ')').submit(function(e){{
+                    //$('form:eq(1)').submit(function(e){{
+                        // form add object
+                        $.ajax({{
+                            type: method,
+                            url: endpoint,
+                            data: $('form:eq(' + form_index + ')').serialize(),
+                            success: function (data) {{
+                                if(data.is_success){{
+                                    toastr.success(data.message);
+                                    if(form_index == 3){{
+                                        table.ajax.reload();
+                                    }}
+                                }} else {{
+                                    toastr.error(data.message);
+                                }}
+                            }}
+                        }});
+                        e.preventDefault();
+                        $('.pgs_dismiss_modal').click();
+                    }});
+                }};
+                
+                // add form
+                form_submit("{0}", 1, "POST");
+                
+                // edit form
+                form_submit("{1}", 2, "PUT");
+                
+                // delete form
+                form_submit("{2}", 3, "DELETE");
+            """.format(lurl_for(crud_endpoint[0]), lurl_for(crud_endpoint[1]), lurl_for(crud_endpoint[2]))
+
+        script += """
+            });
+        </script>
+            """
+        return Markup(script)
     else:
         css_script = """
             <link href="{0}" rel="stylesheet" type="text/css">
@@ -821,9 +825,7 @@ def load_group_script():
                         alert(request.responseText);
                     }}
                 }})
-                
             }});
-            
         }});
     </script>
     """.format(g.c.MODAL_HISTORY_ID, g.c.BTNVIEW_ID, 'view_gr_history',

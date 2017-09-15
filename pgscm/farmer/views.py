@@ -133,3 +133,31 @@ def add_farmer():
     else:
         return jsonify(is_success=False,
                        message=str(__('The form is not validate!')))
+
+
+@farmer.route('/vi/sua-nong-dan', endpoint='edit_farmer_vi', methods=['PUT'])
+@farmer.route('/en/edit-farmer', endpoint='edit_farmer_en', methods=['PUT'])
+@roles_accepted(*c.ADMIN_MOD_ROLE)
+def edit_farmer():
+    pass
+
+
+@farmer.route('/vi/xoa-nong-dan', endpoint='delete_farmer_vi',
+              methods=['DELETE'])
+@farmer.route('/en/delete-farmer', endpoint='delete_farmer_en',
+              methods=['DELETE'])
+@roles_accepted(*c.ADMIN_MOD_ROLE)
+def delete_farmer():
+    dform = DeleteForm()
+    if dform.validate_on_submit():
+        del_farmer = sqla.session.query(models.Farmer) \
+            .filter_by(id=dform.id.data).one()
+        del_farmer._deleted_at = func.now()
+        if dform.modify_info.data:
+            del_farmer._modify_info = dform.modify_info.data
+        sqla.session.commit()
+        return jsonify(is_success=True,
+                       message=str(__('Delete farmer success!')))
+    else:
+        return jsonify(is_success=False,
+                       message=str(__('The form is not validate!')))

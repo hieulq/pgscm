@@ -10,7 +10,7 @@
     {{ super() }}
     <!-- DataTables -->
     {{ load_datatables_script(
-            ajax_endpoint='farmer',crud_endpoint=['farmer.add_farmer', 'farmer.edit_farmer', 'farmer.del_farmer'],
+            ajax_endpoint='farmer',crud_endpoint=['farmer.add_farmer', 'farmer.edit_farmer', 'farmer.delete_farmer'],
             export_columns='0,1,2,3,4',
             column_names=[("farmer_code", True, g.c.LINK_DISP, _('Code')), ("name", True, g.c.BOLD_DISP, _('Name')),
             ("gender", True, g.c.GenderType, _('Gender')), ("type", True, g.c.FarmerType, _('Type')),
