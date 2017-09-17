@@ -139,7 +139,30 @@ def add_farmer():
 @farmer.route('/en/edit-farmer', endpoint='edit_farmer_en', methods=['PUT'])
 @roles_accepted(*c.ADMIN_MOD_ROLE)
 def edit_farmer():
-    pass
+    form = FarmerForm()
+    form.group_id.choices = [(form.group_id.data,
+                              form.group_id.label.text)]
+    if form.id.data:
+        if form.validate_on_submit():
+            edit_farmer = sqla.session.query(models.Farmer) \
+                .filter_by(id=form.id.data).one()
+            edit_farmer.farmer_code = form.farmer_code.data
+            edit_farmer.name = form.name.data
+            edit_farmer.gender = form.gender.data
+            edit_farmer.type = form.type.data
+            if edit_farmer.group_id != form.group_id.data:
+                new_group = models.Group.query.filter_by(
+                    id=form.group_id.data).one()
+                edit_farmer.group = new_group
+            sqla.session.commit()
+            return jsonify(is_success=True,
+                           message=str(__('Update farmer success!')))
+        else:
+            return jsonify(is_success=False,
+                           message=str(__('The form is not validate!')))
+    else:
+        return jsonify(is_success=False,
+                       message=str(__("Can't get id of object edit!")))
 
 
 @farmer.route('/vi/xoa-nong-dan', endpoint='delete_farmer_vi',

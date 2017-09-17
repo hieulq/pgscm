@@ -299,10 +299,53 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                         'punish') + "</label></div>" + "\")")
             return render_result
 
+        def get_ajax_config(is_table_of_current_content=True):
+            url = ajax_endpoint
+            ajax_config = """
+                "serverSide": true,
+                "ajax": function(data, callback, settings) {
+                    var sort_column_name = data.columns[data.order[0].column].data;
+                    var direction = data.order[0].dir == 'asc' ? true : false
+                    var where_params = {}
+            """
+            if is_table_of_current_content:
+                ajax_config += """
+                    where_params = {"_deleted_at":null}
+                """
+            else:
+                url += "/deleted"
+            ajax_config += """
+                    var sort_params = {{}}
+                    sort_params[sort_column_name] = direction; 
+                    if (data.search.value) {{
+                        for (idx in data.columns) {{
+                            if (data.columns[idx].searchable && 
+                                data.columns[idx].data != "_deleted_at") {{
+                                where_params[data.columns[idx].data] = {{}};
+                                where_params[data.columns[idx].data]["$contains"]=data.search.value;
+                            }}
+                        }}
+                    }};
+                    $.get('/{0}', {{
+                        per_page: data.length,
+                        page: data.start/data.length + 1,
+                        where: JSON.stringify(where_params),
+                        sort: JSON.stringify(sort_params)
+                        }}, 
+                        function(res, status, req) {{
+                            callback({{
+                                recordsTotal: req.getResponseHeader('X-Total-Count'),
+                                recordsFiltered: req.getResponseHeader('X-Total-Count'),
+                                data: res
+                            }});
+                        }});
+                }},
+            """.format(url)
+            return ajax_config
+
         if current_app.config['AJAX_CALL_ENABLED']:
             mapping = ""
             for column in column_names:
-                render_func = ""
                 if column[0] == 'action':
                     render_func = """"render": function (data, type, row) {{
                             data_attr = ''
@@ -338,37 +381,10 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                          {0}}},""" \
                         .format(render_func, column[0], str(column[1]).lower())
 
-            server_script = """"serverSide": true,
-                    "ajax": function(data, callback, settings) {{
-                        var sort_column_name = data.columns[data.order[0].column].data;
-                        var direction = data.order[0].dir == 'asc' ? true : false
-                        var where_params = {{"_deleted_at":null}}
-                        var sort_params = {{}}
-                        sort_params[sort_column_name] = direction; 
-                        if (data.search.value) {{
-                            for (idx in data.columns) {{
-                                if (data.columns[idx].searchable) {{
-                                    where_params[data.columns[idx].data] = {{}};
-                                    where_params[data.columns[idx].data]["$contains"]=data.search.value;
-                                }}
-                            }}
-                        }};
-                        $.get('/{0}', {{
-                            per_page: data.length,
-                            page: data.start/data.length + 1,
-                            where: JSON.stringify(where_params),
-                            sort: JSON.stringify(sort_params)
-                            }}, 
-                            function(res, status, req) {{
-                                callback({{
-                                    recordsTotal: req.getResponseHeader('X-Total-Count'),
-                                    recordsFiltered: req.getResponseHeader('X-Total-Count'),
-                                    data: res
-                                    }});
-                            }});
-                    }},
+            server_script = """
+                    {0}
                     "columns": [{1}
-                    ],""".format(ajax_endpoint, mapping)
+                    ],""".format(get_ajax_config(True), mapping)
         else:
             server_script = """
             "serverSide": false,
@@ -404,7 +420,6 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 }}
             ],
             "processing": true,
-            {2}
             "paging": true,
             "pagingType": "full_numbers",
             "lengthChange": true,
@@ -412,7 +427,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
             "ordering": true,
             "info": true,
             "autoWidth": true,
-        """.format(g.language, export_columns, server_script)
+        """.format(g.language, export_columns)
 
         column_of_deleted_data = ""
         init_complete_config = """
@@ -446,145 +461,142 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
         <!-- page script -->
         <script>
             $(function () {{
-                var table = $('#pgs_data').DataTable({{
-                    {1}
-                    "drawCallback": function( settings ) {{
-                        $('.{2}').on('click', function (event) {{
-                            
-                            var data = $(this).data()
-                            var modal = $('#{3}')
-                            
-                            function call_ajax(url, resource, id_resource, element_id, default_value){{
-                                $.ajax({{
-                                    type: "get",
-                                    url: url,
-                                    data: 'where={{"' + resource + '": ' +
-                                        '{{"$ref": "/' + resource + '/' + id_resource + '"}} }}',
-                                    success: function (data, text) {{
-                                        var select2_data = [];
-                                        for (var i = 0; i < data.length; i++) {{
-                                            select2_data[i] = {{
-                                                id: data[i]['$id'],
-                                                text: data[i].type + " " + data[i].name
+                function create_dataTable(){{
+                    var table = $('#pgs_data').DataTable({{
+                        {17}
+                        {1}
+                        "drawCallback": function( settings ) {{
+                            $('.{2}').on('click', function (event) {{
+                                
+                                var data = $(this).data()
+                                var modal = $('#{3}')
+                                
+                                function call_ajax(url, resource, id_resource, element_id, default_value){{
+                                    $.ajax({{
+                                        type: "get",
+                                        url: url,
+                                        data: 'where={{"' + resource + '": ' +
+                                            '{{"$ref": "/' + resource + '/' + id_resource + '"}} }}',
+                                        success: function (data, text) {{
+                                            var select2_data = [];
+                                            for (var i = 0; i < data.length; i++) {{
+                                                select2_data[i] = {{
+                                                    id: data[i]['$id'],
+                                                    text: data[i].type + " " + data[i].name
+                                                }}
                                             }}
+                                            modal.find('#'+element_id).select2({{ width: '100%', data: select2_data}})
+                                                .val(default_value).trigger('change.select2');
+                                        }},
+                                        error: function (request, status, error) {{
+                                            console.log(request);
+                                            console.log(error);
+                                            alert(request.responseText);
                                         }}
-                                        modal.find('#'+element_id).select2({{ width: '100%', data: select2_data}})
-                                            .val(default_value).trigger('change.select2');
-                                    }},
-                                    error: function (request, status, error) {{
-                                        console.log(request);
-                                        console.log(error);
-                                        alert(request.responseText);
+                                    }});
+                                }}
+                                
+                                var s2 = $('.{10}')
+                                var multi_select_data = []
+                                for (var key in data) {{
+                                    var target = modal.find('#' + key)
+                                    var get_resource = key.split('_id');
+                                    if(!target.length && get_resource.length > 1){{
+                                        target = modal.find('#load_now-'+ get_resource[0]);
                                     }}
-                                }});
-                            }}
-                            
-                            var s2 = $('.{10}')
-                            var multi_select_data = []
-                            for (var key in data) {{
-                                var target = modal.find('#' + key)
-                                var get_resource = key.split('_id');
-                                if(!target.length && get_resource.length > 1){{
-                                    target = modal.find('#load_now-'+ get_resource[0]);
-                                }}
-                                value = ''
-                                if (data[key]!='None'){{value = data[key]}}
-                                if (target.is('select')){{
-                                    target.val(data[key]).trigger('change.select2')
-                                }} else {{
-                                    modal.find('#' + key).val(value)
-                                }}
-                                if (key.startsWith('multiSelect')) {{
-                                    multi_select_data.push(data[key])
-                                }}
-                            }}
-                            if(s2.length > 0 && multi_select_data.length > 0){{
-                                s2.val(multi_select_data).trigger("change")
-                            }}
-
-                            var op = modal.find('#{12}')
-                            if(op.length > 0 ){{
-                                op.parent().removeClass('hidden')
-                                modal.find('#password').prop('required',false)
-                                modal.find('#password').parent().removeClass('required')
-                                modal.find('#confirm').prop('required',false)
-                                modal.find('#confirm').parent().removeClass('required')
-                            }}
-                            
-                            if(data['province_id'] && data['district_id']){{
-                                modal.find('#district_id').empty();
-                                call_ajax('/district', 'province', data['province_id'],
-                                    'district_id', data['district_id']);
-                            }}
-                            
-                            if(data['district_id'] && data['ward_id']){{
-                                modal.find('#ward_id').empty();
-                                call_ajax('/ward', 'district', data['district_id'],
-                                    'ward_id', data['ward_id']);
-                            }}
-
-
-                        }})
-                        $('.{5}').on('click', function (event) {{
-                            var modal_add = $('#{11}')
-                            modal_add.find('#id').val('')
-                            var op = modal_add.find('#{12}')
-                            if(op.length > 0 ){{
-                                op.parent().addClass('hidden')
-                                modal_add.find('#password').prop('required',true)
-                                modal_add.find('#password').parent().addClass('required')
-                                modal_add.find('#confirm').prop('required',true)
-                                modal_add.find('#confirm').parent().addClass('required')
-                            }}
-                        }})
-                        $('.{6}').on('click', function (event) {{
-                            var data = $(this).data()
-                            var modal_del = $('#{7}')
-                            modal_del.find('#id').val(data['id'])
-                        }})
-                        $('#{9}').removeClass('btn-primary')
-                        .addClass('btn-warning')
-                    }},
-                    "initComplete": function (settings, json) {{
-                        $('.{5}').appendTo('#pgs_data_filter');
-                        $('.{5}').css("margin-left", "5px");
-                        {16}
-                        $('#{13}').change(function () {{
-                            var search_type = $('#{13}').val();
-                            if(search_type == "deleted"){{
-                                $.ajax({{
-                                    type: "get",
-                                    url: '/{14}/deleted',
-                                    success: function (data, text) {{
-                                        table.destroy();
-                                        $('#pgs_data').empty();     
-                                        var columns = [{15}];      
-                                        table = $('#pgs_data').DataTable({{
-                                            {1}
-                                            data: data,
-                                            columns : columns,
-                                            "initComplete": function (settings, json) {{
-                                                {16}
-                                                var search_type_element = $("#{13}");
-                                                search_type_element.val('deleted');
-                                                search_type_element.change(function () {{
-                                                    var search_type = search_type_element.val();
-                                                    if(search_type == "none_delete"){{
-                                                        location.reload();
-                                                    }}
-                                                }});
-                                            }}
-                                        }}) 
-                                    }},
-                                    error: function (request, status, error) {{
-                                        console.log(request);
-                                        console.log(error);
+                                    value = ''
+                                    if (data[key]!='None'){{value = data[key]}}
+                                    if (target.is('select')){{
+                                        target.val(data[key]).trigger('change.select2')
+                                    }} else {{
+                                        modal.find('#' + key).val(value)
                                     }}
-                                }});
-                            }}
-                        }});
-                    }},
-                }})
+                                    if (key.startsWith('multiSelect')) {{
+                                        multi_select_data.push(data[key])
+                                    }}
+                                }}
+                                if(s2.length > 0 && multi_select_data.length > 0){{
+                                    s2.val(multi_select_data).trigger("change")
+                                }}
+    
+                                var op = modal.find('#{12}')
+                                if(op.length > 0 ){{
+                                    op.parent().removeClass('hidden')
+                                    modal.find('#password').prop('required',false)
+                                    modal.find('#password').parent().removeClass('required')
+                                    modal.find('#confirm').prop('required',false)
+                                    modal.find('#confirm').parent().removeClass('required')
+                                }}
+                                
+                                if(data['province_id'] && data['district_id']){{
+                                    modal.find('#district_id').empty();
+                                    call_ajax('/district', 'province', data['province_id'],
+                                        'district_id', data['district_id']);
+                                }}
+                                
+                                if(data['district_id'] && data['ward_id']){{
+                                    modal.find('#ward_id').empty();
+                                    call_ajax('/ward', 'district', data['district_id'],
+                                        'ward_id', data['ward_id']);
+                                }}
+    
+    
+                            }})
+                            $('.{5}').on('click', function (event) {{
+                                var modal_add = $('#{11}')
+                                modal_add.find('#id').val('')
+                                var op = modal_add.find('#{12}')
+                                if(op.length > 0 ){{
+                                    op.parent().addClass('hidden')
+                                    modal_add.find('#password').prop('required',true)
+                                    modal_add.find('#password').parent().addClass('required')
+                                    modal_add.find('#confirm').prop('required',true)
+                                    modal_add.find('#confirm').parent().addClass('required')
+                                }}
+                            }})
+                            $('.{6}').on('click', function (event) {{
+                                var data = $(this).data()
+                                var modal_del = $('#{7}')
+                                modal_del.find('#id').val(data['id'])
+                            }})
+                            $('#{9}').removeClass('btn-primary')
+                            .addClass('btn-warning')
+                        }},
+                        "initComplete": function (settings, json) {{
+                            $('.{5}').appendTo('#pgs_data_filter');
+                            $('.{5}').css("margin-left", "5px");
+                            {16}
+                            $('#{13}').change(function () {{
+                                var search_type = $('#{13}').val();
+                                if(search_type == "deleted"){{
+                                    table.destroy();
+                                    $('#pgs_data').empty();
+                                    var columns = [{15}];      
+                                    table = $('#pgs_data').DataTable({{
+                                        {18}
+                                        {1}
+                                        columns : columns,
+                                        "initComplete": function (settings, json) {{
+                                            {16}
+                                            var search_type_element = $("#{13}");
+                                            search_type_element.val('deleted');
+                                            search_type_element.change(function () {{
+                                                var search_type = search_type_element.val();
+                                                if(search_type == "none_delete"){{
+                                                    table.destroy();
+                                                    $('#pgs_data').empty();
+                                                    table = create_dataTable();
+                                                }}
+                                            }});
+                                        }}
+                                    }}) 
+                                }}
+                            }});
+                        }},
+                    }})
+                    return table;
+                }}
+                var table = create_dataTable();
                 {4}
                 $('.{8}').removeClass('btn-default')
                     .addClass('btn-primary pull-right')
@@ -597,13 +609,14 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                    g.c.BTNDEL_ID, g.c.MODAL_DEL_ID, g.c.SUBMIT_DEFAULT_CLASS,
                    g.c.DEL_SUBMIT_ID, g.c.MULTI_SELECT_DEFAULT_CLASS,
                    g.c.MODAL_ADD_ID, 'old_pass', 'search_type',
-                   ajax_endpoint, column_of_deleted_data, init_complete_config,)
+                   ajax_endpoint, column_of_deleted_data, init_complete_config,
+                   server_script, get_ajax_config(False))
 
         if len(crud_endpoint) == 3:
             script += """
+                var table = table;
                 function form_submit(endpoint, form_index, method){{
                     $('form:eq(' + form_index + ')').submit(function(e){{
-                    //$('form:eq(1)').submit(function(e){{
                         // form add object
                         $.ajax({{
                             type: method,
@@ -612,7 +625,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                             success: function (data) {{
                                 if(data.is_success){{
                                     toastr.success(data.message);
-                                    if(form_index == 3){{
+                                    if(form_index != 1){{
                                         table.ajax.reload();
                                     }}
                                 }} else {{
