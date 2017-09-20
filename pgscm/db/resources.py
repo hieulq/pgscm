@@ -196,9 +196,13 @@ class FarmerResource(ModelResource):
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
-    def add_filter_province_id(self, kwargs, province_id):
-        gs = [g.id for g in models.Group.query.filter_by(
-            province_id=province_id, _deleted_at=None).all()]
+    def add_filter_province_id(self, kwargs, province_id, is_get_deleted=False):
+        if is_get_deleted:
+            gs = [g.id for g in models.Group.query.filter_by(
+                province_id=province_id).all()]
+        else:
+            gs = [g.id for g in models.Group.query.filter_by(
+                province_id=province_id, _deleted_at=None).all()]
         for cond in kwargs['where']:
             if cond.attribute == 'group_id' and isinstance(
                     cond.filter, filters.InFilter):
@@ -207,8 +211,8 @@ class FarmerResource(ModelResource):
                     if val in gs:
                         value.append(val)
                 cond.value = value
-            else:
-                kwargs['where'] += \
+
+        kwargs['where'] += \
                     (self.manager.filters['group_id']['in'].convert(
                         {'$in': gs}),)
         return kwargs
@@ -219,7 +223,7 @@ class FarmerResource(ModelResource):
         province_id = current_user.province_id
         func = _check_user_province(self.manager, kwargs, is_province=False)
         if province_id and is_region_role():
-            self.add_filter_province_id(kwargs, province_id)
+            self.add_filter_province_id(kwargs, province_id, False)
         if len(kwargs['where']) == 0:
             gs = [g.id for g in models.Group.query.filter_by(
                 province_id=province_id, _deleted_at=None).all()]
@@ -243,11 +247,12 @@ class FarmerResource(ModelResource):
         province_id = current_user.province_id
         func = _check_user_province(self.manager, kwargs, is_delete=False,
                                     is_province=False)
-        if province_id and is_region_role():
-            # TODO: function add query province id for /deleted api not work
-            self.add_filter_province_id(kwargs, province_id)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
+        if province_id and is_region_role():
+            # TODO: function add query province id for /deleted api not work
+            self.add_filter_province_id(kwargs, province_id, True)
+
         return func(**kwargs)
 
 
