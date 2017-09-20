@@ -196,27 +196,33 @@ class FarmerResource(ModelResource):
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
+    def add_filter_province_id(self, kwargs, province_id):
+        gs = [g.id for g in models.Group.query.filter_by(
+            province_id=province_id, _deleted_at=None).all()]
+        for cond in kwargs['where']:
+            if cond.attribute == 'group_id' and isinstance(
+                    cond.filter, filters.InFilter):
+                value = []
+                for val in cond.value:
+                    if val in gs:
+                        value.append(val)
+                cond.value = value
+            else:
+                kwargs['where'] += \
+                    (self.manager.filters['group_id']['in'].convert(
+                        {'$in': gs}),)
+        return kwargs
+
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
         province_id = current_user.province_id
         func = _check_user_province(self.manager, kwargs, is_province=False)
         if province_id and is_region_role():
+            self.add_filter_province_id(kwargs, province_id)
+        if len(kwargs['where']) == 0:
             gs = [g.id for g in models.Group.query.filter_by(
                 province_id=province_id, _deleted_at=None).all()]
-            for cond in kwargs['where']:
-                if cond.attribute == 'group_id' and isinstance(
-                        cond.filter, filters.InFilter):
-                    value = []
-                    for val in cond.value:
-                        if val in gs:
-                            value.append(val)
-                    cond.value = value
-                else:
-                    kwargs['where'] += \
-                        (self.manager.filters['group_id']['in'].convert(
-                            {'$in': gs}),)
-        if len(kwargs['where']) == 0:
             kwargs['where'] += \
                 (self.manager.filters['group_id']['in'].convert(
                     {'$in': gs}),)
@@ -234,12 +240,14 @@ class FarmerResource(ModelResource):
     @Route.GET('/deleted', schema=Instances(),
                response_schema=Instances())
     def get_farmers_deleted(self, **kwargs):
+        province_id = current_user.province_id
         func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_get_all=True)
+                                    is_province=False)
+        if province_id and is_region_role():
+            # TODO: function add query province id for /deleted api not work
+            self.add_filter_province_id(kwargs, province_id)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
-        del kwargs['per_page']
-        del kwargs['page']
         return func(**kwargs)
 
 
