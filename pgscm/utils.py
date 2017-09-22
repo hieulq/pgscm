@@ -147,7 +147,8 @@ class PgsPotionManager(SQLAlchemyManager):
             or_filter = ()
             for cond in where:
                 if cond.attribute == 'province_id' \
-                        or cond.attribute == '_deleted_at':
+                        or cond.attribute == '_deleted_at'\
+                        or cond.attribute == 'group_id':
                     and_where += (cond, )
                 elif cond.attribute in filter_or_cols:
                     or_filter += (cond, )

@@ -196,8 +196,8 @@ class FarmerResource(ModelResource):
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
-    def add_filter_province_id(self, kwargs, province_id, is_get_deleted=False):
-        if is_get_deleted:
+    def add_filter_province_id(self, kwargs, province_id, is_get_all=False):
+        if is_get_all:
             gs = [g.id for g in models.Group.query.filter_by(
                 province_id=province_id).all()]
         else:
