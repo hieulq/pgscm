@@ -157,31 +157,45 @@ class CertResource(ModelResource):
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
         return self.manager.paginated_instances_or(**kwargs)
 
+    @Route.GET('/groups', schema=Instances(),
+               response_schema=Instances())
+    def get_cer_for_groups(self, **kwargs):
+        self._filter_group_farmer_on_province(kwargs)
+        kwargs['filter_or_cols'] = ['certificate_expiry_date']
+        kwargs['where'] += (self.manager.filters['owner_group_id']['ne']
+                            .convert({'$ne': ''}),)
+        return self.manager.paginated_instances_or(**kwargs)
+
+    @Route.GET('/farmers', schema=Instances(),
+               response_schema=Instances())
+    def get_cer_for_farmers(self, **kwargs):
+        self._filter_group_farmer_on_province(kwargs)
+        kwargs['filter_or_cols'] = ['certificate_expiry_date']
+        kwargs['where'] += (self.manager.filters['owner_farmer_id']['ne']
+                            .convert({'$ne': ''}),)
+        return self.manager.paginated_instances_or(**kwargs)
+
     @Route.GET('/groups/deleted', schema=Instances(),
                response_schema=Instances())
     def get_cer_for_groups_deleted(self, **kwargs):
-        func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_get_all=True)
+        self._filter_group_farmer_on_province(kwargs)
+        kwargs['filter_or_cols'] = ['certificate_expiry_date']
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         kwargs['where'] += (self.manager.filters['owner_group_id']['ne']
                             .convert({'$ne': ''}),)
-        del kwargs['per_page']
-        del kwargs['page']
-        return func(**kwargs)
+        return self.manager.paginated_instances_or(**kwargs)
 
     @Route.GET('/farmers/deleted', schema=Instances(),
                response_schema=Instances())
     def get_cer_for_farmers_deleted(self, **kwargs):
-        func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_get_all=True)
+        self._filter_group_farmer_on_province(kwargs)
+        kwargs['filter_or_cols'] = ['certificate_expiry_date']
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         kwargs['where'] += (self.manager.filters['owner_farmer_id']['ne']
                             .convert({'$ne': ''}),)
-        del kwargs['per_page']
-        del kwargs['page']
-        return func(**kwargs)
+        return self.manager.paginated_instances_or(**kwargs)
 
 
 class FarmerResource(ModelResource):
@@ -213,7 +227,7 @@ class FarmerResource(ModelResource):
                 cond.value = value
 
         kwargs['where'] += \
-                    (self.manager.filters['group_id']['in'].convert(
+            (self.manager.filters['group_id']['in'].convert(
                         {'$in': gs}),)
         return kwargs
 
@@ -250,9 +264,7 @@ class FarmerResource(ModelResource):
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         if province_id and is_region_role():
-            # TODO: function add query province id for /deleted api not work
             self.add_filter_province_id(kwargs, province_id, True)
-
         return func(**kwargs)
 
 
@@ -291,11 +303,9 @@ class GroupResource(ModelResource):
                response_schema=Instances())
     def get_groups_deleted(self, **kwargs):
         func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_get_all=True)
+                                    is_province=True)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
-        del kwargs['per_page']
-        del kwargs['page']
         return func(**kwargs)
 
 
@@ -393,11 +403,9 @@ class AssociateGroupResource(ModelResource):
                response_schema=Instances())
     def get_agroups_deleted(self, **kwargs):
         func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_get_all=True)
+                                    is_province=True)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
-        del kwargs['per_page']
-        del kwargs['page']
         return func(**kwargs)
 
 

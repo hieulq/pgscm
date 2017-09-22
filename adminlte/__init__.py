@@ -320,7 +320,11 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     if (data.search.value) {{
                         for (idx in data.columns) {{
                             if (data.columns[idx].searchable && 
-                                data.columns[idx].data != "_deleted_at") {{
+                                data.columns[idx].data != "_deleted_at" &&
+                                data.columns[idx].data != "group_area" &&
+                                data.columns[idx].data != "member_count" &&
+                                data.columns[idx].data != "certificate_start_date" &&
+                                data.columns[idx].data != "certificate_expiry_date") {{
                                 where_params[data.columns[idx].data] = {{}};
                                 where_params[data.columns[idx].data]["$contains"]=data.search.value;
                             }}
@@ -625,9 +629,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                             success: function (data) {{
                                 if(data.is_success){{
                                     toastr.success(data.message);
-                                    if(form_index != 1){{
-                                        table.ajax.reload();
-                                    }}
+                                    table.ajax.reload();
                                 }} else {{
                                     toastr.error(data.message);
                                 }}
