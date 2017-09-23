@@ -2,18 +2,19 @@ from flask_babelex import gettext
 from flask_babelex import ngettext
 from flask_babelex import lazy_gettext
 
-from flask import flash
+from flask import flash, jsonify
 from flask_wtf import FlaskForm
 from flask_security import current_user
 from flask_potion.contrib.alchemy import SQLAlchemyManager
 from flask_potion.instances import Pagination, Instances as BaseInst
+
+from sqlalchemy import func
 
 from wtforms.widgets.core import Select as BaseSelectWidget
 from wtforms.widgets.core import Input
 from wtforms import TextAreaField, SubmitField, HiddenField
 
 from pgscm import const as c
-
 
 from pgscm import const
 
@@ -101,6 +102,22 @@ def convert_filters(value, field_filters):
     return filter.convert(value)
 
 
+def soft_delete(sqla, model):
+    dform = DeleteForm()
+    if dform.validate_on_submit():
+        del_object = sqla.session.query(model) \
+            .filter_by(id=dform.id.data).one()
+        del_object._deleted_at = func.now()
+        if dform.modify_info.data:
+            del_object._modify_info = dform.modify_info.data
+        sqla.session.commit()
+        return jsonify(is_success=True,
+                       message=str(__('Delete farmer success!')))
+    else:
+        return jsonify(is_success=False,
+                       message=str(__('The form is not validate!')))
+
+
 class Instances(BaseInst):
 
     def _field_filters_schema(self, filters):
@@ -147,7 +164,8 @@ class PgsPotionManager(SQLAlchemyManager):
             or_filter = ()
             for cond in where:
                 if cond.attribute == 'province_id' \
-                        or cond.attribute == '_deleted_at':
+                        or cond.attribute == '_deleted_at'\
+                        or cond.attribute == 'group_id':
                     and_where += (cond, )
                 elif cond.attribute in filter_or_cols:
                     or_filter += (cond, )

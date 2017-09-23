@@ -12,7 +12,7 @@
     {{ super() }}
     <!-- DataTables with select2 enabled -->
     {{ load_datatables_script(
-            ajax_endpoint='associate_group',
+            ajax_endpoint='associate_group', crud_endpoint=['agroup.add_agroup', 'agroup.edit_agroup', 'agroup.delete_agroup'],
             export_columns='0,1,2,3',
             column_names=[("associate_group_code", True, g.c.LINK_DISP, _('Code')),
             ("name", True, g.c.BOLD_DISP, _('Name')),

@@ -11,7 +11,7 @@ from .forms import FarmerForm
 from pgscm import sqla
 from pgscm.db import models
 from pgscm import const as c
-from pgscm.utils import __, DeleteForm, check_role, is_region_role
+from pgscm.utils import __, DeleteForm, check_role, is_region_role, soft_delete
 
 crud_role = c.ADMIN_MOD_ROLE
 
@@ -171,16 +171,4 @@ def edit_farmer():
               methods=['DELETE'])
 @roles_accepted(*c.ADMIN_MOD_ROLE)
 def delete_farmer():
-    dform = DeleteForm()
-    if dform.validate_on_submit():
-        del_farmer = sqla.session.query(models.Farmer) \
-            .filter_by(id=dform.id.data).one()
-        del_farmer._deleted_at = func.now()
-        if dform.modify_info.data:
-            del_farmer._modify_info = dform.modify_info.data
-        sqla.session.commit()
-        return jsonify(is_success=True,
-                       message=str(__('Delete farmer success!')))
-    else:
-        return jsonify(is_success=False,
-                       message=str(__('The form is not validate!')))
+    return soft_delete(sqla, models.Farmer)
