@@ -281,6 +281,8 @@ class GroupResource(ModelResource):
         associate_group = fields.Inline('associate_group')
         province_id = fields.String()
         associate_group_id = fields.String()
+        district_id = fields.String()
+        ward_id = fields.String()
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
