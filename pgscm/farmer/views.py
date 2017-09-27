@@ -171,4 +171,4 @@ def edit_farmer():
               methods=['DELETE'])
 @roles_accepted(*c.ADMIN_MOD_ROLE)
 def delete_farmer():
-    return soft_delete(sqla, models.Farmer)
+    return soft_delete(sqla, "farmer", models)

@@ -102,15 +102,72 @@ def convert_filters(value, field_filters):
     return filter.convert(value)
 
 
-def soft_delete(sqla, model):
+def delete_farmer(farmer_id, sqla, models, modify_info):
+    farmer_delete = sqla.session.query(models.Farmer) \
+            .filter_by(id=farmer_id).one()
+    farmer_delete._deleted_at = func.now()
+    farmer_delete._modify_info = modify_info
+
+    cert_of_farmer_deleted = sqla.session.query(models.Certificate)\
+        .filter_by(owner_farmer_id=farmer_id).all()
+    for cert in cert_of_farmer_deleted:
+        cert._deleted_at = func.now()
+
+    sqla.session.commit()
+
+
+def delete_group(group_id, sqla, models, modify_info):
+    group_delete = sqla.session.query(models.Group) \
+        .filter_by(id=group_id).one()
+    group_delete._deleted_at = func.now()
+    group_delete._modify_info = modify_info
+
+    cert_of_group_deleted = sqla.session.query(models.Certificate) \
+        .filter_by(owner_group_id=group_id).all()
+    for cert in cert_of_group_deleted:
+        cert._deleted_at = func.now()
+
+    farmer_of_group_deleted = sqla.session.query(models.Farmer) \
+        .filter_by(group_id=group_id).all()
+    for f in farmer_of_group_deleted:
+        delete_farmer(f.id, sqla, models, "")
+
+    sqla.session.commit()
+
+
+def delete_agroup(agroup_id, sqla, models, modify_info):
+    agroup_delete = sqla.session.query(models.AssociateGroup) \
+        .filter_by(id=agroup_id).one()
+    agroup_delete._deleted_at = func.now()
+    agroup_delete._modify_info = modify_info
+
+    group_of_agroup_deleted = sqla.session.query(models.Group) \
+        .filter_by(associate_group_id=agroup_id).all()
+    for g in group_of_agroup_deleted:
+        delete_group(g.id, sqla, models, "")
+
+    sqla.session.commit()
+
+
+def soft_delete(sqla, object_del, models):
     dform = DeleteForm()
     if dform.validate_on_submit():
-        del_object = sqla.session.query(model) \
-            .filter_by(id=dform.id.data).one()
-        del_object._deleted_at = func.now()
-        if dform.modify_info.data:
-            del_object._modify_info = dform.modify_info.data
-        sqla.session.commit()
+        if object_del == "farmer":
+            delete_farmer(dform.id.data, sqla, models, dform.modify_info.data)
+        elif object_del == "group":
+            delete_group(dform.id.data, sqla, models, dform.modify_info.data)
+        elif object_del == "agroup":
+            delete_agroup(dform.id.data, sqla, models, dform.modify_info.data)
+        else:
+            return jsonify(is_success=False,
+                           message=str(__('Not valid soft delete form!')))
+
+        # del_object = sqla.session.query(model) \
+        #     .filter_by(id=dform.id.data).one()
+        # del_object._deleted_at = func.now()
+        # if dform.modify_info.data:
+        #     del_object._modify_info = dform.modify_info.data
+        # sqla.session.commit()
         return jsonify(is_success=True,
                        message=str(__('Delete farmer success!')))
     else:

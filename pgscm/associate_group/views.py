@@ -165,4 +165,4 @@ def edit_agroup():
               methods=['DELETE'])
 @roles_accepted(*c.ADMIN_MOD_ROLE)
 def delete_agroup():
-    return soft_delete(sqla, models.AssociateGroup)
+    return soft_delete(sqla, "agroup", models)
