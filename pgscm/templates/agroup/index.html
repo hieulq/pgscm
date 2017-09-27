@@ -91,6 +91,6 @@
     {{ render_modal(g.c.MODAL_EDIT_ID, 'modal', _('Update Data')) }}
     {{ render_modal(g.c.MODAL_DEL_ID, 'modal-danger', _('Confirm to delete') ) }}
     {{ render_modal(g.c.MODAL_DETAIL_ID, 'modal', _('Associate group info'), 'modal-lg',
-        [(_('certificates'), False), (_('groups'), False), (_('farmers'), False), (_('approved area'), True)],
+        [(_('certificates'), False), (_('groups'), False), (_('farmers (Male / Female)'), False), (_('approved area'), True)],
         [_('Group code'), _('Name'), _('Village'), _('Ward'), _('District'), _('Province'), _('Deleted at'), _('Reason')]) }}
 {%- endblock content %}

@@ -796,13 +796,17 @@ def load_group_script():
                 }});
             }})
             
-            function get_info_of_group(url, group_attribute_name, group_id, des_id_element) {{
+            function get_info_of_group(url, data, des_id_element) {{
                 $.ajax({{
                     url: url,
-                    data: 'where={{"' + group_attribute_name + '": "' + group_id + '"}}',
+                    data: data,
                     success: function (data, status, req) {{
-                        var count = req.getResponseHeader('X-Total-Count');
-                        if(!count){{
+                        var count;
+                        if(url == '/group/group_summary'){{
+                            data = JSON.parse(data);
+                            count = data['total_of_farmer'] + " (" + data['total_of_male'] + 
+                                    " / " + data['total_of_female'] + ")";
+                        }} else {{
                             count = data.length;
                             var total_area_approved = 0;
                             var total_area = 0;
@@ -820,14 +824,15 @@ def load_group_script():
                     error: function (request, status, error) {{
                         console.log(request);
                         console.log(error);
-                        alert(request.responseText);
                     }}
                 }})
             }}
             $('.{1}').on('click', function (event) {{
                 var group_id = $(this).data()['id'];
-                get_info_of_group('/farmer', 'group_id', group_id, 'label_sum1');
-                get_info_of_group('/certificate/total', 'owner_group_id', group_id, 'label_sum0');
+                var d1 = 'id="' + group_id + '"';
+                get_info_of_group('/group/group_summary', d1, 'label_sum1');
+                var d2 = 'where={{"owner_group_id": "' + group_id + '"}}';
+                get_info_of_group('/certificate/total', d2, 'label_sum0');
                 
                 $.ajax({{
                     method: 'GET',
@@ -884,7 +889,8 @@ def load_agroup_script():
                             data = JSON.parse(data)
                             $('#label_sum0').html(data['total_of_cert']);
                             $('#label_sum1').html(data['total_of_gr']);
-                            $('#label_sum2').html(data['total_of_farmer']);
+                            $('#label_sum2').html(data['total_of_farmer'] + ' (' + data['total_of_male'] + ' / ' + 
+                                    data['total_of_female'] + ')');
                             $('#label_sum3').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
                         }},
                         error: function (request, status, error) {{
