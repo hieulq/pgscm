@@ -141,7 +141,8 @@ def lurl_for(endpoint):
 
 
 def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns="",
-                           column_names=[], js=True, select2_class=None, multi_select2_class=None):
+                           column_names=[], js=True, select2_class=None, multi_select2_class=None,
+                           has_button_view=False):
     if js:
         select2_script = ""
         datatables_script = """
@@ -352,27 +353,41 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
             for column in column_names:
                 if column[0] == 'action':
                     render_func = """"render": function (data, type, row) {{
-                            data_attr = ''
-                            row_attr = Object.keys(row)
-                            for (idx in row_attr) {{
-                                if (row_attr[idx].startsWith('_') == false) {{
-                                    value = row[row_attr[idx]]
-                                    data_attr += 'data-' + row_attr[idx].replace(/[$]/g, '') + '=\"' + value + '\" '
-                                }}
+                        data_attr = ''
+                        row_attr = Object.keys(row)
+                        for (idx in row_attr) {{
+                            if (row_attr[idx].startsWith('_') == false) {{
+                                value = row[row_attr[idx]]
+                                data_attr += 'data-' + row_attr[idx].replace(/[$]/g, '') + '=\"' + value + '\" '
                             }}
-                            return "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
+                        }}
+                        return "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
+                        "data-toggle=\\"modal\\" data-target=\\"#{3}\\"" +
+                        data_attr +
+                        ">" +
+                        "<i class=\\"fa fa-{4}\\"></i></button>" + 
+                        " " +
+                    """.format(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info',
+                                     g.c.MODAL_EDIT_ID, 'edit')
+
+                    if has_button_view:
+                        render_func += """
+                            "<button type=\\"button\\" class=\\"btn {1} {0} {2}\\"" +
+                            "data-toggle=\\"modal\\" data-target=\\"#{4}\\"" +
+                            data_attr +
+                            ">" +
+                            "<i class=\\"fa fa-{3}\\"></i></button>" + 
+                            " " +
+                        """.format('btn-xs', g.c.BTNVIEW_ID, 'btn-warning', 'search',
+                                     g.c.MODAL_DETAIL_ID)
+
+                    render_func += """
+                            "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
                             "data-toggle=\\"modal\\" data-target=\\"#{3}\\"" +
                             data_attr +
                             ">" +
-                            "<i class=\\"fa fa-{4}\\"></i></button>" + 
-                            " " +
-                            "<button type=\\"button\\" class=\\"btn {5} {1} {6}\\"" +
-                            "data-toggle=\\"modal\\" data-target=\\"#{7}\\"" +
-                            data_attr +
-                            ">" +
-                            "<i class=\\"fa fa-{8}\\"></i></button>"
-                        }}""".format(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info',
-                                     g.c.MODAL_EDIT_ID, 'edit', g.c.BTNDEL_ID,
+                            "<i class=\\"fa fa-{4}\\"></i></button>"
+                        }}""".format('btn-xs', g.c.BTNDEL_ID,
                                      'btn-danger', g.c.MODAL_DEL_ID, 'trash')
                     mapping += """
                         {{"orderable": {1}, "searchable": {1},
@@ -459,6 +474,12 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     '</select>'
                 )
             """.format('search_type', _('Deleted'), _('Current'))
+
+        grop_agroup_script = ""
+        if ajax_endpoint == "associate_group":
+            grop_agroup_script = load_agroup_script()
+        elif ajax_endpoint == "group":
+            grop_agroup_script = load_group_script()
 
         script = """
         {0}
@@ -565,6 +586,10 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                             }})
                             $('#{9}').removeClass('btn-primary')
                             .addClass('btn-warning')
+                            
+                            
+                            {19}
+                            
                         }},
                         "initComplete": function (settings, json) {{
                             $('.{5}').appendTo('#pgs_data_filter');
@@ -614,7 +639,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                    g.c.DEL_SUBMIT_ID, g.c.MULTI_SELECT_DEFAULT_CLASS,
                    g.c.MODAL_ADD_ID, 'old_pass', 'search_type',
                    ajax_endpoint, column_of_deleted_data, init_complete_config,
-                   server_script, get_ajax_config(False))
+                   server_script, get_ajax_config(False), grop_agroup_script)
 
         if len(crud_endpoint) == 3:
             script += """
@@ -688,8 +713,6 @@ def load_group_script():
         farmer_type[key.value] = _(key.name)
 
     group_script = """
-    <script>
-        $(document).ready(function () {{
             var elements_select2 = $('select');
 
             function catch_select2_select_event(source_element, url, resource, des1_element, des2_element) {{
@@ -811,7 +834,6 @@ def load_group_script():
                     url: '/farmer/deleted',
                     data: 'where={{"group_id": "' + group_id + '"}}',
                     success: function (data, status, req) {{
-                        console.log(data)
                         $('#{9}').find('tr:gt(0)').remove()
                         if(data.length){{
                             $('#{10}').addClass('hidden');
@@ -841,21 +863,17 @@ def load_group_script():
                     }}
                 }})
             }});
-        }});
-    </script>
     """.format(g.c.MODAL_HISTORY_ID, g.c.BTNVIEW_ID, 'view_gr_history',
                g.c.CertificateStatusType['approved'].value,
                g.c.CertificateStatusType['approved_no_cert'].value,
                json.dumps(certificate_status_type), json.dumps(certificate_re_verify_status_type),
                json.dumps(gender_type), json.dumps(farmer_type),
                'tab_history', 'no_data')
-    return Markup(group_script)
+    return group_script
 
 
 def load_agroup_script():
     agroup_script = """
-        <script>
-            $(document).ready(function () {{
                 $('.{0}').on('click', function (event) {{
                     var agroup_id = $(this).data()['id'];
                     $.ajax({{
@@ -913,11 +931,9 @@ def load_agroup_script():
                     }})
                         
                 }});
-            }});
-        </script>
     
     """.format(g.c.BTNVIEW_ID, 'tab_history', 'no_data')
-    return Markup(agroup_script)
+    return agroup_script
 
 
 def check_role(current, target):
@@ -965,10 +981,6 @@ class AdminLTE(object):
             check_role
         app.jinja_env.globals['load_datatables_script'] = \
             load_datatables_script
-        app.jinja_env.globals['load_group_script'] = \
-            load_group_script
-        app.jinja_env.globals['load_agroup_script'] = \
-            load_agroup_script
 
         if not hasattr(app, 'extensions'):
             app.extensions = {}
