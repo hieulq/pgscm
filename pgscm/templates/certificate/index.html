@@ -11,8 +11,8 @@
     <!-- DataTables with select2 enabled -->
     {% if only_farmer == False %}
     {{ load_datatables_script(
-            ajax_endpoint='certificate/groups',
-            export_columns='0,1,2,3,4,5,6,7,8,9',
+            ajax_endpoint='certificate/groups', crud_endpoint=['certificate.add_certificate', 'certificate.edit_certificate', 'certificate.delete_certificate'],
+            export_columns='0,1,2,3,4,5,6,7,8',
             column_names=[("certificate_code", True, g.c.LINK_DISP, _('Code')),
             ("owner_group.name", False, g.c.BOLD_DISP, _('Certified group')),
             ("group_area", True, g.c.BOLD_DISP, _('Area/Count')), ("member_count", True, None, _('Member count')),
@@ -22,8 +22,8 @@
             ("action", False, None, _('Actions'))], select2_class=g.c.SELECT_DEFAULT_ID) }}
     {% else %}
     {{ load_datatables_script(
-            ajax_endpoint='certificate/farmers',
-            export_columns='0,1,2,3,4,5,6,7,8,9',
+            ajax_endpoint='certificate/farmers', crud_endpoint=['certificate.add_certificate', 'certificate.edit_certificate', 'certificate.delete_certificate'],
+            export_columns='0,1,2,3,4,5,6,7,8',
             column_names=[("certificate_code", True, g.c.LINK_DISP, _('Code')),
             ("owner_farmer.name", False, g.c.BOLD_DISP, _('Certified farmer')),
             ("group_area", True, g.c.BOLD_DISP, _('Area/Count')), ("member_count", True, None, _('Member count')),
