@@ -136,8 +136,13 @@ def is_active_in_tree(request, endpoint, tree=False):
         return 'node'
 
 
-def load_datatables_script(ajax_endpoint="", export_columns="",
-                           column_names=[], js=True, select2_class=None, multi_select2_class=None):
+def lurl_for(endpoint):
+    return url_for(endpoint + '_' + g.language)
+
+
+def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns="",
+                           column_names=[], js=True, select2_class=None, multi_select2_class=None,
+                           has_button_view=False):
     if js:
         select2_script = ""
         datatables_script = """
@@ -295,33 +300,94 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                         'punish') + "</label></div>" + "\")")
             return render_result
 
+        def get_ajax_config(is_table_of_current_content=True):
+            url = ajax_endpoint
+            ajax_config = """
+                "serverSide": true,
+                "ajax": function(data, callback, settings) {
+                    var sort_column_name = data.columns[data.order[0].column].data;
+                    var direction = data.order[0].dir == 'asc' ? true : false
+                    var where_params = {}
+            """
+            if is_table_of_current_content:
+                ajax_config += """
+                    where_params = {"_deleted_at":null}
+                """
+            else:
+                url += "/deleted"
+            ajax_config += """
+                    var sort_params = {{}}
+                    sort_params[sort_column_name] = direction; 
+                    if (data.search.value) {{
+                        for (idx in data.columns) {{
+                            if (data.columns[idx].searchable && 
+                                data.columns[idx].data != "_deleted_at" &&
+                                data.columns[idx].data != "group_area" &&
+                                data.columns[idx].data != "member_count" &&
+                                data.columns[idx].data != "certificate_start_date" &&
+                                data.columns[idx].data != "certificate_expiry_date") {{
+                                where_params[data.columns[idx].data] = {{}};
+                                where_params[data.columns[idx].data]["$contains"]=data.search.value;
+                            }}
+                        }}
+                    }};
+                    $.get('/{0}', {{
+                        per_page: data.length,
+                        page: data.start/data.length + 1,
+                        where: JSON.stringify(where_params),
+                        sort: JSON.stringify(sort_params)
+                        }}, 
+                        function(res, status, req) {{
+                            callback({{
+                                recordsTotal: req.getResponseHeader('X-Total-Count'),
+                                recordsFiltered: req.getResponseHeader('X-Total-Count'),
+                                data: res
+                            }});
+                        }});
+                }},
+            """.format(url)
+            return ajax_config
+
         if current_app.config['AJAX_CALL_ENABLED']:
             mapping = ""
             for column in column_names:
-                render_func = ""
                 if column[0] == 'action':
                     render_func = """"render": function (data, type, row) {{
-                            data_attr = ''
-                            row_attr = Object.keys(row)
-                            for (idx in row_attr) {{
-                                if (row_attr[idx].startsWith('_') == false) {{
-                                    value = row[row_attr[idx]]
-                                    data_attr += 'data-' + row_attr[idx].replace(/[$]/g, '') + '=\"' + value + '\" '
-                                }}
+                        data_attr = ''
+                        row_attr = Object.keys(row)
+                        for (idx in row_attr) {{
+                            if (row_attr[idx].startsWith('_') == false) {{
+                                value = row[row_attr[idx]]
+                                data_attr += 'data-' + row_attr[idx].replace(/[$]/g, '') + '=\"' + value + '\" '
                             }}
-                            return "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
+                        }}
+                        return "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
+                        "data-toggle=\\"modal\\" data-target=\\"#{3}\\"" +
+                        data_attr +
+                        ">" +
+                        "<i class=\\"fa fa-{4}\\"></i></button>" + 
+                        " " +
+                    """.format(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info',
+                                     g.c.MODAL_EDIT_ID, 'edit')
+
+                    if has_button_view:
+                        render_func += """
+                            "<button type=\\"button\\" class=\\"btn {1} {0} {2}\\"" +
+                            "data-toggle=\\"modal\\" data-target=\\"#{4}\\"" +
+                            data_attr +
+                            ">" +
+                            "<i class=\\"fa fa-{3}\\"></i></button>" + 
+                            " " +
+                        """.format('btn-xs', g.c.BTNVIEW_ID, 'btn-warning', 'search',
+                                     g.c.MODAL_DETAIL_ID)
+
+                    render_func += """
+                            "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
                             "data-toggle=\\"modal\\" data-target=\\"#{3}\\"" +
                             data_attr +
                             ">" +
-                            "<i class=\\"fa fa-{4}\\"></i></button>" + 
-                            " " +
-                            "<button type=\\"button\\" class=\\"btn {5} {1} {6}\\"" +
-                            "data-toggle=\\"modal\\" data-target=\\"#{7}\\"" +
-                            data_attr +
-                            ">" +
-                            "<i class=\\"fa fa-{8}\\"></i></button>"
-                        }}""".format(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info',
-                                     g.c.MODAL_EDIT_ID, 'edit', g.c.BTNDEL_ID,
+                            "<i class=\\"fa fa-{4}\\"></i></button>"
+                        }}""".format('btn-xs', g.c.BTNDEL_ID,
                                      'btn-danger', g.c.MODAL_DEL_ID, 'trash')
                     mapping += """
                         {{"orderable": {1}, "searchable": {1},
@@ -334,37 +400,10 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                          {0}}},""" \
                         .format(render_func, column[0], str(column[1]).lower())
 
-            server_script = """"serverSide": true,
-                    "ajax": function(data, callback, settings) {{
-                        var sort_column_name = data.columns[data.order[0].column].data;
-                        var direction = data.order[0].dir == 'asc' ? true : false
-                        var where_params = {{"_deleted_at":null}}
-                        var sort_params = {{}}
-                        sort_params[sort_column_name] = direction; 
-                        if (data.search.value) {{
-                            for (idx in data.columns) {{
-                                if (data.columns[idx].searchable) {{
-                                    where_params[data.columns[idx].data] = {{}};
-                                    where_params[data.columns[idx].data]["$contains"]=data.search.value;
-                                }}
-                            }}
-                        }};
-                        $.get('/{0}', {{
-                            per_page: data.length,
-                            page: data.start/data.length + 1,
-                            where: JSON.stringify(where_params),
-                            sort: JSON.stringify(sort_params)
-                            }}, 
-                            function(res, status, req) {{
-                                callback({{
-                                    recordsTotal: req.getResponseHeader('X-Total-Count'),
-                                    recordsFiltered: req.getResponseHeader('X-Total-Count'),
-                                    data: res
-                                    }});
-                            }});
-                    }},
+            server_script = """
+                    {0}
                     "columns": [{1}
-                    ],""".format(ajax_endpoint, mapping)
+                    ],""".format(get_ajax_config(True), mapping)
         else:
             server_script = """
             "serverSide": false,
@@ -400,7 +439,6 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                 }}
             ],
             "processing": true,
-            {2}
             "paging": true,
             "pagingType": "full_numbers",
             "lengthChange": true,
@@ -408,7 +446,7 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
             "ordering": true,
             "info": true,
             "autoWidth": true,
-        """.format(g.language, export_columns, server_script)
+        """.format(g.language, export_columns)
 
         column_of_deleted_data = ""
         init_complete_config = """
@@ -437,166 +475,211 @@ def load_datatables_script(ajax_endpoint="", export_columns="",
                 )
             """.format('search_type', _('Deleted'), _('Current'))
 
-        script = Markup("""
+        grop_agroup_script = ""
+        if ajax_endpoint == "associate_group":
+            grop_agroup_script = load_agroup_script()
+        elif ajax_endpoint == "group":
+            grop_agroup_script = load_group_script()
+
+        script = """
         {0}
         <!-- page script -->
         <script>
             $(function () {{
-                var table = $('#pgs_data').DataTable({{
-                    {1}
-                    "drawCallback": function( settings ) {{
-                        $('.{2}').on('click', function (event) {{
-                            
-                            var data = $(this).data()
-                            var modal = $('#{3}')
-                            
-                            function call_ajax(url, resource, id_resource, element_id, default_value){{
-                                $.ajax({{
-                                    type: "get",
-                                    url: url,
-                                    data: 'where={{"' + resource + '": ' +
-                                        '{{"$ref": "/' + resource + '/' + id_resource + '"}} }}',
-                                    success: function (data, text) {{
-                                        var select2_data = [];
-                                        for (var i = 0; i < data.length; i++) {{
-                                            select2_data[i] = {{
-                                                id: data[i]['$id'],
-                                                text: data[i].type + " " + data[i].name
+                function create_dataTable(){{
+                    var table = $('#pgs_data').DataTable({{
+                        {17}
+                        {1}
+                        "drawCallback": function( settings ) {{
+                            $('.{2}').on('click', function (event) {{
+                                
+                                var data = $(this).data()
+                                var modal = $('#{3}')
+                                
+                                function call_ajax(url, resource, id_resource, element_id, default_value){{
+                                    $.ajax({{
+                                        type: "get",
+                                        url: url,
+                                        data: 'where={{"' + resource + '": ' +
+                                            '{{"$ref": "/' + resource + '/' + id_resource + '"}} }}',
+                                        success: function (data, text) {{
+                                            var select2_data = [];
+                                            for (var i = 0; i < data.length; i++) {{
+                                                select2_data[i] = {{
+                                                    id: data[i]['$id'],
+                                                    text: data[i].type + " " + data[i].name
+                                                }}
                                             }}
+                                            modal.find('#'+element_id).select2({{ width: '100%', data: select2_data}})
+                                                .val(default_value).trigger('change.select2');
+                                        }},
+                                        error: function (request, status, error) {{
+                                            console.log(request);
+                                            console.log(error);
+                                            alert(request.responseText);
                                         }}
-                                        modal.find('#'+element_id).select2({{ width: '100%', data: select2_data}})
-                                            .val(default_value).trigger('change.select2');
-                                    }},
-                                    error: function (request, status, error) {{
-                                        console.log(request);
-                                        console.log(error);
-                                        alert(request.responseText);
+                                    }});
+                                }}
+                                
+                                var s2 = $('.{10}')
+                                var multi_select_data = []
+                                for (var key in data) {{
+                                    var target = modal.find('#' + key)
+                                    var get_resource = key.split('_id');
+                                    if(!target.length && get_resource.length > 1){{
+                                        target = modal.find('#load_now-'+ get_resource[0]);
                                     }}
-                                }});
-                            }}
-                            
-                            var s2 = $('.{10}')
-                            var multi_select_data = []
-                            for (var key in data) {{
-                                var target = modal.find('#' + key)
-                                var get_resource = key.split('_id');
-                                if(!target.length && get_resource.length > 1){{
-                                    target = modal.find('#load_now-'+ get_resource[0]);
-                                }}
-                                value = ''
-                                if (data[key]!='None'){{value = data[key]}}
-                                if (target.is('select')){{
-                                    target.val(data[key]).trigger('change.select2')
-                                }} else {{
-                                    modal.find('#' + key).val(value)
-                                }}
-                                if (key.startsWith('multiSelect')) {{
-                                    multi_select_data.push(data[key])
-                                }}
-                            }}
-                            if(s2.length > 0 && multi_select_data.length > 0){{
-                                s2.val(multi_select_data).trigger("change")
-                            }}
-
-                            var op = modal.find('#{12}')
-                            if(op.length > 0 ){{
-                                op.parent().removeClass('hidden')
-                                modal.find('#password').prop('required',false)
-                                modal.find('#password').parent().removeClass('required')
-                                modal.find('#confirm').prop('required',false)
-                                modal.find('#confirm').parent().removeClass('required')
-                            }}
-                            
-                            if(data['province_id'] && data['district_id']){{
-                                modal.find('#district_id').empty();
-                                call_ajax('/district', 'province', data['province_id'],
-                                    'district_id', data['district_id']);
-                            }}
-                            
-                            if(data['district_id'] && data['ward_id']){{
-                                modal.find('#ward_id').empty();
-                                call_ajax('/ward', 'district', data['district_id'],
-                                    'ward_id', data['ward_id']);
-                            }}
-
-
-                        }})
-                        $('.{5}').on('click', function (event) {{
-                            var modal_add = $('#{11}')
-                            modal_add.find('#id').val('')
-                            var op = modal_add.find('#{12}')
-                            if(op.length > 0 ){{
-                                op.parent().addClass('hidden')
-                                modal_add.find('#password').prop('required',true)
-                                modal_add.find('#password').parent().addClass('required')
-                                modal_add.find('#confirm').prop('required',true)
-                                modal_add.find('#confirm').parent().addClass('required')
-                            }}
-                        }})
-                        $('.{6}').on('click', function (event) {{
-                            var data = $(this).data()
-                            var modal_del = $('#{7}')
-                            modal_del.find('#id').val(data['id'])
-                        }})
-                        $('#{9}').removeClass('btn-primary')
-                        .addClass('btn-warning')
-                    }},
-                    "initComplete": function (settings, json) {{
-                        $('.{5}').appendTo('#pgs_data_filter');
-                        $('.{5}').css("margin-left", "5px");
-                        {16}
-                        $('#{13}').change(function () {{
-                            var search_type = $('#{13}').val();
-                            if(search_type == "deleted"){{
-                                $.ajax({{
-                                    type: "get",
-                                    url: '/{14}/deleted',
-                                    success: function (data, text) {{
-                                        table.destroy();
-                                        $('#pgs_data').empty();     
-                                        var columns = [{15}];      
-                                        table = $('#pgs_data').DataTable({{
-                                            {1}
-                                            data: data,
-                                            columns : columns,
-                                            "initComplete": function (settings, json) {{
-                                                {16}
-                                                var search_type_element = $("#{13}");
-                                                search_type_element.val('deleted');
-                                                search_type_element.change(function () {{
-                                                    var search_type = search_type_element.val();
-                                                    if(search_type == "none_delete"){{
-                                                        location.reload();
-                                                    }}
-                                                }});
-                                            }}
-                                        }}) 
-                                    }},
-                                    error: function (request, status, error) {{
-                                        console.log(request);
-                                        console.log(error);
+                                    value = ''
+                                    if (data[key]!='None'){{value = data[key]}}
+                                    if (target.is('select')){{
+                                        target.val(data[key]).trigger('change.select2')
+                                    }} else {{
+                                        modal.find('#' + key).val(value)
                                     }}
-                                }});
-                            }}
-                        }});
-                    }},
-                }})
+                                    if (key.startsWith('multiSelect')) {{
+                                        multi_select_data.push(data[key])
+                                    }}
+                                }}
+                                if(s2.length > 0 && multi_select_data.length > 0){{
+                                    s2.val(multi_select_data).trigger("change")
+                                }}
+    
+                                var op = modal.find('#{12}')
+                                if(op.length > 0 ){{
+                                    op.parent().removeClass('hidden')
+                                    modal.find('#password').prop('required',false)
+                                    modal.find('#password').parent().removeClass('required')
+                                    modal.find('#confirm').prop('required',false)
+                                    modal.find('#confirm').parent().removeClass('required')
+                                }}
+                                
+                                if(data['province_id'] && data['district_id']){{
+                                    modal.find('#district_id').empty();
+                                    call_ajax('/district', 'province', data['province_id'],
+                                        'district_id', data['district_id']);
+                                }}
+                                
+                                if(data['district_id'] && data['ward_id']){{
+                                    modal.find('#ward_id').empty();
+                                    call_ajax('/ward', 'district', data['district_id'],
+                                        'ward_id', data['ward_id']);
+                                }}
+    
+    
+                            }})
+                            $('.{5}').on('click', function (event) {{
+                                var modal_add = $('#{11}')
+                                modal_add.find('#id').val('')
+                                var op = modal_add.find('#{12}')
+                                if(op.length > 0 ){{
+                                    op.parent().addClass('hidden')
+                                    modal_add.find('#password').prop('required',true)
+                                    modal_add.find('#password').parent().addClass('required')
+                                    modal_add.find('#confirm').prop('required',true)
+                                    modal_add.find('#confirm').parent().addClass('required')
+                                }}
+                            }})
+                            $('.{6}').on('click', function (event) {{
+                                var data = $(this).data()
+                                var modal_del = $('#{7}')
+                                modal_del.find('#id').val(data['id'])
+                            }})
+                            $('#{9}').removeClass('btn-primary')
+                            .addClass('btn-warning')
+                            
+                            
+                            {19}
+                            
+                        }},
+                        "initComplete": function (settings, json) {{
+                            $('.{5}').appendTo('#pgs_data_filter');
+                            $('.{5}').css("margin-left", "5px");
+                            {16}
+                            $('#{13}').change(function () {{
+                                var search_type = $('#{13}').val();
+                                if(search_type == "deleted"){{
+                                    table.destroy();
+                                    $('#pgs_data').empty();
+                                    var columns = [{15}];      
+                                    table = $('#pgs_data').DataTable({{
+                                        {18}
+                                        {1}
+                                        columns : columns,
+                                        "initComplete": function (settings, json) {{
+                                            {16}
+                                            var search_type_element = $("#{13}");
+                                            search_type_element.val('deleted');
+                                            search_type_element.change(function () {{
+                                                var search_type = search_type_element.val();
+                                                if(search_type == "none_delete"){{
+                                                    table.destroy();
+                                                    $('#pgs_data').empty();
+                                                    table = create_dataTable();
+                                                }}
+                                            }});
+                                        }}
+                                    }}) 
+                                }}
+                            }});
+                        }},
+                    }})
+                    return table;
+                }}
+                var table = create_dataTable();
                 {4}
                 $('.{8}').removeClass('btn-default')
                     .addClass('btn-primary pull-right')
                     .before("<hr />" )
                 $('.{8}').parent()
-                    .append('<button type="button" class="btn btn-default"'+
-                    'data-dismiss="modal">Cancel</button>')
-            }});
-        </script>
+                    .append('<button type="button" class="pgs_dismiss_modal btn btn-default"'+
+                    'data-dismiss="modal">Cancel</button>');
         """.format(datatables_script, datatable_config, g.c.BTNEDIT_ID,
                    g.c.MODAL_EDIT_ID, select2_script, g.c.BTNADD_ID,
                    g.c.BTNDEL_ID, g.c.MODAL_DEL_ID, g.c.SUBMIT_DEFAULT_CLASS,
                    g.c.DEL_SUBMIT_ID, g.c.MULTI_SELECT_DEFAULT_CLASS,
                    g.c.MODAL_ADD_ID, 'old_pass', 'search_type',
-                   ajax_endpoint, column_of_deleted_data, init_complete_config))
-        return script
+                   ajax_endpoint, column_of_deleted_data, init_complete_config,
+                   server_script, get_ajax_config(False), grop_agroup_script)
+
+        if len(crud_endpoint) == 3:
+            script += """
+                var table = table;
+                function form_submit(endpoint, form_index, method){{
+                    $('form:eq(' + form_index + ')').submit(function(e){{
+                        // form add object
+                        $.ajax({{
+                            type: method,
+                            url: endpoint,
+                            data: $('form:eq(' + form_index + ')').serialize(),
+                            success: function (data) {{
+                                if(data.is_success){{
+                                    toastr.success(data.message);
+                                    table.ajax.reload();
+                                }} else {{
+                                    toastr.error(data.message);
+                                }}
+                            }}
+                        }});
+                        e.preventDefault();
+                        $('.pgs_dismiss_modal').click();
+                    }});
+                }};
+                
+                // add form
+                form_submit("{0}", 1, "POST");
+                
+                // edit form
+                form_submit("{1}", 2, "PUT");
+                
+                // delete form
+                form_submit("{2}", 3, "DELETE");
+            """.format(lurl_for(crud_endpoint[0]), lurl_for(crud_endpoint[1]), lurl_for(crud_endpoint[2]))
+
+        script += """
+            });
+        </script>
+            """
+        return Markup(script)
     else:
         css_script = """
             <link href="{0}" rel="stylesheet" type="text/css">
@@ -630,8 +713,6 @@ def load_group_script():
         farmer_type[key.value] = _(key.name)
 
     group_script = """
-    <script>
-        $(document).ready(function () {{
             var elements_select2 = $('select');
 
             function catch_select2_select_event(source_element, url, resource, des1_element, des2_element) {{
@@ -715,13 +796,17 @@ def load_group_script():
                 }});
             }})
             
-            function get_info_of_group(url, group_attribute_name, group_id, des_id_element) {{
+            function get_info_of_group(url, data, des_id_element) {{
                 $.ajax({{
                     url: url,
-                    data: 'where={{"' + group_attribute_name + '": "' + group_id + '"}}',
+                    data: data,
                     success: function (data, status, req) {{
-                        var count = req.getResponseHeader('X-Total-Count');
-                        if(!count){{
+                        var count;
+                        if(url == '/group/group_summary'){{
+                            data = JSON.parse(data);
+                            count = data['total_of_farmer'] + " (" + data['total_of_male'] + 
+                                    " / " + data['total_of_female'] + ")";
+                        }} else {{
                             count = data.length;
                             var total_area_approved = 0;
                             var total_area = 0;
@@ -739,21 +824,21 @@ def load_group_script():
                     error: function (request, status, error) {{
                         console.log(request);
                         console.log(error);
-                        alert(request.responseText);
                     }}
                 }})
             }}
             $('.{1}').on('click', function (event) {{
                 var group_id = $(this).data()['id'];
-                get_info_of_group('/farmer', 'group_id', group_id, 'label_sum1');
-                get_info_of_group('/certificate/total', 'owner_group_id', group_id, 'label_sum0');
+                var d1 = 'id="' + group_id + '"';
+                get_info_of_group('/group/group_summary', d1, 'label_sum1');
+                var d2 = 'where={{"owner_group_id": "' + group_id + '"}}';
+                get_info_of_group('/certificate/total', d2, 'label_sum0');
                 
                 $.ajax({{
                     method: 'GET',
                     url: '/farmer/deleted',
                     data: 'where={{"group_id": "' + group_id + '"}}',
                     success: function (data, status, req) {{
-                        console.log(data)
                         $('#{9}').find('tr:gt(0)').remove()
                         if(data.length){{
                             $('#{10}').addClass('hidden');
@@ -782,24 +867,18 @@ def load_group_script():
                         alert(request.responseText);
                     }}
                 }})
-                
             }});
-            
-        }});
-    </script>
     """.format(g.c.MODAL_HISTORY_ID, g.c.BTNVIEW_ID, 'view_gr_history',
                g.c.CertificateStatusType['approved'].value,
                g.c.CertificateStatusType['approved_no_cert'].value,
                json.dumps(certificate_status_type), json.dumps(certificate_re_verify_status_type),
                json.dumps(gender_type), json.dumps(farmer_type),
                'tab_history', 'no_data')
-    return Markup(group_script)
+    return group_script
 
 
 def load_agroup_script():
     agroup_script = """
-        <script>
-            $(document).ready(function () {{
                 $('.{0}').on('click', function (event) {{
                     var agroup_id = $(this).data()['id'];
                     $.ajax({{
@@ -810,7 +889,8 @@ def load_agroup_script():
                             data = JSON.parse(data)
                             $('#label_sum0').html(data['total_of_cert']);
                             $('#label_sum1').html(data['total_of_gr']);
-                            $('#label_sum2').html(data['total_of_farmer']);
+                            $('#label_sum2').html(data['total_of_farmer'] + ' (' + data['total_of_male'] + ' / ' + 
+                                    data['total_of_female'] + ')');
                             $('#label_sum3').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
                         }},
                         error: function (request, status, error) {{
@@ -857,11 +937,9 @@ def load_agroup_script():
                     }})
                         
                 }});
-            }});
-        </script>
     
     """.format(g.c.BTNVIEW_ID, 'tab_history', 'no_data')
-    return Markup(agroup_script)
+    return agroup_script
 
 
 def check_role(current, target):
@@ -909,10 +987,6 @@ class AdminLTE(object):
             check_role
         app.jinja_env.globals['load_datatables_script'] = \
             load_datatables_script
-        app.jinja_env.globals['load_group_script'] = \
-            load_group_script
-        app.jinja_env.globals['load_agroup_script'] = \
-            load_agroup_script
 
         if not hasattr(app, 'extensions'):
             app.extensions = {}

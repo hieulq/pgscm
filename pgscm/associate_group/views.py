@@ -1,5 +1,5 @@
 from flask import render_template, current_app, request, \
-    flash, redirect, url_for
+    flash, redirect, url_for, jsonify
 from flask_security import roles_accepted, current_user
 from sqlalchemy import func
 
@@ -10,7 +10,7 @@ from .forms import AssociateGroupForm
 
 from pgscm import sqla
 from pgscm.db import models
-from pgscm.utils import __, DeleteForm, check_role, is_region_role
+from pgscm.utils import __, DeleteForm, check_role, is_region_role, soft_delete
 from pgscm import const as c
 
 crud_role = c.ADMIN_MOD_ROLE
@@ -104,3 +104,65 @@ def index():
 
         return render_template('agroup/index.html', ags=ags,
                                form=form, dform=dform)
+
+
+@agroup.route('/vi/them-lien-nhom', endpoint='add_agroup_vi', methods=['POST'])
+@agroup.route('/en/add-agroup', endpoint='add_agroup_en', methods=['POST'])
+@roles_accepted(*c.ADMIN_MOD_ROLE)
+def add_agroup():
+    form = AssociateGroupForm()
+    form.province_id.choices = [(form.province_id.data,
+                                 form.province_id.label.text)]
+    form.id.data = str(uuid.uuid4())
+    if form.validate_on_submit():
+        province = sqla.session.query(models.Province) \
+            .filter_by(province_id=form.province_id.data).one()
+        as_group = form.associate_group_code.data
+        new_agroup = models.AssociateGroup(
+            id=form.id.data,
+            associate_group_code=as_group,
+            name=form.name.data, province=province,
+            email=form.email.data,
+        )
+        sqla.session.add(new_agroup)
+        sqla.session.commit()
+        return jsonify(is_success=True,
+                       message=str(__('Add associate group success!')))
+    else:
+        return jsonify(is_success=False,
+                       message=str(__('The form is not validate!')))
+
+
+@agroup.route('/vi/sua-lien-nhom', endpoint='edit_agroup_vi', methods=['PUT'])
+@agroup.route('/en/edit-agroup', endpoint='edit_agroup_en', methods=['PUT'])
+@roles_accepted(*c.ADMIN_MOD_ROLE)
+def edit_agroup():
+    form = AssociateGroupForm()
+    form.province_id.choices = [(form.province_id.data,
+                                form.province_id.label.text)]
+    if form.validate_on_submit():
+        edit_agroup = sqla.session.query(models.AssociateGroup) \
+            .filter_by(id=form.id.data).one()
+        edit_agroup.email = form.email.data
+        edit_agroup.associate_group_code = form \
+            .associate_group_code.data
+        edit_agroup.name = form.name.data
+        if edit_agroup.province_id != form.province_id.data:
+            edit_agroup.province = models.Province.query \
+                .filter_by(province_id=form.province_id.data) \
+                .one()
+        sqla.session.commit()
+        return jsonify(is_success=True,
+                       message=str(__('Edit associate group success!')))
+    else:
+        return jsonify(is_success=False,
+                       message=str(__('The form is not validate!')))
+
+
+@agroup.route('/vi/xoa-lien-nhom', endpoint='delete_agroup_vi',
+              methods=['DELETE'])
+@agroup.route('/en/delete-agroup', endpoint='delete_agroup_en',
+              methods=['DELETE'])
+@roles_accepted(*c.ADMIN_MOD_ROLE)
+def delete_agroup():
+    return soft_delete(sqla, "agroup", models)

@@ -157,31 +157,45 @@ class CertResource(ModelResource):
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
         return self.manager.paginated_instances_or(**kwargs)
 
+    @Route.GET('/groups', schema=Instances(),
+               response_schema=Instances())
+    def get_cer_for_groups(self, **kwargs):
+        self._filter_group_farmer_on_province(kwargs)
+        kwargs['filter_or_cols'] = ['certificate_expiry_date']
+        kwargs['where'] += (self.manager.filters['owner_group_id']['ne']
+                            .convert({'$ne': ''}),)
+        return self.manager.paginated_instances_or(**kwargs)
+
+    @Route.GET('/farmers', schema=Instances(),
+               response_schema=Instances())
+    def get_cer_for_farmers(self, **kwargs):
+        self._filter_group_farmer_on_province(kwargs)
+        kwargs['filter_or_cols'] = ['certificate_expiry_date']
+        kwargs['where'] += (self.manager.filters['owner_farmer_id']['ne']
+                            .convert({'$ne': ''}),)
+        return self.manager.paginated_instances_or(**kwargs)
+
     @Route.GET('/groups/deleted', schema=Instances(),
                response_schema=Instances())
     def get_cer_for_groups_deleted(self, **kwargs):
-        func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_get_all=True)
+        self._filter_group_farmer_on_province(kwargs)
+        kwargs['filter_or_cols'] = ['certificate_expiry_date']
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         kwargs['where'] += (self.manager.filters['owner_group_id']['ne']
                             .convert({'$ne': ''}),)
-        del kwargs['per_page']
-        del kwargs['page']
-        return func(**kwargs)
+        return self.manager.paginated_instances_or(**kwargs)
 
     @Route.GET('/farmers/deleted', schema=Instances(),
                response_schema=Instances())
     def get_cer_for_farmers_deleted(self, **kwargs):
-        func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_get_all=True)
+        self._filter_group_farmer_on_province(kwargs)
+        kwargs['filter_or_cols'] = ['certificate_expiry_date']
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         kwargs['where'] += (self.manager.filters['owner_farmer_id']['ne']
                             .convert({'$ne': ''}),)
-        del kwargs['per_page']
-        del kwargs['page']
-        return func(**kwargs)
+        return self.manager.paginated_instances_or(**kwargs)
 
 
 class FarmerResource(ModelResource):
@@ -196,27 +210,37 @@ class FarmerResource(ModelResource):
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
+    def add_filter_province_id(self, kwargs, province_id, is_get_all=False):
+        if is_get_all:
+            gs = [g.id for g in models.Group.query.filter_by(
+                province_id=province_id).all()]
+        else:
+            gs = [g.id for g in models.Group.query.filter_by(
+                province_id=province_id, _deleted_at=None).all()]
+        for cond in kwargs['where']:
+            if cond.attribute == 'group_id' and isinstance(
+                    cond.filter, filters.InFilter):
+                value = []
+                for val in cond.value:
+                    if val in gs:
+                        value.append(val)
+                cond.value = value
+
+        kwargs['where'] += \
+            (self.manager.filters['group_id']['in'].convert(
+                        {'$in': gs}),)
+        return kwargs
+
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
         province_id = current_user.province_id
         func = _check_user_province(self.manager, kwargs, is_province=False)
         if province_id and is_region_role():
+            self.add_filter_province_id(kwargs, province_id, False)
+        if len(kwargs['where']) == 0:
             gs = [g.id for g in models.Group.query.filter_by(
                 province_id=province_id, _deleted_at=None).all()]
-            for cond in kwargs['where']:
-                if cond.attribute == 'group_id' and isinstance(
-                        cond.filter, filters.InFilter):
-                    value = []
-                    for val in cond.value:
-                        if val in gs:
-                            value.append(val)
-                    cond.value = value
-                else:
-                    kwargs['where'] += \
-                        (self.manager.filters['group_id']['in'].convert(
-                            {'$in': gs}),)
-        if len(kwargs['where']) == 0:
             kwargs['where'] += \
                 (self.manager.filters['group_id']['in'].convert(
                     {'$in': gs}),)
@@ -234,12 +258,13 @@ class FarmerResource(ModelResource):
     @Route.GET('/deleted', schema=Instances(),
                response_schema=Instances())
     def get_farmers_deleted(self, **kwargs):
+        province_id = current_user.province_id
         func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_get_all=True)
+                                    is_province=False)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
-        del kwargs['per_page']
-        del kwargs['page']
+        if province_id and is_region_role():
+            self.add_filter_province_id(kwargs, province_id, True)
         return func(**kwargs)
 
 
@@ -256,6 +281,8 @@ class GroupResource(ModelResource):
         associate_group = fields.Inline('associate_group')
         province_id = fields.String()
         associate_group_id = fields.String()
+        district_id = fields.String()
+        ward_id = fields.String()
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
@@ -278,12 +305,23 @@ class GroupResource(ModelResource):
                response_schema=Instances())
     def get_groups_deleted(self, **kwargs):
         func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_get_all=True)
+                                    is_province=True)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
-        del kwargs['per_page']
-        del kwargs['page']
         return func(**kwargs)
+
+    @Route.GET('/group_summary')
+    def group_summary(self, id: fields.String()) -> fields.String():
+        total_farmer = models.Farmer.query\
+            .filter_by(group_id=id, _deleted_at=None).all()
+        total_male = models.Farmer.query\
+            .filter_by(group_id=id, _deleted_at=None, gender=1).all()
+        response = {
+            'total_of_farmer': len(total_farmer),
+            'total_of_male': len(total_male),
+            'total_of_female': len(total_farmer) - len(total_male)
+        }
+        return json.dumps(response)
 
 
 class AssociateGroupResource(ModelResource):
@@ -319,6 +357,8 @@ class AssociateGroupResource(ModelResource):
         response = {
             'total_of_gr': len(gs),
             'total_of_farmer': 0,
+            'total_of_male': 0,
+            'total_of_female': 0,
             'total_of_cert': 0,
             'total_of_area': 0,
             'total_of_approved_area': 0
@@ -336,9 +376,12 @@ class AssociateGroupResource(ModelResource):
 
             fs = models.Farmer.query.filter_by(
                 group_id=g, _deleted_at=None).all()
+            males = models.Farmer.query.filter_by(
+                group_id=g, _deleted_at=None, gender=1).all()
             response['total_of_farmer'] += len(fs)
-        r = json.dumps(response)
-        type(r)
+            response['total_of_male'] += len(males)
+        response['total_of_female'] = \
+            response['total_of_farmer'] - response['total_of_male']
         return json.dumps(response)
 
     @Route.GET('/area')
@@ -380,11 +423,9 @@ class AssociateGroupResource(ModelResource):
                response_schema=Instances())
     def get_agroups_deleted(self, **kwargs):
         func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_get_all=True)
+                                    is_province=True)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
-        del kwargs['per_page']
-        del kwargs['page']
         return func(**kwargs)
 
 

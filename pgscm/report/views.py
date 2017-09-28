@@ -27,7 +27,7 @@ def alarms():
     if current_app.config['AJAX_CALL_ENABLED']:
         form.owner_farmer_id.choices = []
         form.owner_group_id.choices = []
-        return render_template('report/index.html', form=form,
+        return render_template('report/alarm.html', form=form,
                                dform=dform, only_farmer=True)
     else:
         province_id = current_user.province_id

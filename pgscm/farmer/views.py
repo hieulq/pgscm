@@ -1,7 +1,7 @@
 import uuid
 
 from flask import render_template, current_app, request, \
-    flash, redirect, url_for
+    flash, redirect, url_for, jsonify
 from flask_security import roles_accepted, current_user
 from sqlalchemy import func
 
@@ -11,7 +11,7 @@ from .forms import FarmerForm
 from pgscm import sqla
 from pgscm.db import models
 from pgscm import const as c
-from pgscm.utils import __, DeleteForm, check_role, is_region_role
+from pgscm.utils import __, DeleteForm, check_role, is_region_role, soft_delete
 
 crud_role = c.ADMIN_MOD_ROLE
 
@@ -109,3 +109,66 @@ def index():
 
         return render_template('farmer/index.html', farmers=farmers,
                                form=form, dform=dform)
+
+
+@farmer.route('/vi/them-nong-dan', endpoint='add_farmer_vi', methods=['POST'])
+@farmer.route('/en/add-farmer', endpoint='add_farmer_en', methods=['POST'])
+@roles_accepted(*c.ADMIN_MOD_ROLE)
+def add_farmer():
+    form = FarmerForm()
+    form.group_id.choices = [(form.group_id.data,
+                              form.group_id.label.text)]
+    form.id.data = str(uuid.uuid4())
+    if form.validate_on_submit():
+        group_farmer = models.Group.query.filter_by(
+            id=form.group_id.data).one()
+        new_farmer = models.Farmer(
+            id=form.id.data, type=form.type.data,
+            farmer_code=form.farmer_code.data,
+            name=form.name.data, group=group_farmer,
+            gender=form.gender.data)
+        sqla.session.add(new_farmer)
+        sqla.session.commit()
+        return jsonify(is_success=True, message=str(__('Add farmer success!')))
+    else:
+        return jsonify(is_success=False,
+                       message=str(__('The form is not validate!')))
+
+
+@farmer.route('/vi/sua-nong-dan', endpoint='edit_farmer_vi', methods=['PUT'])
+@farmer.route('/en/edit-farmer', endpoint='edit_farmer_en', methods=['PUT'])
+@roles_accepted(*c.ADMIN_MOD_ROLE)
+def edit_farmer():
+    form = FarmerForm()
+    form.group_id.choices = [(form.group_id.data,
+                              form.group_id.label.text)]
+    if form.id.data:
+        if form.validate_on_submit():
+            edit_farmer = sqla.session.query(models.Farmer) \
+                .filter_by(id=form.id.data).one()
+            edit_farmer.farmer_code = form.farmer_code.data
+            edit_farmer.name = form.name.data
+            edit_farmer.gender = form.gender.data
+            edit_farmer.type = form.type.data
+            if edit_farmer.group_id != form.group_id.data:
+                new_group = models.Group.query.filter_by(
+                    id=form.group_id.data).one()
+                edit_farmer.group = new_group
+            sqla.session.commit()
+            return jsonify(is_success=True,
+                           message=str(__('Update farmer success!')))
+        else:
+            return jsonify(is_success=False,
+                           message=str(__('The form is not validate!')))
+    else:
+        return jsonify(is_success=False,
+                       message=str(__("Can't get id of object edit!")))
+
+
+@farmer.route('/vi/xoa-nong-dan', endpoint='delete_farmer_vi',
+              methods=['DELETE'])
+@farmer.route('/en/delete-farmer', endpoint='delete_farmer_en',
+              methods=['DELETE'])
+@roles_accepted(*c.ADMIN_MOD_ROLE)
+def delete_farmer():
+    return soft_delete(sqla, "farmer", models)
