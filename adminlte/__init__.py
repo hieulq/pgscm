@@ -310,9 +310,10 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     var where_params = {}
             """
             if is_table_of_current_content:
-                ajax_config += """
-                    where_params = {"_deleted_at":null}
-                """
+                if ajax_endpoint != 'user':
+                    ajax_config += """
+                        where_params = {"_deleted_at":null}
+                    """
             else:
                 url += "/deleted"
             ajax_config += """
