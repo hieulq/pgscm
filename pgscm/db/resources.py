@@ -281,6 +281,8 @@ class GroupResource(ModelResource):
         associate_group = fields.Inline('associate_group')
         province_id = fields.String()
         associate_group_id = fields.String()
+        district_id = fields.String()
+        ward_id = fields.String()
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
@@ -307,6 +309,19 @@ class GroupResource(ModelResource):
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         return func(**kwargs)
+
+    @Route.GET('/group_summary')
+    def group_summary(self, id: fields.String()) -> fields.String():
+        total_farmer = models.Farmer.query\
+            .filter_by(group_id=id, _deleted_at=None).all()
+        total_male = models.Farmer.query\
+            .filter_by(group_id=id, _deleted_at=None, gender=1).all()
+        response = {
+            'total_of_farmer': len(total_farmer),
+            'total_of_male': len(total_male),
+            'total_of_female': len(total_farmer) - len(total_male)
+        }
+        return json.dumps(response)
 
 
 class AssociateGroupResource(ModelResource):
@@ -342,6 +357,8 @@ class AssociateGroupResource(ModelResource):
         response = {
             'total_of_gr': len(gs),
             'total_of_farmer': 0,
+            'total_of_male': 0,
+            'total_of_female': 0,
             'total_of_cert': 0,
             'total_of_area': 0,
             'total_of_approved_area': 0
@@ -359,9 +376,12 @@ class AssociateGroupResource(ModelResource):
 
             fs = models.Farmer.query.filter_by(
                 group_id=g, _deleted_at=None).all()
+            males = models.Farmer.query.filter_by(
+                group_id=g, _deleted_at=None, gender=1).all()
             response['total_of_farmer'] += len(fs)
-        r = json.dumps(response)
-        type(r)
+            response['total_of_male'] += len(males)
+        response['total_of_female'] = \
+            response['total_of_farmer'] - response['total_of_male']
         return json.dumps(response)
 
     @Route.GET('/area')

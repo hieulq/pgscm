@@ -19,9 +19,7 @@
             ("village", True, None, _('Village')), ("ward.name", False, None, _('Ward')),
             ("district.name", False, None, _('District')), ("province.name", False, None, _('Province')),
             ("associate_group.name", False, None, _('Associated Group')), ("action", False, None, _('Actions'))],
-            select2_class=g.c.SELECT_DEFAULT_ID) }}
-
-    {{ load_group_script() }}
+            select2_class=g.c.SELECT_DEFAULT_ID, has_button_view=True) }}
 
 {%- endblock scripts %}
 {% block content_header -%}
@@ -102,6 +100,6 @@
     {{ render_modal(g.c.MODAL_DEL_ID, 'modal-danger', _('Confirm to delete') ) }}
     {{ render_modal(g.c.MODAL_HISTORY_ID, 'modal', _('Certificate history'),  'modal-lg') }}
     {{ render_modal(g.c.MODAL_DETAIL_ID, 'modal', _('Group info'), 'modal-lg',
-            [(_('certificates'), False), (_('farmers'), False), (_('approved area'), True)],
+            [(_('certificates'), False), (_('farmers (Male / Female)'), False), (_('approved area'), True)],
             [_('Farmer code'), _('Name'), _('Gender'), _('Type'), _('Deleted at'), _('Reason')]) }}
 {%- endblock content %}
