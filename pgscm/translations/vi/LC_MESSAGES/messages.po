@@ -627,7 +627,7 @@ msgstr "Tổng "
 
 #: pgscm/templates/macro.html:84
 msgid "No data"
-msgstr "Không có dữ l"
+msgstr "Không có dữ liệu"
 
 #: pgscm/templates/macro.html:98
 msgid "Close"
