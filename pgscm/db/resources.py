@@ -80,7 +80,8 @@ class CertResource(ModelResource):
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
-    def _filter_group_farmer_on_province(self, kwargs):
+    def _filter_group_farmer_on_province(self, kwargs, is_cert_for_group=False,
+                                         is_cert_for_farmer=False):
         province_id = current_user.province_id
         if province_id and is_region_role():
             gs = [g.id for g in models.Group.query.filter_by(
@@ -91,32 +92,41 @@ class CertResource(ModelResource):
                 models.Farmer._deleted_at == None).all()]
             group_filter_exist = False
             farmer_filter_exist = False
-            for cond in kwargs['where']:
-                if cond.attribute == 'owner_group_id' and isinstance(
-                        cond.filter, filters.InFilter):
-                    value = []
-                    for val in cond.value:
-                        if val in gs:
-                            value.append(val)
-                    cond.value = value
-                elif not group_filter_exist:
-                    kwargs['where'] += \
-                        (self.manager.filters['owner_group_id']['in'].convert(
-                            {'$in': gs}),)
-                    group_filter_exist = True
+            if is_cert_for_group:
+                kwargs['where'] += \
+                    (self.manager.filters['owner_group_id']['in'].convert(
+                        {'$in': gs}),)
+            elif is_cert_for_farmer:
+                kwargs['where'] += \
+                    (self.manager.filters['owner_farmer_id']['in'].convert(
+                        {'$in': fs}),)
+            else:
+                for cond in kwargs['where']:
+                    if cond.attribute == 'owner_group_id' and isinstance(
+                            cond.filter, filters.InFilter):
+                        value = []
+                        for val in cond.value:
+                            if val in gs:
+                                value.append(val)
+                        cond.value = value
+                    elif not group_filter_exist:
+                        kwargs['where'] += \
+                            (self.manager.filters['owner_group_id']['in']
+                                 .convert({'$in': gs}),)
+                        group_filter_exist = True
 
-                if cond.attribute == 'owner_farmer_id' and isinstance(
-                    cond.filter, filters.InFilter):
-                    value = []
-                    for val in cond.value:
-                        if val in fs:
-                            value.append(val)
-                    cond.value = value
-                elif not farmer_filter_exist:
-                    kwargs['where'] += \
-                        (self.manager.filters['owner_farmer_id']['in'].convert(
-                            {'$in': fs}),)
-                    farmer_filter_exist = True
+                    if cond.attribute == 'owner_farmer_id' and isinstance(
+                        cond.filter, filters.InFilter):
+                        value = []
+                        for val in cond.value:
+                            if val in fs:
+                                value.append(val)
+                        cond.value = value
+                    elif not farmer_filter_exist:
+                        kwargs['where'] += \
+                            (self.manager.filters['owner_farmer_id']['in']
+                                 .convert({'$in': fs}),)
+                        farmer_filter_exist = True
             if len(kwargs['where']) == 0:
                 kwargs['where'] += \
                     (self.manager.filters['owner_group_id']['in'].convert(
@@ -161,7 +171,14 @@ class CertResource(ModelResource):
     @Route.GET('/groups', schema=Instances(),
                response_schema=Instances())
     def get_cer_for_groups(self, **kwargs):
-        self._filter_group_farmer_on_province(kwargs)
+        self._filter_group_farmer_on_province(kwargs, is_cert_for_group=True)
+        today = datetime.datetime.today().strftime('%Y-%m-%d')
+        kwargs['where'] += \
+            (self.manager.filters['certificate_expiry_date']['gte'].
+             convert({'$gte': today}),
+             self.manager.filters['certificate_expiry_date']['eq']
+             .convert({'$eq': None}),
+             )
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
         kwargs['filter_and_cols'] = ['owner_group_id']
         kwargs['where'] += (self.manager.filters['owner_group_id']['ne']
@@ -171,7 +188,14 @@ class CertResource(ModelResource):
     @Route.GET('/farmers', schema=Instances(),
                response_schema=Instances())
     def get_cer_for_farmers(self, **kwargs):
-        self._filter_group_farmer_on_province(kwargs)
+        self._filter_group_farmer_on_province(kwargs, is_cert_for_farmer=True)
+        today = datetime.datetime.today().strftime('%Y-%m-%d')
+        kwargs['where'] += \
+            (self.manager.filters['certificate_expiry_date']['gte'].
+             convert({'$gte': today}),
+             self.manager.filters['certificate_expiry_date']['eq']
+             .convert({'$eq': None}),
+             )
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
         kwargs['filter_and_cols'] = ['owner_farmer_id']
         kwargs['where'] += (self.manager.filters['owner_farmer_id']['ne']
