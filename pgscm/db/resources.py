@@ -131,13 +131,14 @@ class CertResource(ModelResource):
         today = datetime.datetime.today().strftime('%Y-%m-%d')
         day = (datetime.datetime.today() + datetime.timedelta(days=60)) \
             .strftime('%Y-%m-%d')
-        func = _check_user_province(self.manager, kwargs, is_province=False,
-                                    is_delete=True, is_and=True)
         kwargs['where'] += \
             (self.manager.filters['certificate_expiry_date']['lte'].
              convert({'$lte': day}),
              self.manager.filters['certificate_expiry_date']['gte'].
              convert({'$gte': today}))
+        kwargs['filter_and_cols'] = ['certificate_expiry_date']
+        func = _check_user_province(self.manager, kwargs, is_province=False,
+                                    is_delete=True)
         self._filter_group_farmer_on_province(kwargs)
         return func(**kwargs)
 
@@ -162,6 +163,7 @@ class CertResource(ModelResource):
     def get_cer_for_groups(self, **kwargs):
         self._filter_group_farmer_on_province(kwargs)
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
+        kwargs['filter_and_cols'] = ['owner_group_id']
         kwargs['where'] += (self.manager.filters['owner_group_id']['ne']
                             .convert({'$ne': ''}),)
         return self.manager.paginated_instances_or(**kwargs)
@@ -171,6 +173,7 @@ class CertResource(ModelResource):
     def get_cer_for_farmers(self, **kwargs):
         self._filter_group_farmer_on_province(kwargs)
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
+        kwargs['filter_and_cols'] = ['owner_farmer_id']
         kwargs['where'] += (self.manager.filters['owner_farmer_id']['ne']
                             .convert({'$ne': ''}),)
         return self.manager.paginated_instances_or(**kwargs)

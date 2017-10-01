@@ -528,7 +528,11 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                     var target = modal.find('#' + key)
                                     var get_resource = key.split('_id');
                                     if(!target.length && get_resource.length > 1){{
-                                        target = modal.find('#load_now-'+ get_resource[0]);
+                                        var load_resource = get_resource[0];
+                                        if (load_resource.startsWith('owner')){{
+                                            load_resource = get_resource[0].split('_')[1];
+                                        }}
+                                        target = modal.find('#load_now-'+ load_resource);
                                     }}
                                     value = ''
                                     if (data[key]!='None'){{value = data[key]}}

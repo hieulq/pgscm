@@ -201,14 +201,17 @@ class Instances(BaseInst):
 
 class PgsPotionManager(SQLAlchemyManager):
     def paginated_instances_or(self, page, per_page, where=None, sort=None,
-                               filter_or_cols=[]):
+                               filter_or_cols=[], filter_and_cols=[]):
         instances = self.instances_or(where=where, sort=sort,
-                                      filter_or_cols=filter_or_cols)
+                                      filter_or_cols=filter_or_cols,
+                                      filter_and_cols=filter_and_cols)
         if isinstance(instances, list):
             return Pagination.from_list(instances, page, per_page)
         return self._query_get_paginated_items(instances, page, per_page)
 
-    def instances_or(self, where=None, sort=None, filter_or_cols=[]):
+    def instances_or(self, where=None, sort=None, filter_or_cols=[],
+                     filter_and_cols=[]):
+        filter_and_cols += ['province_id', '_deleted_at', 'group_id']
         query = self._query()
 
         if query is None:
@@ -219,9 +222,7 @@ class PgsPotionManager(SQLAlchemyManager):
             or_where = ()
             or_filter = ()
             for cond in where:
-                if cond.attribute == 'province_id' \
-                        or cond.attribute == '_deleted_at'\
-                        or cond.attribute == 'group_id':
+                if cond.attribute in filter_and_cols:
                     and_where += (cond, )
                 elif cond.attribute in filter_or_cols:
                     or_filter += (cond, )
