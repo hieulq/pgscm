@@ -38,8 +38,6 @@ def users():
         form.province_id.choices = []
         province_id = current_user.province_id
         if province_id and is_region_role():
-            us = models.User.query.filter_by(
-                province_id=province_id).all()
             form.province_id.choices = [
                 (p.province_id, p.type + " " + p.name) for p in
                 models.Province.query.filter_by(province_id=province_id).all()]
