@@ -158,16 +158,15 @@ def soft_delete(sqla, object_del, models):
             delete_group(dform.id.data, sqla, models, dform.modify_info.data)
         elif object_del == "agroup":
             delete_agroup(dform.id.data, sqla, models, dform.modify_info.data)
+        elif object_del == "certificate":
+            cert_delete = sqla.session.query(models.Certificate) \
+                .filter_by(id=dform.id.data).one()
+            cert_delete._deleted_at = func.now()
+            cert_delete._modify_info = dform.modify_info.data
+            sqla.session.commit()
         else:
             return jsonify(is_success=False,
                            message=str(__('Not valid soft delete form!')))
-
-        # del_object = sqla.session.query(model) \
-        #     .filter_by(id=dform.id.data).one()
-        # del_object._deleted_at = func.now()
-        # if dform.modify_info.data:
-        #     del_object._modify_info = dform.modify_info.data
-        # sqla.session.commit()
         return jsonify(is_success=True,
                        message=str(__('Delete farmer success!')))
     else:
@@ -202,14 +201,17 @@ class Instances(BaseInst):
 
 class PgsPotionManager(SQLAlchemyManager):
     def paginated_instances_or(self, page, per_page, where=None, sort=None,
-                               filter_or_cols=[]):
+                               filter_or_cols=[], filter_and_cols=[]):
         instances = self.instances_or(where=where, sort=sort,
-                                      filter_or_cols=filter_or_cols)
+                                      filter_or_cols=filter_or_cols,
+                                      filter_and_cols=filter_and_cols)
         if isinstance(instances, list):
             return Pagination.from_list(instances, page, per_page)
         return self._query_get_paginated_items(instances, page, per_page)
 
-    def instances_or(self, where=None, sort=None, filter_or_cols=[]):
+    def instances_or(self, where=None, sort=None, filter_or_cols=[],
+                     filter_and_cols=[]):
+        filter_and_cols += ['province_id', '_deleted_at', 'group_id']
         query = self._query()
 
         if query is None:
@@ -220,9 +222,7 @@ class PgsPotionManager(SQLAlchemyManager):
             or_where = ()
             or_filter = ()
             for cond in where:
-                if cond.attribute == 'province_id' \
-                        or cond.attribute == '_deleted_at'\
-                        or cond.attribute == 'group_id':
+                if cond.attribute in filter_and_cols:
                     and_where += (cond, )
                 elif cond.attribute in filter_or_cols:
                     or_filter += (cond, )

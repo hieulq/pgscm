@@ -310,9 +310,10 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     var where_params = {}
             """
             if is_table_of_current_content:
-                ajax_config += """
-                    where_params = {"_deleted_at":null}
-                """
+                if ajax_endpoint != 'user':
+                    ajax_config += """
+                        where_params = {"_deleted_at":null}
+                    """
             else:
                 url += "/deleted"
             ajax_config += """
@@ -527,7 +528,11 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                     var target = modal.find('#' + key)
                                     var get_resource = key.split('_id');
                                     if(!target.length && get_resource.length > 1){{
-                                        target = modal.find('#load_now-'+ get_resource[0]);
+                                        var load_resource = get_resource[0];
+                                        if (load_resource.startsWith('owner')){{
+                                            load_resource = get_resource[0].split('_')[1];
+                                        }}
+                                        target = modal.find('#load_now-'+ load_resource);
                                     }}
                                     value = ''
                                     if (data[key]!='None'){{value = data[key]}}
@@ -564,8 +569,6 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                     call_ajax('/ward', 'district', data['district_id'],
                                         'ward_id', data['ward_id']);
                                 }}
-    
-    
                             }})
                             $('.{5}').on('click', function (event) {{
                                 var modal_add = $('#{11}')
@@ -626,6 +629,19 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     return table;
                 }}
                 var table = create_dataTable();
+                    
+                if('{14}' == 'certificate/groups'){{
+                    var modal_edit = $('#{3}');
+                    modal_edit.find('#load_now-farmer').parent().remove();
+                    var modal_add = $('#{11}');
+                    modal_add.find('#load_now-farmer').parent().remove();
+                }} else if('{14}' == 'certificate/farmers'){{
+                var modal_edit = $('#{3}');
+                    modal_edit.find('#load_now-group').parent().remove();
+                    var modal_add = $('#{11}');
+                    modal_add.find('#load_now-group').parent().remove();
+                }}
+                
                 {4}
                 $('.{8}').removeClass('btn-default')
                     .addClass('btn-primary pull-right')
@@ -633,6 +649,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 $('.{8}').parent()
                     .append('<button type="button" class="pgs_dismiss_modal btn btn-default"'+
                     'data-dismiss="modal">Cancel</button>');
+                    
         """.format(datatables_script, datatable_config, g.c.BTNEDIT_ID,
                    g.c.MODAL_EDIT_ID, select2_script, g.c.BTNADD_ID,
                    g.c.BTNDEL_ID, g.c.MODAL_DEL_ID, g.c.SUBMIT_DEFAULT_CLASS,

@@ -10,7 +10,7 @@
     {{ super() }}
     <!-- DataTables with select2 enabled -->
     {{ load_datatables_script(
-            ajax_endpoint='user',
+            ajax_endpoint='user', crud_endpoint=['admin.add_user', 'admin.edit_user', 'admin.delete_user'],
             export_columns='0,1,2,3,4,5,6',
             column_names=[("fullname", True, g.c.BOLD_DISP), ("email", True, g.c.LINK_DISP), ("province.name", False, None),
             ("current_login_ip", True, None), ("last_login_ip", True, None), ("current_login_at", True, None),
