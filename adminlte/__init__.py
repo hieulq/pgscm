@@ -406,6 +406,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                      'btn-danger', g.c.MODAL_DEL_ID, 'trash')
                     mapping += """
                         {{"orderable": {1}, "searchable": {1},
+                            "width": "10%", 
                          {0}}},""" \
                         .format(render_func, str(column[1]).lower())
                 else:
