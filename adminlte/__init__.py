@@ -9,7 +9,7 @@ import json
 from jinja2 import Markup
 from flask import Blueprint, current_app, url_for, g
 from flask_security import current_user
-from pgscm.utils import _
+from pgscm.utils import _, is_region_role
 
 
 class CDN(object):
@@ -197,7 +197,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 $('.select2-search__field').css('border', 'none');
                 """.format(multi_select2_class)
 
-            if current_user.province_id:
+            if current_user.province_id and is_region_role():
                 has_province_id = 1
             else:
                 has_province_id = 0
@@ -362,6 +362,20 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                 data_attr += 'data-' + row_attr[idx].replace(/[$]/g, '') + '=\"' + value + '\" '
                             }}
                         }}
+                        if('{5}' == 'user'){{
+                            if(row['roles'].length > 0){{
+                                for(var i in row['roles']){{
+                                    var user_role_id = row['roles'][i]["$ref"].split('/')[2];
+                                    for(var r in roles){{
+                                        if(user_role_id == roles[r]['$id']){{
+                                            data_attr += 'data-multi-select-' + roles[r]['name'] +
+                                                            '=\"' + roles[r]['name'] + '\"';
+                                            break;
+                                        }}
+                                    }}
+                                }}
+                            }}
+                        }}
                         return "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
                         "data-toggle=\\"modal\\" data-target=\\"#{3}\\"" +
                         data_attr +
@@ -369,7 +383,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                         "<i class=\\"fa fa-{4}\\"></i></button>" + 
                         " " +
                     """.format(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info',
-                                     g.c.MODAL_EDIT_ID, 'edit')
+                               g.c.MODAL_EDIT_ID, 'edit', ajax_endpoint)
 
                     if has_button_view:
                         render_func += """
@@ -392,6 +406,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                      'btn-danger', g.c.MODAL_DEL_ID, 'trash')
                     mapping += """
                         {{"orderable": {1}, "searchable": {1},
+                            "width": "10%", 
                          {0}}},""" \
                         .format(render_func, str(column[1]).lower())
                 else:
@@ -487,6 +502,22 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
         <!-- page script -->
         <script>
             $(function () {{
+            
+                var roles = [];
+                if('{14}' == 'user'){{
+                    $.ajax({{
+                        type: "get",
+                        url: '/role',
+                        success: function (data, text) {{
+                            roles = data;
+                        }},
+                        error: function (request, status, error) {{
+                            console.log(request);
+                            console.log(error);
+                        }}
+                    }});
+                }}
+            
                 function create_dataTable(){{
                     var table = $('#pgs_data').DataTable({{
                         {17}

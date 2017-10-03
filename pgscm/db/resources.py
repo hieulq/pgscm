@@ -41,6 +41,7 @@ class RoleResource(ModelResource):
 
 
 class UserResource(ModelResource):
+
     class Meta:
         model = models.User
         id_field_class = fields.String
@@ -48,7 +49,8 @@ class UserResource(ModelResource):
         exclude_fields = ['password']
 
     class Schema:
-        roles = fields.Inline('role')
+        roles = fields.ToMany('role')
+        # roles = fields.List(fields.ToMany('role'))
         province = fields.Inline('province')
         province_id = fields.String()
         last_login_at = fields.DateTimeString()
