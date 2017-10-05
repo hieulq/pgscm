@@ -439,6 +439,23 @@ class AssociateGroupResource(ModelResource):
                     sum += cert.group_area
         return sum
 
+    @Route.GET('/gender')
+    def gender(self) -> fields.String():
+        gender = int(request.args.get('type'))
+        province_id = current_user.province_id
+        if province_id and is_region_role():
+            gs = [g.id for g in models.Group.query.filter_by(
+                province_id=province_id, _deleted_at=None).all()]
+        else:
+            gs = [g.id for g in models.Group.query.filter_by(
+                _deleted_at=None).all()]
+        sum = 0
+        for g in gs:
+            count = models.Farmer.query.filter_by(
+                group_id=g, _deleted_at=None, gender=gender).all()
+            sum += len(count)
+        return sum
+
     @Route.GET('/select2', schema=Instances(),
                response_schema=Instances())
     def select2_api(self, **kwargs):

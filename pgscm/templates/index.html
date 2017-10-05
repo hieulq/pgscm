@@ -338,5 +338,25 @@
             is_header=False,
             unit="m2"
           ) }}
+        {{ widgets.small_box(
+            id="pgs-total-male",
+            url="/associate_group/gender?type=1",
+            bgcolor="bg-blue",
+            header=0,
+            body=_("Total male farmers"),
+            iconclass="fa fa-mars",
+            footerlink="agroup.index",
+            is_header=False
+          ) }}
+        {{ widgets.small_box(
+            id="pgs-total-female",
+            url="/associate_group/gender?type=2",
+            bgcolor="bg-maroon",
+            header=0,
+            body=_("Total female farmers"),
+            iconclass="fa fa-venus",
+            footerlink="agroup.index",
+            is_header=False
+          ) }}
     </div><!-- /.row -->
 {%- endblock content %}

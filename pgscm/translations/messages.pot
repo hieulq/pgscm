@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PGSCM 1.0.0\n"
 "Report-Msgid-Bugs-To: hieulq19@gmail.com\n"
-"POT-Creation-Date: 2017-10-05 12:34+0700\n"
+"POT-Creation-Date: 2017-10-05 13:48+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -600,6 +600,14 @@ msgstr ""
 
 #: pgscm/templates/index.html:335
 msgid "Total requested area"
+msgstr ""
+
+#: pgscm/templates/index.html:346
+msgid "Total male farmers"
+msgstr ""
+
+#: pgscm/templates/index.html:356
+msgid "Total female farmers"
 msgstr ""
 
 #: pgscm/templates/macro.html:18
