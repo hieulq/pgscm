@@ -288,7 +288,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
             if column_type == g.c.CertificateReVerifyStatusType:
                 render_result = render_tmpl.format(
                     "", "",
-                    "(data==1?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
+                    "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
                         'not_check') + "</label></div>" +
                     "\":data==2?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
                         'valid') + "</label></div>" +

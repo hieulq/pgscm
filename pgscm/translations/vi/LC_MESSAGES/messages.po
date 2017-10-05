@@ -53,7 +53,7 @@ msgstr "Phê chuẩn - no cc"
 
 #: adminlte/__init__.py:291
 msgid "not_check"
-msgstr "Chưa thanh tra"
+msgstr "Cấp mới"
 
 #: adminlte/__init__.py:293
 msgid "valid"
@@ -274,7 +274,7 @@ msgstr "Trạng thái"
 
 #: pgscm/certificate/forms.py:33
 msgid "Approved"
-msgstr "Phê duyệt"
+msgstr "Phê chuẩn"
 
 #: pgscm/certificate/forms.py:34
 msgid "Rejected"
@@ -294,7 +294,7 @@ msgstr "Trạng thái thanh tra"
 
 #: pgscm/certificate/forms.py:43
 msgid "Not check"
-msgstr "Chưa kiểm tra"
+msgstr "Cấp mới"
 
 #: pgscm/certificate/forms.py:45
 msgid "Decline"
