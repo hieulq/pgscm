@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-09-15 14:31+0700\n"
+"POT-Creation-Date: 2017-10-05 12:34+0700\n"
 "PO-Revision-Date: 2017-07-08 21:17+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: vi\n"
@@ -17,75 +17,75 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.5.1\n"
 
-#: adminlte/__init__.py:267
+#: adminlte/__init__.py:272
 msgid "member"
 msgstr "Thành viên"
 
-#: adminlte/__init__.py:267
+#: adminlte/__init__.py:272
 msgid "reviewer"
 msgstr "Thanh tra"
 
-#: adminlte/__init__.py:271
+#: adminlte/__init__.py:276
 msgid "male"
 msgstr "Nam"
 
-#: adminlte/__init__.py:271
+#: adminlte/__init__.py:276
 msgid "female"
 msgstr "Nữ"
 
-#: adminlte/__init__.py:275
+#: adminlte/__init__.py:280
 msgid "approved"
 msgstr "Phê chuẩn"
 
-#: adminlte/__init__.py:277
+#: adminlte/__init__.py:282
 msgid "rejected"
 msgstr "Từ chối"
 
-#: adminlte/__init__.py:279
+#: adminlte/__init__.py:284
 msgid "in_conversion"
 msgstr "Đang chuyển đổi"
 
-#: adminlte/__init__.py:281
+#: adminlte/__init__.py:286
 msgid "approved_no_cert"
 msgstr "Phê chuẩn - no cc"
 
-#: adminlte/__init__.py:286
+#: adminlte/__init__.py:291
 msgid "not_check"
 msgstr "Chưa thanh tra"
 
-#: adminlte/__init__.py:288
+#: adminlte/__init__.py:293
 msgid "valid"
 msgstr "Duy trì"
 
-#: adminlte/__init__.py:290
+#: adminlte/__init__.py:295
 msgid "decline"
 msgstr "Thu hồi"
 
-#: adminlte/__init__.py:292
+#: adminlte/__init__.py:297
 msgid "warning"
 msgstr "Cảnh cáo"
 
-#: adminlte/__init__.py:294
+#: adminlte/__init__.py:299
 msgid "punish"
 msgstr "Phạt"
 
-#: adminlte/__init__.py:429 pgscm/templates/agroup/index.html:97
-#: pgscm/templates/group/index.html:106
+#: adminlte/__init__.py:483 pgscm/templates/agroup/index.html:95
+#: pgscm/templates/group/index.html:104
 msgid "Deleted at"
 msgstr "Thời điểm xóa"
 
-#: adminlte/__init__.py:429 pgscm/templates/agroup/index.html:97
-#: pgscm/templates/group/index.html:106 pgscm/utils.py:64
+#: adminlte/__init__.py:483 pgscm/templates/agroup/index.html:95
+#: pgscm/templates/group/index.html:104 pgscm/utils.py:65
 msgid "Reason"
 msgstr "Lý do"
 
-#: adminlte/__init__.py:438
+#: adminlte/__init__.py:492
 msgid "Deleted"
 msgstr "Đã xóa"
 
-#: adminlte/__init__.py:438
+#: adminlte/__init__.py:492
 msgid "Current"
 msgstr "Hiện tại"
 
@@ -94,25 +94,41 @@ msgid "More info"
 msgstr "Thông tin chi tiết"
 
 #: pgscm/admin/forms.py:26 pgscm/associate_group/forms.py:22
-#: pgscm/certificate/forms.py:54 pgscm/farmer/forms.py:21
-#: pgscm/group/forms.py:31 pgscm/utils.py:62
+#: pgscm/certificate/forms.py:54 pgscm/farmer/forms.py:27
+#: pgscm/group/forms.py:31 pgscm/utils.py:63
 msgid "Id"
 msgstr "Id"
 
-#: pgscm/utils.py:66
+#: pgscm/utils.py:67
 msgid "Describe your reasons to delete this data"
 msgstr "Mô tả nguyên nhân xoá dữ liệu"
 
-#: pgscm/utils.py:67
+#: pgscm/utils.py:68
 msgid "Delete!"
 msgstr "Xoá dữ liệu!"
 
-#: pgscm/utils.py:76
+#: pgscm/utils.py:77
 msgid "You have no permission!"
 msgstr "Bạn không đủ quyền!"
 
+#: pgscm/utils.py:169
+msgid "Not valid soft delete form!"
+msgstr "Không hợp lệ!"
+
+#: pgscm/farmer/views.py:106 pgscm/utils.py:171
+msgid "Delete farmer success!"
+msgstr "Xoá nông dân thành công!"
+
+#: pgscm/admin/views.py:217 pgscm/admin/views.py:274 pgscm/admin/views.py:291
+#: pgscm/associate_group/views.py:133 pgscm/associate_group/views.py:159
+#: pgscm/certificate/views.py:378 pgscm/certificate/views.py:429
+#: pgscm/farmer/views.py:135 pgscm/farmer/views.py:162 pgscm/group/views.py:197
+#: pgscm/group/views.py:232 pgscm/utils.py:174
+msgid "The form is not validate!"
+msgstr "Form chưa được kiểm tra thông tin!"
+
 #: pgscm/admin/forms.py:8 pgscm/associate_group/forms.py:7
-#: pgscm/certificate/forms.py:8 pgscm/farmer/forms.py:7 pgscm/group/forms.py:7
+#: pgscm/certificate/forms.py:8 pgscm/farmer/forms.py:8 pgscm/group/forms.py:7
 #: pgscm/security/forms.py:14
 msgid "Required field!"
 msgstr "Trường bắt buộc nhập!"
@@ -123,19 +139,19 @@ msgstr "Mật khẩu phải đồng bộ"
 
 #: pgscm/admin/forms.py:13 pgscm/admin/forms.py:14
 #: pgscm/associate_group/forms.py:16 pgscm/associate_group/forms.py:17
-#: pgscm/farmer/forms.py:13 pgscm/farmer/forms.py:14 pgscm/group/forms.py:16
+#: pgscm/farmer/forms.py:14 pgscm/farmer/forms.py:15 pgscm/group/forms.py:16
 #: pgscm/group/forms.py:17 pgscm/templates/agroup/index.html:18
-#: pgscm/templates/agroup/index.html:55 pgscm/templates/agroup/index.html:97
+#: pgscm/templates/agroup/index.html:53 pgscm/templates/agroup/index.html:95
 #: pgscm/templates/farmer/index.html:15 pgscm/templates/farmer/index.html:50
-#: pgscm/templates/group/index.html:18 pgscm/templates/group/index.html:56
-#: pgscm/templates/group/index.html:106
+#: pgscm/templates/group/index.html:18 pgscm/templates/group/index.html:54
+#: pgscm/templates/group/index.html:104
 msgid "Name"
 msgstr "Tên"
 
 #: pgscm/admin/forms.py:15 pgscm/admin/forms.py:17
 #: pgscm/associate_group/forms.py:18 pgscm/associate_group/forms.py:19
 #: pgscm/templates/admin/user.html:49 pgscm/templates/agroup/index.html:19
-#: pgscm/templates/agroup/index.html:56
+#: pgscm/templates/agroup/index.html:54
 msgid "Email"
 msgstr "Email"
 
@@ -158,31 +174,32 @@ msgstr "Quyền"
 #: pgscm/admin/forms.py:24 pgscm/associate_group/forms.py:20
 #: pgscm/group/forms.py:18 pgscm/security/forms.py:12
 #: pgscm/templates/admin/user.html:50 pgscm/templates/agroup/index.html:19
-#: pgscm/templates/agroup/index.html:57 pgscm/templates/agroup/index.html:97
-#: pgscm/templates/group/index.html:20 pgscm/templates/group/index.html:60
+#: pgscm/templates/agroup/index.html:55 pgscm/templates/agroup/index.html:95
+#: pgscm/templates/group/index.html:20 pgscm/templates/group/index.html:58
 msgid "Province"
 msgstr "Tỉnh/Thành phố"
 
 #: pgscm/admin/forms.py:27 pgscm/associate_group/forms.py:23
-#: pgscm/certificate/forms.py:55 pgscm/farmer/forms.py:22
+#: pgscm/certificate/forms.py:55 pgscm/farmer/forms.py:28
 #: pgscm/group/forms.py:32
 msgid "Submit"
 msgstr "Lưu thông tin"
 
-#: pgscm/admin/views.py:65
+#: pgscm/admin/views.py:74 pgscm/admin/views.py:238
 msgid "Old password is wrong!"
 msgstr "Mật khẩu cũ không đúng!"
 
-#: pgscm/admin/views.py:75 pgscm/admin/views.py:76 pgscm/admin/views.py:130
-#: pgscm/admin/views.py:131
+#: pgscm/admin/views.py:84 pgscm/admin/views.py:85 pgscm/admin/views.py:140
+#: pgscm/admin/views.py:141 pgscm/admin/views.py:212 pgscm/admin/views.py:214
+#: pgscm/admin/views.py:245 pgscm/admin/views.py:247
 msgid "The email was existed!"
 msgstr "Email đã tồn tại!"
 
-#: pgscm/admin/views.py:103
+#: pgscm/admin/views.py:112 pgscm/admin/views.py:271
 msgid "Update user success!"
 msgstr "Cập nhật người dùng PGS thành công!"
 
-#: pgscm/admin/views.py:106 pgscm/admin/views.py:133
+#: pgscm/admin/views.py:115 pgscm/admin/views.py:143
 #: pgscm/associate_group/views.py:68 pgscm/associate_group/views.py:89
 #: pgscm/certificate/views.py:123 pgscm/certificate/views.py:157
 #: pgscm/certificate/views.py:268 pgscm/certificate/views.py:302
@@ -191,11 +208,11 @@ msgstr "Cập nhật người dùng PGS thành công!"
 msgid "The form is not validated!"
 msgstr "Thông tin không hợp lệ!"
 
-#: pgscm/admin/views.py:126
+#: pgscm/admin/views.py:136 pgscm/admin/views.py:209
 msgid "Add user success!"
 msgstr "Thêm mới người dùng PGS thành công!"
 
-#: pgscm/admin/views.py:144
+#: pgscm/admin/views.py:154 pgscm/admin/views.py:288
 msgid "Delete user success!"
 msgstr "Xóa người dùng PGS thành công!"
 
@@ -207,13 +224,17 @@ msgstr "Mã liên nhóm"
 msgid "Update associate group success!"
 msgstr "Cập nhật liên nhóm PGS thành công!"
 
-#: pgscm/associate_group/views.py:85
+#: pgscm/associate_group/views.py:85 pgscm/associate_group/views.py:130
 msgid "Add associate group success!"
 msgstr "Thêm mới liên nhóm thành công!"
 
 #: pgscm/associate_group/views.py:102
 msgid "Delete associate group success!"
 msgstr "Xóa liên nhóm thành công!"
+
+#: pgscm/associate_group/views.py:156
+msgid "Edit associate group success!"
+msgstr "Cập nhật thông tin liên nhóm thành công!"
 
 #: pgscm/certificate/forms.py:13 pgscm/certificate/forms.py:14
 #: pgscm/templates/macro.html:26
@@ -301,12 +322,14 @@ msgstr "Cho nhóm"
 
 #: pgscm/certificate/views.py:92 pgscm/certificate/views.py:133
 #: pgscm/certificate/views.py:237 pgscm/certificate/views.py:278
+#: pgscm/certificate/views.py:348 pgscm/certificate/views.py:395
 #: pgscm/report/views.py:76 pgscm/report/views.py:117
 msgid "The expiry date must greater than start date"
 msgstr "Ngày hết hạn phải lớn hơn ngày hiện tại"
 
 #: pgscm/certificate/views.py:93 pgscm/certificate/views.py:134
 #: pgscm/certificate/views.py:238 pgscm/certificate/views.py:279
+#: pgscm/certificate/views.py:350 pgscm/certificate/views.py:397
 #: pgscm/report/views.py:77 pgscm/report/views.py:118
 msgid "The expiry date must greater than start date!"
 msgstr "Ngày hết hạn phải lớn hơn ngày hiện tại!"
@@ -317,7 +340,7 @@ msgid "Update certificate success!"
 msgstr "Cập nhật chứng chỉ thành công!"
 
 #: pgscm/certificate/views.py:154 pgscm/certificate/views.py:299
-#: pgscm/report/views.py:138
+#: pgscm/certificate/views.py:375 pgscm/report/views.py:138
 msgid "Add certificate success!"
 msgstr "Thêm mới chứng chỉ thành công!"
 
@@ -326,78 +349,82 @@ msgstr "Thêm mới chứng chỉ thành công!"
 msgid "Delete certificate success!"
 msgstr "Xoá chứng chỉ thành công!"
 
-#: pgscm/farmer/forms.py:11 pgscm/farmer/forms.py:12
-#: pgscm/templates/group/index.html:106
+#: pgscm/certificate/views.py:426
+msgid "Edit certificate success!"
+msgstr "Cập nhật thông tin chứng chỉ thành công!"
+
+#: pgscm/farmer/forms.py:12 pgscm/farmer/forms.py:13
+#: pgscm/templates/group/index.html:104
 msgid "Farmer code"
 msgstr "Mã nông dân"
 
-#: pgscm/farmer/forms.py:15 pgscm/templates/farmer/index.html:16
-#: pgscm/templates/farmer/index.html:51 pgscm/templates/group/index.html:106
+#: pgscm/farmer/forms.py:16 pgscm/templates/farmer/index.html:16
+#: pgscm/templates/farmer/index.html:51 pgscm/templates/group/index.html:104
 msgid "Gender"
 msgstr "Giới tính"
 
-#: pgscm/farmer/forms.py:17 pgscm/templates/farmer/index.html:16
-#: pgscm/templates/farmer/index.html:52 pgscm/templates/group/index.html:106
+#: pgscm/farmer/forms.py:18 pgscm/farmer/views.py:25
+msgid "Male"
+msgstr "Nam"
+
+#: pgscm/farmer/forms.py:19 pgscm/farmer/views.py:26
+msgid "Female"
+msgstr "Nữ"
+
+#: pgscm/farmer/forms.py:20 pgscm/templates/farmer/index.html:16
+#: pgscm/templates/farmer/index.html:52 pgscm/templates/group/index.html:104
 msgid "Type"
 msgstr "Loại thành viên"
 
-#: pgscm/farmer/forms.py:19 pgscm/templates/farmer/index.html:17
-#: pgscm/templates/farmer/index.html:53 pgscm/templates/group/index.html:36
+#: pgscm/farmer/forms.py:22 pgscm/farmer/views.py:27
+msgid "Member"
+msgstr "Thành viên"
+
+#: pgscm/farmer/forms.py:23 pgscm/farmer/views.py:28
+msgid "Reviewer"
+msgstr "Thanh tra"
+
+#: pgscm/farmer/forms.py:24 pgscm/templates/farmer/index.html:17
+#: pgscm/templates/farmer/index.html:53 pgscm/templates/group/index.html:34
 #: pgscm/templates/index.html:176
 msgid "Group"
 msgstr "Nhóm"
 
-#: pgscm/farmer/views.py:25
-msgid "Male"
-msgstr "Nam"
-
-#: pgscm/farmer/views.py:26
-msgid "Female"
-msgstr "Nữ"
-
-#: pgscm/farmer/views.py:27
-msgid "Member"
-msgstr "Thành viên"
-
-#: pgscm/farmer/views.py:28
-msgid "Reviewer"
-msgstr "Thanh tra"
-
-#: pgscm/farmer/views.py:74
+#: pgscm/farmer/views.py:74 pgscm/farmer/views.py:159
 msgid "Update farmer success!"
 msgstr "Cập nhật thông tin user thành công!"
 
-#: pgscm/farmer/views.py:90
+#: pgscm/farmer/views.py:90 pgscm/farmer/views.py:132
 msgid "Add farmer success!"
 msgstr "Tạo nông dân thành công!"
 
-#: pgscm/farmer/views.py:106
-msgid "Delete farmer success!"
-msgstr "Xoá nông dân thành công!"
+#: pgscm/farmer/views.py:165
+msgid "Can't get id of object edit!"
+msgstr "Không lấy được id của đối tượng cần cập nhật!"
 
 #: pgscm/group/forms.py:11 pgscm/group/forms.py:14
-#: pgscm/templates/agroup/index.html:97
+#: pgscm/templates/agroup/index.html:95
 msgid "Group code"
 msgstr "Mã nhóm"
 
-#: pgscm/group/forms.py:21 pgscm/templates/agroup/index.html:97
-#: pgscm/templates/group/index.html:20 pgscm/templates/group/index.html:59
+#: pgscm/group/forms.py:21 pgscm/templates/agroup/index.html:95
+#: pgscm/templates/group/index.html:20 pgscm/templates/group/index.html:57
 msgid "District"
 msgstr "Quận/Huyện"
 
-#: pgscm/group/forms.py:23 pgscm/templates/agroup/index.html:97
-#: pgscm/templates/group/index.html:19 pgscm/templates/group/index.html:58
+#: pgscm/group/forms.py:23 pgscm/templates/agroup/index.html:95
+#: pgscm/templates/group/index.html:19 pgscm/templates/group/index.html:56
 msgid "Ward"
 msgstr "Phường/Xã"
 
 #: pgscm/group/forms.py:25 pgscm/group/forms.py:26
-#: pgscm/templates/agroup/index.html:97 pgscm/templates/group/index.html:19
-#: pgscm/templates/group/index.html:57
+#: pgscm/templates/agroup/index.html:95 pgscm/templates/group/index.html:19
+#: pgscm/templates/group/index.html:55
 msgid "Village"
 msgstr "Thôn/Xóm"
 
-#: pgscm/group/forms.py:27 pgscm/templates/agroup/index.html:35
-#: pgscm/templates/group/index.html:21 pgscm/templates/group/index.html:61
+#: pgscm/group/forms.py:27 pgscm/templates/agroup/index.html:33
+#: pgscm/templates/group/index.html:21 pgscm/templates/group/index.html:59
 #: pgscm/templates/index.html:182
 msgid "Associated Group"
 msgstr "Liên nhóm"
@@ -406,13 +433,17 @@ msgstr "Liên nhóm"
 msgid "Update group success!"
 msgstr "Cập nhật nhóm thành công!"
 
-#: pgscm/group/views.py:134
+#: pgscm/group/views.py:134 pgscm/group/views.py:194
 msgid "Add group success!"
 msgstr "Thêm mới nhóm thành công!"
 
 #: pgscm/group/views.py:150
 msgid "Delete group success!"
 msgstr "Xóa nhóm thành công!"
+
+#: pgscm/group/views.py:229
+msgid "Edit group success!"
+msgstr "Cập nhật thông tin nhóm thành công!"
 
 #: pgscm/security/forms.py:10
 msgid "Full name"
@@ -556,7 +587,7 @@ msgstr "Nông dân"
 msgid "Groups"
 msgstr "Nhóm PGS"
 
-#: pgscm/templates/agroup/index.html:28 pgscm/templates/agroup/index.html:46
+#: pgscm/templates/agroup/index.html:26 pgscm/templates/agroup/index.html:44
 #: pgscm/templates/index.html:306
 msgid "PGS Associate Groups"
 msgstr "Liên nhóm PGS"
@@ -641,19 +672,19 @@ msgstr "Người dùng PGS"
 msgid "Managing roles and permissions in PGS system"
 msgstr "Quản lý quyền hạn người dùng trong hệ thống PGS"
 
-#: pgscm/templates/admin/user.html:28 pgscm/templates/agroup/index.html:33
+#: pgscm/templates/admin/user.html:28 pgscm/templates/agroup/index.html:31
 #: pgscm/templates/certificate/index.html:43
-#: pgscm/templates/farmer/index.html:27 pgscm/templates/group/index.html:34
+#: pgscm/templates/farmer/index.html:27 pgscm/templates/group/index.html:32
 #: pgscm/templates/report/alarm.html:28
 msgid "Home"
 msgstr "Trang chủ"
 
 #: pgscm/templates/admin/user.html:35 pgscm/templates/admin/user.html:87
-#: pgscm/templates/agroup/index.html:40 pgscm/templates/agroup/index.html:92
+#: pgscm/templates/agroup/index.html:38 pgscm/templates/agroup/index.html:90
 #: pgscm/templates/certificate/index.html:50
 #: pgscm/templates/certificate/index.html:119
 #: pgscm/templates/farmer/index.html:35 pgscm/templates/farmer/index.html:88
-#: pgscm/templates/group/index.html:41 pgscm/templates/group/index.html:100
+#: pgscm/templates/group/index.html:39 pgscm/templates/group/index.html:98
 msgid "Create New"
 msgstr "Tạo mới"
 
@@ -678,61 +709,61 @@ msgid "Last login at"
 msgstr "Đăng nhập gần đây"
 
 #: pgscm/templates/admin/user.html:55 pgscm/templates/agroup/index.html:20
-#: pgscm/templates/agroup/index.html:59
+#: pgscm/templates/agroup/index.html:57
 #: pgscm/templates/certificate/index.html:22
 #: pgscm/templates/certificate/index.html:33
 #: pgscm/templates/certificate/index.html:78
 #: pgscm/templates/farmer/index.html:17 pgscm/templates/farmer/index.html:55
-#: pgscm/templates/group/index.html:21 pgscm/templates/group/index.html:63
+#: pgscm/templates/group/index.html:21 pgscm/templates/group/index.html:61
 #: pgscm/templates/report/alarm.html:57
 msgid "Actions"
 msgstr "Thao tác"
 
-#: pgscm/templates/admin/user.html:88 pgscm/templates/agroup/index.html:93
+#: pgscm/templates/admin/user.html:88 pgscm/templates/agroup/index.html:91
 #: pgscm/templates/certificate/index.html:120
-#: pgscm/templates/farmer/index.html:89 pgscm/templates/group/index.html:101
+#: pgscm/templates/farmer/index.html:89 pgscm/templates/group/index.html:99
 #: pgscm/templates/report/alarm.html:95
 msgid "Update Data"
 msgstr "Cập nhật dữ liệu"
 
-#: pgscm/templates/admin/user.html:89 pgscm/templates/agroup/index.html:94
+#: pgscm/templates/admin/user.html:89 pgscm/templates/agroup/index.html:92
 #: pgscm/templates/certificate/index.html:121
-#: pgscm/templates/farmer/index.html:90 pgscm/templates/group/index.html:102
+#: pgscm/templates/farmer/index.html:90 pgscm/templates/group/index.html:100
 #: pgscm/templates/report/alarm.html:96
 msgid "Confirm to delete"
 msgstr "Xác nhận xoá dữ liệu"
 
-#: pgscm/templates/agroup/index.html:17 pgscm/templates/agroup/index.html:54
+#: pgscm/templates/agroup/index.html:17 pgscm/templates/agroup/index.html:52
 #: pgscm/templates/certificate/index.html:16
 #: pgscm/templates/certificate/index.html:27
 #: pgscm/templates/certificate/index.html:64
 #: pgscm/templates/farmer/index.html:15 pgscm/templates/farmer/index.html:49
-#: pgscm/templates/group/index.html:18 pgscm/templates/group/index.html:55
+#: pgscm/templates/group/index.html:18 pgscm/templates/group/index.html:53
 #: pgscm/templates/report/alarm.html:46
 msgid "Code"
 msgstr "Mã"
 
-#: pgscm/templates/agroup/index.html:29
+#: pgscm/templates/agroup/index.html:27
 msgid "Managing regional associate groups in PGS system"
 msgstr "Quản lý liên nhóm theo vùng trong hệ thống PGS"
 
-#: pgscm/templates/agroup/index.html:95
+#: pgscm/templates/agroup/index.html:93
 msgid "Associate group info"
 msgstr "Thông tin liên nhóm"
 
-#: pgscm/templates/agroup/index.html:96 pgscm/templates/group/index.html:105
+#: pgscm/templates/agroup/index.html:94 pgscm/templates/group/index.html:103
 msgid "certificates"
 msgstr "chứng chỉ PGS"
 
-#: pgscm/templates/agroup/index.html:96
+#: pgscm/templates/agroup/index.html:94
 msgid "groups"
 msgstr "nhóm"
 
-#: pgscm/templates/agroup/index.html:96 pgscm/templates/group/index.html:105
-msgid "farmers"
-msgstr "nông dân"
+#: pgscm/templates/agroup/index.html:94 pgscm/templates/group/index.html:103
+msgid "farmers (Male / Female)"
+msgstr "nông dân (Nam / Nữ)"
 
-#: pgscm/templates/agroup/index.html:96 pgscm/templates/group/index.html:105
+#: pgscm/templates/agroup/index.html:94 pgscm/templates/group/index.html:103
 msgid "approved area"
 msgstr "diện tích chứng nhận"
 
@@ -776,19 +807,19 @@ msgstr "Quản lý nông dân trong hệ thống PGS"
 msgid "PGS Farmers"
 msgstr "Nông dân PGS"
 
-#: pgscm/templates/group/index.html:29 pgscm/templates/group/index.html:47
+#: pgscm/templates/group/index.html:27 pgscm/templates/group/index.html:45
 msgid "PGS Groups"
 msgstr "Nhóm PGS"
 
-#: pgscm/templates/group/index.html:30
+#: pgscm/templates/group/index.html:28
 msgid "Managing regional groups in PGS system"
 msgstr "Quản lý các nhóm PGS theo vùng"
 
-#: pgscm/templates/group/index.html:103
+#: pgscm/templates/group/index.html:101
 msgid "Certificate history"
 msgstr "Lịch sử cấp chứng chỉ PGS"
 
-#: pgscm/templates/group/index.html:104
+#: pgscm/templates/group/index.html:102
 msgid "Group info"
 msgstr "Thông tin nhóm"
 
@@ -880,4 +911,7 @@ msgstr "Hãy đăng ký tài khoản PGS mới!"
 
 #~ msgid "Start date"
 #~ msgstr "Ngày cấp"
+
+#~ msgid "farmers"
+#~ msgstr "nông dân"
 
