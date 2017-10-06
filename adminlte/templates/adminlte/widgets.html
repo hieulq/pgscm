@@ -30,9 +30,12 @@ footerlink="#", is_header=True, unit="") %}
                     {% if is_header %}
                     count = req.getResponseHeader('X-Total-Count');
                     {% else %}
-                    count = res
+                    count = res;
                     {% endif %}
-                    $("#{{ id }}").find('h3').html(count + ' {{ unit }}');
+                    if('{{ unit }}' == 'm2'){
+                        count += ' m<sup>2</sup>';
+                    }
+                    $("#{{ id }}").find('h3').html(count);
                 }
             })
         })

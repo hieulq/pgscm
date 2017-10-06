@@ -149,6 +149,7 @@ class CertResource(ModelResource):
              self.manager.filters['certificate_expiry_date']['gte'].
              convert({'$gte': today}))
         kwargs['filter_and_cols'] = ['certificate_expiry_date']
+        kwargs['filter_or_cols'] = ['owner_group_id', 'owner_farmer_id']
         func = _check_user_province(self.manager, kwargs, is_province=False,
                                     is_delete=True)
         self._filter_group_farmer_on_province(kwargs)
@@ -207,8 +208,9 @@ class CertResource(ModelResource):
     @Route.GET('/groups/deleted', schema=Instances(),
                response_schema=Instances())
     def get_cer_for_groups_deleted(self, **kwargs):
-        self._filter_group_farmer_on_province(kwargs)
+        self._filter_group_farmer_on_province(kwargs, is_cert_for_group=True)
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
+        kwargs['filter_and_cols'] = ['owner_group_id']
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         kwargs['where'] += (self.manager.filters['owner_group_id']['ne']
@@ -218,8 +220,9 @@ class CertResource(ModelResource):
     @Route.GET('/farmers/deleted', schema=Instances(),
                response_schema=Instances())
     def get_cer_for_farmers_deleted(self, **kwargs):
-        self._filter_group_farmer_on_province(kwargs)
+        self._filter_group_farmer_on_province(kwargs, is_cert_for_farmer=True)
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
+        kwargs['filter_and_cols'] = ['owner_farmer_id']
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         kwargs['where'] += (self.manager.filters['owner_farmer_id']['ne']
