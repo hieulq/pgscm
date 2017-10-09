@@ -321,7 +321,13 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     sort_params[sort_column_name] = direction; 
                     if (data.search.value) {{
                         for (idx in data.columns) {{
-                            if (data.columns[idx].searchable && 
+                            if ((data.columns[idx].data == "group_area" ||
+                                data.columns[idx].data == "member_count") &&
+                                parseInt(data.search.value)){{
+                                where_params[data.columns[idx].data] = {{}};
+                                where_params[data.columns[idx].data]["$eq"]=parseInt(data.search.value);
+                            }}
+                            else if (data.columns[idx].searchable && 
                                 data.columns[idx].data != "_deleted_at" &&
                                 data.columns[idx].data != "group_area" &&
                                 data.columns[idx].data != "member_count" &&
