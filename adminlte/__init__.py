@@ -720,13 +720,13 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 }};
                 
                 // add form
-                form_submit("{0}", 1, "POST");
+                form_submit("{0}", 0, "POST");
                 
                 // edit form
-                form_submit("{1}", 2, "PUT");
+                form_submit("{1}", 1, "PUT");
                 
                 // delete form
-                form_submit("{2}", 3, "DELETE");
+                form_submit("{2}", 2, "DELETE");
             """.format(lurl_for(crud_endpoint[0]), lurl_for(crud_endpoint[1]), lurl_for(crud_endpoint[2]))
 
         script += """

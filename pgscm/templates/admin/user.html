@@ -12,9 +12,11 @@
     {{ load_datatables_script(
             ajax_endpoint='user', crud_endpoint=['admin.add_user', 'admin.edit_user', 'admin.delete_user'],
             export_columns='0,1,2,3,4,5,6',
-            column_names=[("fullname", True, g.c.BOLD_DISP), ("email", True, g.c.LINK_DISP), ("province.name", False, None),
-            ("current_login_ip", True, None), ("last_login_ip", True, None), ("current_login_at", True, None),
-            ("last_login_at", True, None), ("action", False, None)],
+            column_names=[("fullname", True, g.c.BOLD_DISP, _('Fullname')), ("email", True, g.c.LINK_DISP, _('Email')),
+            ("province.name", False, None, _('Province')),
+            ("current_login_ip", True, None, _('Current login IP')), ("last_login_ip", True, None, _('Last login IP')),
+            ("current_login_at", True, None, _('Current login at')),
+            ("last_login_at", True, None, _('Last login at')), ("action", False, None, _('Actions'))],
             select2_class=g.c.SELECT_DEFAULT_ID, multi_select2_class=g.c.MULTI_SELECT_DEFAULT_CLASS) }}
 
 {%- endblock scripts %}
