@@ -213,8 +213,15 @@ def add_user():
             return jsonify(is_success=False,
                            message=str(__('The email was existed!')))
     else:
+        error_message = ""
+        if form.errors.keys():
+            for k in form.errors.keys():
+                for mes in form.errors[k]:
+                    error_message += mes
+        else:
+            error_message = str(__('The form is not validate!'))
         return jsonify(is_success=False,
-                       message=str(__('The form is not validate!')))
+                       message=error_message)
 
 
 @admin.route('/vi/sua-nguoi-dung', endpoint='edit_user_vi', methods=['PUT'])
