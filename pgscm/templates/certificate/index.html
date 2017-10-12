@@ -34,16 +34,29 @@
     {% endif %}
 {%- endblock scripts %}
 {% block content_header -%}
-    <h1>
-        {{ _('PGS Certificates') }}
-        <small>{{ _('Managing PGS certificates') }}</small>
-    </h1>
-    <ol class="breadcrumb">
-        <li><a href="{{ lurl_for('main.index') }}"><i
-                class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
-        <li class="active"><a href="{{ lurl_for('certificate.index') }}"><i
-                class="fa fa-balance-scale"></i>{{ _('Certificate') }}</a></li>
-    </ol>
+    {% if only_farmer == False %}
+        <h1>
+            {{ _('PGS Certificates for groups') }}
+            <small>{{ _('Managing PGS certificates for groups') }}</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{{ lurl_for('main.index') }}"><i
+                    class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
+            <li class="active"><a href="{{ lurl_for('certificate.groups') }}"><i
+                    class="fa fa-balance-scale"></i>{{ _('Certificates for groups') }}</a></li>
+        </ol>
+    {% else %}
+        <h1>
+            {{ _('PGS Certificates for farmers') }}
+            <small>{{ _('Managing PGS certificates for farmers') }}</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{{ lurl_for('main.index') }}"><i
+                    class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
+            <li class="active"><a href="{{ lurl_for('certificate.farmers') }}"><i
+                    class="fa fa-balance-scale"></i>{{ _('Certificates for farmers') }}</a></li>
+        </ol>
+    {% endif %}
 {%- endblock content_header %}
 {% block content -%}
     {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}

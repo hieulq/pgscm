@@ -412,15 +412,15 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                      'btn-danger', g.c.MODAL_DEL_ID, 'trash')
                     mapping += """
                         {{"orderable": {1}, "searchable": {1},
-                            "width": "10%", 
+                            "width": "10%", "title": "{2}",
                          {0}}},""" \
-                        .format(render_func, str(column[1]).lower())
+                        .format(render_func, str(column[1]).lower(), column[3])
                 else:
                     render_func = convert_column_display(column[2])
                     mapping += """
                         {{"data": "{1}", "orderable": {2}, "searchable": {2},
-                         {0}}},""" \
-                        .format(render_func, column[0], str(column[1]).lower())
+                          "title": "{3}", {0}}},""" \
+                        .format(render_func, column[0], str(column[1]).lower(), column[3])
 
             server_script = """
                     {0}
@@ -720,13 +720,13 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 }};
                 
                 // add form
-                form_submit("{0}", 1, "POST");
+                form_submit("{0}", 0, "POST");
                 
                 // edit form
-                form_submit("{1}", 2, "PUT");
+                form_submit("{1}", 1, "PUT");
                 
                 // delete form
-                form_submit("{2}", 3, "DELETE");
+                form_submit("{2}", 2, "DELETE");
             """.format(lurl_for(crud_endpoint[0]), lurl_for(crud_endpoint[1]), lurl_for(crud_endpoint[2]))
 
         script += """

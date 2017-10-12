@@ -154,21 +154,25 @@ def soft_delete(sqla, object_del, models):
     if dform.validate_on_submit():
         if object_del == "farmer":
             delete_farmer(dform.id.data, sqla, models, dform.modify_info.data)
+            success_message = str(__('Delete farmer success!'))
         elif object_del == "group":
             delete_group(dform.id.data, sqla, models, dform.modify_info.data)
+            success_message = str(__('Delete group success!'))
         elif object_del == "agroup":
             delete_agroup(dform.id.data, sqla, models, dform.modify_info.data)
+            success_message = str(__('Delete associate group success!'))
         elif object_del == "certificate":
             cert_delete = sqla.session.query(models.Certificate) \
                 .filter_by(id=dform.id.data).one()
             cert_delete._deleted_at = func.now()
             cert_delete._modify_info = dform.modify_info.data
             sqla.session.commit()
+            success_message = str(__('Delete certificate success!'))
         else:
             return jsonify(is_success=False,
                            message=str(__('Not valid soft delete form!')))
         return jsonify(is_success=True,
-                       message=str(__('Delete farmer success!')))
+                       message=success_message)
     else:
         return jsonify(is_success=False,
                        message=str(__('The form is not validate!')))

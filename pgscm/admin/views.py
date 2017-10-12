@@ -173,13 +173,6 @@ def check_user_email(user_list_result, edit_user_email):
         return False
 
 
-@admin.route('/vi/quan-tri/vung', endpoint='regions_vi')
-@admin.route('/en/admin/regions', endpoint='regions_en')
-@roles_accepted(*c.ONLY_ADMIN_ROLE)
-def regions():
-    return render_template('admin/regions_management.html')
-
-
 @admin.route('/vi/them-nguoi-dung', endpoint='add_user_vi', methods=['POST'])
 @admin.route('/en/add-user', endpoint='add_user_en', methods=['POST'])
 @roles_accepted(*c.ONLY_ADMIN_ROLE)
@@ -213,8 +206,15 @@ def add_user():
             return jsonify(is_success=False,
                            message=str(__('The email was existed!')))
     else:
+        error_message = ""
+        if form.errors.keys():
+            for k in form.errors.keys():
+                for mes in form.errors[k]:
+                    error_message += mes
+        else:
+            error_message = str(__('The form is not validate!'))
         return jsonify(is_success=False,
-                       message=str(__('The form is not validate!')))
+                       message=error_message)
 
 
 @admin.route('/vi/sua-nguoi-dung', endpoint='edit_user_vi', methods=['PUT'])
