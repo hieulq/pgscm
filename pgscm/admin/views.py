@@ -173,13 +173,6 @@ def check_user_email(user_list_result, edit_user_email):
         return False
 
 
-# @admin.route('/vi/quan-tri/vung', endpoint='regions_vi')
-# @admin.route('/en/admin/regions', endpoint='regions_en')
-# @roles_accepted(*c.ONLY_ADMIN_ROLE)
-# def regions():
-#     return render_template('admin/regions_management.html')
-
-
 @admin.route('/vi/them-nguoi-dung', endpoint='add_user_vi', methods=['POST'])
 @admin.route('/en/add-user', endpoint='add_user_en', methods=['POST'])
 @roles_accepted(*c.ONLY_ADMIN_ROLE)
