@@ -281,23 +281,23 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                         'approved') + "</label></div>" +
                     "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
                         'rejected') + "</label></div>" +
-                    "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
-                        'in_conversion') + "</label></div>" +
-                    "\":\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i>""" + _(
-                        'approved_no_cert') + "</label></div>\")")
-            if column_type == g.c.CertificateReVerifyStatusType:
-                render_result = render_tmpl.format(
-                    "", "",
-                    "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                        'not_check') + "</label></div>" +
-                    "\":data==2?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                        'valid') + "</label></div>" +
                     "\":data==3?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
                         'decline') + "</label></div>" +
                     "\":data==4?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
                         'warning') + "</label></div>" +
+                    "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i>""" + _(
+                        'punish') + "</label></div>\")")
+            if column_type == g.c.CertificateReVerifyStatusType:
+                render_result = render_tmpl.format(
+                    "", "",
+                    "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
+                        'adding') + "</label></div>" +
+                    "\":data==2?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
+                        'keeping') + "</label></div>" +
+                    "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
+                        'converting') + "</label></div>" +
                     "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                        'punish') + "</label></div>" + "\")")
+                        'fortuity') + "</label></div>" + "\")")
             return render_result
 
         def get_ajax_config(is_table_of_current_content=True):
@@ -766,9 +766,8 @@ def load_group_script():
     for key in g.c.FarmerType:
         farmer_type[key.value] = _(key.name)
 
+    # TODO: check total of area at line 870
     group_script = """
-            var elements_select2 = $('select');
-
             function catch_select2_select_event(source_element, url, resource, des1_element, des2_element) {{
                 $(source_element).on("select2:select", function (e) {{
                     $(des1_element).empty();
@@ -799,17 +798,21 @@ def load_group_script():
                 }});
             }}
 
-            catch_select2_select_event(elements_select2[0], '/district', 'province', 
-                elements_select2[1], elements_select2[2]);
+            var select2_province = $('select#load_now-province');
+            var select2_district = $('select#district_id');
+            var select2_ward = $('select#ward_id');
 
-            catch_select2_select_event(elements_select2[4], '/district', 'province', 
-                elements_select2[5], elements_select2[6]);
+            catch_select2_select_event(select2_province[0], '/district', 'province', 
+                select2_district[0], select2_ward[0]);
 
-            catch_select2_select_event(elements_select2[1], '/ward', 'district', 
-                elements_select2[2], NaN);
+            catch_select2_select_event(select2_province[1], '/district', 'province', 
+                select2_district[1], select2_ward[1]);
+
+            catch_select2_select_event(select2_district[0], '/ward', 'district', 
+                select2_ward[0], NaN);
             
-            catch_select2_select_event(elements_select2[5], '/ward', 'district',
-                elements_select2[6], NaN);
+            catch_select2_select_event(select2_district[1], '/ward', 'district', 
+                select2_ward[1], NaN);
                 
             var certificate_status_type = {5};
             var certificate_re_verify_status_type = {6};
@@ -866,8 +869,7 @@ def load_group_script():
                             var total_area = 0;
                             for(var i in data){{
                                 total_area += data[i]['group_area'];
-                                if(data[i]['status'] == {3} || 
-                                   data[i]['status'] == {4} ){{
+                                if(data[i]['status'] == {3}){{
                                    total_area_approved += data[i]['group_area'];
                                 }}
                             }}

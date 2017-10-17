@@ -60,13 +60,13 @@ class FarmerType(IntEnum):
 class CertificateStatusType(IntEnum):
     approved = 1  # dong y cap
     rejected = 2  # tu choi cap
-    in_conversion = 3  # chua xac nhan
-    approved_no_cert = 4  # khong co chung chi
+    decline = 3  # thu hoi
+    warning = 4  # canh cao
+    punish = 5  # phat
 
 
 class CertificateReVerifyStatusType(IntEnum):
-    not_check = 1  # chua thanh tra
-    valid = 2  # ok
-    decline = 3  # thu hoi
-    warning = 4  # canh cao
-    punish = 5  # dinh chi, xu phat
+    adding = 1  # cap moi
+    keeping = 2  # duy tri
+    converting = 3  # dang chuyen doi
+    fortuity = 4  # dot xuat

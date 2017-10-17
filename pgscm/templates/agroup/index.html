@@ -11,6 +11,7 @@
 {% block scripts %}
     {{ super() }}
     <!-- DataTables with select2 enabled -->
+    {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
     {{ load_datatables_script(
             ajax_endpoint='associate_group', crud_endpoint=['agroup.add_agroup', 'agroup.edit_agroup', 'agroup.delete_agroup'],
             export_columns='0,1,2,3',
@@ -19,6 +20,15 @@
             ("email", True, None, _('Email')), ("province.name", False, None, _('Province')),
             ("action", False, None, _('Actions'))],
             select2_class=g.c.SELECT_DEFAULT_ID, has_button_view=True) }}
+    {% else %}
+    {{ load_datatables_script(
+            ajax_endpoint='associate_group', crud_endpoint=['agroup.add_agroup', 'agroup.edit_agroup', 'agroup.delete_agroup'],
+            export_columns='0,1,2,3',
+            column_names=[("associate_group_code", True, g.c.LINK_DISP, _('Code')),
+            ("name", True, g.c.BOLD_DISP, _('Name')),
+            ("email", True, None, _('Email')), ("province.name", False, None, _('Province'))],
+            select2_class=g.c.SELECT_DEFAULT_ID) }}
+    {% endif %}
 
 {%- endblock scripts %}
 {% block content_header -%}
