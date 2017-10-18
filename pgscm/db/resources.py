@@ -404,7 +404,6 @@ class AssociateGroupResource(ModelResource):
                 #     response['total_of_area'] += cert.group_area
                 response['total_of_area'] += cert.group_area
                 if cert.status == c.CertificateStatusType.approved:
-                    # or cert.status == c.CertificateStatusType.approved_no_cert:
                     response['total_of_approved_area'] += cert.group_area
 
             fs = models.Farmer.query.filter_by(
@@ -439,7 +438,6 @@ class AssociateGroupResource(ModelResource):
                 if not approved:
                     sum += cert.group_area
                 elif cert.status == c.CertificateStatusType.approved:
-                    # or cert.status == c.CertificateStatusType.approved_no_cert:
                     sum += cert.group_area
         return sum
 
