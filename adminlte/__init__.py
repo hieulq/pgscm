@@ -935,66 +935,87 @@ def load_group_script():
 
 def load_agroup_script():
     agroup_script = """
-                $('.{0}').on('click', function (event) {{
-                    var agroup_id = $(this).data()['id'];
-                    $.ajax({{
-                        method: 'GET',
-                        url: '/associate_group/agroup_summary',
-                        data: 'id="' + agroup_id + '"',
-                        success: function (data, status, req) {{
-                            data = JSON.parse(data)
-                            $('#label_sum0').html(data['total_of_cert']);
-                            $('#label_sum1').html(data['total_of_gr']);
-                            $('#label_sum2').html(data['total_of_farmer'] + ' (' + data['total_of_male'] + ' / ' + 
-                                    data['total_of_female'] + ')');
-                            $('#label_sum3').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
-                        }},
-                        error: function (request, status, error) {{
-                            console.log(request);
-                            console.log(error);
-                            alert(request.responseText);
-                        }}
-                    }})
+        $('.{0}').on('click', function (event) {{
+                
+            var agroup_id = $(this).data()['id'];
+            function get_agroup_report(year) {{
+                var data = {{id: agroup_id, year: year}};
+                $.ajax({{
+                    method: 'GET',
+                    url: '/associate_group/agroup_summary',
+                    // data: 'id="' + agroup_id + '", year:"' + year + '"',
+                    data: data,
+                    success: function (data, status, req) {{
+                        data = JSON.parse(data)
+                        $('#label_sum0').html(data['total_of_cert']);
+                        $('#label_sum1').html(data['total_of_gr']);
+                        $('#label_sum2').html(data['total_of_farmer'] + ' (' + data['total_of_male'] + ' / ' + 
+                                data['total_of_female'] + ')');
+                        $('#label_sum3').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
+                    }},
+                    error: function (request, status, error) {{
+                        console.log(request);
+                        console.log(error);
+                        alert(request.responseText);
+                    }}
+                }})
+            }}
+            
+            var date = new Date();
+            var year_selects = [];
+            for(var i = 0;i<10;i++){{
+                year_selects.push(date.getFullYear() - i);
+            }}
+            $('#{3}').select2({{
+                data: year_selects
+            }});
+            
+            $('#{3}').change(function(){{
+                get_agroup_report($('#{3}').val());
+            }});
+            
+            get_agroup_report($('#{3}').val());
+            
                     
-                    $.ajax({{
-                        method: 'GET',
-                        url: '/group/deleted',
-                        data: 'where={{"associate_group_id": "' + agroup_id + '"}}',
-                        success: function (data, status, req) {{
-                            $('#{1}').find('tr:gt(0)').remove()
-                            if(data.length){{
-                                $('#{2}').addClass('hidden');
-                                $('#{1} div').removeClass('hidden');
-                                var table_body = $('#{1} table tbody');
-                                for (var i in data) {{
-                                    var new_row = '<tr>' +
-                                        '<th scope="row">' + (parseInt(i) + 1) + '</th>' +
-                                        '<td><b>' + data[i]['group_code'] + '</b></td>' +
-                                        '<td>' + data[i]['name'] + '</td>' +
-                                        '<td>' + data[i]['village'] + '</td>' +
-                                        '<td>' + data[i]['ward']['name'] + '</td>' +
-                                        '<td>' + data[i]['district']['name'] + '</td>' +
-                                        '<td>' + data[i]['province']['name'] + '</td>' +
-                                        '<td>' + data[i]['_deleted_at'] + '</td>' +
-                                        '<td>' + data[i]['_modify_info'] + '</td>' +
-                                        '</tr>';
-                                    table_body.append(new_row);
-                                }}
-                            }} else {{
-                                $('#{1} div').addClass('hidden');
-                                $('#{2}').removeClass('hidden');
-                            }}
-                        }},
-                        error: function (request, status, error) {{
-                            console.log(request);
-                            console.log(error);
-                            alert(request.responseText);
+            $.ajax({{
+                method: 'GET',
+                url: '/group/deleted',
+                data: 'where={{"associate_group_id": "' + agroup_id + '"}}',
+                success: function (data, status, req) {{
+                    $('#{1}').find('tr:gt(0)').remove()
+                    if(data.length){{
+                        $('#{2}').addClass('hidden');
+                        $('#{1} div').removeClass('hidden');
+                        var table_body = $('#{1} table tbody');
+                        for (var i in data) {{
+                            var new_row = '<tr>' +
+                                '<th scope="row">' + (parseInt(i) + 1) + '</th>' +
+                                '<td><b>' + data[i]['group_code'] + '</b></td>' +
+                                '<td>' + data[i]['name'] + '</td>' +
+                                '<td>' + data[i]['village'] + '</td>' +
+                                '<td>' + data[i]['ward']['name'] + '</td>' +
+                                '<td>' + data[i]['district']['name'] + '</td>' +
+                                '<td>' + data[i]['province']['name'] + '</td>' +
+                                '<td>' + data[i]['_deleted_at'] + '</td>' +
+                                '<td>' + data[i]['_modify_info'] + '</td>' +
+                                '</tr>';
+                            table_body.append(new_row);
                         }}
-                    }})
+                    }} else {{
+                        $('#{1} div').addClass('hidden');
+                        $('#{2}').removeClass('hidden');
+                    }}
+                }},
+                error: function (request, status, error) {{
+                    console.log(request);
+                    console.log(error);
+                    alert(request.responseText);
+                }}
+            }})
                         
-                }});
+        }});
     
-    """.format(g.c.BTNVIEW_ID, 'tab_history', 'no_data')
+    """.format(g.c.BTNVIEW_ID, 'tab_history', 'no_data', 'year_report')
     return agroup_script
 
 

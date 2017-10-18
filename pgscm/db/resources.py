@@ -376,8 +376,11 @@ class AssociateGroupResource(ModelResource):
         return func(**kwargs)
 
     @Route.GET('/agroup_summary')
-    def agroup_summary(self, id: fields.String()) -> fields.String():
+    def agroup_summary(self, id: fields.String(),
+                       year: fields.Integer()) -> fields.String():
         agroup_id = id
+        report_year = year
+        current_year = datetime.datetime.now().year
         province_id = current_user.province_id
         if province_id and is_region_role():
             gs = [g.id for g in models.Group.query.filter_by(
@@ -396,8 +399,19 @@ class AssociateGroupResource(ModelResource):
             'total_of_approved_area': 0
         }
         for g in gs:
-            cs = models.Certificate.query.filter_by(
-                    owner_group_id=g, _deleted_at=None).all()
+            if current_year == report_year:
+                cs = models.Certificate.query.filter_by(
+                        owner_group_id=g, _deleted_at=None).all()
+            else:
+                start_time = datetime.datetime(report_year, 1, 1)\
+                    .strftime('%Y-%m-%d')
+                end_time = datetime.datetime(report_year, 12, 30)\
+                    .strftime('%Y-%m-%d')
+                cs = models.Certificate.query.filter(
+                    models.Certificate.owner_group_id == g,
+                    models.Certificate.certificate_start_date >= start_time,
+                    models.Certificate.certificate_start_date <= end_time)\
+                    .all()
             response['total_of_cert'] += len(cs)
             for cert in cs:
                 # if cert.status != c.CertificateStatusType.in_conversion:
