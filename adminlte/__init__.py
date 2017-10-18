@@ -926,7 +926,7 @@ def load_group_script():
             }});
     """.format(g.c.MODAL_HISTORY_ID, g.c.BTNVIEW_ID, 'view_gr_history',
                g.c.CertificateStatusType['approved'].value,
-               g.c.CertificateStatusType['approved_no_cert'].value,
+               g.c.CertificateStatusType['warning'].value,
                json.dumps(certificate_status_type), json.dumps(certificate_re_verify_status_type),
                json.dumps(gender_type), json.dumps(farmer_type),
                'tab_history', 'no_data')
