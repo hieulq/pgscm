@@ -832,29 +832,36 @@ def load_group_script():
             var gender_type = {7};
             var farmer_type = {8};
             
-            $('.{2}').on('click', function () {{
-                var owner_group_id = $(this).data()['owner_group_id'];
+            function get_cert_history(group_id) {{
+                var owner_group_id = group_id;
                 $.ajax({{
                     type: "get",
                     url: '/certificate',
                     data: 'where={{"owner_group_id": "' + owner_group_id + '"}}',
                     success: function (data, text) {{
-                        $('#{0}').find("tr:gt(0)").remove();
+                    console.log(data);
+                        $('#{11}').find("tr:gt(0)").remove();
                         if (data.length) {{
-                            var table_body = $('#{0} tbody');
+                            $('#{12}').addClass('hidden');
+                            $('#{11} div').removeClass('hidden');
+                            var table_body = $('#{11} table tbody');
                             for (var i in data) {{
                                 var new_row = '<tr>' +
                                     '<th scope="row">' + (parseInt(i) + 1) + '</th>' +
                                     '<td><b>' + data[i]['certificate_code'] + '</b></td>' +
+                                    '<td>' + data[i]['group_area'] + '</td>' +
+                                    '<td>' + data[i]['member_count'] + '</td>' +
                                     '<td>' + data[i]['gov_certificate_id'] + '</td>' +
                                     '<td>' + certificate_status_type[data[i]['status']] + '</td>' +
                                     '<td>' + certificate_re_verify_status_type[data[i]['re_verify_status']] + '</td>' +
-                                    '<td>' + data[i]['certificate_start_date'] + '</td>' +
                                     '<td>' + data[i]['certificate_expiry_date'] + '</td>' +
                                     '<td>' + data[i]['_modify_info'] + '</td>' +
                                     '</tr>';
                                 table_body.append(new_row);
                             }}
+                        }} else {{
+                            $('#{12}').removeClass('hidden');
+                            $('#{11} div').addClass('hidden');
                         }}
                     }},
                     error: function (request, status, error) {{
@@ -863,7 +870,7 @@ def load_group_script():
                         alert(request.responseText);
                     }}
                 }});
-            }})
+            }}
             
             function get_info_of_group(url, data, des_id_element) {{
                 $.ajax({{
@@ -935,13 +942,15 @@ def load_group_script():
                         alert(request.responseText);
                     }}
                 }})
+                
+                get_cert_history(group_id);
             }});
     """.format(g.c.MODAL_HISTORY_ID, g.c.BTNVIEW_ID, 'view_gr_history',
                g.c.CertificateStatusType['approved'].value,
                g.c.CertificateStatusType['warning'].value,
                json.dumps(certificate_status_type), json.dumps(certificate_re_verify_status_type),
                json.dumps(gender_type), json.dumps(farmer_type),
-               'tab_history', 'no_data')
+               'tab_history', 'no_data', 'tab_cert', 'no_cert_data')
     return group_script
 
 

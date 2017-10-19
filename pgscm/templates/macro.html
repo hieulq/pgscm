@@ -1,5 +1,5 @@
 {% import "bootstrap/wtf.html" as wtf %}
-{% macro render_modal(id, type, title, size='', label_sum=[], column_name=[]) -%}
+{% macro render_modal(id, type, title, size='', label_sum=[], column_name=[], cert_tab=None) -%}
     <div class="modal {{ type }} fade" id="{{ id }}"
          style="display: none">
         <!-- .modal -->
@@ -43,14 +43,16 @@
                                                       aria-expanded="true">{{ _('Summary') }}</a></li>
                                 <li class=""><a href="#tab_history" data-toggle="tab"
                                                 aria-expanded="false">{{ _('History') }}</a></li>
+                                <li class=""><a href="#tab_cert" data-toggle="tab"
+                                                aria-expanded="false">{{ _('Certificate') }}</a></li>
                                 <li class="pull-left header"><i class="fa fa-th"></i> {{ _('Detail info') }}</li>
                             </ul>
                             <div class="tab-content" >
                                 <div class="tab-pane active" id="tab_summary">
-                                <div class="form-group pull-right">
-                                    <select id="year_report" style="display: none">
-                                    </select>
-                                </div>
+                                    <div class="form-group pull-right">
+                                        <select id="year_report" style="display: none">
+                                        </select>
+                                    </div>
                                     {% for lbl in label_sum %}
                                         <div class="form-group" style="clear: right;">
                                             <label class="col-md-7 col-sm-7 col-xs-7 control-label">
@@ -86,6 +88,30 @@
                                         </table>
                                     </div>
                                     <p id="no_data" class="hidden" style="text-align: center;">{{ _('No data') }}</p>
+                                </div>
+                                <!-- /.tab-pane -->
+                                <!-- /.tab-pane -->
+                                <div class="tab-pane" id="tab_cert">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered {{ g.c.TAB_CERTIFICATE_ID }}">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>{{ _('Code') }}</th>
+                                                <th>{{ _('Area') }}</th>
+                                                <th>{{ _('Member count') }}</th>
+                                                <th>{{ _('Decision') }}</th>
+                                                <th>{{ _('Status') }}</th>
+                                                <th>{{ _('Verify status') }}</th>
+                                                <th>{{ _('Verify date') }}</th>
+                                                <th>{{ _('Note') }}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <p id="no_cert_data" class="hidden" style="text-align: center;">{{ _('No data') }}</p>
                                 </div>
                                 <!-- /.tab-pane -->
                             </div>
