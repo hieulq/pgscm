@@ -368,7 +368,8 @@ def add_certificate():
                 gov_certificate_id=form.gov_certificate_id.data,
                 status=form.status.data,
                 re_verify_status=form.re_verify_status.data,
-                owner_farmer=owner_farmer, owner_group=owner_group)
+                owner_farmer=owner_farmer, owner_group=owner_group,
+                _modify_info=form.modify_info.data)
             sqla.session.add(new_cert)
             sqla.session.commit()
             return jsonify(is_success=True, message=str(
@@ -411,6 +412,8 @@ def edit_certificate():
                 edit_certificate.status = form.status.data
                 edit_certificate.re_verify_status = form \
                     .re_verify_status.data
+                if form.modify_info.data:
+                    edit_certificate._modify_info = form.modify_info.data
                 if form.owner_farmer_id:
                     if edit_certificate.owner_farmer_id != \
                             form.owner_farmer_id.data:

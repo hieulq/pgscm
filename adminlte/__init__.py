@@ -269,7 +269,11 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
             if column_type == g.c.FarmerType:
                 render_result = render_tmpl.format(
                     "", "",
-                    "(data == 1 ? \"" + _('member') + "\" : \"" + _('reviewer') + "\")")
+                    "(data == 1 ? \"" + _('member') +
+                    "\":data == 2 ? \"" + _('reviewer') +
+                    "\":data == 3 ? \"" + _('leader') +
+                    "\":data == 4 ? \"" + _('deputy_leader') +
+                    "\" : \"" + _('counter') + "\")")
             if column_type == g.c.GenderType:
                 render_result = render_tmpl.format(
                     "", "",
@@ -277,16 +281,17 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
             if column_type == g.c.CertificateStatusType:
                 render_result = render_tmpl.format(
                     "", "",
-                    "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                        'approved') + "</label></div>" +
-                    "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                        'rejected') + "</label></div>" +
-                    "\":data==3?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                        'decline') + "</label></div>" +
-                    "\":data==4?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
-                        'warning') + "</label></div>" +
-                    "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i>""" + _(
-                        'punish') + "</label></div>\")")
+                    "(data==1?\"" + """<div class=\\"form-group has-success\\">""" +
+                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                        """<i class=\\"fa fa-check-circle-o\\"></i> """ + _('approved') + "</label></div>" +
+                    "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\" style=\\"cursor:pointer\\"><i class=\\"fa fa-times-circle-o\\"></i> """ +
+                        _('rejected') + "</label></div>" +
+                    "\":data==3?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\" style=\\"cursor:pointer\\"><i class=\\"fa fa-times-circle-o\\"></i> """ +
+                        _('decline') + "</label></div>" +
+                    "\":data==4?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\" style=\\"cursor:pointer\\"><i class=\\"fa fa-warning\\"></i> """ +
+                        _('warning') + "</label></div>" +
+                    "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\" style=\\"cursor:pointer\\"><i class=\\"fa fa-times-circle-o\\"></i>""" +
+                        _('punish') + "</label></div>\")")
             if column_type == g.c.CertificateReVerifyStatusType:
                 render_result = render_tmpl.format(
                     "", "",
@@ -297,7 +302,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
                         'converting') + "</label></div>" +
                     "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                        'fortuity') + "</label></div>" + "\")")
+                        'fortuity') + "</label></div>\")")
             return render_result
 
         def get_ajax_config(is_table_of_current_content=True):
@@ -969,6 +974,8 @@ def load_agroup_script():
             $('#{3}').select2({{
                 data: year_selects
             }});
+            
+             $('#{3}').removeClass('display');
             
             $('#{3}').change(function(){{
                 get_agroup_report($('#{3}').val());
