@@ -281,23 +281,23 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                         'approved') + "</label></div>" +
                     "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
                         'rejected') + "</label></div>" +
-                    "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
-                        'in_conversion') + "</label></div>" +
-                    "\":\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i>""" + _(
-                        'approved_no_cert') + "</label></div>\")")
-            if column_type == g.c.CertificateReVerifyStatusType:
-                render_result = render_tmpl.format(
-                    "", "",
-                    "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                        'not_check') + "</label></div>" +
-                    "\":data==2?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                        'valid') + "</label></div>" +
                     "\":data==3?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
                         'decline') + "</label></div>" +
                     "\":data==4?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
                         'warning') + "</label></div>" +
+                    "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i>""" + _(
+                        'punish') + "</label></div>\")")
+            if column_type == g.c.CertificateReVerifyStatusType:
+                render_result = render_tmpl.format(
+                    "", "",
+                    "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
+                        'adding') + "</label></div>" +
+                    "\":data==2?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
+                        'keeping') + "</label></div>" +
+                    "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
+                        'converting') + "</label></div>" +
                     "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                        'punish') + "</label></div>" + "\")")
+                        'fortuity') + "</label></div>" + "\")")
             return render_result
 
         def get_ajax_config(is_table_of_current_content=True):
@@ -766,9 +766,8 @@ def load_group_script():
     for key in g.c.FarmerType:
         farmer_type[key.value] = _(key.name)
 
+    # TODO: check total of area at line 870
     group_script = """
-            var elements_select2 = $('select');
-
             function catch_select2_select_event(source_element, url, resource, des1_element, des2_element) {{
                 $(source_element).on("select2:select", function (e) {{
                     $(des1_element).empty();
@@ -799,17 +798,21 @@ def load_group_script():
                 }});
             }}
 
-            catch_select2_select_event(elements_select2[0], '/district', 'province', 
-                elements_select2[1], elements_select2[2]);
+            var select2_province = $('select#load_now-province');
+            var select2_district = $('select#district_id');
+            var select2_ward = $('select#ward_id');
 
-            catch_select2_select_event(elements_select2[4], '/district', 'province', 
-                elements_select2[5], elements_select2[6]);
+            catch_select2_select_event(select2_province[0], '/district', 'province', 
+                select2_district[0], select2_ward[0]);
 
-            catch_select2_select_event(elements_select2[1], '/ward', 'district', 
-                elements_select2[2], NaN);
+            catch_select2_select_event(select2_province[1], '/district', 'province', 
+                select2_district[1], select2_ward[1]);
+
+            catch_select2_select_event(select2_district[0], '/ward', 'district', 
+                select2_ward[0], NaN);
             
-            catch_select2_select_event(elements_select2[5], '/ward', 'district',
-                elements_select2[6], NaN);
+            catch_select2_select_event(select2_district[1], '/ward', 'district', 
+                select2_ward[1], NaN);
                 
             var certificate_status_type = {5};
             var certificate_re_verify_status_type = {6};
@@ -866,8 +869,7 @@ def load_group_script():
                             var total_area = 0;
                             for(var i in data){{
                                 total_area += data[i]['group_area'];
-                                if(data[i]['status'] == {3} || 
-                                   data[i]['status'] == {4} ){{
+                                if(data[i]['status'] == {3}){{
                                    total_area_approved += data[i]['group_area'];
                                 }}
                             }}
@@ -924,7 +926,7 @@ def load_group_script():
             }});
     """.format(g.c.MODAL_HISTORY_ID, g.c.BTNVIEW_ID, 'view_gr_history',
                g.c.CertificateStatusType['approved'].value,
-               g.c.CertificateStatusType['approved_no_cert'].value,
+               g.c.CertificateStatusType['warning'].value,
                json.dumps(certificate_status_type), json.dumps(certificate_re_verify_status_type),
                json.dumps(gender_type), json.dumps(farmer_type),
                'tab_history', 'no_data')
@@ -933,66 +935,87 @@ def load_group_script():
 
 def load_agroup_script():
     agroup_script = """
-                $('.{0}').on('click', function (event) {{
-                    var agroup_id = $(this).data()['id'];
-                    $.ajax({{
-                        method: 'GET',
-                        url: '/associate_group/agroup_summary',
-                        data: 'id="' + agroup_id + '"',
-                        success: function (data, status, req) {{
-                            data = JSON.parse(data)
-                            $('#label_sum0').html(data['total_of_cert']);
-                            $('#label_sum1').html(data['total_of_gr']);
-                            $('#label_sum2').html(data['total_of_farmer'] + ' (' + data['total_of_male'] + ' / ' + 
-                                    data['total_of_female'] + ')');
-                            $('#label_sum3').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
-                        }},
-                        error: function (request, status, error) {{
-                            console.log(request);
-                            console.log(error);
-                            alert(request.responseText);
-                        }}
-                    }})
+        $('.{0}').on('click', function (event) {{
+                
+            var agroup_id = $(this).data()['id'];
+            function get_agroup_report(year) {{
+                var data = {{id: agroup_id, year: year}};
+                $.ajax({{
+                    method: 'GET',
+                    url: '/associate_group/agroup_summary',
+                    // data: 'id="' + agroup_id + '", year:"' + year + '"',
+                    data: data,
+                    success: function (data, status, req) {{
+                        data = JSON.parse(data)
+                        $('#label_sum0').html(data['total_of_cert']);
+                        $('#label_sum1').html(data['total_of_gr']);
+                        $('#label_sum2').html(data['total_of_farmer'] + ' (' + data['total_of_male'] + ' / ' + 
+                                data['total_of_female'] + ')');
+                        $('#label_sum3').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
+                    }},
+                    error: function (request, status, error) {{
+                        console.log(request);
+                        console.log(error);
+                        alert(request.responseText);
+                    }}
+                }})
+            }}
+            
+            var date = new Date();
+            var year_selects = [];
+            for(var i = 0;i<10;i++){{
+                year_selects.push(date.getFullYear() - i);
+            }}
+            $('#{3}').select2({{
+                data: year_selects
+            }});
+            
+            $('#{3}').change(function(){{
+                get_agroup_report($('#{3}').val());
+            }});
+            
+            get_agroup_report($('#{3}').val());
+            
                     
-                    $.ajax({{
-                        method: 'GET',
-                        url: '/group/deleted',
-                        data: 'where={{"associate_group_id": "' + agroup_id + '"}}',
-                        success: function (data, status, req) {{
-                            $('#{1}').find('tr:gt(0)').remove()
-                            if(data.length){{
-                                $('#{2}').addClass('hidden');
-                                $('#{1} div').removeClass('hidden');
-                                var table_body = $('#{1} table tbody');
-                                for (var i in data) {{
-                                    var new_row = '<tr>' +
-                                        '<th scope="row">' + (parseInt(i) + 1) + '</th>' +
-                                        '<td><b>' + data[i]['group_code'] + '</b></td>' +
-                                        '<td>' + data[i]['name'] + '</td>' +
-                                        '<td>' + data[i]['village'] + '</td>' +
-                                        '<td>' + data[i]['ward']['name'] + '</td>' +
-                                        '<td>' + data[i]['district']['name'] + '</td>' +
-                                        '<td>' + data[i]['province']['name'] + '</td>' +
-                                        '<td>' + data[i]['_deleted_at'] + '</td>' +
-                                        '<td>' + data[i]['_modify_info'] + '</td>' +
-                                        '</tr>';
-                                    table_body.append(new_row);
-                                }}
-                            }} else {{
-                                $('#{1} div').addClass('hidden');
-                                $('#{2}').removeClass('hidden');
-                            }}
-                        }},
-                        error: function (request, status, error) {{
-                            console.log(request);
-                            console.log(error);
-                            alert(request.responseText);
+            $.ajax({{
+                method: 'GET',
+                url: '/group/deleted',
+                data: 'where={{"associate_group_id": "' + agroup_id + '"}}',
+                success: function (data, status, req) {{
+                    $('#{1}').find('tr:gt(0)').remove()
+                    if(data.length){{
+                        $('#{2}').addClass('hidden');
+                        $('#{1} div').removeClass('hidden');
+                        var table_body = $('#{1} table tbody');
+                        for (var i in data) {{
+                            var new_row = '<tr>' +
+                                '<th scope="row">' + (parseInt(i) + 1) + '</th>' +
+                                '<td><b>' + data[i]['group_code'] + '</b></td>' +
+                                '<td>' + data[i]['name'] + '</td>' +
+                                '<td>' + data[i]['village'] + '</td>' +
+                                '<td>' + data[i]['ward']['name'] + '</td>' +
+                                '<td>' + data[i]['district']['name'] + '</td>' +
+                                '<td>' + data[i]['province']['name'] + '</td>' +
+                                '<td>' + data[i]['_deleted_at'] + '</td>' +
+                                '<td>' + data[i]['_modify_info'] + '</td>' +
+                                '</tr>';
+                            table_body.append(new_row);
                         }}
-                    }})
+                    }} else {{
+                        $('#{1} div').addClass('hidden');
+                        $('#{2}').removeClass('hidden');
+                    }}
+                }},
+                error: function (request, status, error) {{
+                    console.log(request);
+                    console.log(error);
+                    alert(request.responseText);
+                }}
+            }})
                         
-                }});
+        }});
     
-    """.format(g.c.BTNVIEW_ID, 'tab_history', 'no_data')
+    """.format(g.c.BTNVIEW_ID, 'tab_history', 'no_data', 'year_report')
     return agroup_script
 
 

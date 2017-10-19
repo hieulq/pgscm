@@ -47,8 +47,12 @@
                             </ul>
                             <div class="tab-content" >
                                 <div class="tab-pane active" id="tab_summary">
+                                <div class="form-group pull-right">
+                                    <select id="year_report">
+                                    </select>
+                                </div>
                                     {% for lbl in label_sum %}
-                                        <div class="form-group">
+                                        <div class="form-group" style="clear: right;">
                                             <label class="col-md-7 col-sm-7 col-xs-7 control-label">
                                                 {{ _('Total of ') + lbl[0] }}
                                             </label>

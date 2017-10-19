@@ -10,7 +10,7 @@ data_required = validators.DataRequired(message=__('Required field!'))
 
 class CertificateForm(FlaskForm):
     certificate_code = StringField(
-        __('Certificate code'), validators=[data_required],
+        __('Certificate code'), validators=[],
         render_kw={"placeholder": __('Certificate code')})
     group_area = IntegerField(
         __('Group area'), validators=[data_required],
@@ -32,21 +32,23 @@ class CertificateForm(FlaskForm):
         __('Status'), validators=[data_required], coerce=int, widget=Select(),
         choices=[(c.CertificateStatusType.approved.value, __('Approved')),
                  (c.CertificateStatusType.rejected.value, __('Rejected')),
-                 (c.CertificateStatusType.approved_no_cert.value,
-                  __('Approved no cert')),
-                 (c.CertificateStatusType.in_conversion.value,
-                  __('In conversion'))])
+                 (c.CertificateStatusType.decline.value,
+                  __('Decline')),
+                 (c.CertificateStatusType.warning.value,
+                  __('Warning')),
+                 (c.CertificateStatusType.punish.value,
+                  __('Punish'))])
     re_verify_status = SelectField(
         __('Reverify Status'), validators=[data_required], coerce=int,
         widget=Select(),
-        choices=[(c.CertificateReVerifyStatusType.not_check.value,
-                  __('Not check')),
-                 (c.CertificateReVerifyStatusType.decline.value,
-                  __('Decline')),
-                 (c.CertificateReVerifyStatusType.punish.value, __('Punish')),
-                 (c.CertificateReVerifyStatusType.valid.value, __('Valid')),
-                 (c.CertificateReVerifyStatusType.warning.value,
-                  __('Warning'))])
+        choices=[(c.CertificateReVerifyStatusType.adding.value,
+                  __('Adding')),
+                 (c.CertificateReVerifyStatusType.keeping.value,
+                  __('Keeping')),
+                 (c.CertificateReVerifyStatusType.converting.value,
+                  __('Converting')),
+                 (c.CertificateReVerifyStatusType.fortuity.value,
+                  __('Fortuity'))])
     owner_farmer_id = SelectField(__('Certificated farmer'), validators=[
         data_required], coerce=str, widget=Select(), id='load_now-farmer')
     owner_group_id = SelectField(__('Certificated group'), validators=[

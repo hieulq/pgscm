@@ -12,6 +12,7 @@
 {% block scripts %}
     {{ super() }}
     <!-- DataTables with select2 enabled -->
+    {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
     {{ load_datatables_script(
             ajax_endpoint='group', crud_endpoint=['group.add_group', 'group.edit_group', 'group.delete_group'],
             export_columns='0,1,2,3,4,5,6',
@@ -20,6 +21,16 @@
             ("district.name", False, None, _('District')), ("province.name", False, None, _('Province')),
             ("associate_group.name", False, None, _('Associated Group')), ("action", False, None, _('Actions'))],
             select2_class=g.c.SELECT_DEFAULT_ID, has_button_view=True) }}
+    {% else %}
+    {{ load_datatables_script(
+            ajax_endpoint='group', crud_endpoint=['group.add_group', 'group.edit_group', 'group.delete_group'],
+            export_columns='0,1,2,3,4,5,6',
+            column_names=[("group_code", True, g.c.LINK_DISP, _('Code')), ("name", True, g.c.BOLD_DISP, _('Name')),
+            ("village", True, None, _('Village')), ("ward.name", False, None, _('Ward')),
+            ("district.name", False, None, _('District')), ("province.name", False, None, _('Province')),
+            ("associate_group.name", False, None, _('Associated Group'))],
+            select2_class=g.c.SELECT_DEFAULT_ID, has_button_view=False) }}
+    {% endif %}
 
 {%- endblock scripts %}
 {% block content_header -%}
