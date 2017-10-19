@@ -20,11 +20,7 @@ class FarmerForm(FlaskForm):
     type = SelectField(__('Type'), validators=[data_required],
                        coerce=int, widget=Select(),
                        choices=[(c.FarmerType.member.value, __('Member')),
-                        (c.FarmerType.reviewer.value, __('Reviewer')),
-                        (c.FarmerType.leader.value, __('Leader')),
-                        (c.FarmerType.deputy_leader.value,
-                         __('Deputy leader')),
-                        (c.FarmerType.counter.value, __('Counter'))])
+                         (c.FarmerType.reviewer.value, __('Reviewer'))])
     group_id = SelectField(__('Group'), validators=[data_required],
                            coerce=str, widget=Select(), id='load_now-group',
                            choices=[])
