@@ -239,7 +239,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     }}
                     
                     if(select2_elements.length){{
-                        var h = select2_elements.length / 2;
+                        var h = Math.floor(select2_elements.length / 2);
                         for(var i = 0; i < h;i++){{
                             var element_id = select2_elements[i].getAttribute('id');
                             if(element_id.startsWith('load_now')){{
@@ -509,11 +509,13 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 )
             """.format('search_type', _('Deleted'), _('Current'))
 
-        grop_agroup_script = ""
+        page_script = ""
         if ajax_endpoint == "associate_group":
-            grop_agroup_script = load_agroup_script()
+            page_script = load_agroup_script()
         elif ajax_endpoint == "group":
-            grop_agroup_script = load_group_script()
+            page_script = load_group_script()
+        elif ajax_endpoint == "user":
+            page_script = load_user_script()
 
         script = """
         {0}
@@ -639,7 +641,6 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                             $('#{9}').removeClass('btn-primary')
                             .addClass('btn-warning')
                             
-                            
                             {19}
                             
                         }},
@@ -705,7 +706,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                    g.c.DEL_SUBMIT_ID, g.c.MULTI_SELECT_DEFAULT_CLASS,
                    g.c.MODAL_ADD_ID, 'old_pass', 'search_type',
                    ajax_endpoint, column_of_deleted_data, init_complete_config,
-                   server_script, get_ajax_config(False), grop_agroup_script)
+                   server_script, get_ajax_config(False), page_script)
 
         if len(crud_endpoint) == 3:
             script += """
@@ -1040,6 +1041,57 @@ def load_agroup_script():
     
     """.format(g.c.BTNVIEW_ID, 'tab_history', 'no_data', 'year_report')
     return agroup_script
+
+
+def load_user_script():
+    user_script = """
+        function catch_select2_select_event(source_element, url, resource, des1_element, des2_element) {{
+            $(source_element).on("select2:select", function (e) {{
+                $(des1_element).empty();
+                if (des2_element) {{
+                    $(des2_element).empty();
+                }}
+                var value = e.target.value;
+                $.ajax({{
+                    type: "get",
+                    url: url,
+                    data: 'where={{"' + resource + '": {{"$ref": "/' + resource + '/' + value + '"}} }}',
+                    success: function (data, text) {{
+                        var select2_data = [];
+                        for (var i = 0; i < data.length; i++) {{
+                            select2_data[i] = {{
+                                id: data[i]['$id'],
+                                text: data[i].type + " " + data[i].name
+                            }}
+                        }}
+                        $(des1_element).select2({{data: select2_data}});
+                    }},
+                    error: function (request, status, error) {{
+                        console.log(request);
+                        console.log(error);
+                        alert(request.responseText);
+                    }}
+                }});
+            }});
+        }}
+
+        var select2_province = $('select#load_now-province');
+        var select2_district = $('select#district_id');
+        var select2_ward = $('select#ward_id');
+
+        catch_select2_select_event(select2_province[0], '/district', 'province', 
+            select2_district[0], select2_ward[0]);
+
+        catch_select2_select_event(select2_province[1], '/district', 'province', 
+            select2_district[1], select2_ward[1]);
+
+        catch_select2_select_event(select2_district[0], '/ward', 'district', 
+            select2_ward[0], NaN);
+            
+        catch_select2_select_event(select2_district[1], '/ward', 'district', 
+            select2_ward[1], NaN);
+    """.format()
+    return user_script
 
 
 def check_role(current, target):

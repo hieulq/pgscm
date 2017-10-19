@@ -36,6 +36,8 @@ def users():
 
     if current_app.config['AJAX_CALL_ENABLED']:
         form.province_id.choices = []
+        form.district_id.choices = []
+        form.ward_id.choices = []
         province_id = current_user.province_id
         if province_id and is_region_role():
             form.province_id.choices = [
