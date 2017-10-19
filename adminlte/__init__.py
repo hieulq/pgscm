@@ -282,16 +282,20 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 render_result = render_tmpl.format(
                     "", "",
                     "(data==1?\"" + """<div class=\\"form-group has-success\\">""" +
-                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                        """<label class=\\"control-label\\">""" +
                         """<i class=\\"fa fa-check-circle-o\\"></i> """ + _('approved') + "</label></div>" +
-                    "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\" style=\\"cursor:pointer\\"><i class=\\"fa fa-times-circle-o\\"></i> """ +
-                        _('rejected') + "</label></div>" +
-                    "\":data==3?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\" style=\\"cursor:pointer\\"><i class=\\"fa fa-times-circle-o\\"></i> """ +
-                        _('decline') + "</label></div>" +
-                    "\":data==4?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\" style=\\"cursor:pointer\\"><i class=\\"fa fa-warning\\"></i> """ +
-                        _('warning') + "</label></div>" +
-                    "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\" style=\\"cursor:pointer\\"><i class=\\"fa fa-times-circle-o\\"></i>""" +
-                        _('punish') + "</label></div>\")")
+                    "\":data==2?\"" + """<div class=\\"form-group has-error\\">""" +
+                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                        """<i class=\\"fa fa-times-circle-o\\"></i> """ + _('rejected') + "</label></div>" +
+                    "\":data==3?\"" + """<div class=\\"form-group has-error\\">""" +
+                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                        """<i class=\\"fa fa-times-circle-o\\"></i> """ + _('decline') + "</label></div>" +
+                    "\":data==4?\"" + """<div class=\\"form-group has-warning\\">""" +
+                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                        """<i class=\\"fa fa-warning\\"></i> """ + _('warning') + "</label></div>" +
+                    "\":\"" + """<div class=\\"form-group has-error\\">""" +
+                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                        """<i class=\\"fa fa-times-circle-o\\"></i>""" + _('punish') + "</label></div>\")")
             if column_type == g.c.CertificateReVerifyStatusType:
                 render_result = render_tmpl.format(
                     "", "",
@@ -368,10 +372,13 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                         data_attr = ''
                         row_attr = Object.keys(row)
                         for (idx in row_attr) {{
-                            if (row_attr[idx].startsWith('_') == false) {{
+                            //if (row_attr[idx].startsWith('_') == false) {{
                                 value = row[row_attr[idx]]
+                                if(row_attr[idx].startsWith('_')){{
+                                    row_attr[idx] = row_attr[idx].substring(1, row_attr[idx].length);
+                                }}
                                 data_attr += 'data-' + row_attr[idx].replace(/[$]/g, '') + '=\"' + value + '\" '
-                            }}
+                            //}}
                         }}
                         if('{5}' == 'user'){{
                             if(row['roles'].length > 0){{
