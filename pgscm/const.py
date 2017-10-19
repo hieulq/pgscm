@@ -55,6 +55,9 @@ class GenderType(IntEnum):
 class FarmerType(IntEnum):
     member = 1  # thanh vien
     reviewer = 2  # thanh tra
+    leader = 3  # truong nhom
+    deputy_leader = 4  # pho nhom
+    counter = 5  # ke toan
 
 
 class CertificateStatusType(IntEnum):
