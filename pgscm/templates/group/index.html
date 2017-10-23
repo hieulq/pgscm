@@ -112,5 +112,5 @@
     {{ render_modal(g.c.MODAL_HISTORY_ID, 'modal', _('Certificate history'),  'modal-lg') }}
     {{ render_modal(g.c.MODAL_DETAIL_ID, 'modal', _('Group info'), 'modal-lg',
             [(_('certificates'), False), (_('farmers (Male / Female)'), False), (_('approved area'), True)],
-            [_('Farmer code'), _('Name'), _('Gender'), _('Type'), _('Deleted at'), _('Reason')]) }}
+            [_('Farmer code'), _('Name'), _('Gender'), _('Type'), _('Deleted at'), _('Reason')], 'group') }}
 {%- endblock content %}

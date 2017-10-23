@@ -106,7 +106,8 @@ def delete_farmer(farmer_id, sqla, models, modify_info):
     farmer_delete = sqla.session.query(models.Farmer) \
             .filter_by(id=farmer_id).one()
     farmer_delete._deleted_at = func.now()
-    farmer_delete._modify_info = modify_info
+    if modify_info:
+        farmer_delete._modify_info = modify_info
 
     cert_of_farmer_deleted = sqla.session.query(models.Certificate)\
         .filter_by(owner_farmer_id=farmer_id).all()
@@ -120,7 +121,8 @@ def delete_group(group_id, sqla, models, modify_info):
     group_delete = sqla.session.query(models.Group) \
         .filter_by(id=group_id).one()
     group_delete._deleted_at = func.now()
-    group_delete._modify_info = modify_info
+    if modify_info:
+        group_delete._modify_info = modify_info
 
     cert_of_group_deleted = sqla.session.query(models.Certificate) \
         .filter_by(owner_group_id=group_id).all()
@@ -139,7 +141,8 @@ def delete_agroup(agroup_id, sqla, models, modify_info):
     agroup_delete = sqla.session.query(models.AssociateGroup) \
         .filter_by(id=agroup_id).one()
     agroup_delete._deleted_at = func.now()
-    agroup_delete._modify_info = modify_info
+    if modify_info:
+        agroup_delete._modify_info = modify_info
 
     group_of_agroup_deleted = sqla.session.query(models.Group) \
         .filter_by(associate_group_id=agroup_id).all()
@@ -165,7 +168,8 @@ def soft_delete(sqla, object_del, models):
             cert_delete = sqla.session.query(models.Certificate) \
                 .filter_by(id=dform.id.data).one()
             cert_delete._deleted_at = func.now()
-            cert_delete._modify_info = dform.modify_info.data
+            if dform.modify_info.data:
+                cert_delete._modify_info = dform.modify_info.data
             sqla.session.commit()
             success_message = str(__('Delete certificate success!'))
         else:

@@ -53,5 +53,7 @@ class CertificateForm(FlaskForm):
         data_required], coerce=str, widget=Select(), id='load_now-farmer')
     owner_group_id = SelectField(__('Certificated group'), validators=[
         data_required], coerce=str, widget=Select(), id='load_now-group')
+    modify_info = StringField(__('Note'),
+                              render_kw={"placeholder": __('Note')})
     id = HiddenField(__('Id'), validators=[data_required])
     submit = SubmitField(__('Submit'), widget=Submit())

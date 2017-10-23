@@ -141,7 +141,7 @@ class Certificate(sqla.Model):
                                   sqla.ForeignKey('farmer.id'), nullable=True)
     owner_group = sqla.relationship('Group', back_populates='certificates')
     owner_farmer = sqla.relationship('Farmer', back_populates='certificates')
-    note = sqla.Column(sqla.String(255))
+
     group_area = sqla.Column(sqla.Integer(), nullable=False, default=0)
     member_count = sqla.Column(sqla.Integer(), nullable=False, default=0)
     certificate_start_date = sqla.Column(sqla.Date(), nullable=True)

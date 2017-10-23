@@ -239,7 +239,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     }}
                     
                     if(select2_elements.length){{
-                        var h = select2_elements.length / 2;
+                        var h = Math.floor(select2_elements.length / 2);
                         for(var i = 0; i < h;i++){{
                             var element_id = select2_elements[i].getAttribute('id');
                             if(element_id.startsWith('load_now')){{
@@ -269,7 +269,11 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
             if column_type == g.c.FarmerType:
                 render_result = render_tmpl.format(
                     "", "",
-                    "(data == 1 ? \"" + _('member') + "\" : \"" + _('reviewer') + "\")")
+                    "(data == 1 ? \"" + _('member') +
+                    "\":data == 2 ? \"" + _('reviewer') +
+                    "\":data == 3 ? \"" + _('leader') +
+                    "\":data == 4 ? \"" + _('deputy_leader') +
+                    "\" : \"" + _('counter') + "\")")
             if column_type == g.c.GenderType:
                 render_result = render_tmpl.format(
                     "", "",
@@ -277,16 +281,21 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
             if column_type == g.c.CertificateStatusType:
                 render_result = render_tmpl.format(
                     "", "",
-                    "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                        'approved') + "</label></div>" +
-                    "\":data==2?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                        'rejected') + "</label></div>" +
-                    "\":data==3?\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                        'decline') + "</label></div>" +
-                    "\":data==4?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
-                        'warning') + "</label></div>" +
-                    "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i>""" + _(
-                        'punish') + "</label></div>\")")
+                    "(data==1?\"" + """<div class=\\"form-group has-success\\">""" +
+                        """<label class=\\"control-label\\">""" +
+                        """<i class=\\"fa fa-check-circle-o\\"></i> """ + _('approved') + "</label></div>" +
+                    "\":data==2?\"" + """<div class=\\"form-group has-error\\">""" +
+                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                        """<i class=\\"fa fa-times-circle-o\\"></i> """ + _('rejected') + "</label></div>" +
+                    "\":data==3?\"" + """<div class=\\"form-group has-error\\">""" +
+                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                        """<i class=\\"fa fa-times-circle-o\\"></i> """ + _('decline') + "</label></div>" +
+                    "\":data==4?\"" + """<div class=\\"form-group has-warning\\">""" +
+                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                        """<i class=\\"fa fa-warning\\"></i> """ + _('warning') + "</label></div>" +
+                    "\":\"" + """<div class=\\"form-group has-error\\">""" +
+                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                        """<i class=\\"fa fa-times-circle-o\\"></i>""" + _('punish') + "</label></div>\")")
             if column_type == g.c.CertificateReVerifyStatusType:
                 render_result = render_tmpl.format(
                     "", "",
@@ -297,7 +306,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
                         'converting') + "</label></div>" +
                     "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                        'fortuity') + "</label></div>" + "\")")
+                        'fortuity') + "</label></div>\")")
             return render_result
 
         def get_ajax_config(is_table_of_current_content=True):
@@ -363,10 +372,13 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                         data_attr = ''
                         row_attr = Object.keys(row)
                         for (idx in row_attr) {{
-                            if (row_attr[idx].startsWith('_') == false) {{
+                            //if (row_attr[idx].startsWith('_') == false) {{
                                 value = row[row_attr[idx]]
+                                if(row_attr[idx].startsWith('_')){{
+                                    row_attr[idx] = row_attr[idx].substring(1, row_attr[idx].length);
+                                }}
                                 data_attr += 'data-' + row_attr[idx].replace(/[$]/g, '') + '=\"' + value + '\" '
-                            }}
+                            //}}
                         }}
                         if('{5}' == 'user'){{
                             if(row['roles'].length > 0){{
@@ -497,11 +509,13 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 )
             """.format('search_type', _('Deleted'), _('Current'))
 
-        grop_agroup_script = ""
+        page_script = ""
         if ajax_endpoint == "associate_group":
-            grop_agroup_script = load_agroup_script()
+            page_script = load_agroup_script()
         elif ajax_endpoint == "group":
-            grop_agroup_script = load_group_script()
+            page_script = load_group_script()
+        elif ajax_endpoint == "user":
+            page_script = load_user_script()
 
         script = """
         {0}
@@ -627,7 +641,6 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                             $('#{9}').removeClass('btn-primary')
                             .addClass('btn-warning')
                             
-                            
                             {19}
                             
                         }},
@@ -693,7 +706,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                    g.c.DEL_SUBMIT_ID, g.c.MULTI_SELECT_DEFAULT_CLASS,
                    g.c.MODAL_ADD_ID, 'old_pass', 'search_type',
                    ajax_endpoint, column_of_deleted_data, init_complete_config,
-                   server_script, get_ajax_config(False), grop_agroup_script)
+                   server_script, get_ajax_config(False), page_script)
 
         if len(crud_endpoint) == 3:
             script += """
@@ -820,29 +833,36 @@ def load_group_script():
             var gender_type = {7};
             var farmer_type = {8};
             
-            $('.{2}').on('click', function () {{
-                var owner_group_id = $(this).data()['owner_group_id'];
+            function get_cert_history(group_id) {{
+                var owner_group_id = group_id;
                 $.ajax({{
                     type: "get",
                     url: '/certificate',
                     data: 'where={{"owner_group_id": "' + owner_group_id + '"}}',
                     success: function (data, text) {{
-                        $('#{0}').find("tr:gt(0)").remove();
+                    console.log(data);
+                        $('#{11}').find("tr:gt(0)").remove();
                         if (data.length) {{
-                            var table_body = $('#{0} tbody');
+                            $('#{12}').addClass('hidden');
+                            $('#{11} div').removeClass('hidden');
+                            var table_body = $('#{11} table tbody');
                             for (var i in data) {{
                                 var new_row = '<tr>' +
                                     '<th scope="row">' + (parseInt(i) + 1) + '</th>' +
                                     '<td><b>' + data[i]['certificate_code'] + '</b></td>' +
+                                    '<td>' + data[i]['group_area'] + '</td>' +
+                                    '<td>' + data[i]['member_count'] + '</td>' +
                                     '<td>' + data[i]['gov_certificate_id'] + '</td>' +
                                     '<td>' + certificate_status_type[data[i]['status']] + '</td>' +
                                     '<td>' + certificate_re_verify_status_type[data[i]['re_verify_status']] + '</td>' +
-                                    '<td>' + data[i]['certificate_start_date'] + '</td>' +
                                     '<td>' + data[i]['certificate_expiry_date'] + '</td>' +
                                     '<td>' + data[i]['_modify_info'] + '</td>' +
                                     '</tr>';
                                 table_body.append(new_row);
                             }}
+                        }} else {{
+                            $('#{12}').removeClass('hidden');
+                            $('#{11} div').addClass('hidden');
                         }}
                     }},
                     error: function (request, status, error) {{
@@ -851,7 +871,7 @@ def load_group_script():
                         alert(request.responseText);
                     }}
                 }});
-            }})
+            }}
             
             function get_info_of_group(url, data, des_id_element) {{
                 $.ajax({{
@@ -923,13 +943,15 @@ def load_group_script():
                         alert(request.responseText);
                     }}
                 }})
+                
+                get_cert_history(group_id);
             }});
     """.format(g.c.MODAL_HISTORY_ID, g.c.BTNVIEW_ID, 'view_gr_history',
                g.c.CertificateStatusType['approved'].value,
                g.c.CertificateStatusType['warning'].value,
                json.dumps(certificate_status_type), json.dumps(certificate_re_verify_status_type),
                json.dumps(gender_type), json.dumps(farmer_type),
-               'tab_history', 'no_data')
+               'tab_history', 'no_data', 'tab_cert', 'no_cert_data')
     return group_script
 
 
@@ -969,6 +991,8 @@ def load_agroup_script():
             $('#{3}').select2({{
                 data: year_selects
             }});
+            
+             $('#{3}').removeClass('display');
             
             $('#{3}').change(function(){{
                 get_agroup_report($('#{3}').val());
@@ -1017,6 +1041,57 @@ def load_agroup_script():
     
     """.format(g.c.BTNVIEW_ID, 'tab_history', 'no_data', 'year_report')
     return agroup_script
+
+
+def load_user_script():
+    user_script = """
+        function catch_select2_select_event(source_element, url, resource, des1_element, des2_element) {{
+            $(source_element).on("select2:select", function (e) {{
+                $(des1_element).empty();
+                if (des2_element) {{
+                    $(des2_element).empty();
+                }}
+                var value = e.target.value;
+                $.ajax({{
+                    type: "get",
+                    url: url,
+                    data: 'where={{"' + resource + '": {{"$ref": "/' + resource + '/' + value + '"}} }}',
+                    success: function (data, text) {{
+                        var select2_data = [];
+                        for (var i = 0; i < data.length; i++) {{
+                            select2_data[i] = {{
+                                id: data[i]['$id'],
+                                text: data[i].type + " " + data[i].name
+                            }}
+                        }}
+                        $(des1_element).select2({{data: select2_data}});
+                    }},
+                    error: function (request, status, error) {{
+                        console.log(request);
+                        console.log(error);
+                        alert(request.responseText);
+                    }}
+                }});
+            }});
+        }}
+
+        var select2_province = $('select#load_now-province');
+        var select2_district = $('select#district_id');
+        var select2_ward = $('select#ward_id');
+
+        catch_select2_select_event(select2_province[0], '/district', 'province', 
+            select2_district[0], select2_ward[0]);
+
+        catch_select2_select_event(select2_province[1], '/district', 'province', 
+            select2_district[1], select2_ward[1]);
+
+        catch_select2_select_event(select2_district[0], '/ward', 'district', 
+            select2_ward[0], NaN);
+            
+        catch_select2_select_event(select2_district[1], '/ward', 'district', 
+            select2_ward[1], NaN);
+    """.format()
+    return user_script
 
 
 def check_role(current, target):
