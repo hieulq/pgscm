@@ -781,7 +781,6 @@ def load_group_script():
     for key in g.c.FarmerType:
         farmer_type[key.value] = _(key.name)
 
-    # TODO: check total of area at line 870
     group_script = """
             function catch_select2_select_event(source_element, url, resource, des1_element, des2_element) {{
                 $(source_element).on("select2:select", function (e) {{
@@ -841,8 +840,7 @@ def load_group_script():
                     type: "get",
                     url: '/certificate',
                     data: 'where={{"owner_group_id": "' + owner_group_id + '"}}',
-                    success: function (data, text) {{
-                    console.log(data);
+                    success: function (data, text) {{                    
                         $('#{11}').find("tr:gt(0)").remove();
                         if (data.length) {{
                             $('#{12}').addClass('hidden');
@@ -889,9 +887,13 @@ def load_group_script():
                             count = data.length;
                             var total_area_approved = 0;
                             var total_area = 0;
+                            console.log(data);
                             for(var i in data){{
-                                total_area += data[i]['group_area'];
-                                if(data[i]['status'] == {3}){{
+                                if(data[i]['re_verify_status'] != {3}){{
+                                    total_area += data[i]['group_area'];
+                                }}
+                                if(data[i]['re_verify_status'] == {4} || 
+                                   data[i]['re_verify_status'] == {13}){{
                                    total_area_approved += data[i]['group_area'];
                                 }}
                             }}
@@ -949,11 +951,12 @@ def load_group_script():
                 get_cert_history(group_id);
             }});
     """.format(g.c.MODAL_HISTORY_ID, g.c.BTNVIEW_ID, 'view_gr_history',
-               g.c.CertificateStatusType['approved'].value,
-               g.c.CertificateStatusType['warning'].value,
+               g.c.CertificateReVerifyStatusType['fortuity'].value,
+               g.c.CertificateReVerifyStatusType['adding'].value,
                json.dumps(certificate_status_type), json.dumps(certificate_re_verify_status_type),
                json.dumps(gender_type), json.dumps(farmer_type),
-               'tab_history', 'no_data', 'tab_cert', 'no_cert_data')
+               'tab_history', 'no_data', 'tab_cert', 'no_cert_data',
+               g.c.CertificateReVerifyStatusType['keeping'].value)
     return group_script
 
 
