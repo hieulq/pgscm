@@ -410,10 +410,13 @@ class AssociateGroupResource(ModelResource):
                     .all()
             response['total_of_cert'] += len(cs)
             for cert in cs:
-                # if cert.status != c.CertificateStatusType.in_conversion:
-                #     response['total_of_area'] += cert.group_area
-                response['total_of_area'] += cert.group_area
-                if cert.status == c.CertificateStatusType.approved:
+                if cert.re_verify_status != \
+                        c.CertificateReVerifyStatusType.fortuity:
+                    response['total_of_area'] += cert.group_area
+                if cert.re_verify_status == \
+                        c.CertificateReVerifyStatusType.adding or \
+                        cert.re_verify_status == \
+                        c.CertificateReVerifyStatusType.keeping:
                     response['total_of_approved_area'] += cert.group_area
 
             fs = models.Farmer.query.filter_by(
@@ -445,11 +448,13 @@ class AssociateGroupResource(ModelResource):
             cs = models.Certificate.query.filter_by(
                 owner_group_id=g, _deleted_at=None).all()
             for cert in cs:
-                if not approved and cert.status != \
+                if not approved and cert.re_verify_status != \
                         c.CertificateReVerifyStatusType.fortuity:
                     sum += cert.group_area
-                elif cert.status == c.CertificateReVerifyStatusType.adding or \
-                        cert.status == c.CertificateReVerifyStatusType.keeping:
+                elif cert.re_verify_status == \
+                        c.CertificateReVerifyStatusType.adding or \
+                        cert.re_verify_status == \
+                        c.CertificateReVerifyStatusType.keeping:
                     sum += cert.group_area
         return sum
 

@@ -250,7 +250,7 @@ def edit_user():
             edit_user.email = form.email.data
             edit_user.fullname = form.fullname.data
             if form.associate_group_id.data != edit_user.associate_group_id:
-                edit_user.province = models.AssociateGroup.query \
+                edit_user.associate_group = models.AssociateGroup.query \
                     .filter_by(id=form.associate_group_id.data) \
                     .one()
             for new_role in form.roles.data:
