@@ -21,11 +21,9 @@ class UserForm(FlaskForm):
     confirm = PasswordField(__('Repeat Password'), validators=[data_required])
     roles = SelectMultipleField(__('Role'), validators=[data_required],
                                 widget=MultiSelect())
-    province_id = SelectField(__('Province'), coerce=str, widget=Select(),
-                              id='load_now-province')
-    district_id = SelectField(__('District'), validators=[data_required],
-                              coerce=str, widget=Select())
-    ward_id = SelectField(__('Ward'), validators=[data_required],
-                          coerce=str, widget=Select())
+    associate_group_id = SelectField(__('Associated Group'),
+                                     validators=[data_required], coerce=str,
+                                     widget=Select(),
+                                     id='load_now-associate_group')
     id = HiddenField(__('Id'), validators=[data_required])
     submit = SubmitField(__('Submit'), widget=Submit())

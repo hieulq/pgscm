@@ -13,7 +13,7 @@
             ajax_endpoint='user', crud_endpoint=['admin.add_user', 'admin.edit_user', 'admin.delete_user'],
             export_columns='0,1,2,3,4,5,6',
             column_names=[("fullname", True, g.c.BOLD_DISP, _('Fullname')), ("email", True, g.c.LINK_DISP, _('Email')),
-            ("province.name", False, None, _('Province')),
+            ("associate_group.name", False, None, _('Associated Group')),
             ("current_login_ip", True, None, _('Current login IP')), ("last_login_ip", True, None, _('Last login IP')),
             ("current_login_at", True, None, _('Current login at')),
             ("last_login_at", True, None, _('Last login at')), ("action", False, None, _('Actions'))],
@@ -49,7 +49,7 @@
                         <tr>
                             <th>{{ _('Fullname') }}</th>
                             <th>{{ _('Email') }}</th>
-                            <th>{{ _('Province') }}</th>
+                            <th>{{ _('Associated Group') }}</th>
                             <th>{{ _('Current login IP') }}
                             <th>{{ _('Last login IP') }}
                             <th>{{ _('Current login at') }}
@@ -66,7 +66,7 @@
                                     </a>
                                 </td>
                                 <td><b>{{ u.email }}</b></td>
-                                <td>{{ u.province.name }}</td>
+                                <td>{{ u.associate_group.name }}</td>
                                 <td>{{ u.last_login_ip }}</td>
                                 <td>{{ u.current_login_ip }}</td>
                                 <td>{{ u.last_login_at }}</td>

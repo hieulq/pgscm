@@ -197,10 +197,12 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 $('.select2-search__field').css('border', 'none');
                 """.format(multi_select2_class)
 
-            if current_user.province_id and is_region_role():
+            # TODO: check logic at there: has_associate_group_id
+            if current_user.associate_group_id and is_region_role():
                 has_province_id = 1
+                has_associate_group_id = 1
             else:
-                has_province_id = 0
+                has_associate_group_id = 0
 
             select2_script += """
                     var select2_elements = $('select')
@@ -255,7 +257,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                         }}
                     }}
                         
-            """.format(has_province_id)
+            """.format(has_associate_group_id)
 
         def convert_column_display(column_type):
             render_result = ""

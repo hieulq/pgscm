@@ -22,11 +22,11 @@ def _check_user_province(manager, kwargs, is_and=False, is_delete=True,
         func = manager.paginated_instances
     else:
         func = manager.paginated_instances_or
-    province_id = current_user.province_id
-    if is_region_role() and province_id and is_province:
+    associate_group_id = current_user.associate_group_id
+    if is_region_role() and associate_group_id and is_province:
         kwargs['where'] += \
-            (manager.filters['province_id'][None].convert(
-                province_id),)
+            (manager.filters['id'][None].convert(
+                associate_group_id),)
     if is_delete:
         kwargs['where'] += \
             (manager.filters['_deleted_at'][None].convert(None),)
@@ -50,9 +50,8 @@ class UserResource(ModelResource):
 
     class Schema:
         roles = fields.ToMany('role')
-        # roles = fields.List(fields.ToMany('role'))
-        province = fields.Inline('province')
-        province_id = fields.String()
+        associate_group = fields.Inline('associate_group')
+        associate_group_id = fields.String()
         last_login_at = fields.DateTimeString()
         current_login_at = fields.DateTimeString()
 
@@ -84,7 +83,8 @@ class CertResource(ModelResource):
 
     def _filter_group_farmer_on_province(self, kwargs, is_cert_for_group=False,
                                          is_cert_for_farmer=False):
-        province_id = current_user.province_id
+        province_id = None
+        # province_id = current_user.province_id
         if province_id and is_region_role():
             gs = [g.id for g in models.Group.query.filter_by(
                 province_id=province_id, _deleted_at=None).all()]
@@ -266,7 +266,8 @@ class FarmerResource(ModelResource):
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        province_id = current_user.province_id
+        province_id = None
+        # province_id = current_user.province_id
         func = _check_user_province(self.manager, kwargs, is_province=False)
         if province_id and is_region_role():
             self.add_filter_province_id(kwargs, province_id, False)
@@ -290,7 +291,8 @@ class FarmerResource(ModelResource):
     @Route.GET('/deleted', schema=Instances(),
                response_schema=Instances())
     def get_farmers_deleted(self, **kwargs):
-        province_id = current_user.province_id
+        province_id = None
+        # province_id = current_user.province_id
         func = _check_user_province(self.manager, kwargs, is_delete=False,
                                     is_province=False)
         kwargs['where'] += \
@@ -381,13 +383,7 @@ class AssociateGroupResource(ModelResource):
         agroup_id = id
         report_year = year
         current_year = datetime.datetime.now().year
-        province_id = current_user.province_id
-        if province_id and is_region_role():
-            gs = [g.id for g in models.Group.query.filter_by(
-                province_id=province_id, _deleted_at=None,
-                associate_group_id=agroup_id).all()]
-        else:
-            gs = [g.id for g in models.Group.query.filter_by(
+        gs = [g.id for g in models.Group.query.filter_by(
                 _deleted_at=None, associate_group_id=agroup_id).all()]
         response = {
             'total_of_gr': len(gs),
@@ -437,10 +433,10 @@ class AssociateGroupResource(ModelResource):
             approved = True
         else:
             approved = False
-        province_id = current_user.province_id
-        if province_id and is_region_role():
+        associate_group_id = current_user.associate_group_id
+        if associate_group_id and is_region_role():
             gs = [g.id for g in models.Group.query.filter_by(
-                province_id=province_id, _deleted_at=None).all()]
+                associate_group_id=associate_group_id, _deleted_at=None).all()]
         else:
             gs = [g.id for g in models.Group.query.filter_by(
                 _deleted_at=None).all()]
@@ -449,19 +445,21 @@ class AssociateGroupResource(ModelResource):
             cs = models.Certificate.query.filter_by(
                 owner_group_id=g, _deleted_at=None).all()
             for cert in cs:
-                if not approved:
+                if not approved and cert.status != \
+                        c.CertificateReVerifyStatusType.fortuity:
                     sum += cert.group_area
-                elif cert.status == c.CertificateStatusType.approved:
+                elif cert.status == c.CertificateReVerifyStatusType.adding or \
+                        cert.status == c.CertificateReVerifyStatusType.keeping:
                     sum += cert.group_area
         return sum
 
     @Route.GET('/gender')
     def gender(self) -> fields.String():
         gender = int(request.args.get('type'))
-        province_id = current_user.province_id
-        if province_id and is_region_role():
+        associate_group_id = current_user.associate_group_id
+        if associate_group_id and is_region_role():
             gs = [g.id for g in models.Group.query.filter_by(
-                province_id=province_id, _deleted_at=None).all()]
+                associate_group_id=associate_group_id, _deleted_at=None).all()]
         else:
             gs = [g.id for g in models.Group.query.filter_by(
                 _deleted_at=None).all()]
@@ -528,9 +526,9 @@ class ProvinceResource(ModelResource):
 def init_resources(api):
     api.add_resource(RoleResource)
     api.add_resource(UserResource)
-    api.add_resource(CertResource)
-    api.add_resource(FarmerResource)
-    api.add_resource(GroupResource)
+    # api.add_resource(CertResource)
+    # api.add_resource(FarmerResource)
+    # api.add_resource(GroupResource)
     api.add_resource(AssociateGroupResource)
     api.add_resource(ProvinceResource)
     api.add_resource(DistrictResource)
