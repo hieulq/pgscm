@@ -27,6 +27,12 @@ def index():
         form.ward_id.choices = []
         form.district_id.choices = []
         form.province_id.choices = []
+        associate_group_id = current_user.associate_group_id
+        if associate_group_id and is_region_role():
+            form.associate_group_id.choices = [
+                (ag.id, ag.name) for ag in
+                models.AssociateGroup.query.filter_by(
+                    id=associate_group_id).all()]
         return render_template('group/index.html', form=form, dform=dform)
     else:
         province_id = current_user.province_id

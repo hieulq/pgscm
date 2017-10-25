@@ -39,9 +39,9 @@ def users():
         associate_group_id = current_user.associate_group_id
         if associate_group_id and is_region_role():
             form.associate_group_id.choices = [
-                (ag.associate_group_id, ag.name) for ag in
+                (ag.id, ag.name) for ag in
                 models.AssociateGroup.query.filter_by(
-                    associate_group_id=associate_group_id).all()]
+                    id=associate_group_id).all()]
         return render_template('admin/user.html', form=form, dform=dform)
     else:
         province_id = current_user.province_id

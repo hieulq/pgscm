@@ -197,9 +197,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 $('.select2-search__field').css('border', 'none');
                 """.format(multi_select2_class)
 
-            # TODO: check logic at there: has_associate_group_id
             if current_user.associate_group_id and is_region_role():
-                has_province_id = 1
                 has_associate_group_id = 1
             else:
                 has_associate_group_id = 0
@@ -246,7 +244,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                             var element_id = select2_elements[i].getAttribute('id');
                             if(element_id.startsWith('load_now')){{
                                 var resource = element_id.split('-')[1]
-                                if(resource == 'province'){{
+                                if(resource == 'associate_group'){{
                                     if(!{0}){{
                                         select2_ajax(i, h, resource);
                                     }}
@@ -887,7 +885,6 @@ def load_group_script():
                             count = data.length;
                             var total_area_approved = 0;
                             var total_area = 0;
-                            console.log(data);
                             for(var i in data){{
                                 if(data[i]['re_verify_status'] != {3}){{
                                     total_area += data[i]['group_area'];

@@ -59,7 +59,13 @@ class UserResource(ModelResource):
                response_schema=Instances())
     def instances(self, **kwargs):
         func = check_user_associate_group(self.manager,
-                                          kwargs, is_delete=False)
+                                          kwargs, is_delete=False,
+                                          is_agroup_id=False)
+        associate_group_id = current_user.associate_group_id
+        if is_region_role() and associate_group_id:
+            kwargs['where'] += \
+                (self.manager.filters['associate_group_id'][None].convert(
+                    associate_group_id),)
         return func(**kwargs)
 
 
@@ -326,10 +332,19 @@ class GroupResource(ModelResource):
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
+    def add_agroup_id_filter(self, kwargs):
+        associate_group_id = current_user.associate_group_id
+        if is_region_role() and associate_group_id:
+            kwargs['where'] += \
+                (self.manager.filters['associate_group_id'][None].convert(
+                    associate_group_id),)
+
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        func = check_user_associate_group(self.manager, kwargs)
+        func = check_user_associate_group(self.manager,
+                                          kwargs, is_agroup_id=False)
+        self.add_agroup_id_filter(kwargs)
         return func(**kwargs)
 
     @Route.GET('/select2', schema=Instances(),
@@ -337,6 +352,7 @@ class GroupResource(ModelResource):
     def select2_api(self, **kwargs):
         kwargs['where'] += \
             (self.manager.filters['_deleted_at'][None].convert(None),)
+        self.add_agroup_id_filter(kwargs)
         del kwargs['per_page']
         del kwargs['page']
         return self.manager.instances(**kwargs)
@@ -345,7 +361,8 @@ class GroupResource(ModelResource):
                response_schema=Instances())
     def get_groups_deleted(self, **kwargs):
         func = check_user_associate_group(self.manager, kwargs,
-                                          is_delete=False, is_agroup_id=True)
+                                          is_delete=False, is_agroup_id=False)
+        self.add_agroup_id_filter(kwargs)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         return func(**kwargs)
