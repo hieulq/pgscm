@@ -32,10 +32,10 @@ class User(sqla.Model, UserMixin):
     fullname = sqla.Column(sqla.String(64), unique=True, index=True)
     roles = sqla.relationship(Role, secondary=roles_users,
                               backref=sqla.backref('user', lazy='dynamic'))
-    province_id = sqla.Column(sqla.String(64), sqla.ForeignKey(
-        'province.province_id'), nullable=True)
-    province = sqla.relationship('Province', back_populates='users')
-
+    associate_group_id = sqla.Column(sqla.String(64), sqla.ForeignKey(
+        'associate_group.id'), nullable=True)
+    associate_group = sqla.relationship('AssociateGroup',
+                                        back_populates='users')
     active = sqla.Column(sqla.Boolean())
     password = sqla.Column(sqla.String(255))
     last_login_at = sqla.Column(sqla.DateTime())
@@ -63,6 +63,7 @@ class AssociateGroup(sqla.Model):
     province = sqla.relationship('Province', back_populates='associate_groups')
 
     groups = sqla.relationship('Group', back_populates='associate_group')
+    users = sqla.relationship('User', back_populates='associate_group')
 
     _deleted_at = sqla.Column(sqla.DateTime())
     _modify_info = sqla.Column(sqla.String(255))
@@ -202,6 +203,5 @@ class Province(sqla.Model):
     groups = sqla.relationship('Group', back_populates='province')
     associate_groups = sqla.relationship('AssociateGroup',
                                          back_populates='province')
-    users = sqla.relationship('User', back_populates='province')
     __table_args__ = (
         sqla.Index('province_index', 'name'),)

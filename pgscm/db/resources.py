@@ -14,19 +14,19 @@ import json
 from pgscm.db import models
 
 
-def _check_user_province(manager, kwargs, is_and=False, is_delete=True,
-                         is_province=True, is_get_all=False):
+def check_user_associate_group(manager, kwargs, is_and=False, is_delete=True,
+                         is_agroup_id=True, is_get_all=False):
     if is_get_all:
         func = manager.instances
     elif len(kwargs['where']) == 0 or is_and:
         func = manager.paginated_instances
     else:
         func = manager.paginated_instances_or
-    province_id = current_user.province_id
-    if is_region_role() and province_id and is_province:
+    associate_group_id = current_user.associate_group_id
+    if is_region_role() and associate_group_id and is_agroup_id:
         kwargs['where'] += \
-            (manager.filters['province_id'][None].convert(
-                province_id),)
+            (manager.filters['id'][None].convert(
+                associate_group_id),)
     if is_delete:
         kwargs['where'] += \
             (manager.filters['_deleted_at'][None].convert(None),)
@@ -50,16 +50,22 @@ class UserResource(ModelResource):
 
     class Schema:
         roles = fields.ToMany('role')
-        # roles = fields.List(fields.ToMany('role'))
-        province = fields.Inline('province')
-        province_id = fields.String()
+        associate_group = fields.Inline('associate_group')
+        associate_group_id = fields.String()
         last_login_at = fields.DateTimeString()
         current_login_at = fields.DateTimeString()
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        func = _check_user_province(self.manager, kwargs, is_delete=False)
+        func = check_user_associate_group(self.manager,
+                                          kwargs, is_delete=False,
+                                          is_agroup_id=False)
+        associate_group_id = current_user.associate_group_id
+        if is_region_role() and associate_group_id:
+            kwargs['where'] += \
+                (self.manager.filters['associate_group_id'][None].convert(
+                    associate_group_id),)
         return func(**kwargs)
 
 
@@ -82,14 +88,14 @@ class CertResource(ModelResource):
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
-    def _filter_group_farmer_on_province(self, kwargs, is_cert_for_group=False,
-                                         is_cert_for_farmer=False):
-        province_id = current_user.province_id
-        if province_id and is_region_role():
+    def _filter_group_farmer_on_associate_group(self, kwargs,
+                    is_cert_for_group=False, is_cert_for_farmer=False):
+        associate_group_id = current_user.associate_group_id
+        if associate_group_id and is_region_role():
             gs = [g.id for g in models.Group.query.filter_by(
-                province_id=province_id, _deleted_at=None).all()]
+                associate_group_id=associate_group_id, _deleted_at=None).all()]
             fs = [f.id for f in models.Farmer.query.join(models.Group).filter(
-                models.Group.province_id == province_id,
+                models.Group.associate_group_id == associate_group_id,
                 models.Group._deleted_at == None,
                 models.Farmer._deleted_at == None).all()]
             group_filter_exist = False
@@ -150,15 +156,15 @@ class CertResource(ModelResource):
              convert({'$gte': today}))
         kwargs['filter_and_cols'] = ['certificate_expiry_date']
         kwargs['filter_or_cols'] = ['owner_group_id', 'owner_farmer_id']
-        func = _check_user_province(self.manager, kwargs, is_province=False,
-                                    is_delete=True)
-        self._filter_group_farmer_on_province(kwargs)
+        func = check_user_associate_group(self.manager, kwargs,
+                                          is_agroup_id=False, is_delete=True)
+        self._filter_group_farmer_on_associate_group(kwargs)
         return func(**kwargs)
 
     @Route.GET('/total', rel="", schema=Instances(),
                response_schema=Instances())
     def total(self, **kwargs):
-        func = _check_user_province(self.manager, kwargs, is_delete=True,
+        func = check_user_associate_group(self.manager, kwargs, is_delete=True,
                                     is_get_all=True)
         del kwargs['per_page']
         del kwargs['page']
@@ -167,14 +173,15 @@ class CertResource(ModelResource):
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        self._filter_group_farmer_on_province(kwargs)
+        self._filter_group_farmer_on_associate_group(kwargs)
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
         return self.manager.paginated_instances_or(**kwargs)
 
     @Route.GET('/groups', schema=Instances(),
                response_schema=Instances())
     def get_cer_for_groups(self, **kwargs):
-        self._filter_group_farmer_on_province(kwargs, is_cert_for_group=True)
+        self._filter_group_farmer_on_associate_group(kwargs,
+                                                     is_cert_for_group=True)
         today = datetime.datetime.today().strftime('%Y-%m-%d')
         kwargs['where'] += \
             (self.manager.filters['certificate_expiry_date']['gte'].
@@ -191,7 +198,8 @@ class CertResource(ModelResource):
     @Route.GET('/farmers', schema=Instances(),
                response_schema=Instances())
     def get_cer_for_farmers(self, **kwargs):
-        self._filter_group_farmer_on_province(kwargs, is_cert_for_farmer=True)
+        self._filter_group_farmer_on_associate_group(kwargs,
+                                                     is_cert_for_farmer=True)
         today = datetime.datetime.today().strftime('%Y-%m-%d')
         kwargs['where'] += \
             (self.manager.filters['certificate_expiry_date']['gte'].
@@ -208,7 +216,8 @@ class CertResource(ModelResource):
     @Route.GET('/groups/deleted', schema=Instances(),
                response_schema=Instances())
     def get_cer_for_groups_deleted(self, **kwargs):
-        self._filter_group_farmer_on_province(kwargs, is_cert_for_group=True)
+        self._filter_group_farmer_on_associate_group(kwargs,
+                                                     is_cert_for_group=True)
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
         kwargs['filter_and_cols'] = ['owner_group_id']
         kwargs['where'] += \
@@ -220,7 +229,8 @@ class CertResource(ModelResource):
     @Route.GET('/farmers/deleted', schema=Instances(),
                response_schema=Instances())
     def get_cer_for_farmers_deleted(self, **kwargs):
-        self._filter_group_farmer_on_province(kwargs, is_cert_for_farmer=True)
+        self._filter_group_farmer_on_associate_group(kwargs,
+                                                     is_cert_for_farmer=True)
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
         kwargs['filter_and_cols'] = ['owner_farmer_id']
         kwargs['where'] += \
@@ -242,13 +252,14 @@ class FarmerResource(ModelResource):
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
-    def add_filter_province_id(self, kwargs, province_id, is_get_all=False):
+    def add_filter_associate_group_id(self, kwargs,
+                                      associate_group_id, is_get_all=False):
         if is_get_all:
             gs = [g.id for g in models.Group.query.filter_by(
-                province_id=province_id).all()]
+                associate_group_id=associate_group_id).all()]
         else:
             gs = [g.id for g in models.Group.query.filter_by(
-                province_id=province_id, _deleted_at=None).all()]
+                associate_group_id=associate_group_id, _deleted_at=None).all()]
         for cond in kwargs['where']:
             if cond.attribute == 'group_id' and isinstance(
                     cond.filter, filters.InFilter):
@@ -266,13 +277,15 @@ class FarmerResource(ModelResource):
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        province_id = current_user.province_id
-        func = _check_user_province(self.manager, kwargs, is_province=False)
-        if province_id and is_region_role():
-            self.add_filter_province_id(kwargs, province_id, False)
+        associate_group_id = current_user.associate_group_id
+        func = check_user_associate_group(self.manager,
+                                          kwargs, is_agroup_id=False)
+        if associate_group_id and is_region_role():
+            self.add_filter_associate_group_id(kwargs,
+                                               associate_group_id, False)
         if len(kwargs['where']) == 0:
             gs = [g.id for g in models.Group.query.filter_by(
-                province_id=province_id, _deleted_at=None).all()]
+                associate_group_id=associate_group_id, _deleted_at=None).all()]
             kwargs['where'] += \
                 (self.manager.filters['group_id']['in'].convert(
                     {'$in': gs}),)
@@ -290,13 +303,14 @@ class FarmerResource(ModelResource):
     @Route.GET('/deleted', schema=Instances(),
                response_schema=Instances())
     def get_farmers_deleted(self, **kwargs):
-        province_id = current_user.province_id
-        func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_province=False)
+        associate_group_id = current_user.associate_group_id
+        func = check_user_associate_group(self.manager, kwargs,
+                                          is_delete=False, is_agroup_id=False)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
-        if province_id and is_region_role():
-            self.add_filter_province_id(kwargs, province_id, True)
+        if associate_group_id and is_region_role():
+            self.add_filter_associate_group_id(kwargs,
+                                               associate_group_id, True)
         return func(**kwargs)
 
 
@@ -318,10 +332,19 @@ class GroupResource(ModelResource):
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
+    def add_agroup_id_filter(self, kwargs):
+        associate_group_id = current_user.associate_group_id
+        if is_region_role() and associate_group_id:
+            kwargs['where'] += \
+                (self.manager.filters['associate_group_id'][None].convert(
+                    associate_group_id),)
+
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        func = _check_user_province(self.manager, kwargs)
+        func = check_user_associate_group(self.manager,
+                                          kwargs, is_agroup_id=False)
+        self.add_agroup_id_filter(kwargs)
         return func(**kwargs)
 
     @Route.GET('/select2', schema=Instances(),
@@ -329,6 +352,7 @@ class GroupResource(ModelResource):
     def select2_api(self, **kwargs):
         kwargs['where'] += \
             (self.manager.filters['_deleted_at'][None].convert(None),)
+        self.add_agroup_id_filter(kwargs)
         del kwargs['per_page']
         del kwargs['page']
         return self.manager.instances(**kwargs)
@@ -336,8 +360,9 @@ class GroupResource(ModelResource):
     @Route.GET('/deleted', schema=Instances(),
                response_schema=Instances())
     def get_groups_deleted(self, **kwargs):
-        func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_province=True)
+        func = check_user_associate_group(self.manager, kwargs,
+                                          is_delete=False, is_agroup_id=False)
+        self.add_agroup_id_filter(kwargs)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         return func(**kwargs)
@@ -372,7 +397,7 @@ class AssociateGroupResource(ModelResource):
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        func = _check_user_province(self.manager, kwargs)
+        func = check_user_associate_group(self.manager, kwargs)
         return func(**kwargs)
 
     @Route.GET('/agroup_summary')
@@ -381,13 +406,7 @@ class AssociateGroupResource(ModelResource):
         agroup_id = id
         report_year = year
         current_year = datetime.datetime.now().year
-        province_id = current_user.province_id
-        if province_id and is_region_role():
-            gs = [g.id for g in models.Group.query.filter_by(
-                province_id=province_id, _deleted_at=None,
-                associate_group_id=agroup_id).all()]
-        else:
-            gs = [g.id for g in models.Group.query.filter_by(
+        gs = [g.id for g in models.Group.query.filter_by(
                 _deleted_at=None, associate_group_id=agroup_id).all()]
         response = {
             'total_of_gr': len(gs),
@@ -414,10 +433,13 @@ class AssociateGroupResource(ModelResource):
                     .all()
             response['total_of_cert'] += len(cs)
             for cert in cs:
-                # if cert.status != c.CertificateStatusType.in_conversion:
-                #     response['total_of_area'] += cert.group_area
-                response['total_of_area'] += cert.group_area
-                if cert.status == c.CertificateStatusType.approved:
+                if cert.re_verify_status != \
+                        c.CertificateReVerifyStatusType.fortuity:
+                    response['total_of_area'] += cert.group_area
+                if cert.re_verify_status == \
+                        c.CertificateReVerifyStatusType.adding or \
+                        cert.re_verify_status == \
+                        c.CertificateReVerifyStatusType.keeping:
                     response['total_of_approved_area'] += cert.group_area
 
             fs = models.Farmer.query.filter_by(
@@ -437,10 +459,10 @@ class AssociateGroupResource(ModelResource):
             approved = True
         else:
             approved = False
-        province_id = current_user.province_id
-        if province_id and is_region_role():
+        associate_group_id = current_user.associate_group_id
+        if associate_group_id and is_region_role():
             gs = [g.id for g in models.Group.query.filter_by(
-                province_id=province_id, _deleted_at=None).all()]
+                associate_group_id=associate_group_id, _deleted_at=None).all()]
         else:
             gs = [g.id for g in models.Group.query.filter_by(
                 _deleted_at=None).all()]
@@ -449,19 +471,23 @@ class AssociateGroupResource(ModelResource):
             cs = models.Certificate.query.filter_by(
                 owner_group_id=g, _deleted_at=None).all()
             for cert in cs:
-                if not approved:
+                if not approved and cert.re_verify_status != \
+                        c.CertificateReVerifyStatusType.fortuity:
                     sum += cert.group_area
-                elif cert.status == c.CertificateStatusType.approved:
+                elif cert.re_verify_status == \
+                        c.CertificateReVerifyStatusType.adding or \
+                        cert.re_verify_status == \
+                        c.CertificateReVerifyStatusType.keeping:
                     sum += cert.group_area
         return sum
 
     @Route.GET('/gender')
     def gender(self) -> fields.String():
         gender = int(request.args.get('type'))
-        province_id = current_user.province_id
-        if province_id and is_region_role():
+        associate_group_id = current_user.associate_group_id
+        if associate_group_id and is_region_role():
             gs = [g.id for g in models.Group.query.filter_by(
-                province_id=province_id, _deleted_at=None).all()]
+                associate_group_id=associate_group_id, _deleted_at=None).all()]
         else:
             gs = [g.id for g in models.Group.query.filter_by(
                 _deleted_at=None).all()]
@@ -484,8 +510,8 @@ class AssociateGroupResource(ModelResource):
     @Route.GET('/deleted', schema=Instances(),
                response_schema=Instances())
     def get_agroups_deleted(self, **kwargs):
-        func = _check_user_province(self.manager, kwargs, is_delete=False,
-                                    is_province=True)
+        func = check_user_associate_group(self.manager, kwargs,
+                                          is_delete=False, is_agroup_id=True)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         return func(**kwargs)

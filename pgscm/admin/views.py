@@ -35,14 +35,13 @@ def users():
                               models.Role.name.asc()).all()]
 
     if current_app.config['AJAX_CALL_ENABLED']:
-        form.province_id.choices = []
-        form.district_id.choices = []
-        form.ward_id.choices = []
-        province_id = current_user.province_id
-        if province_id and is_region_role():
-            form.province_id.choices = [
-                (p.province_id, p.type + " " + p.name) for p in
-                models.Province.query.filter_by(province_id=province_id).all()]
+        form.associate_group_id.choices = []
+        associate_group_id = current_user.associate_group_id
+        if associate_group_id and is_region_role():
+            form.associate_group_id.choices = [
+                (ag.id, ag.name) for ag in
+                models.AssociateGroup.query.filter_by(
+                    id=associate_group_id).all()]
         return render_template('admin/user.html', form=form, dform=dform)
     else:
         province_id = current_user.province_id
@@ -182,18 +181,18 @@ def add_user():
     form = UserForm()
     form.roles.choices = [(r.name, r.description) for r in
                 models.Role.query.order_by(models.Role.name.asc()).all()]
-    form.province_id.choices = [(form.province_id.data,
-                                 form.province_id.label.text)]
+    form.associate_group_id.choices = [(form.associate_group_id.data,
+                                 form.associate_group_id.label.text)]
     setattr(form.password, 'validators', [data_required, match_pass])
     setattr(form.confirm, 'validators', [data_required])
     form.id.data = str(uuid.uuid4())
     if form.validate_on_submit():
         if not user_datastore.find_user(email=form.email.data):
-            province = models.Province.query.filter_by(
-                province_id=form.province_id.data).one()
+            associate_group = models.AssociateGroup.query.filter_by(
+                id=form.associate_group_id.data).one()
             user_datastore.create_user(
                 id=form.id.data, email=form.email.data,
-                fullname=form.fullname.data, province=province,
+                fullname=form.fullname.data, associate_group=associate_group,
                 password=security_utils.hash_password(form.password.data))
             sqla.session.commit()
             for role in form.roles.data:
@@ -227,8 +226,8 @@ def edit_user():
     form.roles.choices = [(r.name, r.description) for r in
                           models.Role.query.order_by(
                               models.Role.name.asc()).all()]
-    form.province_id.choices = [(form.province_id.data,
-                                 form.province_id.label.text)]
+    form.associate_group_id.choices = [(form.associate_group_id.data,
+                                 form.associate_group_id.label.text)]
     setattr(form.password, 'validators', [match_pass])
     setattr(form.confirm, 'validators', [])
     if form.validate_on_submit():
@@ -250,9 +249,9 @@ def edit_user():
         else:
             edit_user.email = form.email.data
             edit_user.fullname = form.fullname.data
-            if form.province_id.data != edit_user.province_id:
-                edit_user.province = models.Province.query \
-                    .filter_by(province_id=form.province_id.data) \
+            if form.associate_group_id.data != edit_user.associate_group_id:
+                edit_user.associate_group = models.AssociateGroup.query \
+                    .filter_by(id=form.associate_group_id.data) \
                     .one()
             for new_role in form.roles.data:
                 role_is_added = False
