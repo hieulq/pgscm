@@ -219,8 +219,7 @@ class PgsPotionManager(SQLAlchemyManager):
 
     def instances_or(self, where=None, sort=None, filter_or_cols=[],
                      filter_and_cols=[]):
-        filter_and_cols += ['id', '_deleted_at',
-                            'group_id', 'associate_group_id']
+        filter_and_cols += ['id', '_deleted_at']
         query = self._query()
 
         if query is None:

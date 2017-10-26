@@ -328,6 +328,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
             ajax_config += """
                     var sort_params = {{}}
                     sort_params[sort_column_name] = direction; 
+                    var text_search = false;
                     if (data.search.value) {{
                         for (idx in data.columns) {{
                             if ((data.columns[idx].data == "group_area" ||
@@ -341,9 +342,12 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                 data.columns[idx].data != "group_area" &&
                                 data.columns[idx].data != "member_count" &&
                                 data.columns[idx].data != "certificate_start_date" &&
-                                data.columns[idx].data != "certificate_expiry_date") {{
-                                where_params[data.columns[idx].data] = {{}};
-                                where_params[data.columns[idx].data]["$contains"]=data.search.value;
+                                data.columns[idx].data != "certificate_expiry_date" &&
+                                data.columns[idx].data != "last_login_at" &&
+                                data.columns[idx].data != "current_login_at") {{
+                                    where_params[data.columns[idx].data] = {{}};
+                                    where_params[data.columns[idx].data]["$contains"]=data.search.value;
+                                    text_search = data.search.value.trim();
                             }}
                         }}
                     }};
@@ -351,7 +355,8 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                         per_page: data.length,
                         page: data.start/data.length + 1,
                         where: JSON.stringify(where_params),
-                        sort: JSON.stringify(sort_params)
+                        sort: JSON.stringify(sort_params),
+                        text_search: text_search
                         }}, 
                         function(res, status, req) {{
                             callback({{
