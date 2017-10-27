@@ -182,7 +182,7 @@
                     <i class="fa fa-home"></i> <span>{{ _('Associated Group') }}</span>
                 </a>
             </li>
-            {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN, g.c.N_MOD, g.c.R_MOD]) %}
+{#            {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN, g.c.N_MOD, g.c.R_MOD]) %}#}
             <li class="alarm {{ is_active_in_tree(request, 'report.alarms', False) }}">
                 <a href="{{ lurl_for('report.alarms') }}">
                     <i class="fa fa-warning"></i>
@@ -192,7 +192,7 @@
                     </span>
                 </a>
             </li>
-            {% endif %}
+{#            {% endif %}#}
             {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN]) %}
                 <li class="header">{{ _('DMZ') }}</li>
                 <li class="treeview {{ is_active_in_tree(request, 'admin', True) }}">
@@ -317,7 +317,7 @@
             header=0,
             body=_("Total approved area"),
             iconclass="fa fa-check-circle-o",
-            footerlink="certificate.index",
+            footerlink="certificate.groups",
             is_header=False,
             unit="m2"
           ) }}
@@ -328,7 +328,7 @@
             header=0,
             body=_("Total requested area"),
             iconclass="fa fa-question-circle",
-            footerlink="certificate.index",
+            footerlink="certificate.groups",
             is_header=False,
             unit="m2"
           ) }}

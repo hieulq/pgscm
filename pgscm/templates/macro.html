@@ -43,8 +43,10 @@
                                                       aria-expanded="true">{{ _('Summary') }}</a></li>
                                 <li class=""><a href="#tab_history" data-toggle="tab"
                                                 aria-expanded="false">{{ _('History') }}</a></li>
+                                {% if cert_tab == 'group' %}
                                 <li class=""><a href="#tab_cert" data-toggle="tab"
                                                 aria-expanded="false">{{ _('Certificate') }}</a></li>
+                                {% endif %}
                                 <li class="pull-left header"><i class="fa fa-th"></i> {{ _('Detail info') }}</li>
                             </ul>
                             <div class="tab-content" >
@@ -91,6 +93,7 @@
                                 </div>
                                 <!-- /.tab-pane -->
                                 <!-- /.tab-pane -->
+                            {% if cert_tab == 'group' %}
                                 <div class="tab-pane" id="tab_cert">
                                     <div class="table-responsive">
                                         <table class="table table-hover table-bordered {{ g.c.TAB_CERTIFICATE_ID }}">
@@ -114,6 +117,7 @@
                                     <p id="no_cert_data" class="hidden" style="text-align: center;">{{ _('No data') }}</p>
                                 </div>
                                 <!-- /.tab-pane -->
+                            {% endif %}
                             </div>
                             <!-- /.tab-content -->
                         </div>
