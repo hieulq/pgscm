@@ -58,14 +58,26 @@ class UserResource(ModelResource):
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
-        func = check_user_associate_group(self.manager,
-                                          kwargs, is_delete=False,
-                                          is_agroup_id=False)
         associate_group_id = current_user.associate_group_id
         if is_region_role() and associate_group_id:
             kwargs['where'] += \
                 (self.manager.filters['associate_group_id'][None].convert(
                     associate_group_id),)
+            kwargs['filter_and_cols'] = ['associate_group_id']
+        else:
+            text_search = request.args.get('text_search')
+            if text_search and text_search != 'false':
+                agroups_id = [
+                    ag.id for ag in models.AssociateGroup.query.filter(
+                        models.AssociateGroup.name.contains(
+                            text_search)).all()]
+                kwargs['where'] += \
+                    (self.manager.filters['associate_group_id']['in'].convert(
+                        {'$in': agroups_id}),)
+                kwargs['filter_and_cols'] = ['associate_group_id']
+        func = check_user_associate_group(self.manager,
+                                          kwargs, is_delete=False,
+                                          is_agroup_id=False)
         return func(**kwargs)
 
 
@@ -92,6 +104,7 @@ class CertResource(ModelResource):
                     is_cert_for_group=False, is_cert_for_farmer=False):
         associate_group_id = current_user.associate_group_id
         if associate_group_id and is_region_role():
+            kwargs['filter_and_cols'] = ['associate_group_id']
             gs = [g.id for g in models.Group.query.filter_by(
                 associate_group_id=associate_group_id, _deleted_at=None).all()]
             fs = [f.id for f in models.Farmer.query.join(models.Group).filter(
@@ -252,38 +265,43 @@ class FarmerResource(ModelResource):
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
-    def add_filter_associate_group_id(self, kwargs,
-                                      associate_group_id, is_get_all=False):
-        if is_get_all:
+    def add_filter_associate_group_id(self, kwargs):
+        associate_group_id = current_user.associate_group_id
+        if associate_group_id and is_region_role():
             gs = [g.id for g in models.Group.query.filter_by(
-                associate_group_id=associate_group_id).all()]
-        else:
-            gs = [g.id for g in models.Group.query.filter_by(
-                associate_group_id=associate_group_id, _deleted_at=None).all()]
-        for cond in kwargs['where']:
-            if cond.attribute == 'group_id' and isinstance(
-                    cond.filter, filters.InFilter):
-                value = []
-                for val in cond.value:
-                    if val in gs:
-                        value.append(val)
-                cond.value = value
+                    associate_group_id=associate_group_id,
+                    _deleted_at=None).all()]
+            for cond in kwargs['where']:
+                if cond.attribute == 'group_id' and isinstance(
+                        cond.filter, filters.InFilter):
+                    value = []
+                    for val in cond.value:
+                        if val in gs:
+                            value.append(val)
+                    cond.value = value
 
-        kwargs['where'] += \
-            (self.manager.filters['group_id']['in'].convert(
-                        {'$in': gs}),)
+            kwargs['where'] += \
+                (self.manager.filters['group_id']['in'].convert(
+                            {'$in': gs}),)
+            kwargs['filter_and_cols'] = ['group_id']
+        else:
+            text_search = request.args.get('text_search')
+            if text_search and text_search != 'false':
+                groups_id = [g.id for g in models.Group.query.filter(
+                    models.Group.name.contains(text_search)).all()]
+                kwargs['where'] += \
+                    (self.manager.filters['group_id']['in'].convert(
+                        {'$in': groups_id}),)
         return kwargs
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
         associate_group_id = current_user.associate_group_id
+        self.add_filter_associate_group_id(kwargs)
         func = check_user_associate_group(self.manager,
                                           kwargs, is_agroup_id=False)
-        if associate_group_id and is_region_role():
-            self.add_filter_associate_group_id(kwargs,
-                                               associate_group_id, False)
-        if len(kwargs['where']) == 0:
+        if len(kwargs['where']) == 0 and associate_group_id:
             gs = [g.id for g in models.Group.query.filter_by(
                 associate_group_id=associate_group_id, _deleted_at=None).all()]
             kwargs['where'] += \
@@ -303,14 +321,11 @@ class FarmerResource(ModelResource):
     @Route.GET('/deleted', schema=Instances(),
                response_schema=Instances())
     def get_farmers_deleted(self, **kwargs):
-        associate_group_id = current_user.associate_group_id
+        self.add_filter_associate_group_id(kwargs)
         func = check_user_associate_group(self.manager, kwargs,
                                           is_delete=False, is_agroup_id=False)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
-        if associate_group_id and is_region_role():
-            self.add_filter_associate_group_id(kwargs,
-                                               associate_group_id, True)
         return func(**kwargs)
 
 
@@ -338,13 +353,39 @@ class GroupResource(ModelResource):
             kwargs['where'] += \
                 (self.manager.filters['associate_group_id'][None].convert(
                     associate_group_id),)
+            kwargs['filter_and_cols'] = ['associate_group_id']
+        text_search = request.args.get('text_search')
+        if text_search and text_search != 'false':
+            provinces_id = [
+                p.province_id for p in models.Province.query.filter(
+                    models.Province.name.contains(text_search)).all()]
+            kwargs['where'] += \
+                (self.manager.filters['province_id']['in'].convert(
+                    {'$in': provinces_id}),)
+            districts_id = [
+                d.district_id for d in models.District.query.filter(
+                    models.District.name.contains(text_search)).all()]
+            kwargs['where'] += \
+                (self.manager.filters['district_id']['in'].convert(
+                    {'$in': districts_id}),)
+            wards_id = [p.ward_id for p in models.Ward.query.filter(
+                models.Ward.name.contains(text_search)).all()]
+            kwargs['where'] += \
+                (self.manager.filters['ward_id']['in'].convert(
+                    {'$in': wards_id}),)
+            if not is_region_role() or not associate_group_id:
+                agroups_id = [p.id for p in models.AssociateGroup.query.filter(
+                    models.AssociateGroup.name.contains(text_search)).all()]
+                kwargs['where'] += \
+                    (self.manager.filters['associate_group_id']['in'].convert(
+                        {'$in': agroups_id}),)
 
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
+        self.add_agroup_id_filter(kwargs)
         func = check_user_associate_group(self.manager,
                                           kwargs, is_agroup_id=False)
-        self.add_agroup_id_filter(kwargs)
         return func(**kwargs)
 
     @Route.GET('/select2', schema=Instances(),
@@ -352,7 +393,11 @@ class GroupResource(ModelResource):
     def select2_api(self, **kwargs):
         kwargs['where'] += \
             (self.manager.filters['_deleted_at'][None].convert(None),)
-        self.add_agroup_id_filter(kwargs)
+        associate_group_id = current_user.associate_group_id
+        if is_region_role() and associate_group_id:
+            kwargs['where'] += \
+                (self.manager.filters['associate_group_id'][None].convert(
+                    associate_group_id),)
         del kwargs['per_page']
         del kwargs['page']
         return self.manager.instances(**kwargs)
@@ -360,9 +405,9 @@ class GroupResource(ModelResource):
     @Route.GET('/deleted', schema=Instances(),
                response_schema=Instances())
     def get_groups_deleted(self, **kwargs):
+        self.add_agroup_id_filter(kwargs)
         func = check_user_associate_group(self.manager, kwargs,
                                           is_delete=False, is_agroup_id=False)
-        self.add_agroup_id_filter(kwargs)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         return func(**kwargs)
@@ -394,9 +439,20 @@ class AssociateGroupResource(ModelResource):
         _deleted_at = fields.DateString()
         _deleted_at._schema = c.DATETIME_SCHEMA
 
+    def add_search_in_province(self, kwargs):
+        text_search = request.args.get('text_search')
+        if text_search and text_search != 'false':
+            provinces_id = [
+                p.province_id for p in models.Province.query.filter(
+                    models.Province.name.contains(text_search)).all()]
+            kwargs['where'] += \
+                (self.manager.filters['province_id']['in'].convert(
+                    {'$in': provinces_id}),)
+
     @Route.GET('', rel="instances", schema=Instances(),
                response_schema=Instances())
     def instances(self, **kwargs):
+        self.add_search_in_province(kwargs)
         func = check_user_associate_group(self.manager, kwargs)
         return func(**kwargs)
 
@@ -512,6 +568,7 @@ class AssociateGroupResource(ModelResource):
     def get_agroups_deleted(self, **kwargs):
         func = check_user_associate_group(self.manager, kwargs,
                                           is_delete=False, is_agroup_id=True)
+        self.add_search_in_province(kwargs)
         kwargs['where'] += \
             (self.manager.filters['_deleted_at']['ne'].convert({'$ne': None}),)
         return func(**kwargs)
