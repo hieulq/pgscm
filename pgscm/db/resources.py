@@ -160,18 +160,21 @@ class CertResource(ModelResource):
                response_schema=Instances())
     def nearly_expired(self, **kwargs):
         today = datetime.datetime.today().strftime('%Y-%m-%d')
-        day = (datetime.datetime.today() + datetime.timedelta(days=60)) \
+        day = (datetime.datetime.today() + datetime.timedelta(days=45)) \
             .strftime('%Y-%m-%d')
         kwargs['where'] += \
             (self.manager.filters['certificate_expiry_date']['lte'].
              convert({'$lte': day}),
              self.manager.filters['certificate_expiry_date']['gte'].
              convert({'$gte': today}))
-        kwargs['filter_and_cols'] = ['certificate_expiry_date']
+        self._filter_group_farmer_on_associate_group(kwargs)
+        if 'filter_and_cols' in kwargs:
+            kwargs['filter_and_cols'] += ['certificate_expiry_date']
+        else:
+            kwargs['filter_and_cols'] = ['certificate_expiry_date']
         kwargs['filter_or_cols'] = ['owner_group_id', 'owner_farmer_id']
         func = check_user_associate_group(self.manager, kwargs,
                                           is_agroup_id=False, is_delete=True)
-        self._filter_group_farmer_on_associate_group(kwargs)
         return func(**kwargs)
 
     @Route.GET('/total', rel="", schema=Instances(),

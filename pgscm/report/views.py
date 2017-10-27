@@ -19,7 +19,7 @@ crud_role = c.ADMIN_MOD_ROLE
 
 @report.route('/vi/bao-cao/canh-bao', endpoint='alarms_vi')
 @report.route('/en/report/alarms', endpoint='alarms_en')
-@roles_accepted(*c.ADMIN_MOD_ROLE)
+@roles_accepted(*c.ALL_ROLES)
 def alarms():
     form = CertificateForm()
     dform = DeleteForm()
