@@ -481,6 +481,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
             "paging": true,
             "pagingType": "full_numbers",
             "lengthChange": true,
+            "pageLength": 100,
             "searching": true,
             "ordering": true,
             "info": true,
