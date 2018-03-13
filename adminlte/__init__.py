@@ -481,6 +481,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
             "paging": true,
             "pagingType": "full_numbers",
             "lengthChange": true,
+            "pageLength": 100,
             "searching": true,
             "ordering": true,
             "info": true,
@@ -691,7 +692,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     var modal_add = $('#{11}');
                     modal_add.find('#load_now-farmer').parent().remove();
                 }} else if('{14}' == 'certificate/farmers'){{
-                var modal_edit = $('#{3}');
+                    var modal_edit = $('#{3}');
                     modal_edit.find('#load_now-group').parent().remove();
                     var modal_add = $('#{11}');
                     modal_add.find('#load_now-group').parent().remove();

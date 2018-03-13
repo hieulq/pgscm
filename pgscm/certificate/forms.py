@@ -26,7 +26,8 @@ class CertificateForm(FlaskForm):
         validators=[data_required],
         render_kw={"placeholder": __('Decision code')})
     certificate_expiry_date = DateField(
-        __('Certificate expiry date'), widget=Date(),
+        __('Certificate expiry date'), validators=(validators.Optional(),),
+        widget=Date(),
         render_kw={"placeholder": __('Certificate expiry date')})
     status = SelectField(
         __('Status'), validators=[data_required], coerce=int, widget=Select(),
