@@ -111,7 +111,7 @@ def farmers():
                                 form.owner_farmer_id.data:
                             edit_certificate.owner_farmer = models.Farmer \
                                 .query.filter_by(
-                                id=form.owner_farmer_id.data).one()
+                                    id=form.owner_farmer_id.data).one()
                         if edit_certificate.owner_group_id != \
                                 form.owner_group_id.data:
                             edit_certificate.owner_group = models.Group.query \
@@ -256,7 +256,7 @@ def groups():
                                 form.owner_farmer_id.data:
                             edit_certificate.owner_farmer = models.Farmer \
                                 .query.filter_by(
-                                id=form.owner_farmer_id.data).one()
+                                    id=form.owner_farmer_id.data).one()
                         if edit_certificate.owner_group_id != \
                                 form.owner_group_id.data:
                             edit_certificate.owner_group = models.Group.query \
@@ -343,37 +343,37 @@ def add_certificate():
     if form.validate_on_submit():
         start_date = form.certificate_start_date.data
         expiry_date = form.certificate_expiry_date.data
-        if start_date > expiry_date:
-            form.certificate_expiry_date.errors.append(
-                __('The expiry date must greater than start date'))
-            return jsonify(is_success=False,
-                           message=str(__('The expiry date must greater '
-                                          'than start date!')))
-        else:
-            owner_farmer = None
-            owner_group = None
-            if form.owner_farmer_id:
-                owner_farmer = models.Farmer.query \
-                    .filter_by(id=form.owner_farmer_id.data).one()
-            elif form.owner_group_id:
-                owner_group = models.Group.query \
-                    .filter_by(id=form.owner_group_id.data).one()
-            new_cert = models.Certificate(
-                id=form.id.data,
-                certificate_code=form.certificate_code.data,
-                group_area=form.group_area.data,
-                member_count=form.member_count.data,
-                certificate_start_date=start_date,
-                certificate_expiry_date=expiry_date,
-                gov_certificate_id=form.gov_certificate_id.data,
-                status=form.status.data,
-                re_verify_status=form.re_verify_status.data,
-                owner_farmer=owner_farmer, owner_group=owner_group,
-                _modify_info=form.modify_info.data)
-            sqla.session.add(new_cert)
-            sqla.session.commit()
-            return jsonify(is_success=True, message=str(
-                __('Add certificate success!')))
+        if expiry_date:
+            if start_date > expiry_date:
+                form.certificate_expiry_date.errors.append(
+                    __('The expiry date must greater than start date'))
+                return jsonify(is_success=False,
+                               message=str(__('The expiry date must greater '
+                                              'than start date!')))
+        owner_farmer = None
+        owner_group = None
+        if form.owner_farmer_id:
+            owner_farmer = models.Farmer.query \
+                .filter_by(id=form.owner_farmer_id.data).one()
+        elif form.owner_group_id:
+            owner_group = models.Group.query \
+                .filter_by(id=form.owner_group_id.data).one()
+        new_cert = models.Certificate(
+            id=form.id.data,
+            certificate_code=form.certificate_code.data,
+            group_area=form.group_area.data,
+            member_count=form.member_count.data,
+            certificate_start_date=start_date,
+            certificate_expiry_date=expiry_date,
+            gov_certificate_id=form.gov_certificate_id.data,
+            status=form.status.data,
+            re_verify_status=form.re_verify_status.data,
+            owner_farmer=owner_farmer, owner_group=owner_group,
+            _modify_info=form.modify_info.data)
+        sqla.session.add(new_cert)
+        sqla.session.commit()
+        return jsonify(is_success=True, message=str(
+            __('Add certificate success!')))
     else:
         return jsonify(is_success=False,
                        message=str(__('The form is not validate!')))
@@ -390,42 +390,42 @@ def edit_certificate():
     if form.validate_on_submit():
         start_date = form.certificate_start_date.data
         expiry_date = form.certificate_expiry_date.data
-        if start_date > expiry_date:
-            form.certificate_expiry_date.errors.append(
-                __('The expiry date must greater than start date'))
-            return jsonify(is_success=False,
-                           message=str(__('The expiry date must greater '
-                                          'than start date!')))
-        else:
-            edit_certificate = sqla.session \
-                .query(models.Certificate) \
-                .filter_by(id=form.id.data).one()
-            edit_certificate.certificate_code = form \
-                .certificate_code.data
-            edit_certificate.group_area = form.group_area.data
-            edit_certificate.member_count = form.member_count.data
-            edit_certificate.certificate_start_date = start_date
-            edit_certificate.certificate_expiry_date = expiry_date
-            edit_certificate.gov_certificate_id = form \
-                .gov_certificate_id.data
-            edit_certificate.status = form.status.data
-            edit_certificate.re_verify_status = form \
-                .re_verify_status.data
-            if form.modify_info.data:
-                edit_certificate._modify_info = form.modify_info.data
-            if form.owner_farmer_id:
-                if edit_certificate.owner_farmer_id != \
-                        form.owner_farmer_id.data:
-                    edit_certificate.owner_farmer = models.Farmer \
-                        .query.filter_by(
+        if expiry_date:
+            if start_date > expiry_date:
+                form.certificate_expiry_date.errors.append(
+                    __('The expiry date must greater than start date'))
+                return jsonify(is_success=False,
+                               message=str(__('The expiry date must greater '
+                                              'than start date!')))
+        edit_certificate = sqla.session \
+            .query(models.Certificate) \
+            .filter_by(id=form.id.data).one()
+        edit_certificate.certificate_code = form \
+            .certificate_code.data
+        edit_certificate.group_area = form.group_area.data
+        edit_certificate.member_count = form.member_count.data
+        edit_certificate.certificate_start_date = start_date
+        edit_certificate.certificate_expiry_date = expiry_date
+        edit_certificate.gov_certificate_id = form \
+            .gov_certificate_id.data
+        edit_certificate.status = form.status.data
+        edit_certificate.re_verify_status = form \
+            .re_verify_status.data
+        if form.modify_info.data:
+            edit_certificate._modify_info = form.modify_info.data
+        if form.owner_farmer_id:
+            if edit_certificate.owner_farmer_id != \
+                    form.owner_farmer_id.data:
+                edit_certificate.owner_farmer = models.Farmer \
+                    .query.filter_by(
                         id=form.owner_farmer_id.data).one()
-            elif form.owner_group_id:
-                if edit_certificate.owner_group_id != \
-                        form.owner_group_id.data:
-                    edit_certificate.owner_group = models.Group.query \
-                        .filter_by(id=form.owner_group_id.data).one()
-            return jsonify(is_success=True, message=str(
-                __('Edit certificate success!')))
+        elif form.owner_group_id:
+            if edit_certificate.owner_group_id != \
+                    form.owner_group_id.data:
+                edit_certificate.owner_group = models.Group.query \
+                    .filter_by(id=form.owner_group_id.data).one()
+        return jsonify(is_success=True, message=str(
+            __('Edit certificate success!')))
     else:
         return jsonify(is_success=False,
                        message=str(__('The form is not validate!')))
