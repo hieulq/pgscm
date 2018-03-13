@@ -198,13 +198,14 @@ class CertResource(ModelResource):
     def get_cer_for_groups(self, **kwargs):
         self._filter_group_farmer_on_associate_group(kwargs,
                                                      is_cert_for_group=True)
-        # today = datetime.datetime.today().strftime('%Y-%m-%d')
-        # kwargs['where'] += \
-        #     (self.manager.filters['certificate_expiry_date']['gte'].
-        #      convert({'$gte': today}),
-        #      self.manager.filters['certificate_expiry_date']['eq']
-        #      .convert({'$eq': None}),
-        #      )
+        if len(kwargs['where']) == 1:
+            today = datetime.datetime.today().strftime('%Y-%m-%d')
+            kwargs['where'] += \
+                (self.manager.filters['certificate_expiry_date']['gte'].
+                 convert({'$gte': today}),
+                 self.manager.filters['certificate_expiry_date']['eq']
+                 .convert({'$eq': None}),
+                 )
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
         kwargs['filter_and_cols'] = ['owner_group_id']
         kwargs['where'] += (self.manager.filters['owner_group_id']['ne']
@@ -216,13 +217,14 @@ class CertResource(ModelResource):
     def get_cer_for_farmers(self, **kwargs):
         self._filter_group_farmer_on_associate_group(kwargs,
                                                      is_cert_for_farmer=True)
-        # today = datetime.datetime.today().strftime('%Y-%m-%d')
-        # kwargs['where'] += \
-        #     (self.manager.filters['certificate_expiry_date']['gte'].
-        #      convert({'$gte': today}),
-        #      self.manager.filters['certificate_expiry_date']['eq']
-        #      .convert({'$eq': None}),
-        #      )
+        if len(kwargs['where']) == 1:
+            today = datetime.datetime.today().strftime('%Y-%m-%d')
+            kwargs['where'] += \
+                (self.manager.filters['certificate_expiry_date']['gte'].
+                 convert({'$gte': today}),
+                 self.manager.filters['certificate_expiry_date']['eq']
+                 .convert({'$eq': None}),
+                 )
         kwargs['filter_or_cols'] = ['certificate_expiry_date']
         kwargs['filter_and_cols'] = ['owner_farmer_id']
         kwargs['where'] += (self.manager.filters['owner_farmer_id']['ne']
