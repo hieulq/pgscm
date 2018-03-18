@@ -9,7 +9,11 @@
                     <button type="button" class="close" data-dismiss="modal"
                             aria-label="Close">
                         <span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title">{{ title }}</h4>
+                    <h4 class="modal-title">{{ title }}:
+                        {% if id == g.c.MODAL_DETAIL_ID or id == g.c.MODAL_HISTORY_ID %}
+                            <strong id="modal-header-name"></strong>
+                        {% endif %}
+                    </h4>
                 </div>
                 <div class="modal-body">
                     {% if id == g.c.MODAL_ADD_ID or id == g.c.MODAL_EDIT_ID %}
@@ -27,8 +31,8 @@
                                     <th>{{ _('Decision') }}</th>
                                     <th>{{ _('Status') }}</th>
                                     <th>{{ _('Verify status') }}</th>
-                                    <th>{{ _('Verify date') }}</th>
                                     <th>{{ _('Expiry date') }}</th>
+                                    <th>{{ _('Deleted at') }}</th>
                                     <th>{{ _('Modify info') }}</th>
                                 </tr>
                                 </thead>
@@ -36,6 +40,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <p id="no_history_data" class="hidden" style="text-align: center;">{{ _('No data') }}</p>
                     {% elif id == g.c.MODAL_DETAIL_ID %}
                         <div class="nav-tabs-custom" style="margin-bottom: 0px !important;">
                             <ul class="nav nav-tabs pull-right">

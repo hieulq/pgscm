@@ -142,7 +142,7 @@ def lurl_for(endpoint):
 
 def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns="",
                            column_names=[], js=True, select2_class=None, multi_select2_class=None,
-                           has_button_view=False):
+                           has_button_view=False, has_button_history=False):
     if js:
         select2_script = ""
         datatables_script = """
@@ -419,6 +419,17 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                         """.format('btn-xs', g.c.BTNVIEW_ID, 'btn-warning', 'search',
                                      g.c.MODAL_DETAIL_ID)
 
+                    if has_button_history:
+                        render_func += """
+                            "<button type=\\"button\\" class=\\"btn {1} {0} {2}\\"" +
+                            "data-toggle=\\"modal\\" data-target=\\"#{4}\\"" +
+                            data_attr +
+                            ">" +
+                            "<i class=\\"fa fa-{3}\\"></i></button>" + 
+                            " " +
+                        """.format('btn-xs', g.c.BTNHISTORY_ID, 'btn-warning', 'search',
+                                     g.c.MODAL_HISTORY_ID)
+
                     render_func += """
                             "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
                             "data-toggle=\\"modal\\" data-target=\\"#{3}\\"" +
@@ -522,6 +533,8 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
             page_script = load_group_script()
         elif ajax_endpoint == "user":
             page_script = load_user_script()
+        elif ajax_endpoint == "farmer":
+            page_script = load_farmer_script()
 
         script = """
         {0}
@@ -911,6 +924,10 @@ def load_group_script():
                 }})
             }}
             $('.{1}').on('click', function (event) {{
+            
+                let group_name = $(this).data()['name'];
+                $('#modal-header-name').html(group_name);
+            
                 var group_id = $(this).data()['id'];
                 var d1 = 'id="' + group_id + '"';
                 get_info_of_group('/group/group_summary', d1, 'label_sum1');
@@ -961,6 +978,66 @@ def load_group_script():
                'tab_history', 'no_data', 'tab_cert', 'no_cert_data',
                g.c.CertificateReVerifyStatusType['keeping'].value)
     return group_script
+
+
+def load_farmer_script():
+    certificate_status_type = {}
+    for key in g.c.CertificateStatusType:
+        certificate_status_type[key.value] = _(key.name)
+
+    certificate_re_verify_status_type = {}
+    for key in g.c.CertificateReVerifyStatusType:
+        certificate_re_verify_status_type[key.value] = _(key.name)
+
+    farmer_script = """
+        $('.{0}').on('click', function (event) {{
+            
+            let owner_farmer_id = $(this).data()['id'];
+            let owner_farmer_name = $(this).data()['name'];
+            $('#modal-header-name').html(owner_farmer_name);
+            
+            let certificate_status_type = {3};
+            let certificate_re_verify_status_type = {4};
+            
+            $.ajax({{
+                type: "get",
+                url: '/certificate',
+                data: 'where={{"owner_farmer_id": "' + owner_farmer_id + '"}}',
+                success: function (data, text) {{      
+                    $('#{1} div.modal-body div table').find("tr:gt(0)").remove();
+                    if (data.length) {{
+                        $('#{2}').addClass('hidden');
+                        $('#{1} div.modal-body div').removeClass('hidden');
+                        var table_body = $('#{1} table tbody');
+                        for (var i in data) {{
+                            var new_row = '<tr>' +
+                                '<th scope="row">' + (parseInt(i) + 1) + '</th>' +
+                                '<td><b>' + data[i]['certificate_code'] + '</b></td>' +
+                                '<td>' + data[i]['gov_certificate_id'] + '</td>' +
+                                '<td>' + certificate_re_verify_status_type[data[i]['re_verify_status']] + '</td>' +
+                                '<td>' + certificate_status_type[data[i]['status']] + '</td>' +
+                                '<td>' + data[i]['certificate_expiry_date'] + '</td>' +
+                                '<td>' + data[i]['_deleted_at'] + '</td>' +
+                                '<td>' + data[i]['_modify_info'] + '</td>' +
+                                '</tr>';
+                            table_body.append(new_row);
+                        }}
+                    }} else {{
+                        $('#{2}').removeClass('hidden');
+                        $('#{1} div.modal-body div').addClass('hidden');
+                    }}
+                }},
+                error: function (request, status, error) {{
+                    console.log(request);
+                    console.log(error);
+                    alert(request.responseText);
+                }}
+            }});        
+        }});
+    """.format(g.c.BTNHISTORY_ID, g.c.MODAL_HISTORY_ID, 'no_history_data',
+               json.dumps(certificate_status_type),
+               json.dumps(certificate_re_verify_status_type))
+    return farmer_script
 
 
 def load_agroup_script():

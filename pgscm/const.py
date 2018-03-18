@@ -24,6 +24,7 @@ BTNADD_ID = 'addBtn'
 BTNEDIT_ID = 'editBtn'
 BTNDEL_ID = 'delBtn'
 BTNVIEW_ID = 'viewBtn'
+BTNHISTORY_ID = 'historyBtn'
 
 SELECT_DEFAULT_ID = 'pgs_select'
 
