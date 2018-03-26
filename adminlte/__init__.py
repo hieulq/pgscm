@@ -286,10 +286,10 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                         """<i class=\\"fa fa-check-circle-o\\"></i> """ + _('approved') + "</label></div>" +
                     "\":data==2?\"" + """<div class=\\"form-group has-error\\">""" +
                         """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
-                        """<i class=\\"fa fa-times-circle-o\\"></i> """ + _('rejected') + "</label></div>" +
+                        """<i class=\\"fa fa-times-circle-o\\"></i> """ + _('refuse') + "</label></div>" +
                     "\":data==3?\"" + """<div class=\\"form-group has-error\\">""" +
                         """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
-                        """<i class=\\"fa fa-times-circle-o\\"></i> """ + _('decline') + "</label></div>" +
+                        """<i class=\\"fa fa-times-circle-o\\"></i> """ + _('withdraw') + "</label></div>" +
                     "\":data==4?\"" + """<div class=\\"form-group has-warning\\">""" +
                         """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
                         """<i class=\\"fa fa-warning\\"></i> """ + _('warning') + "</label></div>" +
@@ -300,13 +300,13 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 render_result = render_tmpl.format(
                     "", "",
                     "(data==1?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                        'adding') + "</label></div>" +
+                        'new') + "</label></div>" +
                     "\":data==2?\"" + """<div class=\\"form-group has-success\\"><label class=\\"control-label\\"><i class=\\"fa fa-check-circle-o\\"></i> """ + _(
-                        'keeping') + "</label></div>" +
+                        'remaining') + "</label></div>" +
                     "\":data==3?\"" + """<div class=\\"form-group has-warning\\"><label class=\\"control-label\\"><i class=\\"fa fa-warning\\"></i> """ + _(
-                        'converting') + "</label></div>" +
+                        'conversion') + "</label></div>" +
                     "\":\"" + """<div class=\\"form-group has-error\\"><label class=\\"control-label\\"><i class=\\"fa fa-times-circle-o\\"></i> """ + _(
-                        'fortuity') + "</label></div>\")")
+                        'suddenly') + "</label></div>\")")
             return render_result
 
         def get_ajax_config(is_table_of_current_content=True):
