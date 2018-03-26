@@ -1043,7 +1043,10 @@ def load_farmer_script():
 def load_agroup_script():
     agroup_script = """
         $('.{0}').on('click', function (event) {{
-                
+            
+            let agroup_name = $(this).data()['name'];
+            $('#modal-header-name').html(agroup_name);
+            
             var agroup_id = $(this).data()['id'];
             function get_agroup_report(year) {{
                 var data = {{id: agroup_id, year: year}};
