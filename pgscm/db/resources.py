@@ -466,7 +466,7 @@ class AssociateGroupResource(ModelResource):
                        year: fields.Integer()) -> fields.String():
         agroup_id = id
         report_year = year
-        current_year = datetime.datetime.now().year
+        # current_year = datetime.datetime.now().year
         gs = [g.id for g in models.Group.query.filter_by(
                 _deleted_at=None, associate_group_id=agroup_id).all()]
         response = {
@@ -478,30 +478,25 @@ class AssociateGroupResource(ModelResource):
             'total_of_area': 0,
             'total_of_approved_area': 0
         }
+        start_time = datetime.datetime(report_year, 1, 1) \
+            .strftime('%Y-%m-%d')
+        end_time = datetime.datetime(report_year, 12, 30) \
+            .strftime('%Y-%m-%d')
         for g in gs:
-            if current_year == report_year:
-                cs = models.Certificate.query.filter_by(
-                        owner_group_id=g, _deleted_at=None).all()
-            else:
-                start_time = datetime.datetime(report_year, 1, 1)\
-                    .strftime('%Y-%m-%d')
-                end_time = datetime.datetime(report_year, 12, 30)\
-                    .strftime('%Y-%m-%d')
-                cs = models.Certificate.query.filter(
+            cs = models.Certificate.query.filter(
                     models.Certificate.owner_group_id == g,
                     models.Certificate.certificate_start_date >= start_time,
                     models.Certificate.certificate_start_date <= end_time)\
                     .all()
-            response['total_of_cert'] += len(cs)
             for cert in cs:
                 if cert.re_verify_status != \
                         c.CertificateReVerifyStatusType.fortuity:
                     response['total_of_area'] += cert.group_area
                 if cert.re_verify_status == \
-                        c.CertificateReVerifyStatusType.adding or \
-                        cert.re_verify_status == \
-                        c.CertificateReVerifyStatusType.keeping:
+                        c.CertificateReVerifyStatusType.adding and \
+                        cert.status == c.CertificateStatusType.approved:
                     response['total_of_approved_area'] += cert.group_area
+                    response['total_of_cert'] += 1
 
             fs = models.Farmer.query.filter_by(
                 group_id=g, _deleted_at=None).all()
@@ -536,9 +531,9 @@ class AssociateGroupResource(ModelResource):
                         c.CertificateReVerifyStatusType.fortuity:
                     sum += cert.group_area
                 elif cert.re_verify_status == \
-                        c.CertificateReVerifyStatusType.adding or \
-                        cert.re_verify_status == \
-                        c.CertificateReVerifyStatusType.keeping:
+                        c.CertificateReVerifyStatusType.adding and \
+                        cert.status == \
+                        c.CertificateStatusType.approved:
                     sum += cert.group_area
         return sum
 

@@ -15,10 +15,10 @@
             export_columns='0,1,2,3,4,5,6,7,8,9',
             column_names=[("certificate_code", True, g.c.LINK_DISP, _('Code')), ("owner_group.name", False, g.c.BOLD_DISP, _('Certified group')),
             ("owner_farmer.name", False, g.c.BOLD_DISP, _('Certified farmer')),
-            ("group_area", True, g.c.BOLD_DISP, _('Area/Count')), ("member_count", True, None, _('Member count')),
-            ("gov_certificate_id", True, None, _('Decision')), ("status", True, g.c.CertificateStatusType, _('Status')),
-            ("re_verify_status", True, g.c.CertificateReVerifyStatusType, _('Verify status')), ("certificate_start_date", True, None, _('Verify date')),
-            ("certificate_expiry_date", True, None, _('Expiry date')),
+            ("group_area", True, g.c.BOLD_DISP, _('Area (m2)')),
+            ("gov_certificate_id", True, None, _('Decision number')), ("status", True, g.c.CertificateStatusType, _('Inspection')),
+            ("re_verify_status", True, g.c.CertificateReVerifyStatusType, _('Decision')), ("certificate_start_date", True, None, _('Inspection day')),
+            ("certificate_expiry_date", True, None, _('Expiry day')),
             ("action", False, None, _('Actions'))],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
     {% else %}
@@ -27,10 +27,10 @@
             export_columns='0,1,2,3,4,5,6,7,8,9',
             column_names=[("certificate_code", True, g.c.LINK_DISP, _('Code')), ("owner_group.name", False, g.c.BOLD_DISP, _('Certified group')),
             ("owner_farmer.name", False, g.c.BOLD_DISP, _('Certified farmer')),
-            ("group_area", True, g.c.BOLD_DISP, _('Area/Count')), ("member_count", True, None, _('Member count')),
-            ("gov_certificate_id", True, None, _('Decision')), ("status", True, g.c.CertificateStatusType, _('Status')),
-            ("re_verify_status", True, g.c.CertificateReVerifyStatusType, _('Verify status')), ("certificate_start_date", True, None, _('Verify date')),
-            ("certificate_expiry_date", True, None, _('Expiry date'))],
+            ("group_area", True, g.c.BOLD_DISP, _('Area (m2)')),
+            ("gov_certificate_id", True, None, _('Decision number')), ("status", True, g.c.CertificateStatusType, _('Inspection')),
+            ("re_verify_status", True, g.c.CertificateReVerifyStatusType, _('Decision')), ("certificate_start_date", True, None, _('Inspection day')),
+            ("certificate_expiry_date", True, None, _('Expiry day'))],
             select2_class=g.c.SELECT_DEFAULT_ID) }}
     {% endif %}
 {%- endblock scripts %}
@@ -62,13 +62,12 @@
                             <th>{{ _('Code') }}</th>
                             <th>{{ _('Certified group') }}
                             <th>{{ _('Certified farmer') }}</th>
-                            <th>{{ _('Area/Count') }}</th>
-                            <th>{{ _('Member count') }}</th>
+                            <th>{{ _('Area (m2)') }}</th>
+                            <th>{{ _('Decision number') }}</th>
+                            <th>{{ _('Inspection') }}</th>
                             <th>{{ _('Decision') }}</th>
-                            <th>{{ _('Status') }}</th>
-                            <th>{{ _('Verify status') }}</th>
-                            <th>{{ _('Verify date') }}</th>
-                            <th>{{ _('Expiry date') }}</th>
+                            <th>{{ _('Inspection day') }}</th>
+                            <th>{{ _('Expiry day') }}</th>
                             {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
                                 <th>{{ _('Actions') }}</th>
                             {% endif %}

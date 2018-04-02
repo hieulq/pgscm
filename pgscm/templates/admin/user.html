@@ -34,7 +34,7 @@
     </ol>
 {%- endblock content_header %}
 {% block content -%}
-    {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '', '', '') }}
+    {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('New'), 'plus', '', '', '') }}
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -86,7 +86,7 @@
         <!-- /.col -->
     </div>
     <!-- /.row -->
-    {{ render_modal(g.c.MODAL_ADD_ID, 'modal', _('Create New')) }}
+    {{ render_modal(g.c.MODAL_ADD_ID, 'modal', _('New')) }}
     {{ render_modal(g.c.MODAL_EDIT_ID, 'modal', _('Update Data')) }}
     {{ render_modal(g.c.MODAL_DEL_ID, 'modal-danger', _('Confirm to delete') ) }}
 {%- endblock content %}

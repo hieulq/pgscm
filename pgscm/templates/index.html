@@ -141,7 +141,7 @@
         <li class="header">{{ _('PGS MANAGEMENT') }}</li>
         <li class="{{ is_active_in_tree(request, 'main.index') }}">
             <a href="{{ lurl_for('main.index') }}">
-                <i class="fa fa-dashboard"></i> <span>{{ _('Dashboard') }}</span>
+                <i class="fa fa-dashboard"></i> <span>{{ _('Overview') }}</span>
             </a>
         </li>
         {% if current_user.is_authenticated %}
@@ -179,7 +179,7 @@
 
             <li class="{{ is_active_in_tree(request, 'agroup.index') }}">
                 <a href="{{ lurl_for('agroup.index') }}">
-                    <i class="fa fa-home"></i> <span>{{ _('Associated Group') }}</span>
+                    <i class="fa fa-home"></i> <span>{{ _('Inter-group') }}</span>
                 </a>
             </li>
 {#            {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN, g.c.N_MOD, g.c.R_MOD]) %}#}
@@ -232,12 +232,12 @@
 
 {% block content_header -%}
     <h1>
-        {{ _('Dashboard') }}
-        <small>{{ _('Summary report about PGS status') }}</small>
+        {{ _('Overview') }}
+        <small>{{ _('PGS status') }}</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i>{{ _(' Home') }}</a></li>
-        <li class="active">{{ _('Dashboard') }}</li>
+        <li class="active">{{ _('Overview') }}</li>
     </ol>
 {%- endblock content_header %}
 
@@ -297,7 +297,7 @@
             url="/associate_group",
             bgcolor="bg-orange",
             header=0,
-            body=_("PGS Associate Groups"),
+            body=_("Inter-groups"),
             iconclass="fa fa-home",
             footerlink="agroup.index"
           ) }}
