@@ -13,8 +13,8 @@
     {{ load_datatables_script(
             ajax_endpoint='certificate/nearly_expired', crud_endpoint=['certificate.add_certificate', 'certificate.edit_certificate', 'certificate.delete_certificate'],
             export_columns='0,1,2,3,4,5,6,7,8,9',
-            column_names=[("certificate_code", True, g.c.LINK_DISP, _('Code')), ("owner_group.name", False, g.c.BOLD_DISP, _('Certified group')),
-            ("owner_farmer.name", False, g.c.BOLD_DISP, _('Certified farmer')),
+            column_names=[("certificate_code", True, g.c.LINK_DISP, _('Code')), ("owner_group.name", False, g.c.BOLD_DISP, _('Group')),
+            ("owner_farmer.name", False, g.c.BOLD_DISP, _('Farmer')),
             ("group_area", True, g.c.BOLD_DISP, _('Area (m2)')),
             ("gov_certificate_id", True, None, _('Decision number')), ("status", True, g.c.CertificateStatusType, _('Inspection')),
             ("re_verify_status", True, g.c.CertificateReVerifyStatusType, _('Decision')), ("certificate_start_date", True, None, _('Inspection day')),
@@ -25,8 +25,8 @@
     {{ load_datatables_script(
             ajax_endpoint='certificate/nearly_expired', crud_endpoint=['certificate.add_certificate', 'certificate.edit_certificate', 'certificate.delete_certificate'],
             export_columns='0,1,2,3,4,5,6,7,8,9',
-            column_names=[("certificate_code", True, g.c.LINK_DISP, _('Code')), ("owner_group.name", False, g.c.BOLD_DISP, _('Certified group')),
-            ("owner_farmer.name", False, g.c.BOLD_DISP, _('Certified farmer')),
+            column_names=[("certificate_code", True, g.c.LINK_DISP, _('Code')), ("owner_group.name", False, g.c.BOLD_DISP, _('Group')),
+            ("owner_farmer.name", False, g.c.BOLD_DISP, _('Farmer')),
             ("group_area", True, g.c.BOLD_DISP, _('Area (m2)')),
             ("gov_certificate_id", True, None, _('Decision number')), ("status", True, g.c.CertificateStatusType, _('Inspection')),
             ("re_verify_status", True, g.c.CertificateReVerifyStatusType, _('Decision')), ("certificate_start_date", True, None, _('Inspection day')),
@@ -36,14 +36,14 @@
 {%- endblock scripts %}
 {% block content_header -%}
     <h1>
-        {{ _('Alarmed PGS Certificates') }}
-        <small>{{ _('Managing alarmed PGS certificates') }}</small>
+        {{ _('Warning PGS Certificates') }}
+        <small>{{ _('Managing warning PGS certificates') }}</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="{{ lurl_for('main.index') }}"><i
                 class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
         <li class="active"><a href="{{ lurl_for('report.alarms') }}"><i
-                class="fa fa-warning"></i>{{ _('Alarms') }}</a></li>
+                class="fa fa-warning"></i>{{ _('Warning') }}</a></li>
     </ol>
 {%- endblock content_header %}
 {% block content -%}
@@ -60,8 +60,8 @@
                         <thead>
                         <tr>
                             <th>{{ _('Code') }}</th>
-                            <th>{{ _('Certified group') }}
-                            <th>{{ _('Certified farmer') }}</th>
+                            <th>{{ _('Group') }}
+                            <th>{{ _('Farmer') }}</th>
                             <th>{{ _('Area (m2)') }}</th>
                             <th>{{ _('Decision number') }}</th>
                             <th>{{ _('Inspection') }}</th>

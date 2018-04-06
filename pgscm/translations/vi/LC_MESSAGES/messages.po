@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-03-27 00:36+0700\n"
+"POT-Creation-Date: 2018-04-07 01:05+0700\n"
 "PO-Revision-Date: 2017-07-08 21:17+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: vi\n"
@@ -84,12 +84,12 @@ msgid "suddenly"
 msgstr "Đột xuất"
 
 #: adminlte/__init__.py:518 pgscm/templates/agroup/index.html:105
-#: pgscm/templates/group/index.html:115 pgscm/templates/macro.html:35
+#: pgscm/templates/group/index.html:114 pgscm/templates/macro.html:35
 msgid "Deleted at"
 msgstr "Thời điểm xóa"
 
 #: adminlte/__init__.py:518 pgscm/templates/agroup/index.html:105
-#: pgscm/templates/group/index.html:115 pgscm/utils.py:65
+#: pgscm/templates/group/index.html:114 pgscm/utils.py:65
 msgid "Reason"
 msgstr "Lý do"
 
@@ -170,7 +170,7 @@ msgstr "Mật khẩu phải đồng bộ"
 #: pgscm/templates/agroup/index.html:105 pgscm/templates/farmer/index.html:16
 #: pgscm/templates/farmer/index.html:24 pgscm/templates/farmer/index.html:60
 #: pgscm/templates/group/index.html:19 pgscm/templates/group/index.html:28
-#: pgscm/templates/group/index.html:65 pgscm/templates/group/index.html:115
+#: pgscm/templates/group/index.html:65 pgscm/templates/group/index.html:114
 msgid "Name"
 msgstr "Tên"
 
@@ -200,7 +200,6 @@ msgstr "Quyền"
 
 #: pgscm/admin/forms.py:24 pgscm/group/forms.py:27
 #: pgscm/templates/admin/user.html:16 pgscm/templates/admin/user.html:52
-#: pgscm/templates/agroup/index.html:43
 msgid "Associated Group"
 msgstr "Liên nhóm"
 
@@ -312,7 +311,8 @@ msgstr "Từ chối"
 msgid "Decline"
 msgstr "Thu hồi"
 
-#: pgscm/certificate/forms.py:39
+#: pgscm/certificate/forms.py:39 pgscm/templates/index.html:189
+#: pgscm/templates/report/alarm.html:46
 msgid "Warning"
 msgstr "Cảnh cáo"
 
@@ -382,13 +382,13 @@ msgid "Edit certificate success!"
 msgstr "Cập nhật thông tin chứng chỉ thành công!"
 
 #: pgscm/farmer/forms.py:12 pgscm/farmer/forms.py:13
-#: pgscm/templates/group/index.html:115
+#: pgscm/templates/group/index.html:114
 msgid "Farmer code"
 msgstr "Mã nông dân"
 
 #: pgscm/farmer/forms.py:16 pgscm/templates/farmer/index.html:17
 #: pgscm/templates/farmer/index.html:25 pgscm/templates/farmer/index.html:61
-#: pgscm/templates/group/index.html:115
+#: pgscm/templates/group/index.html:114
 msgid "Gender"
 msgstr "Giới tính"
 
@@ -402,7 +402,7 @@ msgstr "Nữ"
 
 #: pgscm/farmer/forms.py:20 pgscm/templates/farmer/index.html:17
 #: pgscm/templates/farmer/index.html:25 pgscm/templates/farmer/index.html:62
-#: pgscm/templates/group/index.html:115
+#: pgscm/templates/group/index.html:114
 msgid "Type"
 msgstr "Loại thành viên"
 
@@ -429,6 +429,8 @@ msgstr "Kế toán"
 #: pgscm/farmer/forms.py:28 pgscm/templates/farmer/index.html:18
 #: pgscm/templates/farmer/index.html:26 pgscm/templates/farmer/index.html:63
 #: pgscm/templates/group/index.html:45 pgscm/templates/index.html:176
+#: pgscm/templates/report/alarm.html:16 pgscm/templates/report/alarm.html:28
+#: pgscm/templates/report/alarm.html:63
 msgid "Group"
 msgstr "Nhóm"
 
@@ -456,8 +458,6 @@ msgid "District"
 msgstr "Quận/Huyện"
 
 #: pgscm/group/forms.py:23 pgscm/templates/agroup/index.html:105
-#: pgscm/templates/group/index.html:20 pgscm/templates/group/index.html:29
-#: pgscm/templates/group/index.html:67
 msgid "Ward"
 msgstr "Phường/Xã"
 
@@ -536,8 +536,8 @@ msgstr "Đăng xuất"
 msgid "PGS MANAGEMENT"
 msgstr "DANH MỤC QUẢN LÝ PGS"
 
-#: pgscm/templates/index.html:144 pgscm/templates/index.html:235
-#: pgscm/templates/index.html:240
+#: pgscm/templates/index.html:144 pgscm/templates/index.html:234
+#: pgscm/templates/index.html:239
 msgid "Overview"
 msgstr "Tổng quan"
 
@@ -554,87 +554,78 @@ msgid "Certified Farmer"
 msgstr "Cấp cho cá nhân"
 
 #: pgscm/templates/farmer/index.html:39 pgscm/templates/index.html:171
+#: pgscm/templates/report/alarm.html:17 pgscm/templates/report/alarm.html:29
+#: pgscm/templates/report/alarm.html:64
 msgid "Farmer"
 msgstr "Nông dân"
 
-#: pgscm/templates/group/index.html:22 pgscm/templates/group/index.html:31
-#: pgscm/templates/group/index.html:70 pgscm/templates/index.html:182
+#: pgscm/templates/agroup/index.html:43 pgscm/templates/group/index.html:22
+#: pgscm/templates/group/index.html:31 pgscm/templates/group/index.html:70
+#: pgscm/templates/index.html:182 pgscm/templates/index.html:299
 msgid "Inter-group"
 msgstr "Liên nhóm"
 
-#: pgscm/templates/index.html:189 pgscm/templates/report/alarm.html:46
-msgid "Alarms"
-msgstr "Cảnh báo"
-
-#: pgscm/templates/index.html:197
-msgid "DMZ"
-msgstr "KHU VỰC QUẢN TRỊ"
-
-#: pgscm/templates/admin/user.html:31 pgscm/templates/index.html:201
+#: pgscm/templates/admin/user.html:31 pgscm/templates/index.html:200
 msgid "Administrator"
 msgstr "Danh mục quản trị"
 
-#: pgscm/templates/admin/user.html:33 pgscm/templates/index.html:208
+#: pgscm/templates/admin/user.html:33 pgscm/templates/index.html:207
 msgid "Users Management"
 msgstr "Người dùng hệ thống"
 
-#: pgscm/templates/index.html:217
+#: pgscm/templates/index.html:216
 msgid "USER"
 msgstr "TÁC VỤ NGƯỜI DÙNG"
 
-#: pgscm/templates/index.html:220
+#: pgscm/templates/index.html:219
 msgid "Login"
 msgstr "Đăng nhập"
 
-#: pgscm/templates/index.html:236
+#: pgscm/templates/index.html:235
 msgid "PGS status"
 msgstr "Trạng thái của PGS"
 
-#: pgscm/templates/index.html:239
+#: pgscm/templates/index.html:238
 msgid " Home"
 msgstr " Trang chủ"
 
-#: pgscm/templates/index.html:260
+#: pgscm/templates/index.html:259
 msgid "PGS Status"
 msgstr "Trạng thái của PGS"
 
-#: pgscm/templates/index.html:261
+#: pgscm/templates/index.html:260
 msgid "Quickly summary about <code>PGS Certificates</code> analytics."
 msgstr "Thống kê nhanh về <code>Chứng chỉ PGS</code>."
 
-#: pgscm/templates/index.html:273
+#: pgscm/templates/index.html:272
 msgid "Certificates"
 msgstr "Chứng nhận"
 
-#: pgscm/templates/index.html:282
+#: pgscm/templates/index.html:281
 msgid "Farmers"
 msgstr "Nông dân"
 
-#: pgscm/templates/index.html:291
+#: pgscm/templates/index.html:290
 msgid "Groups"
 msgstr "Nhóm PGS"
 
-#: pgscm/templates/index.html:300
-msgid "Inter-groups"
-msgstr "Liên nhóm"
-
-#: pgscm/templates/index.html:309
-msgid "Nearly Expired PGS Certs"
+#: pgscm/templates/index.html:308
+msgid "About to expire"
 msgstr "Chứng chỉ PGS sắp hết hạn"
 
-#: pgscm/templates/index.html:318
+#: pgscm/templates/index.html:317
 msgid "Total approved area"
 msgstr "Tổng diện tích chứng nhận"
 
-#: pgscm/templates/index.html:329
+#: pgscm/templates/index.html:328
 msgid "Total requested area"
 msgstr "Tổng diện tích yêu cầu"
 
-#: pgscm/templates/index.html:340
+#: pgscm/templates/index.html:339
 msgid "Total male farmers"
 msgstr "Tổng nông dân nam"
 
-#: pgscm/templates/index.html:350
+#: pgscm/templates/index.html:349
 msgid "Total female farmers"
 msgstr "Tổng nông dân nữ"
 
@@ -777,18 +768,18 @@ msgid "Confirm to delete"
 msgstr "Xác nhận xoá dữ liệu"
 
 #: pgscm/templates/agroup/index.html:36 pgscm/templates/agroup/index.html:54
-msgid "PGS Associate Groups"
+msgid "PGS Inter-group"
 msgstr "Liên nhóm PGS"
 
 #: pgscm/templates/agroup/index.html:37
-msgid "Managing regional associate groups in PGS system"
+msgid "Managing regional inter-group in PGS system"
 msgstr "Quản lý liên nhóm theo vùng trong hệ thống PGS"
 
 #: pgscm/templates/agroup/index.html:103
-msgid "Associate group info"
-msgstr "Thông tin liên nhóm"
+msgid "Inter-group info"
+msgstr "Liên nhóm PGS"
 
-#: pgscm/templates/agroup/index.html:104 pgscm/templates/group/index.html:114
+#: pgscm/templates/agroup/index.html:104 pgscm/templates/group/index.html:113
 msgid "certificates"
 msgstr "chứng chỉ PGS"
 
@@ -796,19 +787,17 @@ msgstr "chứng chỉ PGS"
 msgid "groups"
 msgstr "nhóm"
 
-#: pgscm/templates/agroup/index.html:104 pgscm/templates/group/index.html:114
+#: pgscm/templates/agroup/index.html:104 pgscm/templates/group/index.html:113
 msgid "farmers (Male / Female)"
 msgstr "nông dân (Nam / Nữ)"
 
-#: pgscm/templates/agroup/index.html:104 pgscm/templates/group/index.html:114
+#: pgscm/templates/agroup/index.html:104 pgscm/templates/group/index.html:113
 msgid "approved area"
 msgstr "diện tích chứng nhận"
 
 #: pgscm/templates/certificate/index.html:18
 #: pgscm/templates/certificate/index.html:29
 #: pgscm/templates/certificate/index.html:105
-#: pgscm/templates/report/alarm.html:16 pgscm/templates/report/alarm.html:28
-#: pgscm/templates/report/alarm.html:63
 msgid "Certified group"
 msgstr "Cấp cho nhóm"
 
@@ -865,8 +854,6 @@ msgstr "Ngày hết hạn"
 #: pgscm/templates/certificate/index.html:42
 #: pgscm/templates/certificate/index.html:53
 #: pgscm/templates/certificate/index.html:107
-#: pgscm/templates/report/alarm.html:17 pgscm/templates/report/alarm.html:29
-#: pgscm/templates/report/alarm.html:64
 msgid "Certified farmer"
 msgstr "Cấp cho nông dân"
 
@@ -915,9 +902,14 @@ msgstr "Quản lý nông dân trong hệ thống PGS"
 msgid "PGS Farmers"
 msgstr "Nông dân PGS"
 
-#: pgscm/templates/farmer/index.html:101 pgscm/templates/group/index.html:112
+#: pgscm/templates/farmer/index.html:101
 msgid "Certificate history"
 msgstr "Lịch sử cấp chứng chỉ PGS"
+
+#: pgscm/templates/group/index.html:20 pgscm/templates/group/index.html:29
+#: pgscm/templates/group/index.html:67
+msgid "Commune"
+msgstr "Phường/Xã"
 
 #: pgscm/templates/group/index.html:38 pgscm/templates/group/index.html:56
 msgid "PGS Groups"
@@ -927,17 +919,21 @@ msgstr "Nhóm PGS"
 msgid "Managing regional groups in PGS system"
 msgstr "Quản lý các nhóm PGS theo vùng"
 
-#: pgscm/templates/group/index.html:113
+#: pgscm/templates/group/index.html:112
 msgid "Group info"
 msgstr "Thông tin nhóm"
 
-#: pgscm/templates/report/alarm.html:39 pgscm/templates/report/alarm.html:54
-msgid "Alarmed PGS Certificates"
+#: pgscm/templates/report/alarm.html:39
+msgid "Warning PGS Certificates"
 msgstr "Các cảnh báo về chứng chỉ PGS"
 
 #: pgscm/templates/report/alarm.html:40
-msgid "Managing alarmed PGS certificates"
-msgstr "Quản lý các cảnh báo quanh chứng chỉ PGS sắp tới hạn"
+msgid "Managing warning PGS certificates"
+msgstr "Quản lý các cảnh báo quanh chứng chỉ PGS sắp hết hạn"
+
+#: pgscm/templates/report/alarm.html:54
+msgid "Alarmed PGS Certificates"
+msgstr "Các cảnh báo về chứng chỉ PGS"
 
 #: pgscm/templates/security/login_user.html:3
 msgid "Log In"
@@ -1090,4 +1086,28 @@ msgstr "Hãy đăng ký tài khoản PGS mới!"
 
 #~ msgid "Verify date"
 #~ msgstr "Ngày thanh tra"
+
+#~ msgid "Alarms"
+#~ msgstr "Cảnh báo"
+
+#~ msgid "DMZ"
+#~ msgstr "KHU VỰC QUẢN TRỊ"
+
+#~ msgid "Inter-groups"
+#~ msgstr "Liên nhóm"
+
+#~ msgid "Nearly Expired PGS Certs"
+#~ msgstr "Chứng chỉ PGS sắp hết hạn"
+
+#~ msgid "PGS Associate Groups"
+#~ msgstr "Liên nhóm PGS"
+
+#~ msgid "Managing regional associate groups in PGS system"
+#~ msgstr "Quản lý liên nhóm theo vùng trong hệ thống PGS"
+
+#~ msgid "Associate group info"
+#~ msgstr "Thông tin liên nhóm"
+
+#~ msgid "Managing alarmed PGS certificates"
+#~ msgstr "Quản lý các cảnh báo quanh chứng chỉ PGS sắp tới hạn"
 

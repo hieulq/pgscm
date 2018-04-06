@@ -33,14 +33,14 @@
 {%- endblock scripts %}
 {% block content_header -%}
     <h1>
-        {{ _('PGS Associate Groups') }}
-        <small>{{ _('Managing regional associate groups in PGS system') }}</small>
+        {{ _('PGS Inter-group') }}
+        <small>{{ _('Managing regional inter-group in PGS system') }}</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="{{ lurl_for('main.index') }}"><i
                 class="fa fa-dashboard"></i> {{ _('Home') }}</a></li>
         <li class="active"><a href="{{ lurl_for('agroup.index') }}"><i
-                class="fa fa-home"></i>{{ _('Associated Group') }}</a></li>
+                class="fa fa-home"></i>{{ _('Inter-group') }}</a></li>
     </ol>
 {%- endblock content_header %}
 {% block content -%}
@@ -51,7 +51,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">{{ _('PGS Associate Groups') }}</h3>
+                    <h3 class="box-title">{{ _('PGS Inter-group') }}</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body table-responsive">
@@ -100,7 +100,7 @@
     {{ render_modal(g.c.MODAL_ADD_ID, 'modal', _('New')) }}
     {{ render_modal(g.c.MODAL_EDIT_ID, 'modal', _('Update Data')) }}
     {{ render_modal(g.c.MODAL_DEL_ID, 'modal-danger', _('Confirm to delete') ) }}
-    {{ render_modal(g.c.MODAL_DETAIL_ID, 'modal', _('Associate group info'), 'modal-lg',
+    {{ render_modal(g.c.MODAL_DETAIL_ID, 'modal', _('Inter-group info'), 'modal-lg',
         [(_('certificates'), False), (_('groups'), False), (_('farmers (Male / Female)'), False), (_('approved area'), True)],
-        [_('Group code'), _('Name'), _('Village'), _('Ward'), _('District'), _('Province'), _('Deleted at'), _('Reason')]) }}
+        [_('Group code'), _('Name'), _('Village'), _('Commune'), _('District'), _('Province'), _('Deleted at'), _('Reason')]) }}
 {%- endblock content %}

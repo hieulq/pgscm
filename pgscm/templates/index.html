@@ -186,7 +186,7 @@
             <li class="alarm {{ is_active_in_tree(request, 'report.alarms', False) }}">
                 <a href="{{ lurl_for('report.alarms') }}">
                     <i class="fa fa-warning"></i>
-                    {{ _('Alarms') }}
+                    {{ _('Warning') }}
                     <span class="pull-right-container">
                       <small class="label pull-right bg-yellow">0</small>
                     </span>
@@ -194,7 +194,6 @@
             </li>
 {#            {% endif %}#}
             {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN]) %}
-                <li class="header">{{ _('DMZ') }}</li>
                 <li class="treeview {{ is_active_in_tree(request, 'admin', True) }}">
                     <a href="{{ lurl_for('admin.index') }}">
                         <i class="fa fa-key"></i>
@@ -297,7 +296,7 @@
             url="/associate_group",
             bgcolor="bg-orange",
             header=0,
-            body=_("Inter-groups"),
+            body=_("Inter-group"),
             iconclass="fa fa-home",
             footerlink="agroup.index"
           ) }}
@@ -306,7 +305,7 @@
             url="/certificate/nearly_expired",
             bgcolor="bg-yellow",
             header=0,
-            body=_("Nearly Expired PGS Certs"),
+            body=_("About to expire"),
             iconclass="fa fa-warning",
             footerlink="report.alarms"
           ) }}
