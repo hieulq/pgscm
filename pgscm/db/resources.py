@@ -523,18 +523,24 @@ class AssociateGroupResource(ModelResource):
             gs = [g.id for g in models.Group.query.filter_by(
                 _deleted_at=None).all()]
         sum = 0
+        today = datetime.date.today()
         for g in gs:
             cs = models.Certificate.query.filter_by(
                 owner_group_id=g, _deleted_at=None).all()
             for cert in cs:
-                if not approved and cert.re_verify_status != \
-                        c.CertificateReVerifyStatusType.fortuity:
-                    sum += cert.group_area
-                elif cert.re_verify_status == \
-                        c.CertificateReVerifyStatusType.adding and \
-                        cert.status == \
-                        c.CertificateStatusType.approved:
-                    sum += cert.group_area
+                if cert.certificate_expiry_date and \
+                                cert.certificate_expiry_date >= today:
+                    if approved and cert.re_verify_status == \
+                            c.CertificateReVerifyStatusType.adding and \
+                            cert.status == \
+                            c.CertificateStatusType.approved:
+                        sum += cert.group_area
+                    if not approved and \
+                            (cert.re_verify_status ==
+                                c.CertificateReVerifyStatusType.adding or
+                            cert.re_verify_status ==
+                                c.CertificateReVerifyStatusType.converting):
+                        sum += cert.group_area
         return sum
 
     @Route.GET('/gender')

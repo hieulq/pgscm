@@ -32,9 +32,9 @@ class CertificateForm(FlaskForm):
     status = SelectField(
         __('Status'), validators=[data_required], coerce=int, widget=Select(),
         choices=[(c.CertificateStatusType.approved.value, __('Approved')),
-                 (c.CertificateStatusType.rejected.value, __('Rejected')),
+                 (c.CertificateStatusType.rejected.value, __('Refuse')),
                  (c.CertificateStatusType.decline.value,
-                  __('Decline')),
+                  __('Withdraw')),
                  (c.CertificateStatusType.warning.value,
                   __('Warning')),
                  (c.CertificateStatusType.punish.value,
@@ -43,13 +43,13 @@ class CertificateForm(FlaskForm):
         __('Reverify Status'), validators=[data_required], coerce=int,
         widget=Select(),
         choices=[(c.CertificateReVerifyStatusType.adding.value,
-                  __('Adding')),
+                  __('New')),
                  (c.CertificateReVerifyStatusType.keeping.value,
-                  __('Keeping')),
+                  __('Remaining')),
                  (c.CertificateReVerifyStatusType.converting.value,
-                  __('Converting')),
+                  __('Conversion')),
                  (c.CertificateReVerifyStatusType.fortuity.value,
-                  __('Fortuity'))])
+                  __('Suddenly'))])
     owner_farmer_id = SelectField(__('Certificated farmer'), validators=[
         data_required], coerce=str, widget=Select(), id='load_now-farmer')
     owner_group_id = SelectField(__('Certificated group'), validators=[
