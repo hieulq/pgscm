@@ -1042,53 +1042,61 @@ def load_farmer_script():
 
 def load_agroup_script():
     agroup_script = """
+    
+        function get_agroup_report(year, agroup_id) {{
+            var data = {{id: agroup_id, year: year}};
+            $.ajax({{
+                method: 'GET',
+                url: '/associate_group/agroup_summary',
+                // data: 'id="' + agroup_id + '", year:"' + year + '"',
+                data: data,
+                success: function (data, status, req) {{
+                    data = JSON.parse(data)
+                    $('#label_sum0').html(data['total_of_cert']);
+                    $('#label_sum1').html(data['total_of_gr']);
+                    $('#label_sum2').html(data['total_of_farmer'] + ' (' + data['total_of_male'] + ' / ' + 
+                            data['total_of_female'] + ')');
+                    $('#label_sum3').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
+                }},
+                error: function (request, status, error) {{
+                    console.log(request);
+                    console.log(error);
+                    alert(request.responseText);
+                }}
+            }})
+        }}
+        
+        select = $('#year_report');
+        var date = new Date();
+        var year_selects = [];
+        var current_year = date.getFullYear();
+        for(var i = 0;i<10;i++){{
+            year_selects.push(current_year - i);
+        }}
+        
+        select.select2({{
+            data: year_selects
+        }});
+            
+        select.change(function(){{
+            var agroup_id = select.attr('data-agroup_id');
+            if(agroup_id) {{
+                get_agroup_report(select.val(), agroup_id);
+            }} else {{
+                console.log('cannot get agroup id');
+            }}
+            // console.log(select.attr('data-agroup_id'));
+        }});
+    
         $('.{0}').on('click', function (event) {{
             
             let agroup_name = $(this).data()['name'];
             $('#modal-header-name').html(agroup_name);
             
             var agroup_id = $(this).data()['id'];
-            function get_agroup_report(year) {{
-                var data = {{id: agroup_id, year: year}};
-                $.ajax({{
-                    method: 'GET',
-                    url: '/associate_group/agroup_summary',
-                    // data: 'id="' + agroup_id + '", year:"' + year + '"',
-                    data: data,
-                    success: function (data, status, req) {{
-                        data = JSON.parse(data)
-                        $('#label_sum0').html(data['total_of_cert']);
-                        $('#label_sum1').html(data['total_of_gr']);
-                        $('#label_sum2').html(data['total_of_farmer'] + ' (' + data['total_of_male'] + ' / ' + 
-                                data['total_of_female'] + ')');
-                        $('#label_sum3').html(data['total_of_approved_area'] + ' / ' + data['total_of_area']);
-                    }},
-                    error: function (request, status, error) {{
-                        console.log(request);
-                        console.log(error);
-                        alert(request.responseText);
-                    }}
-                }})
-            }}
+            select.attr('data-agroup_id', agroup_id);
+            select.val(current_year).trigger('change');
             
-            var date = new Date();
-            var year_selects = [];
-            for(var i = 0;i<10;i++){{
-                year_selects.push(date.getFullYear() - i);
-            }}
-            $('#{3}').select2({{
-                data: year_selects
-            }});
-            
-             $('#{3}').removeClass('display');
-            
-            $('#{3}').change(function(){{
-                get_agroup_report($('#{3}').val());
-            }});
-            
-            get_agroup_report($('#{3}').val());
-            
-                    
             $.ajax({{
                 method: 'GET',
                 url: '/group/deleted',
