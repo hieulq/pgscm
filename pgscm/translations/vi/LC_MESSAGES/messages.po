@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-04-07 02:37+0700\n"
+"POT-Creation-Date: 2018-04-12 11:13+0700\n"
 "PO-Revision-Date: 2017-07-08 21:17+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: vi\n"
@@ -105,9 +105,9 @@ msgstr "Hiện tại"
 msgid "More info"
 msgstr "Thông tin chi tiết"
 
-#: pgscm/admin/forms.py:28 pgscm/associate_group/forms.py:22
-#: pgscm/certificate/forms.py:59 pgscm/farmer/forms.py:31
-#: pgscm/group/forms.py:31 pgscm/utils.py:63
+#: pgscm/admin/forms.py:28 pgscm/associate_group/forms.py:24
+#: pgscm/certificate/forms.py:59 pgscm/farmer/forms.py:33
+#: pgscm/group/forms.py:33 pgscm/utils.py:63
 msgid "Id"
 msgstr "Id"
 
@@ -145,10 +145,10 @@ msgid "Not valid soft delete form!"
 msgstr "Không hợp lệ!"
 
 #: pgscm/admin/views.py:216 pgscm/admin/views.py:275 pgscm/admin/views.py:292
-#: pgscm/associate_group/views.py:133 pgscm/associate_group/views.py:159
+#: pgscm/associate_group/views.py:134 pgscm/associate_group/views.py:161
 #: pgscm/certificate/views.py:379 pgscm/certificate/views.py:431
-#: pgscm/farmer/views.py:131 pgscm/farmer/views.py:158 pgscm/group/views.py:203
-#: pgscm/group/views.py:238 pgscm/utils.py:182
+#: pgscm/farmer/views.py:132 pgscm/farmer/views.py:160 pgscm/group/views.py:204
+#: pgscm/group/views.py:240 pgscm/utils.py:182
 msgid "The form is not validate!"
 msgstr "Form chưa được kiểm tra thông tin!"
 
@@ -203,9 +203,9 @@ msgstr "Quyền"
 msgid "Associated Group"
 msgstr "Liên nhóm"
 
-#: pgscm/admin/forms.py:29 pgscm/associate_group/forms.py:23
-#: pgscm/certificate/forms.py:60 pgscm/farmer/forms.py:32
-#: pgscm/group/forms.py:32
+#: pgscm/admin/forms.py:29 pgscm/associate_group/forms.py:25
+#: pgscm/certificate/forms.py:60 pgscm/farmer/forms.py:34
+#: pgscm/group/forms.py:34
 msgid "Submit"
 msgstr "Lưu thông tin"
 
@@ -252,15 +252,25 @@ msgstr "Mã liên nhóm"
 msgid "Province"
 msgstr "Tỉnh/Thành phố"
 
+#: pgscm/associate_group/forms.py:22 pgscm/farmer/forms.py:31
+#: pgscm/group/forms.py:31
+msgid "Year created"
+msgstr "Năm tham gia"
+
+#: pgscm/associate_group/forms.py:23 pgscm/farmer/forms.py:32
+#: pgscm/group/forms.py:32
+msgid "Enter year"
+msgstr "Nhập năm"
+
 #: pgscm/associate_group/views.py:64
 msgid "Update associate group success!"
 msgstr "Cập nhật liên nhóm PGS thành công!"
 
-#: pgscm/associate_group/views.py:85 pgscm/associate_group/views.py:130
+#: pgscm/associate_group/views.py:85 pgscm/associate_group/views.py:131
 msgid "Add associate group success!"
 msgstr "Thêm mới liên nhóm thành công!"
 
-#: pgscm/associate_group/views.py:156
+#: pgscm/associate_group/views.py:158
 msgid "Edit associate group success!"
 msgstr "Cập nhật thông tin liên nhóm thành công!"
 
@@ -439,15 +449,15 @@ msgstr "Kế toán"
 msgid "Group"
 msgstr "Nhóm"
 
-#: pgscm/farmer/views.py:70 pgscm/farmer/views.py:155
+#: pgscm/farmer/views.py:70 pgscm/farmer/views.py:157
 msgid "Update farmer success!"
 msgstr "Cập nhật thông tin user thành công!"
 
-#: pgscm/farmer/views.py:86 pgscm/farmer/views.py:128
+#: pgscm/farmer/views.py:86 pgscm/farmer/views.py:129
 msgid "Add farmer success!"
 msgstr "Tạo nông dân thành công!"
 
-#: pgscm/farmer/views.py:161
+#: pgscm/farmer/views.py:163
 msgid "Can't get id of object edit!"
 msgstr "Không lấy được id của đối tượng cần cập nhật!"
 
@@ -483,11 +493,11 @@ msgstr "Liên nhóm"
 msgid "Update group success!"
 msgstr "Cập nhật nhóm thành công!"
 
-#: pgscm/group/views.py:140 pgscm/group/views.py:200
+#: pgscm/group/views.py:140 pgscm/group/views.py:201
 msgid "Add group success!"
 msgstr "Thêm mới nhóm thành công!"
 
-#: pgscm/group/views.py:235
+#: pgscm/group/views.py:237
 msgid "Edit group success!"
 msgstr "Cập nhật thông tin nhóm thành công!"
 
@@ -698,7 +708,7 @@ msgstr "Chi tiết"
 
 #: pgscm/templates/macro.html:66
 msgid "Total of "
-msgstr "Tổng"
+msgstr "Tổng "
 
 #: pgscm/templates/agroup/index.html:18 pgscm/templates/agroup/index.html:27
 #: pgscm/templates/agroup/index.html:62

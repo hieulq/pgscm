@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PGSCM 1.0.0\n"
 "Report-Msgid-Bugs-To: hieulq19@gmail.com\n"
-"POT-Creation-Date: 2018-04-07 02:37+0700\n"
+"POT-Creation-Date: 2018-04-12 11:13+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -103,9 +103,9 @@ msgstr ""
 msgid "More info"
 msgstr ""
 
-#: pgscm/admin/forms.py:28 pgscm/associate_group/forms.py:22
-#: pgscm/certificate/forms.py:59 pgscm/farmer/forms.py:31
-#: pgscm/group/forms.py:31 pgscm/utils.py:63
+#: pgscm/admin/forms.py:28 pgscm/associate_group/forms.py:24
+#: pgscm/certificate/forms.py:59 pgscm/farmer/forms.py:33
+#: pgscm/group/forms.py:33 pgscm/utils.py:63
 msgid "Id"
 msgstr ""
 
@@ -143,10 +143,10 @@ msgid "Not valid soft delete form!"
 msgstr ""
 
 #: pgscm/admin/views.py:216 pgscm/admin/views.py:275 pgscm/admin/views.py:292
-#: pgscm/associate_group/views.py:133 pgscm/associate_group/views.py:159
+#: pgscm/associate_group/views.py:134 pgscm/associate_group/views.py:161
 #: pgscm/certificate/views.py:379 pgscm/certificate/views.py:431
-#: pgscm/farmer/views.py:131 pgscm/farmer/views.py:158 pgscm/group/views.py:203
-#: pgscm/group/views.py:238 pgscm/utils.py:182
+#: pgscm/farmer/views.py:132 pgscm/farmer/views.py:160 pgscm/group/views.py:204
+#: pgscm/group/views.py:240 pgscm/utils.py:182
 msgid "The form is not validate!"
 msgstr ""
 
@@ -201,9 +201,9 @@ msgstr ""
 msgid "Associated Group"
 msgstr ""
 
-#: pgscm/admin/forms.py:29 pgscm/associate_group/forms.py:23
-#: pgscm/certificate/forms.py:60 pgscm/farmer/forms.py:32
-#: pgscm/group/forms.py:32
+#: pgscm/admin/forms.py:29 pgscm/associate_group/forms.py:25
+#: pgscm/certificate/forms.py:60 pgscm/farmer/forms.py:34
+#: pgscm/group/forms.py:34
 msgid "Submit"
 msgstr ""
 
@@ -250,15 +250,25 @@ msgstr ""
 msgid "Province"
 msgstr ""
 
+#: pgscm/associate_group/forms.py:22 pgscm/farmer/forms.py:31
+#: pgscm/group/forms.py:31
+msgid "Year created"
+msgstr ""
+
+#: pgscm/associate_group/forms.py:23 pgscm/farmer/forms.py:32
+#: pgscm/group/forms.py:32
+msgid "Enter year"
+msgstr ""
+
 #: pgscm/associate_group/views.py:64
 msgid "Update associate group success!"
 msgstr ""
 
-#: pgscm/associate_group/views.py:85 pgscm/associate_group/views.py:130
+#: pgscm/associate_group/views.py:85 pgscm/associate_group/views.py:131
 msgid "Add associate group success!"
 msgstr ""
 
-#: pgscm/associate_group/views.py:156
+#: pgscm/associate_group/views.py:158
 msgid "Edit associate group success!"
 msgstr ""
 
@@ -437,15 +447,15 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: pgscm/farmer/views.py:70 pgscm/farmer/views.py:155
+#: pgscm/farmer/views.py:70 pgscm/farmer/views.py:157
 msgid "Update farmer success!"
 msgstr ""
 
-#: pgscm/farmer/views.py:86 pgscm/farmer/views.py:128
+#: pgscm/farmer/views.py:86 pgscm/farmer/views.py:129
 msgid "Add farmer success!"
 msgstr ""
 
-#: pgscm/farmer/views.py:161
+#: pgscm/farmer/views.py:163
 msgid "Can't get id of object edit!"
 msgstr ""
 
@@ -481,11 +491,11 @@ msgstr ""
 msgid "Update group success!"
 msgstr ""
 
-#: pgscm/group/views.py:140 pgscm/group/views.py:200
+#: pgscm/group/views.py:140 pgscm/group/views.py:201
 msgid "Add group success!"
 msgstr ""
 
-#: pgscm/group/views.py:235
+#: pgscm/group/views.py:237
 msgid "Edit group success!"
 msgstr ""
 

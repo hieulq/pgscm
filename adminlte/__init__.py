@@ -901,7 +901,6 @@ def load_group_script():
                             count = data['total_of_farmer'] + " (" + data['total_of_male'] + 
                                     " / " + data['total_of_female'] + ")";
                         }} else {{
-                        console.log(data);
                             count = data.length;
                             var total_area_approved = 0;
                             var total_area = 0;
