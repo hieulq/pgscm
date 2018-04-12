@@ -57,6 +57,7 @@ class AssociateGroup(sqla.Model):
 
     name = sqla.Column(sqla.String(80))
     email = sqla.Column(sqla.String(80))
+    created_at = sqla.Column(sqla.Integer(), nullable=True)
 
     province_id = sqla.Column(sqla.String(64), sqla.ForeignKey(
         'province.province_id'))
@@ -77,6 +78,7 @@ class Group(sqla.Model):
                      default=lambda: str(uuid.uuid4()))
     group_code = sqla.Column(sqla.String(64))
     name = sqla.Column(sqla.String(80))
+    created_at = sqla.Column(sqla.Integer(), nullable=True)
 
     village = sqla.Column(sqla.String(64))  # lang, thon
     ward_id = sqla.Column(sqla.String(64),
@@ -118,6 +120,7 @@ class Farmer(sqla.Model):
     name = sqla.Column(sqla.String(80), nullable=False)
     gender = sqla.Column(sqla.Enum(const.GenderType), nullable=False)
     type = sqla.Column(sqla.Enum(const.FarmerType))
+    created_at = sqla.Column(sqla.Integer(), nullable=True)
 
     group_id = sqla.Column(sqla.String(64), sqla.ForeignKey('group.id'),
                            nullable=True)
