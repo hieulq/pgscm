@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, HiddenField, validators, \
-    SubmitField
+    SubmitField, IntegerField
 
 from pgscm.utils import __, Select, Submit
 
@@ -28,5 +28,7 @@ class GroupForm(FlaskForm):
                                      validators=[data_required], coerce=str,
                                      widget=Select(),
                                      id='load_now-associate_group')
+    created_at = IntegerField(__('Year created'),
+                              render_kw={"placeholder": __('Enter year')})
     id = HiddenField(__('Id'), validators=[data_required])
     submit = SubmitField(__('Submit'), widget=Submit())

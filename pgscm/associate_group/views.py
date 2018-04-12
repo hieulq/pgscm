@@ -123,6 +123,7 @@ def add_agroup():
             associate_group_code=as_group,
             name=form.name.data, province=province,
             email=form.email.data,
+            created_at=form.created_at.data
         )
         sqla.session.add(new_agroup)
         sqla.session.commit()
@@ -147,6 +148,7 @@ def edit_agroup():
         edit_agroup.associate_group_code = form \
             .associate_group_code.data
         edit_agroup.name = form.name.data
+        edit_agroup.created_at = form.created_at.data
         if edit_agroup.province_id != form.province_id.data:
             edit_agroup.province = models.Province.query \
                 .filter_by(province_id=form.province_id.data) \

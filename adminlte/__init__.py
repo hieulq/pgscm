@@ -901,15 +901,17 @@ def load_group_script():
                             count = data['total_of_farmer'] + " (" + data['total_of_male'] + 
                                     " / " + data['total_of_female'] + ")";
                         }} else {{
+                        console.log(data);
                             count = data.length;
                             var total_area_approved = 0;
                             var total_area = 0;
                             for(var i in data){{
-                                if(data[i]['re_verify_status'] != {3}){{
+                                if(data[i]['re_verify_status'] == {4} ||
+                                   data[i]['re_verify_status'] == {14} ){{
                                     total_area += data[i]['group_area'];
                                 }}
-                                if(data[i]['re_verify_status'] == {4} || 
-                                   data[i]['re_verify_status'] == {13}){{
+                                if(data[i]['re_verify_status'] == {4} && 
+                                   data[i]['status'] == {13}){{
                                    total_area_approved += data[i]['group_area'];
                                 }}
                             }}
@@ -976,7 +978,8 @@ def load_group_script():
                json.dumps(certificate_status_type), json.dumps(certificate_re_verify_status_type),
                json.dumps(gender_type), json.dumps(farmer_type),
                'tab_history', 'no_data', 'tab_cert', 'no_cert_data',
-               g.c.CertificateReVerifyStatusType['keeping'].value)
+               g.c.CertificateStatusType['approved'].value,
+               g.c.CertificateReVerifyStatusType['converting'].value)
     return group_script
 
 

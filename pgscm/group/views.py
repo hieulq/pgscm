@@ -194,7 +194,8 @@ def add_group():
             name=form.name.data, village=form.village.data,
             ward=ward, district=district,
             associate_group=associate_group,
-            province=province)
+            province=province,
+            created_at=form.created_at.data)
         sqla.session.add(new_group)
         sqla.session.commit()
         return jsonify(is_success=True, message=str(__('Add group success!')))
@@ -215,6 +216,7 @@ def edit_group():
         edit_group.group_code = form.group_code.data
         edit_group.name = form.name.data
         edit_group.village = form.village.data
+        edit_group.created_at = form.created_at.data
         if edit_group.associate_group_id != \
                 form.associate_group_id.data:
             edit_group.associate_group = sqla.session \
