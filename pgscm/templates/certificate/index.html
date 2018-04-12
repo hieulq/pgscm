@@ -86,7 +86,7 @@
 {%- endblock content_header %}
 {% block content -%}
     {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
-        {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '') }}
+        {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('New'), 'plus', '') }}
     {% endif %}
     <div class="row">
         <div class="col-xs-12">

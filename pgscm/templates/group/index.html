@@ -17,7 +17,7 @@
             ajax_endpoint='group', crud_endpoint=['group.add_group', 'group.edit_group', 'group.delete_group'],
             export_columns='0,1,2,3,4,5,6',
             column_names=[("group_code", True, g.c.LINK_DISP, _('Code')), ("name", True, g.c.BOLD_DISP, _('Name')),
-            ("village", True, None, _('Village')), ("ward.name", False, None, _('Ward')),
+            ("village", True, None, _('Village')), ("ward.name", False, None, _('Commune')),
             ("district.name", False, None, _('District')), ("province.name", False, None, _('Province')),
             ("associate_group.name", False, None, _('Inter-group')), ("action", False, None, _('Actions'))],
             select2_class=g.c.SELECT_DEFAULT_ID, has_button_view=True) }}
@@ -26,7 +26,7 @@
             ajax_endpoint='group', crud_endpoint=['group.add_group', 'group.edit_group', 'group.delete_group'],
             export_columns='0,1,2,3,4,5,6',
             column_names=[("group_code", True, g.c.LINK_DISP, _('Code')), ("name", True, g.c.BOLD_DISP, _('Name')),
-            ("village", True, None, _('Village')), ("ward.name", False, None, _('Ward')),
+            ("village", True, None, _('Village')), ("ward.name", False, None, _('Commune')),
             ("district.name", False, None, _('District')), ("province.name", False, None, _('Province')),
             ("associate_group.name", False, None, _('Inter-group'))],
             select2_class=g.c.SELECT_DEFAULT_ID, has_button_view=False) }}
@@ -47,7 +47,7 @@
 {%- endblock content_header %}
 {% block content -%}
     {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
-        {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('Create New'), 'plus', '') }}
+        {{ render_btn(g.c.BTNADD_ID, 'btn-default', '', g.c.MODAL_ADD_ID, _('New'), 'plus', '') }}
     {% endif %}
     <div class="row">
         <div class="col-xs-12">
@@ -64,7 +64,7 @@
                             <th>{{ _('Code') }}</th>
                             <th>{{ _('Name') }}
                             <th>{{ _('Village') }}</th>
-                            <th>{{ _('Ward') }}</th>
+                            <th>{{ _('Commune') }}</th>
                             <th>{{ _('District') }}</th>
                             <th>{{ _('Province') }}</th>
                             <th>{{ _('Inter-group') }}</th>

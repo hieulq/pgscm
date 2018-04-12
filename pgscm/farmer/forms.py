@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, HiddenField, \
-    validators, SubmitField
+    validators, SubmitField, IntegerField
 
 from pgscm import const as c
 from pgscm.utils import __, Select, Submit
@@ -28,5 +28,7 @@ class FarmerForm(FlaskForm):
     group_id = SelectField(__('Group'), validators=[data_required],
                            coerce=str, widget=Select(), id='load_now-group',
                            choices=[])
+    created_at = IntegerField(__('Year created'),
+                              render_kw={"placeholder": __('Enter year')})
     id = HiddenField(__('Id'), validators=[data_required])
     submit = SubmitField(__('Submit'), widget=Submit())

@@ -467,9 +467,12 @@ class AssociateGroupResource(ModelResource):
         agroup_id = id
         report_year = year
         # current_year = datetime.datetime.now().year
-        gs = [g.id for g in models.Group.query.filter_by(
-                _deleted_at=None, associate_group_id=agroup_id).all()]
+        gs = [g.id for g in models.Group.query.filter(
+            models.Group._deleted_at == None,
+            models.Group.associate_group_id == agroup_id,
+            models.Group.created_at <= report_year).all()]
         response = {
+            # 'total_of_gr': len(gs),
             'total_of_gr': len(gs),
             'total_of_farmer': 0,
             'total_of_male': 0,
@@ -489,8 +492,10 @@ class AssociateGroupResource(ModelResource):
                     models.Certificate.certificate_start_date <= end_time)\
                     .all()
             for cert in cs:
-                if cert.re_verify_status != \
-                        c.CertificateReVerifyStatusType.fortuity:
+                if cert.re_verify_status == \
+                        c.CertificateReVerifyStatusType.adding or \
+                        cert.re_verify_status == \
+                        c.CertificateReVerifyStatusType.converting:
                     response['total_of_area'] += cert.group_area
                 if cert.re_verify_status == \
                         c.CertificateReVerifyStatusType.adding and \
@@ -498,10 +503,15 @@ class AssociateGroupResource(ModelResource):
                     response['total_of_approved_area'] += cert.group_area
                     response['total_of_cert'] += 1
 
-            fs = models.Farmer.query.filter_by(
-                group_id=g, _deleted_at=None).all()
-            males = models.Farmer.query.filter_by(
-                group_id=g, _deleted_at=None, gender=1).all()
+            fs = models.Farmer.query.filter(
+                models.Farmer.group_id == g,
+                models.Farmer._deleted_at == None,
+                models.Farmer.created_at <= report_year).all()
+            males = models.Farmer.query.filter(
+                models.Farmer.group_id == g,
+                models.Farmer._deleted_at == None,
+                models.Farmer.gender == 1,
+                models.Farmer.created_at <= report_year).all()
             response['total_of_farmer'] += len(fs)
             response['total_of_male'] += len(males)
         response['total_of_female'] = \
@@ -523,18 +533,24 @@ class AssociateGroupResource(ModelResource):
             gs = [g.id for g in models.Group.query.filter_by(
                 _deleted_at=None).all()]
         sum = 0
+        today = datetime.date.today()
         for g in gs:
             cs = models.Certificate.query.filter_by(
                 owner_group_id=g, _deleted_at=None).all()
             for cert in cs:
-                if not approved and cert.re_verify_status != \
-                        c.CertificateReVerifyStatusType.fortuity:
-                    sum += cert.group_area
-                elif cert.re_verify_status == \
-                        c.CertificateReVerifyStatusType.adding and \
-                        cert.status == \
-                        c.CertificateStatusType.approved:
-                    sum += cert.group_area
+                if cert.certificate_expiry_date and \
+                                cert.certificate_expiry_date >= today:
+                    if approved and cert.re_verify_status == \
+                            c.CertificateReVerifyStatusType.adding and \
+                            cert.status == \
+                            c.CertificateStatusType.approved:
+                        sum += cert.group_area
+                    if not approved and \
+                            (cert.re_verify_status ==
+                                c.CertificateReVerifyStatusType.adding or
+                            cert.re_verify_status ==
+                                c.CertificateReVerifyStatusType.converting):
+                        sum += cert.group_area
         return sum
 
     @Route.GET('/gender')

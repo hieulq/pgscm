@@ -62,15 +62,15 @@ class FarmerType(IntEnum):
     counter = 5  # ke toan
 
 
-class CertificateStatusType(IntEnum):
-    approved = 1  # dong y cap
-    rejected = 2  # tu choi cap (refused)
+class CertificateStatusType(IntEnum):   # inspection
+    approved = 1  # phe chuan
+    rejected = 2  # tu choi cap (refuse)
     decline = 3  # thu hoi      (withdraw)
     warning = 4  # canh cao
     punish = 5  # phat
 
 
-class CertificateReVerifyStatusType(IntEnum):
+class CertificateReVerifyStatusType(IntEnum):   # decision
     adding = 1  # cap moi (new)
     keeping = 2  # duy tri (remaining)
     converting = 3  # dang chuyen doi (conversion)

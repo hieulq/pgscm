@@ -122,7 +122,8 @@ def add_farmer():
             id=form.id.data, type=form.type.data,
             farmer_code=form.farmer_code.data,
             name=form.name.data, group=group_farmer,
-            gender=form.gender.data)
+            gender=form.gender.data,
+            created_at=form.created_at.data)
         sqla.session.add(new_farmer)
         sqla.session.commit()
         return jsonify(is_success=True, message=str(__('Add farmer success!')))
@@ -146,6 +147,7 @@ def edit_farmer():
             edit_farmer.name = form.name.data
             edit_farmer.gender = form.gender.data
             edit_farmer.type = form.type.data
+            edit_farmer.created_at = form.created_at.data
             if edit_farmer.group_id != form.group_id.data:
                 new_group = models.Group.query.filter_by(
                     id=form.group_id.data).one()
