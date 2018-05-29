@@ -488,8 +488,8 @@ class AssociateGroupResource(ModelResource):
         for g in gs:
             cs = models.Certificate.query.filter(
                     models.Certificate.owner_group_id == g,
-                    models.Certificate.certificate_start_date >= start_time,
-                    models.Certificate.certificate_start_date <= end_time)\
+                    models.Certificate.certificate_expiry_date >= start_time,
+                    models.Certificate.certificate_expiry_date <= end_time)\
                     .all()
             for cert in cs:
                 if cert.re_verify_status == \
