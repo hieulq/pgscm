@@ -6,10 +6,13 @@ N_USER = 'national_user'
 R_ADMIN = 'regional_admin'
 R_MOD = 'regional_moderator'
 R_USER = 'regional_user'
+C_USER = 'customer_user'
 ALL_ROLES = [N_ADMIN, N_MOD, N_USER, R_ADMIN, R_MOD, R_USER]
 ONLY_ADMIN_ROLE = [N_ADMIN, R_ADMIN]
 ADMIN_MOD_ROLE = [N_ADMIN, R_ADMIN, N_MOD, R_MOD]
 NATION_ROLE = [N_ADMIN, N_MOD, N_USER]
+CUSTOMER_ROLE = [C_USER]
+
 
 PAGE_HAVE_SOFT_DELETE = ['associate_group', 'group', 'farmer',
                          'certificate/farmers', 'certificate/groups']

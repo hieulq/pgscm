@@ -129,6 +129,11 @@ def create_app(config_name):
         # for master data in DB
         sqla.create_all()
 
+        if not user_datastore.find_role(const.C_USER):
+            user_datastore.create_role(id=str(uuid.uuid4()),
+                                       name=const.C_USER,
+                                       description='Customer Role')
+
         if not user_datastore.find_user(email='admin@pgs.com'):
             user_datastore.create_user(id=str(uuid.uuid4()),
                                        email='admin@pgs.com', fullname="Admin",
