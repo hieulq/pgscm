@@ -204,7 +204,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
 
             select2_script += """
                     var select2_elements = $('select')
-                    
+
                     function select2_ajax(i, h, resource){{
                         $.ajax({{
                             type: "get",
@@ -237,7 +237,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                 }}
                         }});
                     }}
-                    
+
                     if(select2_elements.length){{
                         var h = Math.floor(select2_elements.length / 2);
                         for(var i = 0; i < h;i++){{
@@ -254,7 +254,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                             }}
                         }}
                     }}
-                        
+
             """.format(has_associate_group_id)
 
         def convert_column_display(column_type):
@@ -282,20 +282,20 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 render_result = render_tmpl.format(
                     "", "",
                     "(data==1?\"" + """<div class=\\"form-group has-success\\">""" +
-                        """<label class=\\"control-label\\">""" +
-                        """<i class=\\"fa fa-check-circle-o\\"></i> """ + _('approved') + "</label></div>" +
+                    """<label class=\\"control-label\\">""" +
+                    """<i class=\\"fa fa-check-circle-o\\"></i> """ + _('approved') + "</label></div>" +
                     "\":data==2?\"" + """<div class=\\"form-group has-error\\">""" +
-                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
-                        """<i class=\\"fa fa-times-circle-o\\"></i> """ + _('refuse') + "</label></div>" +
+                    """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                    """<i class=\\"fa fa-times-circle-o\\"></i> """ + _('refuse') + "</label></div>" +
                     "\":data==3?\"" + """<div class=\\"form-group has-error\\">""" +
-                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
-                        """<i class=\\"fa fa-times-circle-o\\"></i> """ + _('withdraw') + "</label></div>" +
+                    """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                    """<i class=\\"fa fa-times-circle-o\\"></i> """ + _('withdraw') + "</label></div>" +
                     "\":data==4?\"" + """<div class=\\"form-group has-warning\\">""" +
-                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
-                        """<i class=\\"fa fa-warning\\"></i> """ + _('warning') + "</label></div>" +
+                    """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                    """<i class=\\"fa fa-warning\\"></i> """ + _('warning') + "</label></div>" +
                     "\":\"" + """<div class=\\"form-group has-error\\">""" +
-                        """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
-                        """<i class=\\"fa fa-times-circle-o\\"></i>""" + _('punish') + "</label></div>\")")
+                    """<label class=\\"control-label\\" style=\\"cursor:pointer\\"  data-toggle=\\"tooltip\\" title=\\" " + row._modify_info + " \\">""" +
+                    """<i class=\\"fa fa-times-circle-o\\"></i>""" + _('punish') + "</label></div>\")")
             if column_type == g.c.CertificateReVerifyStatusType:
                 render_result = render_tmpl.format(
                     "", "",
@@ -373,8 +373,10 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
             mapping = ""
             for column in column_names:
                 if column[0] == 'action':
-                    render_func = """"render": function (data, type, row) {{
-                        data_attr = ''
+                    render_func = """
+                    "render": function (data, type, row) {{
+                        data_attr = '';
+                        btn_view = '';
                         row_attr = Object.keys(row)
                         for (idx in row_attr) {{
                             //if (row_attr[idx].startsWith('_') == false) {{
@@ -385,7 +387,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                 data_attr += 'data-' + row_attr[idx].replace(/[$]/g, '') + '=\"' + value + '\" '
                             //}}
                         }}
-                        if('{5}' == 'user'){{
+                        if('{0}' == 'user'){{
                             if(row['roles'].length > 0){{
                                 for(var i in row['roles']){{
                                     var user_role_id = row['roles'][i]["$ref"].split('/')[2];
@@ -399,45 +401,57 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                 }}
                             }}
                         }}
-                        return "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
-                        "data-toggle=\\"modal\\" data-target=\\"#{3}\\"" +
-                        data_attr +
-                        ">" +
-                        "<i class=\\"fa fa-{4}\\"></i></button>" + 
-                        " " +
-                    """.format(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info',
-                               g.c.MODAL_EDIT_ID, 'edit', ajax_endpoint)
+
+                    """.format(ajax_endpoint)
 
                     if has_button_view:
                         render_func += """
-                            "<button type=\\"button\\" class=\\"btn {1} {0} {2}\\"" +
+                            btn_view = "<button type=\\"button\\" class=\\"btn {1} {0} {2}\\"" +
                             "data-toggle=\\"modal\\" data-target=\\"#{4}\\"" +
                             data_attr +
                             ">" +
                             "<i class=\\"fa fa-{3}\\"></i></button>" + 
-                            " " +
+                            " ";
                         """.format('btn-xs', g.c.BTNVIEW_ID, 'btn-warning', 'search',
-                                     g.c.MODAL_DETAIL_ID)
+                                   g.c.MODAL_DETAIL_ID)
 
-                    if has_button_history:
+                    if check_role(current_user.roles, g.c.ADMIN_MOD_ROLE):
+
                         render_func += """
-                            "<button type=\\"button\\" class=\\"btn {1} {0} {2}\\"" +
-                            "data-toggle=\\"modal\\" data-target=\\"#{4}\\"" +
-                            data_attr +
-                            ">" +
-                            "<i class=\\"fa fa-{3}\\"></i></button>" + 
-                            " " +
-                        """.format('btn-xs', g.c.BTNHISTORY_ID, 'btn-warning', 'search',
-                                     g.c.MODAL_HISTORY_ID)
+                                            return "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
+                                                "data-toggle=\\"modal\\" data-target=\\"#{3}\\"" +
+                                                data_attr +
+                                                ">" +
+                                                "<i class=\\"fa fa-{4}\\"></i></button>" + 
+                                                " " + btn_view + 
+                                            """.format(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info',
+                                                       g.c.MODAL_EDIT_ID, 'edit')
 
-                    render_func += """
-                            "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
-                            "data-toggle=\\"modal\\" data-target=\\"#{3}\\"" +
-                            data_attr +
-                            ">" +
-                            "<i class=\\"fa fa-{4}\\"></i></button>"
-                        }}""".format('btn-xs', g.c.BTNDEL_ID,
-                                     'btn-danger', g.c.MODAL_DEL_ID, 'trash')
+                        if has_button_history:
+                            render_func += """
+                                "<button type=\\"button\\" class=\\"btn {1} {0} {2}\\"" +
+                                "data-toggle=\\"modal\\" data-target=\\"#{4}\\"" +
+                                data_attr +
+                                ">" +
+                                "<i class=\\"fa fa-{3}\\"></i></button>" + 
+                                " " +
+                            """.format('btn-xs', g.c.BTNHISTORY_ID, 'btn-warning', 'search',
+                                       g.c.MODAL_HISTORY_ID)
+
+                        render_func += """
+                                "<button type=\\"button\\" class=\\"btn {0} {1} {2}\\"" +
+                                "data-toggle=\\"modal\\" data-target=\\"#{3}\\"" +
+                                data_attr +
+                                ">" +
+                                "<i class=\\"fa fa-{4}\\"></i></button>"
+                            """.format('btn-xs', g.c.BTNDEL_ID,
+                                       'btn-danger', g.c.MODAL_DEL_ID, 'trash')
+                    else:
+                        render_func += """
+                            return btn_view
+                        """
+
+                    render_func += "}"
                     mapping += """
                         {{"orderable": {1}, "searchable": {1},
                             "width": "10%", "title": "{2}",
@@ -541,7 +555,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
         <!-- page script -->
         <script>
             $(function () {{
-            
+
                 var roles = [];
                 if('{14}' == 'user'){{
                     $.ajax({{
@@ -556,17 +570,17 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                         }}
                     }});
                 }}
-            
+
                 function create_dataTable(){{
                     var table = $('#pgs_data').DataTable({{
                         {17}
                         {1}
                         "drawCallback": function( settings ) {{
                             $('.{2}').on('click', function (event) {{
-                                
+
                                 var data = $(this).data()
                                 var modal = $('#{3}')
-                                
+
                                 function call_ajax(url, resource, id_resource, element_id, default_value){{
                                     $.ajax({{
                                         type: "get",
@@ -591,7 +605,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                         }}
                                     }});
                                 }}
-                                
+
                                 var s2 = $('.{10}')
                                 var multi_select_data = []
                                 for (var key in data) {{
@@ -618,7 +632,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                 if(s2.length > 0 && multi_select_data.length > 0){{
                                     s2.val(multi_select_data).trigger("change")
                                 }}
-    
+
                                 var op = modal.find('#{12}')
                                 if(op.length > 0 ){{
                                     op.parent().removeClass('hidden')
@@ -627,13 +641,13 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                                     modal.find('#confirm').prop('required',false)
                                     modal.find('#confirm').parent().removeClass('required')
                                 }}
-                                
+
                                 if(data['province_id'] && data['district_id']){{
                                     modal.find('#district_id').empty();
                                     call_ajax('/district', 'province', data['province_id'],
                                         'district_id', data['district_id']);
                                 }}
-                                
+
                                 if(data['district_id'] && data['ward_id']){{
                                     modal.find('#ward_id').empty();
                                     call_ajax('/ward', 'district', data['district_id'],
@@ -659,9 +673,9 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                             }})
                             $('#{9}').removeClass('btn-primary')
                             .addClass('btn-warning')
-                            
+
                             {19}
-                            
+
                         }},
                         "initComplete": function (settings, json) {{
                             $('.{5}').appendTo('#pgs_data_filter');
@@ -698,7 +712,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     return table;
                 }}
                 var table = create_dataTable();
-                    
+
                 if('{14}' == 'certificate/groups'){{
                     var modal_edit = $('#{3}');
                     modal_edit.find('#load_now-farmer').parent().remove();
@@ -710,7 +724,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                     var modal_add = $('#{11}');
                     modal_add.find('#load_now-group').parent().remove();
                 }}
-                
+
                 {4}
                 $('.{8}').removeClass('btn-default')
                     .addClass('btn-primary pull-right')
@@ -718,7 +732,7 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                 $('.{8}').parent()
                     .append('<button type="button" class="pgs_dismiss_modal btn btn-default"'+
                     'data-dismiss="modal">Cancel</button>');
-                    
+
         """.format(datatables_script, datatable_config, g.c.BTNEDIT_ID,
                    g.c.MODAL_EDIT_ID, select2_script, g.c.BTNADD_ID,
                    g.c.BTNDEL_ID, g.c.MODAL_DEL_ID, g.c.SUBMIT_DEFAULT_CLASS,
@@ -750,13 +764,13 @@ def load_datatables_script(ajax_endpoint="", crud_endpoint=[], export_columns=""
                         $('.pgs_dismiss_modal').click();
                     }});
                 }};
-                
+
                 // add form
                 form_submit("{0}", 0, "POST");
-                
+
                 // edit form
                 form_submit("{1}", 1, "PUT");
-                
+
                 // delete form
                 form_submit("{2}", 2, "DELETE");
             """.format(lurl_for(crud_endpoint[0]), lurl_for(crud_endpoint[1]), lurl_for(crud_endpoint[2]))
@@ -841,18 +855,18 @@ def load_group_script():
 
             catch_select2_select_event(select2_district[0], '/ward', 'district', 
                 select2_ward[0], NaN);
-            
+
             catch_select2_select_event(select2_district[1], '/ward', 'district', 
                 select2_ward[1], NaN);
-                
+
             var certificate_status_type = {5};
             var certificate_re_verify_status_type = {6};
-            
+
             var gender_type = {7};
             var farmer_type = {8};
-            
+
             function get_cert_history(group_id) {{
-                var owner_group_id = group_id;
+                let owner_group_id = group_id;
                 $.ajax({{
                     type: "get",
                     url: '/certificate',
@@ -889,7 +903,7 @@ def load_group_script():
                     }}
                 }});
             }}
-            
+
             function get_info_of_group(url, data, des_id_element) {{
                 $.ajax({{
                     url: url,
@@ -925,10 +939,10 @@ def load_group_script():
                 }})
             }}
             $('.{1}').on('click', function (event) {{
-            
+
                 let group_name = $(this).data()['name'];
                 $('#modal-header-name').html(group_name);
-            
+
                 var group_id = $(this).data()['id'];
                 var d1 = 'id="' + group_id + '"';
                 get_info_of_group('/group/group_summary', d1, 'label_sum1');
@@ -968,7 +982,7 @@ def load_group_script():
                         alert(request.responseText);
                     }}
                 }})
-                
+
                 get_cert_history(group_id);
             }});
     """.format(g.c.MODAL_HISTORY_ID, g.c.BTNVIEW_ID, 'view_gr_history',
@@ -993,14 +1007,14 @@ def load_farmer_script():
 
     farmer_script = """
         $('.{0}').on('click', function (event) {{
-            
+
             let owner_farmer_id = $(this).data()['id'];
             let owner_farmer_name = $(this).data()['name'];
             $('#modal-header-name').html(owner_farmer_name);
-            
+
             let certificate_status_type = {3};
             let certificate_re_verify_status_type = {4};
-            
+
             $.ajax({{
                 type: "get",
                 url: '/certificate',
@@ -1044,7 +1058,7 @@ def load_farmer_script():
 
 def load_agroup_script():
     agroup_script = """
-    
+
         function get_agroup_report(year, agroup_id) {{
             var data = {{id: agroup_id, year: year}};
             $.ajax({{
@@ -1067,7 +1081,7 @@ def load_agroup_script():
                 }}
             }})
         }}
-        
+
         select = $('#year_report');
         var date = new Date();
         var year_selects = [];
@@ -1075,11 +1089,11 @@ def load_agroup_script():
         for(var i = 0;i<10;i++){{
             year_selects.push(current_year - i);
         }}
-        
+
         select.select2({{
             data: year_selects
         }});
-            
+
         select.change(function(){{
             var agroup_id = select.attr('data-agroup_id');
             if(agroup_id) {{
@@ -1089,16 +1103,16 @@ def load_agroup_script():
             }}
             // console.log(select.attr('data-agroup_id'));
         }});
-    
+
         $('.{0}').on('click', function (event) {{
-            
+
             let agroup_name = $(this).data()['name'];
             $('#modal-header-name').html(agroup_name);
-            
+
             var agroup_id = $(this).data()['id'];
             select.attr('data-agroup_id', agroup_id);
             select.val(current_year).trigger('change');
-            
+
             $.ajax({{
                 method: 'GET',
                 url: '/group/deleted',
@@ -1134,9 +1148,9 @@ def load_agroup_script():
                     alert(request.responseText);
                 }}
             }})
-                        
+
         }});
-    
+
     """.format(g.c.BTNVIEW_ID, 'tab_history', 'no_data', 'year_report')
     return agroup_script
 
@@ -1185,7 +1199,7 @@ def load_user_script():
 
         catch_select2_select_event(select2_district[0], '/ward', 'district', 
             select2_ward[0], NaN);
-            
+
         catch_select2_select_event(select2_district[1], '/ward', 'district', 
             select2_ward[1], NaN);
     """.format()

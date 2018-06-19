@@ -12,8 +12,8 @@
 {% block scripts %}
     {{ super() }}
     <!-- DataTables with select2 enabled -->
-    {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
-    {{ load_datatables_script(
+    {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD, g.c.C_USER]) %}
+        {{ load_datatables_script(
             ajax_endpoint='group', crud_endpoint=['group.add_group', 'group.edit_group', 'group.delete_group'],
             export_columns='0,1,2,3,4,5,6',
             column_names=[("group_code", True, g.c.LINK_DISP, _('Code')), ("name", True, g.c.BOLD_DISP, _('Name')),
@@ -22,7 +22,7 @@
             ("associate_group.name", False, None, _('Inter-group')), ("action", False, None, _('Actions'))],
             select2_class=g.c.SELECT_DEFAULT_ID, has_button_view=True) }}
     {% else %}
-    {{ load_datatables_script(
+        {{ load_datatables_script(
             ajax_endpoint='group', crud_endpoint=['group.add_group', 'group.edit_group', 'group.delete_group'],
             export_columns='0,1,2,3,4,5,6',
             column_names=[("group_code", True, g.c.LINK_DISP, _('Code')), ("name", True, g.c.BOLD_DISP, _('Name')),
@@ -68,7 +68,7 @@
                             <th>{{ _('District') }}</th>
                             <th>{{ _('Province') }}</th>
                             <th>{{ _('Inter-group') }}</th>
-                            {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD]) %}
+                            {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.N_MOD, g.c.R_ADMIN, g.c.R_MOD, g.c.C_USER]) %}
                                 <th>{{ _('Actions') }}</th>
                             {% endif %}
                         </tr>
@@ -93,6 +93,10 @@
                                         {{ render_btn(g.c.BTNEDIT_ID, 'btn-xs', 'btn-info', g.c.MODAL_EDIT_ID, '', 'edit', gr) }}
                                         {{ render_btn(g.c.BTNVIEW_ID, 'btn-xs', 'btn-warning', g.c.MODAL_DETAIL_ID, '', 'search', gr) }}
                                         {{ render_btn(g.c.BTNDEL_ID, 'btn-xs', 'btn-danger', g.c.MODAL_DEL_ID, '', 'trash', gr) }}
+                                    </td>
+                                {% elif check_role(current_user.roles, [g.c.C_USER]) %}
+                                    <td class="actions_column">
+                                        {{ render_btn(g.c.BTNVIEW_ID, 'btn-xs', 'btn-warning', g.c.MODAL_DETAIL_ID, '', 'search', gr) }}
                                     </td>
                                 {% endif %}
                             </tr>

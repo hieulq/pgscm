@@ -15,7 +15,8 @@ from pgscm.db import models
 
 
 def check_user_associate_group(manager, kwargs, is_and=False, is_delete=True,
-                         is_agroup_id=True, is_get_all=False):
+                         is_agroup_id=True, is_get_all=False,
+                               is_not_cert_query=True):
     if is_get_all:
         func = manager.instances
     elif len(kwargs['where']) == 0 or is_and:
@@ -23,10 +24,11 @@ def check_user_associate_group(manager, kwargs, is_and=False, is_delete=True,
     else:
         func = manager.paginated_instances_or
     associate_group_id = current_user.associate_group_id
-    if is_region_role() and associate_group_id and is_agroup_id:
+    if is_region_role() and associate_group_id and is_agroup_id \
+            and is_not_cert_query:
         kwargs['where'] += \
-            (manager.filters['id'][None].convert(
-                associate_group_id),)
+                (manager.filters['id'][None].convert(
+                    associate_group_id),)
     if is_delete:
         kwargs['where'] += \
             (manager.filters['_deleted_at'][None].convert(None),)
@@ -103,7 +105,14 @@ class CertResource(ModelResource):
     def _filter_group_farmer_on_associate_group(self, kwargs,
                     is_cert_for_group=False, is_cert_for_farmer=False):
         associate_group_id = current_user.associate_group_id
-        if associate_group_id and is_region_role():
+        is_query_in_group = False
+        if 'where' in kwargs:
+            for cond in kwargs['where']:
+                if cond.attribute == 'owner_group_id' and isinstance(
+                        cond.filter, filters.EqualFilter):
+                    is_query_in_group = True
+                    break
+        if associate_group_id and is_region_role() and not is_query_in_group:
             kwargs['filter_and_cols'] = ['associate_group_id']
             gs = [g.id for g in models.Group.query.filter_by(
                 associate_group_id=associate_group_id, _deleted_at=None).all()]
@@ -181,7 +190,7 @@ class CertResource(ModelResource):
                response_schema=Instances())
     def total(self, **kwargs):
         func = check_user_associate_group(self.manager, kwargs, is_delete=True,
-                                    is_get_all=True)
+                                    is_get_all=True, is_not_cert_query=False)
         del kwargs['per_page']
         del kwargs['page']
         return func(**kwargs)
