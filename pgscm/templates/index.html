@@ -125,47 +125,51 @@
         </div>
     {% endif %}
     <!-- search form -->
-{#    <form action="#" method="get" class="sidebar-form">#}
-{#        <div class="input-group">#}
-{#            <input type="text" name="q" class="form-control"#}
-{#                   placeholder={{ _('Search...') }}>#}
-{#            <span class="input-group-btn">#}
-{#                <button type="submit" name="search" id="search-btn"#}
-{#                        class="btn btn-flat"><i class="fa fa-search"></i>#}
-{#                </button>#}
-{#              </span>#}
-{#        </div>#}
-{#    </form>#}
+    {#    <form action="#" method="get" class="sidebar-form">#}
+    {#        <div class="input-group">#}
+    {#            <input type="text" name="q" class="form-control"#}
+    {#                   placeholder={{ _('Search...') }}>#}
+    {#            <span class="input-group-btn">#}
+    {#                <button type="submit" name="search" id="search-btn"#}
+    {#                        class="btn btn-flat"><i class="fa fa-search"></i>#}
+    {#                </button>#}
+    {#              </span>#}
+    {#        </div>#}
+    {#    </form>#}
     <!-- /.search form -->
     <ul class="sidebar-menu">
         <li class="header">{{ _('PGS MANAGEMENT') }}</li>
+    {% if not check_role(current_user.roles, [g.c.C_USER]) %}
         <li class="{{ is_active_in_tree(request, 'main.index') }}">
             <a href="{{ lurl_for('main.index') }}">
                 <i class="fa fa-dashboard"></i> <span>{{ _('Overview') }}</span>
             </a>
         </li>
+    {% endif %}
         {% if current_user.is_authenticated %}
-            <li class="treeview {{ is_active_in_tree(request, 'certificate', True) }}">
-                <a href="{{ lurl_for('certificate.index') }}">
-                    <i class="fa fa-balance-scale"></i>
-                    <span>{{ _('Certificate') }}</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="{{ is_active_in_tree(request, 'certificate.groups', False) }}">
-                        <a href="{{ lurl_for('certificate.groups') }}">
-                            <i class="fa fa-group"></i>
-                            {{ _('Certified Group') }}
-                        </a>
-                    </li>
-                    <li class="{{ is_active_in_tree(request, 'certificate.farmers', False) }}">
-                        <a href="{{ lurl_for('certificate.farmers') }}">
-                            <i class="fa fa-child"></i>
-                            {{ _('Certified Farmer') }}
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            {% if not check_role(current_user.roles, [g.c.C_USER]) %}
+                <li class="treeview {{ is_active_in_tree(request, 'certificate', True) }}">
+                    <a href="{{ lurl_for('certificate.index') }}">
+                        <i class="fa fa-balance-scale"></i>
+                        <span>{{ _('Certificate') }}</span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="{{ is_active_in_tree(request, 'certificate.groups', False) }}">
+                            <a href="{{ lurl_for('certificate.groups') }}">
+                                <i class="fa fa-group"></i>
+                                {{ _('Certified Group') }}
+                            </a>
+                        </li>
+                        <li class="{{ is_active_in_tree(request, 'certificate.farmers', False) }}">
+                            <a href="{{ lurl_for('certificate.farmers') }}">
+                                <i class="fa fa-child"></i>
+                                {{ _('Certified Farmer') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
             <li class="{{ is_active_in_tree(request, 'farmer.index') }}">
                 <a href="{{ lurl_for('farmer.index') }}">
                     <i class="fa fa-child"></i> <span>{{ _('Farmer') }}</span>
@@ -176,23 +180,24 @@
                     <i class="fa fa-group"></i> <span>{{ _('Group') }}</span>
                 </a>
             </li>
-
-            <li class="{{ is_active_in_tree(request, 'agroup.index') }}">
-                <a href="{{ lurl_for('agroup.index') }}">
-                    <i class="fa fa-home"></i> <span>{{ _('Inter-group') }}</span>
-                </a>
-            </li>
-{#            {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN, g.c.N_MOD, g.c.R_MOD]) %}#}
-            <li class="alarm {{ is_active_in_tree(request, 'report.alarms', False) }}">
-                <a href="{{ lurl_for('report.alarms') }}">
-                    <i class="fa fa-warning"></i>
-                    {{ _('Warning') }}
-                    <span class="pull-right-container">
+            {% if not check_role(current_user.roles, [g.c.C_USER]) %}
+                <li class="{{ is_active_in_tree(request, 'agroup.index') }}">
+                    <a href="{{ lurl_for('agroup.index') }}">
+                        <i class="fa fa-home"></i> <span>{{ _('Inter-group') }}</span>
+                    </a>
+                </li>
+                {#            {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN, g.c.N_MOD, g.c.R_MOD]) %}#}
+                <li class="alarm {{ is_active_in_tree(request, 'report.alarms', False) }}">
+                    <a href="{{ lurl_for('report.alarms') }}">
+                        <i class="fa fa-warning"></i>
+                        {{ _('Warning') }}
+                        <span class="pull-right-container">
                       <small class="label pull-right bg-yellow">0</small>
                     </span>
-                </a>
-            </li>
-{#            {% endif %}#}
+                    </a>
+                </li>
+            {% endif %}
+            {#            {% endif %}#}
             {% if check_role(current_user.roles, [g.c.N_ADMIN, g.c.R_ADMIN]) %}
                 <li class="treeview {{ is_active_in_tree(request, 'admin', True) }}">
                     <a href="{{ lurl_for('admin.index') }}">
@@ -219,11 +224,11 @@
                     <i class="fa fa-user"></i> <span>{{ _('Login') }}</span>
                 </a>
             </li>
-{#            <li class="treeview">#}
-{#                <a href="{{ url_for_security('register') }}">#}
-{#                    <i class="fa fa-user-plus"></i> <span>{{ _('Register') }}</span>#}
-{#                </a>#}
-{#            </li>#}
+            {#            <li class="treeview">#}
+            {#                <a href="{{ url_for_security('register') }}">#}
+            {#                    <i class="fa fa-user-plus"></i> <span>{{ _('Register') }}</span>#}
+            {#                </a>#}
+            {#            </li>#}
         {% endif %}
     </ul>
     <!-- /.sidebar -->
@@ -243,16 +248,16 @@
 {% block scripts -%}
     {{ super() }}
     <script>
-    $.get('/certificate/nearly_expired', function(res, status, req) {
-    if (req.getResponseHeader('Content-Type') == 'application/json') {
-        count = req.getResponseHeader('X-Total-Count');
-        $("li.warning").find('span.label-warning').html(count);
-        $("li.warning").find('b').html(count);
-        $("li.alarm").find('small.label').html(count);
-    }
-    })
+        $.get('/certificate/nearly_expired', function (res, status, req) {
+            if (req.getResponseHeader('Content-Type') == 'application/json') {
+                count = req.getResponseHeader('X-Total-Count');
+                $("li.warning").find('span.label-warning').html(count);
+                $("li.warning").find('b').html(count);
+                $("li.alarm").find('small.label').html(count);
+            }
+        })
     </script>
-{%- endblock scripts  %}
+{%- endblock scripts %}
 
 {% block content -%}
     <h4 class="page-header">
@@ -260,7 +265,7 @@
         <small>{{ _('Quickly summary about <code>PGS Certificates</code> analytics.') }}
         </small>
     </h4>
-    <script src="{{ adminlte_find_resource('js/plugins/jQuery/jquery-2.2.3.js', cdn='local', use_minified=True)}}"></script>
+    <script src="{{ adminlte_find_resource('js/plugins/jQuery/jquery-2.2.3.js', cdn='local', use_minified=True) }}"></script>
     <!-- Small boxes (Stat box) -->
     <div class="row">
         {{ widgets.small_box(
