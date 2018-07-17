@@ -870,7 +870,7 @@ def load_group_script():
                 $.ajax({{
                     type: "get",
                     url: '/certificate',
-                    data: 'where={{"owner_group_id": "' + owner_group_id + '"}}',
+                    data: 'where={{"owner_group_id": "' + owner_group_id + '"}}&sort={{"certificate_expiry_date": true}}',
                     success: function (data, text) {{                    
                         $('#{11}').find("tr:gt(0)").remove();
                         if (data.length) {{
@@ -1018,7 +1018,7 @@ def load_farmer_script():
             $.ajax({{
                 type: "get",
                 url: '/certificate',
-                data: 'where={{"owner_farmer_id": "' + owner_farmer_id + '"}}',
+                data: 'where={{"owner_farmer_id": "' + owner_farmer_id + '"}}&sort={{"certificate_expiry_date": true}}',
                 success: function (data, text) {{      
                     $('#{1} div.modal-body div table').find("tr:gt(0)").remove();
                     if (data.length) {{
