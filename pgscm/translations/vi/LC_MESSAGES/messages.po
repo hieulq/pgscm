@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-04-12 11:13+0700\n"
+"POT-Creation-Date: 2018-07-30 00:27+0700\n"
 "PO-Revision-Date: 2017-07-08 21:17+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: vi\n"
@@ -83,21 +83,21 @@ msgstr "Đang chuyển đổi"
 msgid "suddenly"
 msgstr "Đột xuất"
 
-#: adminlte/__init__.py:518 pgscm/templates/agroup/index.html:105
-#: pgscm/templates/group/index.html:114 pgscm/templates/macro.html:35
+#: adminlte/__init__.py:532 pgscm/templates/agroup/index.html:105
+#: pgscm/templates/group/index.html:118 pgscm/templates/macro.html:35
 msgid "Deleted at"
 msgstr "Thời điểm xóa"
 
-#: adminlte/__init__.py:518 pgscm/templates/agroup/index.html:105
-#: pgscm/templates/group/index.html:114 pgscm/utils.py:65
+#: adminlte/__init__.py:532 pgscm/templates/agroup/index.html:105
+#: pgscm/templates/group/index.html:118 pgscm/utils.py:65
 msgid "Reason"
 msgstr "Lý do"
 
-#: adminlte/__init__.py:527
+#: adminlte/__init__.py:541
 msgid "Deleted"
 msgstr "Đã xóa"
 
-#: adminlte/__init__.py:527
+#: adminlte/__init__.py:541
 msgid "Current"
 msgstr "Hiện tại"
 
@@ -170,7 +170,7 @@ msgstr "Mật khẩu phải đồng bộ"
 #: pgscm/templates/agroup/index.html:105 pgscm/templates/farmer/index.html:16
 #: pgscm/templates/farmer/index.html:24 pgscm/templates/farmer/index.html:60
 #: pgscm/templates/group/index.html:19 pgscm/templates/group/index.html:28
-#: pgscm/templates/group/index.html:65 pgscm/templates/group/index.html:114
+#: pgscm/templates/group/index.html:65 pgscm/templates/group/index.html:118
 msgid "Name"
 msgstr "Tên"
 
@@ -320,7 +320,7 @@ msgstr "Từ chối"
 msgid "Withdraw"
 msgstr "Thu hồi"
 
-#: pgscm/certificate/forms.py:39 pgscm/templates/index.html:189
+#: pgscm/certificate/forms.py:39 pgscm/templates/index.html:193
 #: pgscm/templates/report/alarm.html:46
 msgid "Warning"
 msgstr "Cảnh cáo"
@@ -397,13 +397,13 @@ msgid "Edit certificate success!"
 msgstr "Cập nhật thông tin chứng chỉ thành công!"
 
 #: pgscm/farmer/forms.py:12 pgscm/farmer/forms.py:13
-#: pgscm/templates/group/index.html:114
+#: pgscm/templates/group/index.html:118
 msgid "Farmer code"
 msgstr "Mã nông dân"
 
 #: pgscm/farmer/forms.py:16 pgscm/templates/farmer/index.html:17
 #: pgscm/templates/farmer/index.html:25 pgscm/templates/farmer/index.html:61
-#: pgscm/templates/group/index.html:114
+#: pgscm/templates/group/index.html:118
 msgid "Gender"
 msgstr "Giới tính"
 
@@ -417,7 +417,7 @@ msgstr "Nữ"
 
 #: pgscm/farmer/forms.py:20 pgscm/templates/farmer/index.html:17
 #: pgscm/templates/farmer/index.html:25 pgscm/templates/farmer/index.html:62
-#: pgscm/templates/group/index.html:114
+#: pgscm/templates/group/index.html:118
 msgid "Type"
 msgstr "Loại thành viên"
 
@@ -443,7 +443,7 @@ msgstr "Kế toán"
 
 #: pgscm/farmer/forms.py:28 pgscm/templates/farmer/index.html:18
 #: pgscm/templates/farmer/index.html:26 pgscm/templates/farmer/index.html:63
-#: pgscm/templates/group/index.html:45 pgscm/templates/index.html:176
+#: pgscm/templates/group/index.html:45 pgscm/templates/index.html:180
 #: pgscm/templates/report/alarm.html:16 pgscm/templates/report/alarm.html:28
 #: pgscm/templates/report/alarm.html:63
 msgid "Group"
@@ -484,8 +484,8 @@ msgstr "Thôn/Xóm"
 
 #: pgscm/group/forms.py:27 pgscm/templates/agroup/index.html:43
 #: pgscm/templates/group/index.html:22 pgscm/templates/group/index.html:31
-#: pgscm/templates/group/index.html:70 pgscm/templates/index.html:182
-#: pgscm/templates/index.html:299
+#: pgscm/templates/group/index.html:70 pgscm/templates/index.html:186
+#: pgscm/templates/index.html:304
 msgid "Inter-group"
 msgstr "Liên nhóm"
 
@@ -558,90 +558,90 @@ msgstr "Đăng xuất"
 msgid "PGS MANAGEMENT"
 msgstr "DANH MỤC QUẢN LÝ PGS"
 
-#: pgscm/templates/index.html:144 pgscm/templates/index.html:234
-#: pgscm/templates/index.html:239
+#: pgscm/templates/index.html:145 pgscm/templates/index.html:239
+#: pgscm/templates/index.html:244
 msgid "Overview"
 msgstr "Tổng quan"
 
-#: pgscm/templates/index.html:151 pgscm/templates/macro.html:53
+#: pgscm/templates/index.html:154 pgscm/templates/macro.html:53
 msgid "Certificate"
 msgstr "Chứng chỉ"
 
-#: pgscm/templates/index.html:158
+#: pgscm/templates/index.html:161
 msgid "Certified Group"
 msgstr "Cấp cho nhóm"
 
-#: pgscm/templates/index.html:164
+#: pgscm/templates/index.html:167
 msgid "Certified Farmer"
 msgstr "Cấp cho cá nhân"
 
-#: pgscm/templates/farmer/index.html:39 pgscm/templates/index.html:171
+#: pgscm/templates/farmer/index.html:39 pgscm/templates/index.html:175
 #: pgscm/templates/report/alarm.html:17 pgscm/templates/report/alarm.html:29
 #: pgscm/templates/report/alarm.html:64
 msgid "Farmer"
 msgstr "Nông dân"
 
-#: pgscm/templates/admin/user.html:31 pgscm/templates/index.html:200
+#: pgscm/templates/admin/user.html:31 pgscm/templates/index.html:205
 msgid "Administrator"
 msgstr "Danh mục quản trị"
 
-#: pgscm/templates/admin/user.html:33 pgscm/templates/index.html:207
+#: pgscm/templates/admin/user.html:33 pgscm/templates/index.html:212
 msgid "Users Management"
 msgstr "Người dùng hệ thống"
 
-#: pgscm/templates/index.html:216
+#: pgscm/templates/index.html:221
 msgid "USER"
 msgstr "TÁC VỤ NGƯỜI DÙNG"
 
-#: pgscm/templates/index.html:219
+#: pgscm/templates/index.html:224
 msgid "Login"
 msgstr "Đăng nhập"
 
-#: pgscm/templates/index.html:235
+#: pgscm/templates/index.html:240
 msgid "PGS status"
 msgstr "Trạng thái của PGS"
 
-#: pgscm/templates/index.html:238
+#: pgscm/templates/index.html:243
 msgid " Home"
 msgstr " Trang chủ"
 
-#: pgscm/templates/index.html:259
+#: pgscm/templates/index.html:264
 msgid "PGS Status"
 msgstr "Trạng thái của PGS"
 
-#: pgscm/templates/index.html:260
+#: pgscm/templates/index.html:265
 msgid "Quickly summary about <code>PGS Certificates</code> analytics."
 msgstr "Thống kê nhanh về <code>Chứng chỉ PGS</code>."
 
-#: pgscm/templates/index.html:272
+#: pgscm/templates/index.html:277
 msgid "Certificates"
 msgstr "Chứng nhận"
 
-#: pgscm/templates/index.html:281
+#: pgscm/templates/index.html:286
 msgid "Farmers"
 msgstr "Nông dân"
 
-#: pgscm/templates/index.html:290
+#: pgscm/templates/index.html:295
 msgid "Groups"
 msgstr "Nhóm PGS"
 
-#: pgscm/templates/index.html:308
+#: pgscm/templates/index.html:313
 msgid "About to expire"
 msgstr "Chứng chỉ PGS sắp hết hạn"
 
-#: pgscm/templates/index.html:317
+#: pgscm/templates/index.html:322
 msgid "Total approved area"
 msgstr "Tổng diện tích chứng nhận"
 
-#: pgscm/templates/index.html:328
+#: pgscm/templates/index.html:333
 msgid "Total requested area"
 msgstr "Tổng diện tích yêu cầu"
 
-#: pgscm/templates/index.html:339
+#: pgscm/templates/index.html:344
 msgid "Total male farmers"
 msgstr "Tổng nông dân nam"
 
-#: pgscm/templates/index.html:349
+#: pgscm/templates/index.html:354
 msgid "Total female farmers"
 msgstr "Tổng nông dân nữ"
 
@@ -782,14 +782,14 @@ msgstr "Trang chủ"
 
 #: pgscm/templates/admin/user.html:90 pgscm/templates/agroup/index.html:101
 #: pgscm/templates/certificate/index.html:159
-#: pgscm/templates/farmer/index.html:100 pgscm/templates/group/index.html:110
+#: pgscm/templates/farmer/index.html:100 pgscm/templates/group/index.html:114
 #: pgscm/templates/report/alarm.html:110
 msgid "Update Data"
 msgstr "Cập nhật dữ liệu"
 
 #: pgscm/templates/admin/user.html:91 pgscm/templates/agroup/index.html:102
 #: pgscm/templates/certificate/index.html:160
-#: pgscm/templates/farmer/index.html:102 pgscm/templates/group/index.html:111
+#: pgscm/templates/farmer/index.html:102 pgscm/templates/group/index.html:115
 #: pgscm/templates/report/alarm.html:111
 msgid "Confirm to delete"
 msgstr "Xác nhận xoá dữ liệu"
@@ -806,7 +806,7 @@ msgstr "Quản lý liên nhóm theo vùng trong hệ thống PGS"
 msgid "Inter-group info"
 msgstr "Liên nhóm PGS"
 
-#: pgscm/templates/agroup/index.html:104 pgscm/templates/group/index.html:113
+#: pgscm/templates/agroup/index.html:104 pgscm/templates/group/index.html:117
 msgid "certificates"
 msgstr "chứng chỉ PGS"
 
@@ -814,11 +814,11 @@ msgstr "chứng chỉ PGS"
 msgid "groups"
 msgstr "nhóm"
 
-#: pgscm/templates/agroup/index.html:104 pgscm/templates/group/index.html:113
+#: pgscm/templates/agroup/index.html:104 pgscm/templates/group/index.html:117
 msgid "farmers (Male / Female)"
 msgstr "nông dân (Nam / Nữ)"
 
-#: pgscm/templates/agroup/index.html:104 pgscm/templates/group/index.html:113
+#: pgscm/templates/agroup/index.html:104 pgscm/templates/group/index.html:117
 msgid "approved area"
 msgstr "diện tích chứng nhận"
 
@@ -911,11 +911,11 @@ msgstr "Nhóm PGS"
 msgid "Managing regional groups in PGS system"
 msgstr "Quản lý các nhóm PGS theo vùng"
 
-#: pgscm/templates/group/index.html:109
+#: pgscm/templates/group/index.html:113
 msgid "Create New"
 msgstr "Tạo mới"
 
-#: pgscm/templates/group/index.html:112
+#: pgscm/templates/group/index.html:116
 msgid "Group info"
 msgstr "Thông tin nhóm"
 
@@ -1050,23 +1050,23 @@ msgstr "Hãy đăng ký tài khoản PGS mới!"
 #~ msgid "Click here to register"
 #~ msgstr "Click vào đây để đăng ký"
 
-#~ msgid "rejected"
-#~ msgstr "Từ chối"
+msgid "rejected"
+msgstr "Từ chối"
 
-#~ msgid "decline"
-#~ msgstr "Thu hồi"
+msgid "decline"
+msgstr "Thu hồi"
 
-#~ msgid "adding"
-#~ msgstr "Cấp mới"
+msgid "adding"
+msgstr "Cấp mới"
 
-#~ msgid "keeping"
-#~ msgstr "Duy trì"
+msgid "keeping"
+msgstr "Duy trì"
 
-#~ msgid "converting"
-#~ msgstr "Đang chuyển đổi"
+msgid "converting"
+msgstr "Đang chuyển đổi"
 
-#~ msgid "fortuity"
-#~ msgstr "Đột xuất"
+msgid "fortuity"
+msgstr "Đột xuất"
 
 #~ msgid "Dashboard"
 #~ msgstr "Tổng quan"
@@ -1107,23 +1107,23 @@ msgstr "Hãy đăng ký tài khoản PGS mới!"
 #~ msgid "Managing alarmed PGS certificates"
 #~ msgstr "Quản lý các cảnh báo quanh chứng chỉ PGS sắp tới hạn"
 
-#~ msgid "Rejected"
-#~ msgstr "Từ chối"
+msgid "Rejected"
+msgstr "Từ chối"
 
-#~ msgid "Decline"
-#~ msgstr "Thu hồi"
+msgid "Decline"
+msgstr "Thu hồi"
 
-#~ msgid "Adding"
-#~ msgstr "Cấp mới"
+msgid "Adding"
+msgstr "Cấp mới"
 
-#~ msgid "Keeping"
-#~ msgstr "Duy trì"
+msgid "Keeping"
+msgstr "Duy trì"
 
-#~ msgid "Converting"
-#~ msgstr "Đang chuyển đổi"
+msgid "Converting"
+msgstr "Đang chuyển đổi"
 
-#~ msgid "Fortuity"
-#~ msgstr "Đột xuất"
+msgid "Fortuity"
+msgstr "Đột xuất"
 
 #~ msgid "Verify status"
 #~ msgstr "Thanh tra"
